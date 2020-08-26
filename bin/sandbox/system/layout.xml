@@ -1,0 +1,460 @@
+<document>
+	<table name="selection">
+		<entity v="-1" />
+		<material v="-1" />
+		<window v="none" />
+		<resource v="-1" />
+	</table>
+	<table name="scene">
+		<entities v="0" />
+		<materials v="0" />
+		<resources v="0" />
+		<assets v="Assets" />
+		<status v="Ready." />
+		<frames v="0.0 fps" />
+	</table>
+	<body>
+		<panel class="root.body" id="system">
+			<rect class="root.header-container" />
+			<label class="root.system-status" :text="scene.status" />
+			<header>
+				<layout class="root.header-layout">
+					<restyle target="#system" rule="spacing" set="4 4">
+						<header-tab class="root.header-tab" text="File">
+							<layout class="root.header-item-layout">
+								<header-item class="root.header-item" id="menu.file-open" text="Open" />
+								<header-item class="root.header-item" id="menu.file-save" text="Save" />
+								<header-item class="root.header-item" id="menu.file-cancel" text="Cancel" />
+							</layout>
+						</header-tab>
+						<header-tab class="root.header-tab" text="Entity">
+							<layout class="root.header-item-layout">
+								<header-item class="root.header-item" id="menu.entity-add" text="Add entity" />
+								<header-item class="root.header-item" id="menu.entity-remove" text="Remove entity" />
+							</layout>
+							<tree class="root.header-tree" text="Transform">
+								<layout class="root.header-item-layout">
+									<header-item class="root.header-item" id="menu.entity-move" text="Move" />
+									<header-item class="root.header-item" id="menu.entity-rotate" text="Rotate" />
+									<header-item class="root.header-item" id="menu.entity-scale" text="Scale" />
+								</layout>
+							</tree>
+							<tree class="root.header-tree" text="Placement">
+								<layout class="root.header-item-layout">
+									<header-item class="root.header-item" id="menu.entity-reposition" text="Position" />
+									<header-item class="root.header-item" id="menu.entity-rerotate" text="Rotation" />
+									<header-item class="root.header-item" id="menu.entity-combine" text="Combine" />
+								</layout>
+							</tree>
+							<tree class="root.header-tree" text="Reset">
+								<layout class="root.header-item-layout">
+									<header-item class="root.header-item" id="menu.entity-reset-move" text="Position" />
+									<header-item class="root.header-item" id="menu.entity-reset-rotate" text="Rotation" />
+									<header-item class="root.header-item" id="menu.entity-reset-scale" text="Scale" />
+								</layout>
+							</tree>
+						</header-tab>
+						<header-tab class="root.header-tab" text="Components">
+							<if :v1="selection.entity" op="neq" v2="-1">
+								<tree class="root.header-tree" text="Animation">
+									<layout class="root.header-item-layout">
+										<header-item class="root.header-item" id="menu.components-skin-animator" text="Skin animator" />
+										<header-item class="root.header-item" id="menu.components-key-animator" text="Key animator" />
+										<header-item class="root.header-item" id="menu.components-emitter-animator" text="Emitter animator" />
+									</layout>
+								</tree>
+								<tree class="root.header-tree" text="Audio">
+									<layout class="root.header-item-layout">
+										<header-item class="root.header-item" id="menu.components-listener" text="Listener" />
+										<header-item class="root.header-item" id="menu.components-source" text="Source" />
+									</layout>
+								</tree>
+								<tree class="root.header-tree" text="Audio effects">
+									<layout class="root.header-item-layout">
+										<header-item class="root.header-item" id="menu.components-reverb-effect" text="Reverb effect" />
+										<header-item class="root.header-item" id="menu.components-chorus-effect" text="Chorus effect" />
+										<header-item class="root.header-item" id="menu.components-distortion-effect" text="Distortion effect" />
+										<header-item class="root.header-item" id="menu.components-echo-effect" text="Echo effect" />
+										<header-item class="root.header-item" id="menu.components-flanger-effect" text="Flanger effect" />
+										<header-item class="root.header-item" id="menu.components-frequency-shifter-effect" text="Frequency shifter effect" />
+										<header-item class="root.header-item" id="menu.components-vocal-morpher-effect" text="Vocal morpher effect" />
+										<header-item class="root.header-item" id="menu.components-pitch-shifter-effect" text="Pitch shifter effect" />
+										<header-item class="root.header-item" id="menu.components-ring-modulator-effect" text="Ring modulator effect" />
+										<header-item class="root.header-item" id="menu.components-autowah-effect" text="Autowah effect" />
+										<header-item class="root.header-item" id="menu.components-compressor-effect" text="Compressor effect" />
+										<header-item class="root.header-item" id="menu.components-equalizer-effect" text="Equalizer effect" />
+									</layout>
+								</tree>
+								<tree class="root.header-tree" text="Geometry">
+									<layout class="root.header-item-layout">
+										<header-item class="root.header-item" id="menu.components-model" text="Model" />
+										<header-item class="root.header-item" id="menu.components-limpid-model" text="Limpid model" />
+										<header-item class="root.header-item" id="menu.components-skin" text="Skin" />
+										<header-item class="root.header-item" id="menu.components-limpid-skin" text="Limpid skin" />
+										<header-item class="root.header-item" id="menu.components-emitter" text="Emitter" />
+										<header-item class="root.header-item" id="menu.components-limpid-emitter" text="Limpid emitter" />
+										<header-item class="root.header-item" id="menu.components-decal" text="Decal" />
+										<header-item class="root.header-item" id="menu.components-limpid-decal" text="Limpid decal" />
+									</layout>
+								</tree>
+								<tree class="root.header-tree" text="Lighting">
+									<layout class="root.header-item-layout">
+										<header-item class="root.header-item" id="menu.components-point-light" text="Point light" />
+										<header-item class="root.header-item" id="menu.components-spot-light" text="Spot light" />
+										<header-item class="root.header-item" id="menu.components-line-light" text="Line light" />
+										<header-item class="root.header-item" id="menu.components-reflection-probe" text="Reflection probe" />
+									</layout>
+								</tree>
+								<tree class="root.header-tree" text="Physics">
+									<layout class="root.header-item-layout">
+										<header-item class="root.header-item" id="menu.components-rigid-body" text="Rigid body" />
+										<header-item class="root.header-item" id="menu.components-soft-body" text="Soft body" />
+										<header-item class="root.header-item" id="menu.components-limpid-soft-body" text="Limpid soft body" />
+										<header-item class="root.header-item" id="menu.components-slider-constraint" text="Slider constraint" />
+										<header-item class="root.header-item" id="menu.components-acceleration" text="Acceleration" />
+										<header-item class="root.header-item" id="menu.components-fly" text="Fly" />
+										<header-item class="root.header-item" id="menu.components-free-look" text="Free look" />
+									</layout>
+								</tree>
+								<tree class="root.header-tree" text="Cameras">
+									<layout class="root.header-item-layout">
+										<header-item class="root.header-item" id="menu.components-camera" text="Camera" />
+										<header-item class="root.header-item" id="menu.components-3d-camera" text="3D camera" />
+									</layout>
+								</tree>
+								<tree class="root.header-tree" text="Scripting">
+									<layout class="root.header-item-layout">
+										<header-item class="root.header-item" id="menu.components-scriptable" text="Scriptable" />
+									</layout>
+								</tree>
+								<tree class="root.header-tree" text="Renderers">
+									<layout class="root.header-item-layout">
+										<header-item class="root.header-item" id="menu.components-model-renderer" text="Model renderer" />
+										<header-item class="root.header-item" id="menu.components-skin-renderer" text="Skin renderer" />
+										<header-item class="root.header-item" id="menu.components-emitter-renderer" text="Emitter renderer" />
+										<header-item class="root.header-item" id="menu.components-depth-renderer" text="Depth renderer" />
+										<header-item class="root.header-item" id="menu.components-light-renderer" text="Light renderer" />
+										<header-item class="root.header-item" id="menu.components-probe-renderer" text="Probe renderer" />
+										<header-item class="root.header-item" id="menu.components-limpid-renderer" text="Limpid renderer" />
+										<header-item class="root.header-item" id="menu.components-reflections-renderer" text="Reflections renderer" />
+										<header-item class="root.header-item" id="menu.components-emission-renderer" text="Emission renderer" />
+										<header-item class="root.header-item" id="menu.components-glitch-renderer" text="Glitch renderer" />
+										<header-item class="root.header-item" id="menu.components-dof-renderer" text="DOF renderer" />
+										<header-item class="root.header-item" id="menu.components-ao-renderer" text="AO renderer" />
+										<header-item class="root.header-item" id="menu.components-do-renderer" text="DO renderer" />
+										<header-item class="root.header-item" id="menu.components-tone-renderer" text="Tone renderer" />
+										<header-item class="root.header-item" id="menu.components-gui-renderer" text="GUI renderer" />
+									</layout>
+								</tree>
+							</if>
+							<else>
+								<layout class="root.header-item-layout">
+									<text text="Select any entity" align="center middle" />
+								</layout>
+							</else>
+						</header-tab>
+						<header-tab class="root.header-tab" text="Scene">
+							<layout class="root.header-item-layout">
+								<header-item class="root.header-item" id="menu.scene-materials" text="Materials" />
+								<header-item class="root.header-item" id="menu.scene-settings" text="Settings" />
+								<header-item class="root.header-item" id="menu.scene-add-material" text="Add material" />
+								<header-item class="root.header-item" id="menu.scene-import-model" text="Import model" />
+								<header-item class="root.header-item" id="menu.scene-import-skin-animation" text="Import skin animation" />
+								<header-item class="root.header-item" id="menu.scene-export-skin-animation" text="Export skin animation" />
+								<header-item class="root.header-item" id="menu.scene-export-key-animation" text="Export key animation" />
+								<header-item class="root.header-item" id="menu.scene-import-material" text="Import material" />
+								<header-item class="root.header-item" id="menu.scene-export-material" text="Export material" />
+								<header-item class="root.header-item" id="menu.scene-demo" text="Start demo" />
+							</layout>
+						</header-tab>
+						<header-tab class="root.header-tab" text="Logs" width="500">
+							<layout class="root.header-item-layout" height="1.075">
+								<template id="menu.logs-window">
+									<text class="root.prop-text" type="wrap-colored" color="255 255 255 255" />
+								</template>
+							</layout>
+						</header-tab>
+					</restyle>
+				</layout>
+			</header>
+			<layout class="root.layout-container">
+				<restyle target="#system" rule="spacing" set="4 4">
+					<push class="hierarchy.layout">
+						<group class="hierarchy.group" id="hierarchy.group">	
+							<layout class="hierarchy.header-layout">
+								<button id="hierarchy.toggle" class="hierarchy.toggle-button"></button>
+							</layout>
+							<layout class="hierarchy.view-layout">
+								<group class="hierarchy.view-group">
+									<if :v1="scene.entities" op="neq" v2="0">
+										<template id="hierarchy.view">
+											<layout class="hierarchy.view-item-layout" />
+											<selectable class="hierarchy.view-selectable" />
+											<tree class="hierarchy.view-tree" />
+										</template>
+									</if>
+									<else>
+										<layout class="hierarchy.view-item-text-layout">
+											<text text="Scene is empty" align="center middle" />
+										</layout>
+									</else>
+								</group>
+							</layout>
+						</group>
+					</push>
+					<push class="preview.layout">
+						<group class="preview.group" id="preview.group">
+							<layout class="preview.image-layout" />
+						</group>
+					</push>
+					<push class="inspector.layout">
+						<group class="inspector.group">
+							<if :v1="selection.window" v2="entity">
+								<layout class="inspector.view-layout">
+									<group class="inspector.view-group" text="Entity">
+										<tree class="root.prop-tree" text="Basics">
+											<layout class="root.prop-layout">
+												<edit id="inspector.entity-name" />
+												<vector class="root.prop-vector" text="Position" count="3" id="inspector.entity-position" />
+												<vector class="root.prop-vector" text="Scale" count="3" id="inspector.entity-scale" />
+												<property class="root.prop-item" text="#Rotation X" min="0" max="360" range="720" id="inspector.entity-rotation-x" />
+												<property class="root.prop-item" text="#Rotation Y" min="0" max="360" range="720" id="inspector.entity-rotation-y" />
+												<property class="root.prop-item" text="#Rotation Z" min="0" max="360" range="720" id="inspector.entity-rotation-z" />
+												<property class="root.prop-item" text="#Tag" min="0" max="81928192" range="2000" decimal="1" id="inspector.entity-tag" />
+												<checkbox class="root.prop-check" text="Constant scale" id="inspector.entity-constant-scale" />
+											</layout>
+										</tree>
+										<template id="inspector.entity">
+											<tree class="root.prop-tree" minimized="1" />
+											<button class="root.prop-button" />
+											<layout class="root.prop-layout" />
+											<vector class="root.prop-vector" />
+											<checkbox class="root.prop-check" />
+											<property class="root.prop-item" />
+											<text class="root.prop-text" />
+											<edit />
+											<contextual height="160" />
+											<image />
+											<combo class="root.prop-combo" text-value="0" />
+											<combo-item />
+											<color-picker />
+										</template>
+									</group>
+								</layout>
+							</if>
+							<else-if :v1="selection.window" v2="material">
+								<layout class="inspector.view-layout">
+									<group class="inspector.view-group" @text="Material (%selection.material%)">
+										<tree text="Emission" type="tab">
+											<layout class="inspector.view-picker-layout">
+												<color-picker id="inspector.material-emission" />
+											</layout>
+											<layout class="inspector.view-prop-layout">
+												<text class="inspector.view-prop-name" text="Intensity" />
+												<slider class="inspector.view-prop-slider" min="0" max="1" id="inspector.material-emission-intensity" />
+											</layout>
+										</tree>
+										<tree text="Metallic" type="tab">
+											<layout class="inspector.view-picker-layout">
+												<color-picker id="inspector.material-metallic" />
+											</layout>
+											<layout class="inspector.view-prop-layout">
+												<text class="inspector.view-prop-name" text="T Metallic" />
+												<slider class="inspector.view-prop-slider" min="-1" max="1" id="inspector.material-metallic-intensity" />
+											</layout>
+										</tree>
+										<layout class="inspector.view-prop-layout">
+											<text class="inspector.view-prop-name" text="F Roughness" />
+											<slider class="inspector.view-prop-slider" min="0" max="1" id="inspector.material-f-roughness" />
+										</layout>
+										<layout class="inspector.view-prop-layout">
+											<text class="inspector.view-prop-name" text="T Roughness" />
+											<slider class="inspector.view-prop-slider" min="-1" max="1" id="inspector.material-t-roughness" />
+										</layout>
+										<layout class="inspector.view-prop-layout">
+											<text class="inspector.view-prop-name" text="F Occlusion" />
+											<slider class="inspector.view-prop-slider" min="0" max="1" id="inspector.material-f-occlusion" />
+										</layout>
+										<layout class="inspector.view-prop-layout">
+											<text class="inspector.view-prop-name" text="T Occlusion" />
+											<slider class="inspector.view-prop-slider" min="-1" max="1" id="inspector.material-t-occlusion" />
+										</layout>
+										<layout class="inspector.view-prop-layout">
+											<text class="inspector.view-prop-name" text="Fresnel" />
+											<slider class="inspector.view-prop-slider" min="0" max="1" id="inspector.material-fresnel" />
+										</layout>
+										<layout class="inspector.view-prop-layout">
+											<text class="inspector.view-prop-name" text="Refraction" />
+											<slider class="inspector.view-prop-slider" min="0" max="50" id="inspector.material-refraction" />
+										</layout>
+										<layout class="inspector.view-prop-layout">
+											<text class="inspector.view-prop-name" text="Limpidity" />
+											<slider class="inspector.view-prop-slider" min="0" max="1" id="inspector.material-limpidity" />
+										</layout>
+										<layout class="inspector.view-prop-layout">
+											<text class="inspector.view-prop-name" text="Environment" />
+											<slider class="inspector.view-prop-slider" min="0" max="1" id="inspector.material-environment" />
+										</layout>
+										<layout class="inspector.view-prop-layout">
+											<text class="inspector.view-prop-name" text="Radius" />
+											<slider class="inspector.view-prop-slider" min="0" max="1" id="inspector.material-radius" />
+										</layout>
+										<layout class="inspector.view-prop-layout">
+											<text class="inspector.view-prop-name" text="Name" />
+											<edit id="inspector.material-name" />
+										</layout>
+										<layout class="inspector.view-item-layout" />
+										<layout class="inspector.view-item-layout">
+											<button class="inspector.view-item-button" text="Back" text-align="center middle" id="inspector.material-back" />
+											<button class="inspector.view-item-button" text="Copy" text-align="center middle" id="inspector.material-copy" />
+											<button class="inspector.view-item-button" text="Remove" text-align="center middle" id="inspector.material-remove" />
+										</layout>
+									</group>
+								</layout>
+							</else-if>
+							<else-if :v1="selection.window" v2="settings">
+								<layout class="inspector.view-layout">
+									<group class="inspector.view-group" text="Settings">
+										<tree text="Startup" type="tab">
+											<layout class="root.prop-layout">
+												<vector class="root.prop-vector" text="Gravity" count="3" id="inspector.settings-startup-gravity" />
+												<vector class="root.prop-vector" text="Water normal" count="3" id="inspector.settings-startup-water-normal" />
+												<property class="root.prop-item" text="#Air density" min="0" max="10" id="inspector.settings-startup-air-density"/>
+												<property class="root.prop-item" text="#Water density" min="1" max="10" id="inspector.settings-startup-water-density" />
+												<property class="root.prop-item" text="#Water offset" min="1" max="10" id="inspector.settings-startup-water-offset" />
+												<property class="root.prop-item" text="#Max displacement" min="1" max="1000" id="inspector.settings-startup-max-displacement" />
+												<checkbox class="root.prop-check" text="Enable soft bodies" id="inspector.settings-startup-enable-softbodies" />
+											</layout>
+										</tree>
+										<tree text="Renderer" type="tab">
+											<layout class="root.prop-layout">
+												<property class="root.prop-item" text="#Render quality" min="0" max="400" id="inspector.settings-renderer-render-quality" />
+												<checkbox class="root.prop-check" text="Enable HDR" id="inspector.settings-renderer-enable-hdr" />
+											</layout>
+										</tree>
+										<tree text="Memory" type="tab">
+											<layout class="root.prop-layout">
+												<property class="root.prop-item-decimal" text="#Max entities" min="64" max="8388608" id="inspector.settings-memory-max-entities" />
+												<property class="root.prop-item-decimal" text="#Max components" min="1024" max="16777216" id="inspector.settings-memory-max-components" />
+											</layout>
+										</tree>
+										<tree text="Simulator" type="tab">
+											<layout class="root.prop-layout">
+												<vector class="root.prop-vector" text="Gravity" count="3" id="inspector.settings-simulator-gravity" />
+												<property class="root.prop-item" text="#Time" min="0.01" max="10" id="inspector.settings-simulator-time" />
+												<checkbox class="root.prop-check" text="Enabled" id="inspector.settings-simulator-enabled" />
+											</layout>
+										</tree>
+										<layout class="inspector.view-item-layout" />
+										<layout class="inspector.view-item-layout">
+											<button text="Save changes" id="inspector.settings-save" />
+										</layout>
+									</group>
+								</layout>
+							</else-if>
+							<else-if :v1="selection.window" v2="materials">
+								<layout class="inspector.view-layout">
+									<group class="inspector.view-group" text="Materials">
+										<if :v1="scene.materials" op="neq" v2="0">
+											<template id="inspector.materials">
+												<layout class="inspector.view-item-layout" />
+												<button class="inspector.view-item-button" />
+											</template>
+										</if>
+										<else>
+											<layout class="inspector.header-layout">
+												<text text="No materials found" align="center middle" />
+											</layout>
+										</else>
+									</group>
+								</layout>
+							</else-if>
+							<else-if :v1="selection.window" v2="import-model">
+								<layout class="inspector.view-layout">
+									<group class="inspector.view-group" text="Import model">
+										<layout class="inspector.view-text-layout">
+											<text type="wrap" text="Warn! Import pre-transformed meshes for skinned model" color="255 255 125 255" />
+										</layout>
+										<layout class="root.prop-layout">
+											<template id="inspector.import-model">
+												<checkbox class="prop-check" />
+											</template>
+										</layout>
+										<layout class="inspector.view-item-layout" />
+										<layout class="inspector.view-item-layout">
+											<button text="Import" id="inspector.import-model-action" />
+										</layout>
+									</group>
+								</layout>
+							</else-if>
+							<else-if :v1="selection.window" v2="import-animation">
+								<layout class="inspector.view-layout">
+									<group class="inspector.view-group" text="Import animation">
+										<layout class="inspector.view-text-layout">
+											<text type="wrap" text="Warn! Import pre-transformed meshes for skinning animation" color="255 255 125 255" />
+										</layout>
+										<layout class="root.prop-layout">
+											<template id="inspector.import-animation">
+												<checkbox class="prop-check" />
+											</template>
+										</layout>
+										<layout class="inspector.view-item-layout" />
+										<layout class="inspector.view-item-layout">
+											<button text="Import" id="inspector.import-animation-action" />
+										</layout>
+									</group>
+								</layout>
+							</else-if>
+							<else>
+								<layout class="inspector.view-layout">
+									<group class="inspector.view-group" text="Inspector">
+										<layout class="inspector.header-layout">
+											<text text="Nothing to view" align="center middle" />
+										</layout>
+									</group>
+								</layout>
+							</else>
+						</group>
+					</push>
+					<push class="content.layout">
+						<group class="content.group">
+							<layout class="content.view-layout">
+								<push class="content.view-content">
+									<group class="content.view-group" text="Content">
+										<if :v1="scene.resources" op="neq" v2="0">
+											<template id="content.hierarchy">
+												<tree class="content.view-tree" />
+											</template>
+										</if>
+										<else>
+											<layout class="content.view-item-text-layout">
+												<text text="No resources" align="center middle" />
+											</layout>
+										</else>
+									</group>
+								</push>
+								<push class="content.view-assets">
+									<group class="content.view-group" :text="scene.assets">
+										<if :v1="selection.resource" op="neq" v2="-1">
+											<template id="content.assets">
+												<layout class="content.view-asset-layout" />
+												<selectable class="content.view-selectable" />
+											</template>
+										</if>
+										<else>
+											<layout class="content.view-item-text-layout">
+												<text text="Empty folder" align="center middle" />
+											</layout>
+										</else>
+									</group>
+								</push>
+							</layout>
+						</group>
+					</push>
+				</restyle>
+			</layout>
+			<label id="system.draggable" />
+			<label class="root.system-frames" :text="scene.frames" />
+		</panel>
+	</body>
+</document>

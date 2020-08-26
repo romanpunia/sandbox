@@ -1,0 +1,77 @@
+<scene>
+	<metadata>
+		<components i="65536" />
+		<entities i="32768" />
+		<render-quality n="1.000000" />
+		<enable-hdr b="false" />
+		<simulator>
+			<enable-soft-body b="true" />
+			<max-displacement n="1000.000000" />
+			<air-density n="1.200000" />
+			<water-offset n="0.000000" />
+			<water-density n="0.000000" />
+			<water-normal x="0.000000" y="0.000000" z="0.000000" />
+			<gravity x="0.000000" y="-10.000000" z="0.000000" />
+		</simulator>
+	</metadata>
+	<materials>
+		<material>
+			<name s="Material" />
+			<emission x="1.000000" y="1.000000" z="1.000000" w="0.515000" />
+			<metallic x="0.000000" y="0.000000" z="0.000000" w="0.000000" />
+			<roughness x="1.000000" y="0.000000" />
+			<fresnel n="0.000000" />
+			<refraction n="0.000000" />
+			<limpidity n="0.000000" />
+			<environment n="0.000000" />
+			<occlusion n="1.000000" />
+			<radius n="0.000000" />
+			<id n="0.000000" />
+		</material>
+	</materials>
+	<entities>
+		<entity>
+			<name s="" />
+			<tag i="-1" />
+			<transform>
+				<position x="0.000000" y="0.000000" z="0.000000" />
+				<rotation x="0.000000" y="0.000000" z="0.000000" />
+				<scale x="1.000000" y="1.000000" z="1.000000" />
+				<constant-scale b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="1525465921" />
+					<active b="true" />
+					<metadata>
+						<animation>
+							<clips>
+								<clip>
+									<name s="basis" />
+									<rate n="1.000000" />
+									<duration n="11.520000" />
+									<frames size="6">
+										<ak-array>-12.7807 3.28072 -8.87716 0.28 2.105 0 1 1 1 1 -12.9258 3.28072 6.89141 0.33 0.929996 0 1 1 1 1 -1.15357 8.66112 20.5852 0 0 0 1 1 1 1 12.3235 4.54826 8.28402 0 0 0 1 1 1 1 10.5392 4.54826 -12.6204 0 0 0 1 1 1 1 -8.73651 4.54826 -11.548 0 0 0 1 1 1 1</ak-array>
+									</frames>
+								</clip>
+							</clips>
+						</animation>
+						<state looped="true" paused="false" blended="true" clip="0" frame="0" rate="1.000000" duration="1.000000" time="0.000000" />
+						<bind>
+							<position x="0.000000" y="0.000000" z="0.000000" />
+							<rotation x="0.000000" y="0.000000" z="0.000000" />
+							<scale x="1.000000" y="1.000000" z="1.000000" />
+							<time n="1.000000" />
+						</bind>
+						<current>
+							<position x="0.000000" y="0.000000" z="0.000000" />
+							<rotation x="0.000000" y="0.000000" z="0.000000" />
+							<scale x="1.000000" y="1.000000" z="1.000000" />
+							<time n="1.000000" />
+						</current>
+					</metadata>
+				</component>
+			</components>
+		</entity>
+	</entities>
+</scene>

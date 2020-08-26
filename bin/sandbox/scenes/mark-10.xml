@@ -1,0 +1,103 @@
+<scene>
+	<metadata>
+		<components i="65536" />
+		<entities i="32768" />
+		<render-quality n="1.000000" />
+		<enable-hdr b="false" />
+		<simulator>
+			<enable-soft-body b="true" />
+			<max-displacement n="1000.000000" />
+			<air-density n="1.200000" />
+			<water-offset n="0.000000" />
+			<water-density n="0.000000" />
+			<water-normal x="0.000000" y="0.000000" z="0.000000" />
+			<gravity x="0.000000" y="-10.000000" z="0.000000" />
+		</simulator>
+	</metadata>
+	<materials>
+		<material>
+			<name s="Material" />
+			<emission x="0.000000" y="0.000000" z="0.000000" w="0.000000" />
+			<metallic x="0.141176" y="0.141176" z="0.141176" w="0.085000" />
+			<roughness x="0.610000" y="-0.125000" />
+			<fresnel n="0.000000" />
+			<refraction n="0.000000" />
+			<limpidity n="0.000000" />
+			<environment n="0.505000" />
+			<occlusion x="0.000000" y="0.000000" />
+			<radius n="0.000000" />
+			<id n="0.000000" />
+		</material>
+	</materials>
+	<entities>
+		<entity>
+			<name s="" />
+			<tag i="-1" />
+			<transform>
+				<position x="12.231969" y="12.524350" z="-9.522464" />
+				<rotation x="0.000000" y="0.000000" z="0.000000" />
+				<scale x="1.000000" y="1.000000" z="1.000000" />
+				<constant-scale b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="2741319553" />
+					<active b="true" />
+					<metadata>
+						<rlh-emission x="0.000006" y="0.000013" z="0.000022" />
+						<mie-emission x="0.000021" y="0.000021" z="0.000021" />
+						<rlh-height n="8000.000000" />
+						<mie-height x="0.000021" y="0.000021" z="0.000021" />
+						<scatter-intensity n="4.799998" />
+						<planet-radius n="6371000.000000" />
+						<atmosphere-radius n="6471000.000000" />
+						<mie-direction n="0.870000" />
+						<diffuse x="1.000000" y="1.000000" z="1.000000" />
+						<projection m11="0.012505" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="0.012505" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="0.005001" m34="0.000000" m41="0.000000" m42="0.000000" m43="0.500000" m44="1.000000" />
+						<view m11="-0.614291" m12="-0.495901" m13="-0.613783" m14="0.000000" m21="0.000000" m22="0.777847" m23="-0.628454" m24="0.000000" m31="0.789080" m32="-0.386054" m33="-0.477824" m34="0.000000" m41="29.048904" m42="12.804191" m43="35.776741" m44="1.000000" />
+						<shadow-bias n="0.000000" />
+						<shadow-distance n="159.940018" />
+						<shadow-far-bias n="20.000000" />
+						<shadow-softness n="0.900000" />
+						<shadow-length n="16.000000" />
+						<shadow-height n="0.000000" />
+						<shadow-iterations i="4" />
+						<emission n="2.080000" />
+						<shadowed b="true" />
+					</metadata>
+				</component>
+			</components>
+		</entity>
+		<entity>
+			<name s="" />
+			<tag i="-1" />
+			<transform>
+				<position x="0.000000" y="0.000000" z="0.000000" />
+				<rotation x="0.000000" y="0.000000" z="1.570796" />
+				<scale x="8.000000" y="8.000000" z="8.000000" />
+				<constant-scale b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="2189814010" />
+					<active b="true" />
+					<metadata>
+						<model s="./models/cube/mesh.xml" />
+						<surfaces>
+							<surface>
+								<name s="Cube" />
+								<diffuse-map s="./materials/bricks/diffuse.jpg" />
+								<diffuse x="0.972549" y="0.972549" z="0.972549" />
+								<texcoord x="4.000000" y="4.000000" />
+								<height-amount n="-0.230000" />
+								<height-bias n="-0.500000" />
+								<material i="0" />
+							</surface>
+						</surfaces>
+						<static b="true" />
+					</metadata>
+				</component>
+			</components>
+		</entity>
+	</entities>
+</scene>

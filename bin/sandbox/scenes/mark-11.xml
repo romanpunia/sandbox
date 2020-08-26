@@ -1,0 +1,368 @@
+<scene>
+	<metadata>
+		<components i="65536" />
+		<entities i="32768" />
+		<render-quality n="2.000000" />
+		<enable-hdr b="false" />
+		<simulator>
+			<enable-soft-body b="true" />
+			<max-displacement n="1000.000000" />
+			<air-density n="1.200000" />
+			<water-offset n="0.000000" />
+			<water-density n="0.000000" />
+			<water-normal x="0.000000" y="0.000000" z="0.000000" />
+			<gravity x="0.000000" y="-10.000000" z="0.000000" />
+		</simulator>
+	</metadata>
+	<materials>
+		<material>
+			<name s="Material" />
+			<emission x="0.000000" y="0.000000" z="0.000000" w="0.000000" />
+			<metallic x="0.133333" y="0.133333" z="0.133333" w="0.085000" />
+			<roughness x="0.535000" y="-0.155000" />
+			<fresnel n="0.015000" />
+			<refraction n="0.000000" />
+			<limpidity n="0.000000" />
+			<environment n="1.000000" />
+			<occlusion n="1.000000" />
+			<radius n="0.000000" />
+			<id n="0.000000" />
+		</material>
+		<material>
+			<name s="Material*" />
+			<emission x="0.000000" y="0.000000" z="0.000000" w="0.000000" />
+			<metallic x="0.988235" y="0.768627" z="0.360784" w="-0.460000" />
+			<roughness x="0.590000" y="-0.265000" />
+			<fresnel n="0.080000" />
+			<refraction n="0.000000" />
+			<limpidity n="0.000000" />
+			<environment n="1.000000" />
+			<occlusion n="1.000000" />
+			<radius n="0.000000" />
+			<id n="1.000000" />
+		</material>
+	</materials>
+	<entities>
+		<entity>
+			<name s="" />
+			<tag i="-1" />
+			<transform>
+				<position x="-6.225375" y="4.181561" z="3.524812" />
+				<rotation x="0.466088" y="1.029744" z="0.000000" />
+				<scale x="1.000000" y="1.000000" z="1.000000" />
+				<constant-scale b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="3880549230" />
+					<active b="true" />
+					<metadata>
+						<mode i="0" />
+						<projection m11="0.659041" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.303225" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000100" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100010" m44="0.000000" />
+						<field-of-view n="75.000023" />
+						<far-plane n="1000.000000" />
+						<near-plane n="0.100000" />
+						<width n="-1.000000" />
+						<height n="-1.000000" />
+						<renderers>
+							<renderer>
+								<id i="1125513033" />
+								<active b="true" />
+								<metadata>
+									<point-light-resolution i="256" />
+									<point-light-limits i="4" />
+									<spot-light-resolution i="1024" />
+									<spot-light-limits i="16" />
+									<line-light-resolution i="2048" />
+									<line-light-limits i="2" />
+									<shadow-distance n="0.500000" />
+								</metadata>
+							</renderer>
+							<renderer>
+								<id i="224048610" />
+								<active b="true" />
+								<metadata>
+									<size i="128" />
+									<mip-levels i="7" />
+								</metadata>
+							</renderer>
+							<renderer>
+								<id i="2914031769" />
+								<active b="true" />
+								<metadata />
+							</renderer>
+							<renderer>
+								<id i="2963592591" />
+								<active b="true" />
+								<metadata />
+							</renderer>
+							<renderer>
+								<id i="3744667382" />
+								<active b="true" />
+								<metadata />
+							</renderer>
+							<renderer>
+								<id i="3187022848" />
+								<active b="true" />
+								<metadata>
+									<high-emission x="0.000000" y="0.000000" z="0.000000" />
+									<low-emission x="0.039216" y="0.039216" z="0.039216" />
+									<sky-emission n="0.000000" />
+									<light-emission n="1.060000" />
+									<sky-color x="1.000000" y="0.992157" z="0.992157" />
+									<recursive-probes b="true" />
+								</metadata>
+							</renderer>
+							<renderer>
+								<id i="1526442014" />
+								<active b="true" />
+								<metadata>
+									<threshold n="0.500000" />
+									<gain n="0.510000" />
+									<fringe n="0.000000" />
+									<bias n="0.420000" />
+									<dither n="0.000000" />
+									<samples n="4.700000" />
+									<rings n="3.100002" />
+									<far-distance n="19.000000" />
+									<far-range n="14.000000" />
+									<near-distance n="4.000000" />
+									<near-range n="2.500000" />
+									<focal-depth n="5.000000" />
+									<intensity n="0.000000" />
+									<circular n="1.000001" />
+								</metadata>
+							</renderer>
+							<renderer>
+								<id i="2949980085" />
+								<active b="true" />
+								<metadata>
+									<iteration-count n="11.199997" />
+									<intensity n="1.560001" />
+									<threshold n="0.670000" />
+									<scale n="3.299999" />
+								</metadata>
+							</renderer>
+							<renderer>
+								<id i="61393170" />
+								<active b="true" />
+								<metadata>
+									<blind-vision-r x="1.000000" y="0.000000" z="0.000000" />
+									<blind-vision-g x="0.000000" y="1.000000" z="0.000000" />
+									<blind-vision-b x="0.000000" y="0.000000" z="1.000000" />
+									<vignette-color x="0.000000" y="0.000000" z="0.000000" />
+									<color-gamma x="1.000000" y="1.000000" z="1.000000" />
+									<desaturation-gamma x="0.300000" y="0.590000" z="0.110000" />
+									<vignette-amount n="0.000000" />
+									<vignette-curve n="1.500000" />
+									<vignette-radius n="1.000000" />
+									<linear-intensity n="1.600000" />
+									<gamma-intensity n="4.199999" />
+									<desaturation-intensity n="0.000000" />
+									<tone-intensity n="0.000000" />
+									<aces-intensity n="1.000000" />
+									<aces-a n="2.860000" />
+									<aces-b n="0.050000" />
+									<aces-c n="1.830002" />
+									<aces-d n="0.500000" />
+									<aces-e n="0.400000" />
+								</metadata>
+							</renderer>
+						</renderers>
+					</metadata>
+				</component>
+			</components>
+		</entity>
+		<entity>
+			<name s="" />
+			<tag i="-1" />
+			<transform>
+				<position x="0.000000" y="0.000000" z="0.000000" />
+				<rotation x="0.000000" y="0.000000" z="0.000000" />
+				<scale x="60.000000" y="1.000000" z="60.000000" />
+				<constant-scale b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="2189814010" />
+					<active b="true" />
+					<metadata>
+						<model s="./models/cube/mesh.xml" />
+						<surfaces>
+							<surface>
+								<name s="Cube" />
+								<diffuse-map s="./materials/paving-stones/diffuse.jpg" />
+								<normal-map s="./materials/paving-stones/normal.jpg" />
+								<roughness-map s="./materials/paving-stones/roughness.jpg" />
+								<height-map s="./materials/paving-stones/height.jpg" />
+								<diffuse x="0.972549" y="0.972549" z="0.972549" />
+								<texcoord x="120.000000" y="120.000000" />
+								<height-amount n="-1.000000" />
+								<height-bias n="-0.700000" />
+								<material i="0" />
+							</surface>
+						</surfaces>
+						<static b="true" />
+					</metadata>
+				</component>
+			</components>
+		</entity>
+		<entity>
+			<name s="" />
+			<tag i="-1" />
+			<transform>
+				<position x="0.000000" y="2.000000" z="-0.000000" />
+				<rotation x="0.000000" y="0.000000" z="0.000000" />
+				<scale x="1.000000" y="1.000000" z="1.000000" />
+				<constant-scale b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="2189814010" />
+					<active b="true" />
+					<metadata>
+						<model s="./models/sphere/mesh.xml" />
+						<surfaces>
+							<surface>
+								<name s="Sphere.001" />
+								<metallic-map s="./materials/metal-panel/metallic.jpg" />
+								<roughness-map s="./materials/metal-panel/roughness.jpg" />
+								<diffuse x="1.000000" y="0.756863" z="0.309804" />
+								<texcoord x="1.000000" y="1.000000" />
+								<height-amount n="0.000000" />
+								<height-bias n="0.000000" />
+								<material i="1" />
+							</surface>
+						</surfaces>
+						<static b="true" />
+					</metadata>
+				</component>
+			</components>
+		</entity>
+		<entity>
+			<name s="" />
+			<tag i="-1" />
+			<transform>
+				<position x="-3.460974" y="5.424480" z="-10.086300" />
+				<rotation x="0.000000" y="0.000000" z="0.000000" />
+				<scale x="1.000000" y="1.000000" z="1.000000" />
+				<constant-scale b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="2741319553" />
+					<active b="true" />
+					<metadata>
+						<rlh-emission x="0.000006" y="0.000013" z="0.000022" />
+						<mie-emission x="0.000021" y="0.000021" z="0.000021" />
+						<rlh-height n="8000.000000" />
+						<mie-height x="0.000021" y="0.000021" z="0.000021" />
+						<scatter-intensity n="7.000000" />
+						<planet-radius n="6371000.000000" />
+						<atmosphere-radius n="6471000.000000" />
+						<mie-direction n="0.870000" />
+						<diffuse x="1.000000" y="1.000000" z="1.000000" />
+						<projection m11="0.020000" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="0.020000" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="0.007143" m34="0.000000" m41="0.000000" m42="0.000000" m43="0.500000" m44="1.000000" />
+						<view m11="-0.945865" m12="0.147156" m13="0.289283" m14="0.000000" m21="0.000000" m22="0.891307" m23="-0.453401" m24="0.000000" m31="-0.324560" m32="-0.428856" m33="-0.843056" m34="0.000000" m41="-7.320706" m42="-0.615088" m43="10.754823" m44="1.000000" />
+						<shadow-bias n="0.000000" />
+						<shadow-distance n="100.000000" />
+						<shadow-far-bias n="20.000000" />
+						<shadow-softness n="0.900000" />
+						<shadow-length n="16.000000" />
+						<shadow-height n="0.000000" />
+						<shadow-iterations i="4" />
+						<emission n="1.120000" />
+						<shadowed b="true" />
+					</metadata>
+				</component>
+				<component>
+					<id i="1525465921" />
+					<active b="true" />
+					<metadata>
+						<animation>
+							<clips>
+								<clip>
+									<name s="" />
+									<rate n="1.000000" />
+									<duration n="7.400000" />
+									<frames size="19">
+										<ak-array>3.85331 3.71768 -4.89304 0 0 0 1 1 1 1 6.39821 3.12412 -4.89304 0 0 0 1 1 1 1 7.69157 2.37429 -4.89304 0 0 0 1 1 1 1 9.86474 1.02053 -4.89304 0 0 0 1 1 1 1 11.3814 0.468225 -4.89304 0 0 0 1 1 1 1 12.8625 -0.0666704 -4.89304 0 0 0 1 1 1 1 13.7081 -0.444632 -4.89304 0 0 0 1 1 1 1 18.1103 -2.2556 -4.89304 0 0 0 1 1 1 1 -5.34871 -0.610872 -4.60004 0 0 0 1 1 1 1 -5.34871 -0.100302 -4.60004 0 0 0 1 1 1 1 -5.34871 0.480105 -4.46267 0 0 0 1 1 1 1 -5.34871 0.832465 -4.78862 0 0 0 1 1 1 1 -5.34871 1.25088 -5.54976 0 0 0 1 1 1 1 -5.34871 2.09945 -7.02015 0 0 0 1 1 1 1 -5.34871 4.28695 -10.0863 0 0 0 1 1 1 1 -1.90308 6.36325 -10.0863 0 0 0 1 1 1 1 2.05537 6.42724 -10.0863 0 0 0 1 1 1 1 7.15141 6.70609 -10.0863 0 0 0 1 1 1 1 9.32463 6.0669 -10.0863 0 0 0 1 1 1 1</ak-array>
+									</frames>
+								</clip>
+							</clips>
+						</animation>
+						<state looped="true" paused="false" blended="false" clip="0" frame="14" rate="1.000000" duration="7.400000" time="4.054193" />
+						<bind>
+							<position x="9.324632" y="6.066904" z="-10.086250" />
+							<rotation x="0.000000" y="0.000000" z="0.000000" />
+							<scale x="1.000000" y="1.000000" z="1.000000" />
+							<time n="1.000000" />
+						</bind>
+						<current>
+							<position x="-3.460974" y="5.424480" z="-10.086300" />
+							<rotation x="0.000000" y="0.000000" z="0.000000" />
+							<scale x="1.000000" y="1.000000" z="1.000000" />
+							<time n="1.000000" />
+						</current>
+					</metadata>
+				</component>
+			</components>
+		</entity>
+		<entity>
+			<name s="" />
+			<tag i="-1" />
+			<transform>
+				<position x="0.000000" y="1.997203" z="-0.000000" />
+				<rotation x="0.000000" y="0.000000" z="0.000000" />
+				<scale x="76.161118" y="76.161118" z="76.161118" />
+				<constant-scale b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="71616870" />
+					<active b="true" />
+					<metadata>
+						<view size="6">
+							<m4x4-array>0 -0 1 0 0 1 0 0 -1 0 0 0 -0 -1.9972 -0 1 0 0 -1 0 -0 1 0 0 1 0 0 0 -0 -1.9972 -0 1 1 0 0 0 -0 0 1 0 0 -1 0 0 -0 -0 -1.9972 1 1 0 0 0 0 0 -1 0 -0 1 0 0 -0 -0 1.9972 1 1 0 0 0 0 1 0 0 0 0 1 0 -0 -1.9972 -0 1 -1 0 0 0 0 1 0 0 0 0 -1 0 -0 -1.9972 -0 1</m4x4-array>
+						</view>
+						<rebuild delay="1" />
+						<projection m11="1.000000" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000100" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.010001" m44="0.000000" />
+						<diffuse x="1.000000" y="1.000000" z="1.000000" />
+						<capture-range n="60.000000" />
+						<emission n="1.000000" />
+						<infinity n="1.000000" />
+						<parallax-corrected b="false" />
+						<static-mask b="false" />
+					</metadata>
+				</component>
+			</components>
+		</entity>
+		<entity>
+			<name s="" />
+			<tag i="-1" />
+			<transform>
+				<position x="2.121833" y="2.116323" z="-0.000000" />
+				<rotation x="0.000000" y="0.000000" z="0.000000" />
+				<scale x="6.084000" y="6.084000" z="6.084000" />
+				<constant-scale b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="782866619" />
+					<active b="true" />
+					<metadata>
+						<diffuse x="0.000000" y="0.992157" z="0.305882" />
+						<emission n="4.160002" />
+						<shadow-softness n="8.200001" />
+						<shadow-distance n="69.939995" />
+						<shadow-bias n="0.000000" />
+						<shadow-iterations i="2" />
+						<shadowed b="true" />
+						<projection m11="1.000000" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.001432" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100143" m44="0.000000" />
+						<view m11="0.000000" m12="-0.000000" m13="1.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="-1.000000" m32="0.000000" m33="0.000000" m34="0.000000" m41="-0.000000" m42="-2.116323" m43="-2.121833" m44="1.000000" />
+					</metadata>
+				</component>
+			</components>
+		</entity>
+	</entities>
+</scene>

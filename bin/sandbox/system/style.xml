@@ -1,0 +1,497 @@
+<styles>
+	<font name="label">
+		<height v="11.75" />
+	</font>
+	<group class="root">
+		<body>
+			<text v="Application" />
+			<width v="1" />
+			<height v="1" />
+			<x v="0" />
+			<y v="0" />
+			<fixed v="0 0 0 0" />
+			<relative v="1" />
+			<movable v="0" />
+			<scalable v="0" />
+			<minimizable v="0" />
+			<no-scrollbar v="1" />
+			<titled v="0" />
+			<bordered v="0" />
+			<padding v="0 0" />
+			<spacing v="0 0" />
+		</body>
+		<header-container>
+			<width v="1" />
+			<height v="0.035" />
+			<x v="0" />
+			<y v="0" />
+			<relative v="1" />
+		</header-container>
+		<header-layout>
+			<display v="static" />
+			<width v="0.075" />
+			<height v="0.035" />
+			<size v="5" />
+			<relative v="1" />
+		</header-layout>
+		<header-tab>
+			<align v="middle center" />
+			<border-size v="1" />
+			<width v="200" />
+			<height v="700" />
+			<border v="0 0 0 0" />
+			<border-radius v="0" />
+			<normal v="0 0 0 0" />
+			<text-normal v="225 225 225 255" />
+		</header-tab>
+		<header-item-layout>
+			<display v="dynamic" />
+			<height v="1" />
+			<size v="1" />
+			<relative v="1" />
+		</header-item-layout>
+		<header-item>
+			<border-radius v="0" />
+			<text-normal v="225 225 225 255" />
+		</header-item>
+		<header-tree>
+			<minimize-normal v="50 50 50 255" />
+			<maximize-normal v="50 50 50 255" />
+			<background v="50 50 50 255" />
+			<text-background v="225 225 225 255" />
+			<select-text-normal v="225 225 225 255" />
+			<select-text-hover v="225 225 225 255" />
+			<select-text-pressed v="225 225 225 255" />
+			<select-text-normal-active v="225 225 225 255" />
+			<select-text-hover-active v="225 225 225 255" />
+			<select-text-pressed-active v="225 225 225 255" />
+			<select-normal v="35 35 35 255" />
+			<select-hover v="60 60 60 255" />
+			<select-pressed v="80 80 80 255" />
+			<select-normal-active v="80 80 80 255" />
+			<select-hover-active v="80 80 80 255" />
+			<select-pressed-active v="80 80 80 255" />
+			<type v="tab" />
+		</header-tree>
+		<layout-container>
+			<display v="space" />
+			<height v="0.875" />
+			<relative v="1" />
+		</layout-container>
+		<prop-layout>
+			<display v="dynamic" />
+			<height v="0.04" />
+			<size v="1" />
+			<relative v="1" />
+		</prop-layout>
+		<prop-vector>
+			<font v="label" />
+			<width v="140" />
+			<height v="240" />
+			<combo-normal v="35 35 35 255" />
+			<combo-hover v="35 35 35 255" />
+			<combo-active v="35 35 35 255" />
+			<combo-label-normal v="225 225 225 255" />
+			<combo-label-hover v="225 225 225 255" />
+			<prop-text-normal v="255 255 255 255" />
+			<prop-text-hover v="255 255 255 255" />
+			<prop-edit-text-normal v="255 255 255 255" />
+			<prop-edit-text-hover v="255 255 255 255" />
+			<prop-edit-text-active v="255 255 255 255" />
+		</prop-vector>
+		<prop-item>
+			<font v="label" />
+			<step v="0.005" />
+			<padding v="0 0" />
+			<inc-symbol v="none" />
+			<dec-symbol v="none" />
+			<normal v="35 35 35 255" />
+			<hover v="35 35 35 255" />
+			<active v="35 35 35 255" />
+			<border-size v="1" />
+			<border-radius v="0" />
+			<text-normal v="225 225 225 255" />
+			<text-hover v="225 225 225 255" />
+			<edit-text-normal v="225 225 225 255" />
+			<edit-text-hover v="225 225 225 255" />
+			<edit-text-active v="225 225 225 255" />
+		</prop-item>
+		<prop-combo-layout>
+			<display v="dynamic" />
+			<height v="0.2" />
+			<size v="1" />
+			<relative v="1" />
+		</prop-combo-layout>
+		<prop-combo>
+			<font v="label" />
+			<content-padding v="4 4" />
+			<text-value v="1" />
+			<normal v="35 35 35 255" />
+			<hover v="35 35 35 255" />
+			<active v="35 35 35 255" />
+			<label-normal v="225 225 225 255" />
+			<label-hover v="225 225 225 255" />
+		</prop-combo>
+		<prop-tree>
+			<font v="label" />
+			<type v="tab" />
+			<text-background v="225 225 225 255" />
+			<select-text-normal v="225 225 225 255" />
+			<select-text-hover v="225 225 225 255" />
+			<select-text-pressed v="225 225 225 255" />
+			<select-text-normal-active v="225 225 225 255" />
+			<select-text-hover-active v="225 225 225 255" />
+			<select-text-pressed-active v="225 225 225 255" />
+			<select-normal v="40 40 40 255" />
+			<select-hover v="60 60 60 255" />
+			<select-pressed v="80 80 80 255" />
+			<select-normal-active v="80 80 80 255" />
+			<select-hover-active v="80 80 80 255" />
+			<select-pressed-active v="80 80 80 255" />
+			<minimized v="0" />
+		</prop-tree>
+		<prop-item-decimal>
+			<font v="label" />
+			<step v="1" />
+			<padding v="0 0" />
+			<inc-symbol v="none" />
+			<dec-symbol v="none" />
+			<normal v="45 45 45 255" />
+			<hover v="45 45 45 255" />
+			<active v="45 45 45 255" />
+			<border-size v="1" />
+			<border-radius v="0" />
+			<text-normal v="225 225 225 255" />
+			<text-hover v="225 225 225 255" />
+			<edit-text-normal v="225 225 225 255" />
+			<edit-text-hover v="225 225 225 255" />
+			<edit-text-active v="225 225 225 255" />
+			<decimal v="1" />
+			<range v="100" />
+		</prop-item-decimal>
+		<prop-check>
+			<font v="label" />
+			<text-normal v="225 225 225 255" />
+			<text-hover v="225 225 225 255" />
+		</prop-check>
+		<prop-text>
+			<font v="label" />
+			<color v="225 225 225 255" />
+		</prop-text>
+		<prop-button>
+			<font v="label" />
+			<text-normal v="225 225 225 255" />
+			<text-hover v="225 225 225 255" />
+			<normal v="35 35 35 255" />
+			<hover v="60 60 60 255" />
+			<active v="80 80 80 255" />
+			<border-radius v="0" />
+		</prop-button>
+		<system-status>
+			<color v="150 150 150 255" />
+			<width v="0.2" />
+			<height v="0.1" />
+			<x v="0.8" />
+			<y v="0.005" />
+			<relative v="1" />
+		</system-status>
+		<system-frames>
+			<color v="150 150 150 255" />
+			<width v="0.2" />
+			<height v="0.1" />
+			<x v="0.725" />
+			<y v="0.6725" />
+			<relative v="1" />
+		</system-frames>
+	</group>
+	<group class="hierarchy">
+		<layout>
+			<width v="0.2" />
+			<height v="0.705" />
+			<x v="0" />
+			<y v="0" />
+			<relative v="1" />
+		</layout>
+		<group>
+			<text v="hierarchy-window" />
+			<movable v="0" />
+			<scalable v="0" />
+			<minimizable v="0" />
+			<no-scrollbar v="1" />
+			<bordered v="0" />
+			<titled v="0" />
+			<group-padding v="10 10" />
+			<padding v="0 0" />
+		</group>
+		<header-layout>
+			<display v="dynamic" />
+			<height v="0.05" />
+			<relative v="1" />
+		</header-layout>
+		<toggle-button>
+			<text v="Activate scene" />
+			<font v="label" />
+			<text-normal v="225 225 225 255" />
+			<text-hover v="225 225 225 255" />
+			<normal v="35 35 35 255" />
+			<hover v="60 60 60 255" />
+			<active v="80 80 80 255" />
+			<border-radius v="0" />
+		</toggle-button>
+		<view-layout>
+			<display v="dynamic" />
+			<height v="0.9" />
+			<relative v="1" />
+		</view-layout>
+		<view-group>
+			<titled v="0" />
+			<text v="Entities" />
+			<fixed v="35 35 35 255" />
+			<header-normal v="60 60 60 255" />
+			<header-hover v="60 60 60 255" />
+			<header-active v="60 60 60 255" />
+		</view-group>
+		<view-item-layout>
+			<display v="dynamic" />
+			<height v="0.05" />
+			<relative v="1" />
+		</view-item-layout>
+		<view-item-text-layout>
+			<display v="dynamic" />
+			<height v="0.9" />
+			<relative v="1" />
+		</view-item-text-layout>
+		<view-tree>
+			<selectable v="1" />
+			<text-background v="225 225 225 255" />
+			<select-text-normal v="225 225 225 255" />
+			<select-text-hover v="225 225 225 255" />
+			<select-text-pressed v="225 225 225 255" />
+			<select-text-normal-active v="225 225 225 255" />
+			<select-text-hover-active v="225 225 225 255" />
+			<select-text-pressed-active v="225 225 225 255" />
+			<select-normal v="35 35 35 255" />
+			<select-hover v="40 40 40 255" />
+			<select-pressed v="50 50 50 255" />
+			<select-normal-active v="50 50 50 255" />
+			<select-hover-active v="50 50 50 255" />
+			<select-pressed-active v="50 50 50 255" />
+		</view-tree>
+		<view-selectable>
+			<normal v="35 35 35 255" />
+			<hover v="60 60 60 255" />
+			<pressed v="70 70 70 255" />
+			<normal-active v="70 70 70 255" />
+			<hover-active v="70 70 70 255" />
+			<pressed-active v="70 70 70 255" />
+			<text-normal v="225 225 225 255" />
+			<text-hover v="225 225 225 255" />
+			<text-pressed v="225 225 225 255" />
+		</view-selectable>
+	</group>
+	<group class="preview">
+		<layout>
+			<width v="0.6" />
+			<height v="0.7" />
+			<x v="0.2" />
+			<y v="0" />
+			<relative v="1" />
+		</layout>
+		<group>
+			<text v="preview-window" />
+			<movable v="0" />
+			<scalable v="0" />
+			<minimizable v="0" />
+			<no-scrollbar v="1" />
+			<titled v="0" />
+			<bordered v="0" />
+			<group-padding v="0 0" />
+			<fixed v="0 0 0 0" />
+		</group>
+		<image-layout>
+			<display v="dynamic" />
+			<height v="1" />
+			<relative v="1" />
+		</image-layout>
+		<image>
+			<color v="255 255 255 255" />
+			<type v="image-colored" />
+		</image>
+	</group>
+	<group class="inspector">
+		<layout>
+			<width v="0.20125" />
+			<height v="1.105" />
+			<x v="0.8" />
+			<y v="0" />
+			<relative v="1" />
+		</layout>
+		<group>
+			<text v="inspector-window" />
+			<movable v="0" />
+			<scalable v="0" />
+			<minimizable v="0" />
+			<no-scrollbar v="1" />
+			<bordered v="0" />
+			<titled v="0" />
+		</group>
+		<view-layout>
+			<display v="dynamic" />
+			<height v="0.985" />
+			<relative v="1" />
+		</view-layout>
+		<view-group>
+			<fixed v="35 35 35 255" />
+			<header-normal v="60 60 60 255" />
+			<header-hover v="60 60 60 255" />
+			<header-active v="60 60 60 255" />
+			<padding v="0 0" />
+			<header-label-normal v="225 225 225 255" />
+			<header-label-hover v="225 225 225 255" />
+			<header-label-active v="225 225 225 255" />
+		</view-group>
+		<header-layout>
+			<display v="dynamic" />
+			<height v="0.9" />
+			<relative v="1" />
+		</header-layout>
+		<view-item-layout>
+			<display v="dynamic" />
+			<height v="0.035" />
+			<relative v="1" />
+		</view-item-layout>
+		<view-picker-layout>
+			<display v="dynamic" />
+			<height v="0.2" />
+			<relative v="1" />
+		</view-picker-layout>
+		<view-text-layout>
+			<display v="dynamic" />
+			<height v="0.05" />
+			<size v="1" />
+			<relative v="1" />
+		</view-text-layout>
+		<view-prop-layout>
+			<display v="static" />
+			<width v="0.42" />
+			<height v="0.04" />
+			<size v="2" />
+			<relative v="1" />
+		</view-prop-layout>
+		<view-prop-name>
+			<align v="left middle" />
+			<font v="label" />
+			<color v="255 255 255 255" />
+		</view-prop-name>
+		<view-prop-slider>
+			<bar-normal v="60 60 60 255" />
+			<bar-hover v="60 60 60 255" />
+			<bar-active v="70 70 70 255" />
+			<bar-filled v="100 100 100 255" />
+			<padding v="0 0" />
+			<step v="0.005" />
+			<font v="label" />
+		</view-prop-slider>
+		<view-item-button>
+			<normal v="50 50 50 255" />
+			<hover v="60 60 60 255" />
+			<active v="70 70 70 255" />
+			<border-size v="0" />
+			<border-radius v="0" />
+			<text-align v="left middle" />
+		</view-item-button>
+	</group>
+	<group class="content">
+		<layout>
+			<width v="0.8" />
+			<height v="0.405" />
+			<x v="0" />
+			<y v="0.69975" />
+			<relative v="1" />
+		</layout>
+		<group>
+			<text v="content-window" />
+			<movable v="0" />
+			<scalable v="0" />
+			<minimizable v="0" />
+			<no-scrollbar v="1" />
+			<bordered v="0" />
+			<titled v="0" />
+			<group-padding v="4 8" />
+		</group>
+		<view-layout>
+			<display v="flex" />
+			<height v="0.94" />
+			<size v="2" />
+			<relative v="1" />
+		</view-layout>
+		<view-content>
+			<width v="0.235" />
+			<relative v="1" />
+		</view-content>
+		<view-assets>
+			<width v="0.775" />
+			<relative v="1" />
+		</view-assets>
+		<view-group>
+			<fixed v="35 35 35 255" />
+			<header-normal v="60 60 60 255" />
+			<header-hover v="60 60 60 255" />
+			<header-active v="60 60 60 255" />
+			<header-label-normal v="225 225 225 255" />
+			<header-label-hover v="225 225 225 255" />
+			<header-label-active v="225 225 225 255" />
+		</view-group>
+		<view-item-layout>
+			<display v="dynamic" />
+			<height v="0.5" />
+			<relative v="1" />
+		</view-item-layout>
+		<view-item-text-layout>
+			<display v="dynamic" />
+			<height v="0.0095" />
+			<relative v="1" />
+		</view-item-text-layout>
+		<view-tree>
+			<selectable v="1" />
+			<select-text-normal v="225 225 225 255" />
+			<select-text-hover v="225 225 225 255" />
+			<select-text-pressed v="225 225 225 255" />
+			<select-text-normal-active v="225 225 225 255" />
+			<select-text-hover-active v="225 225 225 255" />
+			<select-text-pressed-active v="225 225 225 255" />
+			<select-normal v="35 35 35 255" />
+			<select-hover v="60 60 60 255" />
+			<select-pressed v="80 80 80 255" />
+			<select-normal-active v="80 80 80 255" />
+			<select-hover-active v="80 80 80 255" />
+			<select-pressed-active v="80 80 80 255" />
+		</view-tree>
+		<view-asset-layout>
+			<display v="dynamic" />
+			<height v="0.002" />
+			<size v="3" />
+			<relative v="1" />
+		</view-asset-layout>
+		<view-context-layout>
+			<display v="dynamic" />
+			<height v="0.5" />
+			<size v="1" />
+			<relative v="1" />
+		</view-context-layout>
+		<view-context-item>
+			<normal v="0 0 0 0" />
+			<border-radius v="0" />
+			<border-size v="0" />
+			<text v="Choose" />
+		</view-context-item>
+		<view-selectable>
+			<normal v="35 35 35 255" />
+			<hover v="60 60 60 255" />
+			<pressed v="70 70 70 255" />
+			<text-normal v="225 225 225 255" />
+			<text-hover v="225 225 225 255" />
+			<text-pressed v="225 225 225 255" />
+		</view-selectable>
+	</group>
+</styles>
