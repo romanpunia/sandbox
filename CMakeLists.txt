@@ -28,7 +28,7 @@ set_target_properties(sandbox PROPERTIES
 		SOVERSION ${PROJECT_VERSION})
 
 #Project's compiler support for non-UNIX platforms
-include(opt/windows/CMakeLists.txt)
+include(opt/compiler/CMakeLists.txt)
 
 #Project's dependency resolvers
 include(ref/tomahawk/CMakeLists.txt)

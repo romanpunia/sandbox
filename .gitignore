@@ -6,3 +6,4 @@ bin/*.dll
 bin/*.lib
 bin/*.pdb
 bin/*.exe
+bin/*.ilk
