@@ -18,23 +18,13 @@ if (NOT MSVC)
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-implicit-function-declaration -fexceptions")
     endif()
 else()
-    set(CMAKE_SHARED_LINKER_FLAGS "/SUBSYSTEM:WINDOWS")
+    set(CMAKE_EXE_LINKER_FLAGS "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
     set(CMAKE_CXX_FLAGS_DEBUG "/MDd /Zi /Ob0 /Od")
     set(CMAKE_CXX_FLAGS_RELEASE "/MD /O2 /Ob2 /DNDEBUG")
-    set(CMAKE_C_FLAGS_DEBUG "/MDd /Zi /Ob0 /Od")
-    set(CMAKE_C_FLAGS_RELEASE "/MD /O2 /Ob2 /DNDEBUG")
     target_compile_definitions(sandbox PRIVATE
             -D_CRT_SECURE_NO_WARNINGS
             -D_SCL_SECURE_NO_WARNINGS)
     target_compile_options(sandbox PRIVATE
             /wd4305
-            /wd4244
-            /wd4316
-            /wd4018
-            /wd4200)
-endif()
-if (WIN32)
-    target_link_libraries(sandbox PRIVATE
-            ws2_32.lib
-            mswsock.lib)
+            /wd4244)
 endif()
