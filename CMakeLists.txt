@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 cmake_policy(SET CMP0054 NEW)
 
 #Project's package support for non-UNIX platforms
-include(opt/package/CMakeLists.txt)
+include(lib/package/CMakeLists.txt)
 
 #Project's metadata
 project(sandbox)
@@ -17,7 +17,7 @@ if (NOT DEFINED CMAKE_RUNTIME_OUTPUT_DIRECTORY)
 endif()
 
 #Project's source resolver
-include(opt/source/CMakeLists.txt)
+include(lib/source/CMakeLists.txt)
 
 #Project's compile options
 add_executable(sandbox ${SOURCE})
@@ -28,8 +28,13 @@ set_target_properties(sandbox PROPERTIES
 		SOVERSION ${PROJECT_VERSION})
 
 #Project's compiler support for non-UNIX platforms
-include(opt/compiler/CMakeLists.txt)
+include(lib/compiler/CMakeLists.txt)
+
+#Project's internal dependency resolvers
+include(src/internal/gizmo/CMakeLists.txt)
 
 #Project's dependency resolvers
-include(ref/tomahawk/CMakeLists.txt)
-include(ref/gizmo/CMakeLists.txt)
+include(lib/external/tomahawk/CMakeLists.txt)
+
+#Project's target and installation
+include(src/sandbox/CMakeLists.txt)
