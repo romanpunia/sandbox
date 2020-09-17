@@ -4224,7 +4224,7 @@ static void ReactInspectorEntity(GUI::Template* Target, Sandbox* App)
 	if (!Button)
 		return;
 
-	for (auto& It = Base->First(); It != Base->Last(); It++)
+	for (auto It = Base->First(); It != Base->Last(); It++)
 	{
 		Contextual->Source.TriggerX = Tree->GetWidgetPosition().X;
 		Contextual->Source.TriggerY = Tree->GetWidgetPosition().Y;

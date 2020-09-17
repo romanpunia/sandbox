@@ -4,6 +4,6 @@ if (NOT DEFINED THAWK_DIRECTORY)
 endif()
 
 add_subdirectory(${THAWK_DIRECTORY} tomahawk)
+link_directories(${THAWK_DIRECTORY})
 target_include_directories(sandbox PRIVATE ${THAWK_DIRECTORY})
-target_link_directories(sandbox PRIVATE ${THAWK_DIRECTORY})
 target_link_libraries(sandbox PRIVATE tomahawk)
