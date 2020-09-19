@@ -52,11 +52,11 @@ class Sandbox : public Application
 public:
     struct
     {
-        FileTree* Folder;
-        Material* Material;
-		Entity* Might;
-        Entity* Entity;
-        IGizmo* Gizmo;
+        FileTree* Folder = nullptr;
+        Material* Material = nullptr;
+		Entity* Might = nullptr;
+        Entity* Entity = nullptr;
+        IGizmo* Gizmo = nullptr;
         uint64_t Move;
         Inspector Window;
     } Selection;
@@ -66,15 +66,15 @@ public:
 		std::function<void(const std::string&)> OnResource;
 		std::function<void(Entity*)> OnEntity;
 		std::vector<std::pair<std::string, int>> Logs;
+		GUI::Context* GUI = nullptr;
+		GUI::DrawLabel* Label = nullptr;
+		FileTree* Asset = nullptr;
+		Entity* Camera = nullptr;
+		Entity* Draggable = nullptr;
 		std::string Resource;
 		std::string Status;
 		std::string Filename;
 		std::string Target;
-		GUI::Context* GUI;
-		GUI::DrawLabel* Label;
-        FileTree* Asset;
-        Entity* Camera;
-		Entity* Draggable;
         Vector2 Cursor;
         Matrix4x4 Gizmo;
         float GizmoScale;
@@ -92,9 +92,9 @@ public:
 
     struct
     {
-		Document* Layout;
-		Document* Style;
-        IGizmo* Gizmo[3];
+		Document* Layout = nullptr;
+		Document* Style = nullptr;
+		IGizmo* Gizmo[3] = { nullptr };
         std::string CurrentPath;
         std::string NextPath;
 		std::string ScenePath;
@@ -102,27 +102,27 @@ public:
 
 	struct
 	{
-		Texture2D* Empty;
-		Texture2D* Animation;
-		Texture2D* Body;
-		Texture2D* Camera;
-		Texture2D* Decal;
-		Texture2D* Mesh;
-		Texture2D* Motion;
-		Texture2D* Light;
-		Texture2D* Probe;
-		Texture2D* Listener;
-		Texture2D* Source;
-		Texture2D* Emitter;
+		Texture2D* Empty = nullptr;
+		Texture2D* Animation = nullptr;
+		Texture2D* Body = nullptr;
+		Texture2D* Camera = nullptr;
+		Texture2D* Decal = nullptr;
+		Texture2D* Mesh = nullptr;
+		Texture2D* Motion = nullptr;
+		Texture2D* Light = nullptr;
+		Texture2D* Probe = nullptr;
+		Texture2D* Listener = nullptr;
+		Texture2D* Source = nullptr;
+		Texture2D* Emitter = nullptr;
 	} Icons;
 
 	struct
 	{
-		DepthStencilState* DepthStencil;
-		RasterizerState* NoneRasterizer;
-		RasterizerState* BackRasterizer;
-		BlendState* Blend;
-		SamplerState* Sampler;
+		DepthStencilState* DepthStencil = nullptr;
+		RasterizerState* NoneRasterizer = nullptr;
+		RasterizerState* BackRasterizer = nullptr;
+		BlendState* Blend = nullptr;
+		SamplerState* Sampler = nullptr;
 	} States;
 
 public:

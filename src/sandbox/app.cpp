@@ -1905,21 +1905,21 @@ static void ReactInspectorEffect(GUI::Template* Target, Sandbox* App, AudioEffec
 	if (Value->GetFilter() != nullptr)
 	{
 		auto* Base = Value->GetFilter();
-		if (Base->Id() == THAWK_COMPONENT_ID(LowpassFilter))
+		if (THAWK_COMPONENT_IS(Base, LowpassFilter))
 		{
 			auto* Filter = Base->As<Filters::LowpassFilter>();
 			ReactInspectorFloat(Target, Property, &Filter->Gain, 0.0, 1.0, "Filter gain");
 			ReactInspectorFloat(Target, Property, &Filter->GainHF, 0.0, 1.0, "Filter gain HF");
 			Combo->Source.Text = "Lowpass filter";
 		}
-		else if (Base->Id() == THAWK_COMPONENT_ID(HighpassFilter))
+		else if (THAWK_COMPONENT_IS(Base, HighpassFilter))
 		{
 			auto* Filter = Base->As<Filters::HighpassFilter>();
 			ReactInspectorFloat(Target, Property, &Filter->Gain, 0.0, 1.0, "Filter gain");
 			ReactInspectorFloat(Target, Property, &Filter->GainLF, 0.0, 1.0, "Filter gain LF");
 			Combo->Source.Text = "Highpass filter";
 		}
-		else if (Base->Id() == THAWK_COMPONENT_ID(BandpassFilter))
+		else if (THAWK_COMPONENT_IS(Base, BandpassFilter))
 		{
 			auto* Filter = Base->As<Filters::BandpassFilter>();
 			ReactInspectorFloat(Target, Property, &Filter->Gain, 0.0, 1.0, "Filter gain");
@@ -1987,7 +1987,7 @@ static void ReactInspectorEffect(GUI::Template* Target, Sandbox* App, AudioEffec
 		return Active;
 	});
 
-	if (Value->Id() == THAWK_COMPONENT_ID(ReverbEffect))
+	if (THAWK_COMPONENT_IS(Value, ReverbEffect))
 	{
 		Effects::ReverbEffect* Base = Value->As<Effects::ReverbEffect>();
 		ReactInspectorVector3(Target, Vector, &Base->LateReverbPan, "Late reverb pan");
@@ -2012,7 +2012,7 @@ static void ReactInspectorEffect(GUI::Template* Target, Sandbox* App, AudioEffec
 		ReactInspectorFloat(Target, Property, &Base->RoomRolloffFactor, 0.0, 10.0, "Room roll-off");
 		ReactInspectorBool(Target, Checkbox, &Base->IsDecayHFLimited, "Is decay HF limited");
 	}
-	else if (Value->Id() == THAWK_COMPONENT_ID(ChorusEffect))
+	else if (THAWK_COMPONENT_IS(Value, ChorusEffect))
 	{
 		Effects::ChorusEffect* Base = Value->As<Effects::ChorusEffect>();
 		ReactInspectorFloat(Target, Property, &Base->Rate, 0.0, 10.0, "Rate");
@@ -2022,7 +2022,7 @@ static void ReactInspectorEffect(GUI::Template* Target, Sandbox* App, AudioEffec
 		ReactInspectorInt(Target, Property, &Base->Waveform, 0, 1, "Waveform");
 		ReactInspectorInt(Target, Property, &Base->Phase, -180, 180, "Phase");
 	}
-	else if (Value->Id() == THAWK_COMPONENT_ID(DistortionEffect))
+	else if (THAWK_COMPONENT_IS(Value, DistortionEffect))
 	{
 		Effects::DistortionEffect* Base = Value->As<Effects::DistortionEffect>();
 		ReactInspectorFloat(Target, Property, &Base->Edge, 0.0, 1.0, "Edge");
@@ -2031,7 +2031,7 @@ static void ReactInspectorEffect(GUI::Template* Target, Sandbox* App, AudioEffec
 		ReactInspectorFloat(Target, Property, &Base->EQCenter, 80.0, 24000.0, "EQ center");
 		ReactInspectorFloat(Target, Property, &Base->EQBandwidth, 80.0, 24000.0, "EQ bandwidth");
 	}
-	else if (Value->Id() == THAWK_COMPONENT_ID(EchoEffect))
+	else if (THAWK_COMPONENT_IS(Value, EchoEffect))
 	{
 		Effects::EchoEffect* Base = Value->As<Effects::EchoEffect>();
 		ReactInspectorFloat(Target, Property, &Base->Delay, 0.0, 0.207, "Delay");
@@ -2040,7 +2040,7 @@ static void ReactInspectorEffect(GUI::Template* Target, Sandbox* App, AudioEffec
 		ReactInspectorFloat(Target, Property, &Base->Feedback, 0.0, 1.0, "Feedback");
 		ReactInspectorFloat(Target, Property, &Base->Spread, -1.0, 1.0, "Spread");
 	}
-	else if (Value->Id() == THAWK_COMPONENT_ID(FlangerEffect))
+	else if (THAWK_COMPONENT_IS(Value, FlangerEffect))
 	{
 		Effects::FlangerEffect* Base = Value->As<Effects::FlangerEffect>();
 		ReactInspectorFloat(Target, Property, &Base->Rate, 0.0, 10.0, "Rate");
@@ -2050,14 +2050,14 @@ static void ReactInspectorEffect(GUI::Template* Target, Sandbox* App, AudioEffec
 		ReactInspectorInt(Target, Property, &Base->Waveform, 0, 1, "Waveform");
 		ReactInspectorInt(Target, Property, &Base->Phase, -180, 180, "Phase");
 	}
-	else if (Value->Id() == THAWK_COMPONENT_ID(FrequencyShifterEffect))
+	else if (THAWK_COMPONENT_IS(Value, FrequencyShifterEffect))
 	{
 		Effects::FrequencyShifterEffect* Base = Value->As<Effects::FrequencyShifterEffect>();
 		ReactInspectorFloat(Target, Property, &Base->Frequency, 0.0, 24000.0, "Frequency");
 		ReactInspectorInt(Target, Property, &Base->LeftDirection, 0, 2, "Left direction");
 		ReactInspectorInt(Target, Property, &Base->RightDirection, 0, 2, "Right direction");
 	}
-	else if (Value->Id() == THAWK_COMPONENT_ID(VocalMorpherEffect))
+	else if (THAWK_COMPONENT_IS(Value, VocalMorpherEffect))
 	{
 		Effects::VocalMorpherEffect* Base = Value->As<Effects::VocalMorpherEffect>();
 		ReactInspectorFloat(Target, Property, &Base->Rate, 0.0, 10.0, "Rate");
@@ -2067,20 +2067,20 @@ static void ReactInspectorEffect(GUI::Template* Target, Sandbox* App, AudioEffec
 		ReactInspectorInt(Target, Property, &Base->PhonemebCoarseTuning, -24, 24, "Phonemeb coarse");
 		ReactInspectorInt(Target, Property, &Base->Waveform, 0, 2, "Waveform");
 	}
-	else if (Value->Id() == THAWK_COMPONENT_ID(PitchShifterEffect))
+	else if (THAWK_COMPONENT_IS(Value, PitchShifterEffect))
 	{
 		Effects::PitchShifterEffect* Base = Value->As<Effects::PitchShifterEffect>();
 		ReactInspectorInt(Target, Property, &Base->CoarseTune, -12, 12, "Coarse tune");
 		ReactInspectorInt(Target, Property, &Base->FineTune, -50, 50, "Fine tune");
 	}
-	else if (Value->Id() == THAWK_COMPONENT_ID(RingModulatorEffect))
+	else if (THAWK_COMPONENT_IS(Value, RingModulatorEffect))
 	{
 		Effects::RingModulatorEffect* Base = Value->As<Effects::RingModulatorEffect>();
 		ReactInspectorFloat(Target, Property, &Base->Frequency, 0.0, 8000.0, "Frequency");
 		ReactInspectorFloat(Target, Property, &Base->HighpassCutOff, 0.0, 24000.0, "Highpass cut-off");
 		ReactInspectorInt(Target, Property, &Base->Waveform, 0, 2, "Waveform");
 	}
-	else if (Value->Id() == THAWK_COMPONENT_ID(AutowahEffect))
+	else if (THAWK_COMPONENT_IS(Value, AutowahEffect))
 	{
 		Effects::AutowahEffect* Base = Value->As<Effects::AutowahEffect>();
 		ReactInspectorFloat(Target, Property, &Base->AttackTime, 0.0001, 1.0, "Attack time");
@@ -2088,12 +2088,12 @@ static void ReactInspectorEffect(GUI::Template* Target, Sandbox* App, AudioEffec
 		ReactInspectorFloat(Target, Property, &Base->Resonance, 2.0, 1000.0, "Resonance");
 		ReactInspectorFloat(Target, Property, &Base->PeakGain, 0.00003, 31621.0, "Peak gain");
 	}
-	else if (Value->Id() == THAWK_COMPONENT_ID(CompressorEffect))
+	else if (THAWK_COMPONENT_IS(Value, CompressorEffect))
 	{
 		Effects::CompressorEffect* Base = Value->As<Effects::CompressorEffect>();
 		ReactInspectorText(Target, Text, "There are no parameters");
 	}
-	else if (Value->Id() == THAWK_COMPONENT_ID(EqualizerEffect))
+	else if (THAWK_COMPONENT_IS(Value, EqualizerEffect))
 	{
 		Effects::EqualizerEffect* Base = Value->As<Effects::EqualizerEffect>();
 		ReactInspectorFloat(Target, Property, &Base->LowCutOff, 0.126, 7.943, "Low gain");
@@ -2239,7 +2239,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 	if (!Text)
 		return;
 
-	if (Ref->Id() == THAWK_COMPONENT_ID(SliderConstraint))
+	if (THAWK_COMPONENT_IS(Ref, SliderConstraint))
 	{
 		auto* Base = Ref->As<Components::SliderConstraint>();
 		static bool IsGhosted = true;
@@ -2385,7 +2385,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 			return Active;
 		});
 	}
-	else if (Ref->Id() == THAWK_COMPONENT_ID(RigidBody))
+	else if (THAWK_COMPONENT_IS(Ref, RigidBody))
 	{
 		auto* Base = Ref->As<Components::RigidBody>();
 		Target->Compose(Layout, nullptr);
@@ -2615,7 +2615,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 			return Active;
 		});
 	}
-	else if (Ref->Id() == THAWK_COMPONENT_ID(SoftBody))
+	else if (THAWK_COMPONENT_IS(Ref, SoftBody))
 	{
 		auto* Base = Ref->As<Components::SoftBody>();
 		Target->Compose(Layout, nullptr);
@@ -2761,7 +2761,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 			return Active;
 		});
 	}
-	else if (Ref->Id() == THAWK_COMPONENT_ID(AudioSource))
+	else if (THAWK_COMPONENT_IS(Ref, AudioSource))
 	{
 		auto* Base = Ref->As<Components::AudioSource>();
 		if (Base->GetSource()->GetClip() != nullptr)
@@ -2772,7 +2772,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 				auto* Effect = Effects->at(i);
 				Target->ComposeStateful(Tree, [=]()
 				{
-					Tree->Source.Text = App->GetPascal(Effect->Name());
+					Tree->Source.Text = App->GetPascal(Effect->GetName());
 				}, [=](bool Active)
 				{
 					if (Active)
@@ -2863,14 +2863,14 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 			return Active;
 		});
 	}
-	else if (Ref->Id() == THAWK_COMPONENT_ID(AudioListener))
+	else if (THAWK_COMPONENT_IS(Ref, AudioListener))
 	{
 		auto* Base = Ref->As<Components::AudioListener>();
 		Target->Compose(Layout, nullptr);
 
 		ReactInspectorFloat(Target, Property, &Base->Gain, 0, 5, "Gain");
 	}
-	else if (Ref->Id() == THAWK_COMPONENT_ID(Acceleration))
+	else if (THAWK_COMPONENT_IS(Ref, Acceleration))
 	{
 		auto* Base = Ref->As<Components::Acceleration>();
 		Target->Compose(Layout, nullptr);
@@ -2882,7 +2882,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 		ReactInspectorVector3(Target, Vector, &Base->ConstantCenter, "Center");
 		ReactInspectorBool(Target, Checkbox, &Base->Velocity, "Velocity");
 	}
-	else if (Ref->Id() == THAWK_COMPONENT_ID(KeyAnimator))
+	else if (THAWK_COMPONENT_IS(Ref, KeyAnimator))
 	{
 		auto* Base = Ref->As<Components::KeyAnimator>();
 		Target->ComposeStateful(Tree, [=]()
@@ -3069,7 +3069,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 			return Active;
 		});
 	}
-	else if (Ref->Id() == THAWK_COMPONENT_ID(SkinAnimator))
+	else if (THAWK_COMPONENT_IS(Ref, SkinAnimator))
 	{
 		auto* Base = Ref->As<Components::SkinAnimator>();
 		Target->ComposeStateful(Tree, [=]()
@@ -3246,7 +3246,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 			return Active;
 		});
 	}
-	else if (Ref->Id() == THAWK_COMPONENT_ID(EmitterAnimator))
+	else if (THAWK_COMPONENT_IS(Ref, EmitterAnimator))
 	{
 		auto* Base = Ref->As<Components::EmitterAnimator>();
 		Target->ComposeStateful(Tree, [=]()
@@ -3375,7 +3375,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 		ReactInspectorFloat(Target, Property, &Base->Noisiness, 0, 1000, "Noisiness");
 		ReactInspectorBool(Target, Checkbox, &Base->Simulate, "Is simulation enabled");
 	}
-	else if (Ref->Id() == THAWK_COMPONENT_ID(FreeLook))
+	else if (THAWK_COMPONENT_IS(Ref, FreeLook))
 	{
 		auto* Base = Ref->As<Components::FreeLook>();
 		Target->Compose(Layout, nullptr);
@@ -3383,7 +3383,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 		ReactInspectorFloat(Target, Property, &Base->Sensitivity, 0, 4, "Sensitivity");
 		ReactInspectorKeyCode(Target, App, &Base->Rotate, "Rotate");
 	}
-	else if (Ref->Id() == THAWK_COMPONENT_ID(Fly))
+	else if (THAWK_COMPONENT_IS(Ref, Fly))
 	{
 		auto* Base = Ref->As<Components::Fly>();
 		Target->Compose(Layout, nullptr);
@@ -3401,7 +3401,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 		ReactInspectorKeyCode(Target, App, &Base->Fast, "Fast");
 		ReactInspectorKeyCode(Target, App, &Base->Slow, "Slow");
 	}
-	else if (Ref->Id() == THAWK_COMPONENT_ID(Model) || Ref->Id() == THAWK_COMPONENT_ID(LimpidModel))
+	else if (THAWK_COMPONENT_IS(Ref, Model) || THAWK_COMPONENT_IS(Ref, LimpidModel))
 	{
 		auto* Base = Ref->As<Components::Model>();
 		if (Base->GetDrawable() != nullptr)
@@ -3456,7 +3456,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 			return Active;
 		});
 	}
-	else if (Ref->Id() == THAWK_COMPONENT_ID(Skin) || Ref->Id() == THAWK_COMPONENT_ID(LimpidSkin))
+	else if (THAWK_COMPONENT_IS(Ref, Skin) || THAWK_COMPONENT_IS(Ref, LimpidSkin))
 	{
 		auto* Base = Ref->As<Components::Skin>();
 		if (Base->GetDrawable() != nullptr)
@@ -3528,14 +3528,14 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 			return Active;
 		});
 	}
-	else if (Ref->Id() == THAWK_COMPONENT_ID(Decal) || Ref->Id() == THAWK_COMPONENT_ID(LimpidDecal))
+	else if (THAWK_COMPONENT_IS(Ref, Decal) || THAWK_COMPONENT_IS(Ref, LimpidDecal))
 	{
 		auto* Base = Ref->As<Components::Decal>();
 		ReactInspectorAppearance(Target, App, Base->GetSurface());
 		ReactInspectorFloat(Target, Property, &Base->FieldOfView, 0, 360, "Field of view");
 		ReactInspectorFloat(Target, Property, &Base->Distance, 1, 1000, "Distance");
 	}
-	else if (Ref->Id() == THAWK_COMPONENT_ID(Emitter) || Ref->Id() == THAWK_COMPONENT_ID(LimpidEmitter))
+	else if (THAWK_COMPONENT_IS(Ref, Emitter) || THAWK_COMPONENT_IS(Ref, LimpidEmitter))
 	{
 		auto* Base = Ref->As<Components::Emitter>();
 		Target->ComposeStateful(Tree, [=]()
@@ -3568,7 +3568,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 		ReactInspectorBool(Target, Checkbox, &Base->Connected, "Is connected");
 		ReactInspectorBool(Target, Checkbox, &Base->Static, "Is static");
 	}
-	else if (Ref->Id() == THAWK_COMPONENT_ID(PointLight))
+	else if (THAWK_COMPONENT_IS(Ref, PointLight))
 	{
 		auto* Base = Ref->As<Components::PointLight>();
 		ReactInspectorText(Target, Text, "Diffuse color");
@@ -3580,7 +3580,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 		ReactInspectorFloat(Target, Property, &Base->ShadowSoftness, 0, 10, "Shadow softness");
 		ReactInspectorBool(Target, Checkbox, &Base->Shadowed, "Is shadowed");
 	}
-	else if (Ref->Id() == THAWK_COMPONENT_ID(SpotLight))
+	else if (THAWK_COMPONENT_IS(Ref, SpotLight))
 	{
 		auto* Base = Ref->As<Components::SpotLight>();
 		ReactInspectorText(Target, Text, "Diffuse color");
@@ -3594,7 +3594,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 		ReactInspectorFloat(Target, Property, &Base->ShadowSoftness, 0, 10, "Shadow softness");
 		ReactInspectorBool(Target, Checkbox, &Base->Shadowed, "Is shadowed");
 	}
-	else if (Ref->Id() == THAWK_COMPONENT_ID(LineLight))
+	else if (THAWK_COMPONENT_IS(Ref, LineLight))
 	{
 		auto* Base = Ref->As<Components::LineLight>();
 		Vector3 RlhEmission = Base->RlhEmission * 3000;
@@ -3625,7 +3625,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 		Base->RlhEmission = RlhEmission / 3000;
 		Base->MieEmission = MieEmission / 3000;
 	}
-	else if (Ref->Id() == THAWK_COMPONENT_ID(ReflectionProbe))
+	else if (THAWK_COMPONENT_IS(Ref, ReflectionProbe))
 	{
 		auto* Base = Ref->As<Components::ReflectionProbe>();
 		ReactInspectorText(Target, Text, "Reflection color");
@@ -3705,7 +3705,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 		ReactInspectorBool(Target, Checkbox, &Base->ParallaxCorrected, "Parallax corrected");
 		ReactInspectorBool(Target, Checkbox, &Base->StaticMask, "Static mask");
 	}
-	else if (Ref->Id() == THAWK_COMPONENT_ID(Camera))
+	else if (THAWK_COMPONENT_IS(Ref, Camera))
 	{
 		auto* Base = Ref->As<Components::Camera>();
 		for (auto It = Base->GetRenderer()->GetRenderers()->begin(); It != Base->GetRenderer()->GetRenderers()->end(); It++)
@@ -3739,21 +3739,21 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 
 				if (ReactInspectorButton(Target, Button, "Remove"))
 				{
-					Base->GetRenderer()->RemoveRenderer(Render->Id());
+					Base->GetRenderer()->RemoveRenderer(Render->GetId());
 					Contextual->Close();
 					Removed = true;
 				}
 
 				if (ReactInspectorButton(Target, Button, "Move up"))
 				{
-					Base->GetRenderer()->MoveRenderer(Render->Id(), -1);
+					Base->GetRenderer()->MoveRenderer(Render->GetId(), -1);
 					Contextual->Close();
 					Removed = true;
 				}
 
 				if (ReactInspectorButton(Target, Button, "Move down"))
 				{
-					Base->GetRenderer()->MoveRenderer(Render->Id(), 1);
+					Base->GetRenderer()->MoveRenderer(Render->GetId(), 1);
 					Contextual->Close();
 					Removed = true;
 				}
@@ -3766,14 +3766,14 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 
 			Target->ComposeStateful(Tree, [=]()
 			{
-				Tree->Source.Text = App->GetPascal(Render->Name()) + (Render->Active ? "" : " (inactive)");
+				Tree->Source.Text = App->GetPascal(Render->GetName()) + (Render->Active ? "" : " (inactive)");
 			}, [=](bool Active)
 			{
 				if (!Active)
 					return Active;
 
 				Target->Compose(Layout, nullptr);
-				if (Render->Id() == THAWK_COMPONENT_ID(DepthRenderer))
+				if (THAWK_COMPONENT_IS(Render, DepthRenderer))
 				{
 					auto* Source = Render->As<Renderers::DepthRenderer>();
 					ReactInspectorBigInt(Target, Property, &Source->Renderers.PointLightResolution, 4, 4096, "Point light resolution");
@@ -3784,7 +3784,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 					ReactInspectorBigInt(Target, Property, &Source->Renderers.LineLightLimits, 0, 32, "Line light limit");
 					ReactInspectorFloat(Target, Property, &Source->ShadowDistance, 0, 1000, "Shadow Distance");
 				}
-				else if (Render->Id() == THAWK_COMPONENT_ID(LightRenderer))
+				else if (THAWK_COMPONENT_IS(Render, LightRenderer))
 				{
 					auto* Source = Render->As<Renderers::LightRenderer>();
 					ReactInspectorText(Target, Text, "High emission");
@@ -3864,7 +3864,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 
 					ReactInspectorBool(Target, Checkbox, &Source->RecursiveProbes, "Recursive probes");
 				}
-				else if (Render->Id() == THAWK_COMPONENT_ID(ProbeRenderer))
+				else if (THAWK_COMPONENT_IS(Render, ProbeRenderer))
 				{
 					auto* Source = Render->As<Renderers::ProbeRenderer>();
 					if (ReactInspectorBigInt(Target, Property, &Source->Size, 4, 4096, "Resolution"))
@@ -3872,7 +3872,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 
 					ReactInspectorBigInt(Target, Property, &Source->MipLevels, 0, 11, "Mip levels");
 				}
-				else if (Render->Id() == THAWK_COMPONENT_ID(ReflectionsRenderer))
+				else if (THAWK_COMPONENT_IS(Render, ReflectionsRenderer))
 				{
 					auto* Source = Render->As<Renderers::ReflectionsRenderer>();
 					ReactInspectorFloat(Target, Property, &Source->RenderPass1.Samples, 1, 64, "Sample count");
@@ -3880,33 +3880,29 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 					ReactInspectorFloat(Target, Property, &Source->RenderPass1.Intensity, 0, 3, "Intensity");
 					ReactInspectorFloat(Target, Property, &Source->RenderPass2.Blur, 0, 2, "Blur");
 				}
-				else if (Render->Id() == THAWK_COMPONENT_ID(DepthOfFieldRenderer))
+				else if (THAWK_COMPONENT_IS(Render, DepthOfFieldRenderer))
 				{
 					auto* Source = Render->As<Renderers::DepthOfFieldRenderer>();
-					ReactInspectorFloat(Target, Property, &Source->RenderPass.Threshold, 0, 1, "Threshold");
-					ReactInspectorFloat(Target, Property, &Source->RenderPass.Gain, 0, 1, "Gain");
-					ReactInspectorFloat(Target, Property, &Source->RenderPass.Fringe, 0, 1, "Fringe");
-					ReactInspectorFloat(Target, Property, &Source->RenderPass.Dither, 0, 1, "Dither");
-					ReactInspectorFloat(Target, Property, &Source->RenderPass.Bias, 0, 2, "Bias");
-					ReactInspectorFloat(Target, Property, &Source->RenderPass.Samples, 0, 10, "Samples");
-					ReactInspectorFloat(Target, Property, &Source->RenderPass.Rings, 0, 10, "Rings");
-					ReactInspectorFloat(Target, Property, &Source->RenderPass.FocalDepth, 0, 5, "Focal depth");
-					ReactInspectorFloat(Target, Property, &Source->RenderPass.FarDistance, 0, 100, "Far distance");
-					ReactInspectorFloat(Target, Property, &Source->RenderPass.FarRange, 0, 100, "Far range");
-					ReactInspectorFloat(Target, Property, &Source->RenderPass.NearDistance, 0, 50, "Near distance");
+					ReactInspectorFloat(Target, Property, &Source->FocusDistance, -1.0f, 1000, "Auto focus distance");
+					ReactInspectorFloat(Target, Property, &Source->FocusTime, 0.01f, 2.0f, "Auto focus speed");
+					ReactInspectorFloat(Target, Property, &Source->FocusRadius, 0, 8.0f, "Auto focus radius");
+					ReactInspectorFloat(Target, Property, &Source->RenderPass.Radius, 0, 8, "Radius");
+					ReactInspectorFloat(Target, Property, &Source->RenderPass.Bokeh, 0, 512, "Bokeh");
+					ReactInspectorFloat(Target, Property, &Source->RenderPass.Scale, -7, 7, "Scale");
+					ReactInspectorFloat(Target, Property, &Source->RenderPass.NearDistance, 0, 1000, "Near distance");
 					ReactInspectorFloat(Target, Property, &Source->RenderPass.NearRange, 0, 50, "Near range");
-					ReactInspectorFloat(Target, Property, &Source->RenderPass.Intensity, 0, 5, "Intensity");
-					ReactInspectorFloat(Target, Property, &Source->RenderPass.Circular, 0, 5, "Circular");
+					ReactInspectorFloat(Target, Property, &Source->RenderPass.FarDistance, 0, 1000, "Far distance");
+					ReactInspectorFloat(Target, Property, &Source->RenderPass.FarRange, 0, 50, "Far range");
 				}
-				else if (Render->Id() == THAWK_COMPONENT_ID(EmissionRenderer))
+				else if (THAWK_COMPONENT_IS(Render, EmissionRenderer))
 				{
 					auto* Source = Render->As<Renderers::EmissionRenderer>();
 					ReactInspectorFloat(Target, Property, &Source->RenderPass.Samples, 0, 128, "Sample count");
 					ReactInspectorFloat(Target, Property, &Source->RenderPass.Scale, 0, 16, "Scale");
-					ReactInspectorFloat(Target, Property, &Source->RenderPass.Intensity, 0, 3, "Intensity");
+					ReactInspectorFloat(Target, Property, &Source->RenderPass.Intensity, 0, 10, "Intensity");
 					ReactInspectorFloat(Target, Property, &Source->RenderPass.Threshold, 0, 1, "Threshold");
 				}
-				else if (Render->Id() == THAWK_COMPONENT_ID(GlitchRenderer))
+				else if (THAWK_COMPONENT_IS(Render, GlitchRenderer))
 				{
 					auto* Source = Render->As<Renderers::GlitchRenderer>();
 					ReactInspectorFloat(Target, Property, &Source->ColorDrift, 0, 5, "Color drift");
@@ -3914,7 +3910,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 					ReactInspectorFloat(Target, Property, &Source->ScanLineJitter, 0, 5, "Scan line jitter");
 					ReactInspectorFloat(Target, Property, &Source->VerticalJump, 0, 0.1, "Vertical jump");
 				}
-				else if (Render->Id() == THAWK_COMPONENT_ID(AmbientOcclusionRenderer))
+				else if (THAWK_COMPONENT_IS(Render, AmbientOcclusionRenderer))
 				{
 					auto* Source = Render->As<Renderers::AmbientOcclusionRenderer>();
 					ReactInspectorFloat(Target, Property, &Source->RenderPass1.Samples, 1, 8, "Sample count");
@@ -3928,7 +3924,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 					ReactInspectorFloat(Target, Property, &Source->RenderPass2.Blur, 0, 8, "Blur strength");
 					ReactInspectorFloat(Target, Property, &Source->RenderPass2.Power, 0, 8, "Blur power");
 				}
-				else if (Render->Id() == THAWK_COMPONENT_ID(DirectOcclusionRenderer))
+				else if (THAWK_COMPONENT_IS(Render, DirectOcclusionRenderer))
 				{
 					auto* Source = Render->As<Renderers::DirectOcclusionRenderer>();
 					ReactInspectorFloat(Target, Property, &Source->RenderPass1.Samples, 1, 8, "Sample count");
@@ -3942,7 +3938,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 					ReactInspectorFloat(Target, Property, &Source->RenderPass2.Blur, 0, 8, "Blur strength");
 					ReactInspectorFloat(Target, Property, &Source->RenderPass2.Power, 0, 8, "Blur power");
 				}
-				else if (Render->Id() == THAWK_COMPONENT_ID(ToneRenderer))
+				else if (THAWK_COMPONENT_IS(Render, ToneRenderer))
 				{
 					auto* Source = Render->As<Renderers::ToneRenderer>();
 					ReactInspectorText(Target, Text, "Desaturation gamma");
@@ -3960,8 +3956,8 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 					ReactInspectorFloat(Target, Property, &Source->RenderPass.VignetteAmount, 0, 2, "Vignette amount");
 					ReactInspectorFloat(Target, Property, &Source->RenderPass.VignetteCurve, -5, 5, "Vignette curve");
 					ReactInspectorFloat(Target, Property, &Source->RenderPass.VignetteRadius, 0, 3, "Vignette radius");
-					ReactInspectorFloat(Target, Property, &Source->RenderPass.GammaIntensity, 0, 5, "Gamma intensity");
-					ReactInspectorFloat(Target, Property, &Source->RenderPass.LinearIntensity, 0, 5, "Linear intensity");
+					ReactInspectorFloat(Target, Property, &Source->RenderPass.GammaIntensity, 0.1, 4, "Gamma correction");
+					ReactInspectorFloat(Target, Property, &Source->RenderPass.LinearIntensity, 0, 1, "GC intensity");
 					ReactInspectorFloat(Target, Property, &Source->RenderPass.ToneIntensity, 0, 1, "Tone intensity");
 					ReactInspectorFloat(Target, Property, &Source->RenderPass.DesaturationIntensity, 0, 1, "Desaturation intensity");
 					ReactInspectorFloat(Target, Property, &Source->RenderPass.AcesIntensity, 0, 1, "Aces film");
@@ -4034,7 +4030,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 			App->State.IsCameraActive = true;
 		}
 	}
-	else if (Ref->Id() == THAWK_COMPONENT_ID(Scriptable))
+	else if (THAWK_COMPONENT_IS(Ref, Scriptable))
 	{
 		auto* Base = Ref->As<Components::Scriptable>();
 		if (!Base->GetSource().empty())
@@ -4247,7 +4243,7 @@ static void ReactInspectorEntity(GUI::Template* Target, Sandbox* App)
 
 			if (ReactInspectorButton(Target, Button, "Remove"))
 			{
-				Base->RemoveComponent(It->second->Id());
+				Base->RemoveComponent(It->second->GetId());
 				Contextual->Close();
 				Removed = true;
 			}
@@ -4260,7 +4256,7 @@ static void ReactInspectorEntity(GUI::Template* Target, Sandbox* App)
 
 		Target->ComposeStateful(Tree, [=]()
 		{
-			Tree->Source.Text = App->GetPascal(It->second->IsActive() ? It->second->Name() : std::string(It->second->Name()) + " (inactive)");
+			Tree->Source.Text = App->GetPascal(It->second->IsActive() ? It->second->GetName() : std::string(It->second->GetName()) + " (inactive)");
 		}, [=](bool Active)
 		{
 			if (Active)
