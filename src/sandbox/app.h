@@ -165,7 +165,7 @@ Entry:
 		Application::Desc Init;
 		Init.GraphicsDevice.VSyncMode = VSync_Frequency_X1;
 		Init.GraphicsDevice.Backend = RenderBackend_D3D11;
-		Init.GraphicsDevice.Debug = false;
+		Init.GraphicsDevice.Debug = true;
 		Init.Activity.FreePosition = true;
 		Init.Activity.Title = "Sandbox";
 		Init.Activity.Hidden = true;
@@ -176,7 +176,10 @@ Entry:
 		delete App;
 
 		if (Demo::GetSource().empty())
+		{
+			Demo::GetSource().~basic_string();
 			goto Exit;
+		}
 
 		Init.Activity.Title = "Demo";
 		Init.Activity.Hidden = false;

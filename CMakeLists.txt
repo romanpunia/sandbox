@@ -26,6 +26,7 @@ set_target_properties(sandbox PROPERTIES
 		CXX_STANDARD_REQUIRED 14
 		VERSION ${PROJECT_VERSION}
 		SOVERSION ${PROJECT_VERSION})
+target_compile_definitions(sandbox PRIVATE -DTHAWK_EXPORT)
 
 #Project's compiler support for non-UNIX platforms
 include(lib/compiler/CMakeLists.txt)

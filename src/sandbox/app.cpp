@@ -9,9 +9,9 @@ void CGizmoTransformRender::DrawCircle(const tvector3 &orig, float r, float g, f
 
 	Matrix4x4 ViewProjection = App->Scene->GetCamera()->As<Components::Camera>()->GetViewProjection();
 
-	App->Renderer->DirectBegin();
-	App->Renderer->DirectTopology(PrimitiveTopology_Line_Strip);
-	App->Renderer->DirectTransform(Matrix4x4::Create(App->State.Gizmo.Position(), App->State.Gizmo.Rotation()) * ViewProjection);
+	App->Renderer->Begin();
+	App->Renderer->Topology(PrimitiveTopology_Line_Strip);
+	App->Renderer->Transform(Matrix4x4::Create(App->State.Gizmo.Position(), App->State.Gizmo.Rotation()) * ViewProjection);
 
 	for (uint32_t i = 0; i <= 50; i++)
 	{
@@ -19,12 +19,12 @@ void CGizmoTransformRender::DrawCircle(const tvector3 &orig, float r, float g, f
 		vt = vtx * cos((2 * ZPI / 50) * (float)i);
 		vt += vty * sin((2 * ZPI / 50) * (float)i);
 
-		App->Renderer->DirectEmit();
-		App->Renderer->DirectPosition(vt.x, vt.y, vt.z);
-		App->Renderer->DirectColor(r, g, b, 1);
+		App->Renderer->Emit();
+		App->Renderer->Position(vt.x, vt.y, vt.z);
+		App->Renderer->Color(r, g, b, 1);
 	}
 
-	App->Renderer->DirectEnd();
+	App->Renderer->End();
 }
 void CGizmoTransformRender::DrawCircleHalf(const tvector3 &orig, float r, float g, float b, const tvector3 &vtx, const tvector3 &vty, tplane &camPlan)
 {
@@ -34,9 +34,9 @@ void CGizmoTransformRender::DrawCircleHalf(const tvector3 &orig, float r, float 
 
 	Matrix4x4 ViewProjection = App->Scene->GetCamera()->As<Components::Camera>()->GetViewProjection();
 
-	App->Renderer->DirectBegin();
-	App->Renderer->DirectTopology(PrimitiveTopology_Line_Strip);
-	App->Renderer->DirectTransform(Matrix4x4::Create(App->State.Gizmo.Position(), App->State.Gizmo.Rotation()) * ViewProjection);
+	App->Renderer->Begin();
+	App->Renderer->Topology(PrimitiveTopology_Line_Strip);
+	App->Renderer->Transform(Matrix4x4::Create(App->State.Gizmo.Position(), App->State.Gizmo.Rotation()) * ViewProjection);
 
 	for (uint32_t i = 0; i < 30; i++)
 	{
@@ -46,16 +46,16 @@ void CGizmoTransformRender::DrawCircleHalf(const tvector3 &orig, float r, float 
 
 		if (camPlan.DotNormal(vt) > 0)
 		{
-			App->Renderer->DirectEmit();
-			App->Renderer->DirectPosition(vt.x, vt.y, vt.z);
-			App->Renderer->DirectColor(r, g, b, 1);
+			App->Renderer->Emit();
+			App->Renderer->Position(vt.x, vt.y, vt.z);
+			App->Renderer->Color(r, g, b, 1);
 		}
 	}
 
-	App->Renderer->DirectEnd();
-	App->Renderer->DirectBegin();
-	App->Renderer->DirectTopology(PrimitiveTopology_Line_Strip);
-	App->Renderer->DirectTransform(Matrix4x4::Create(App->State.Gizmo.Position(), -1, App->State.Gizmo.Rotation()) * ViewProjection);
+	App->Renderer->End();
+	App->Renderer->Begin();
+	App->Renderer->Topology(PrimitiveTopology_Line_Strip);
+	App->Renderer->Transform(Matrix4x4::Create(App->State.Gizmo.Position(), -1, App->State.Gizmo.Rotation()) * ViewProjection);
 
 	for (uint32_t i = 0; i < 30; i++)
 	{
@@ -65,13 +65,13 @@ void CGizmoTransformRender::DrawCircleHalf(const tvector3 &orig, float r, float 
 
 		if (camPlan.DotNormal(vt) > 0)
 		{
-			App->Renderer->DirectEmit();
-			App->Renderer->DirectPosition(vt.x, vt.y, vt.z);
-			App->Renderer->DirectColor(r, g, b, 1);
+			App->Renderer->Emit();
+			App->Renderer->Position(vt.x, vt.y, vt.z);
+			App->Renderer->Color(r, g, b, 1);
 		}
 	}
 
-	App->Renderer->DirectEnd();
+	App->Renderer->End();
 }
 void CGizmoTransformRender::DrawAxis(const tvector3 &orig, const tvector3 &axis, const tvector3 &vtx, const tvector3 &vty, float fct, float fct2, const tvector4 &col)
 {
@@ -81,19 +81,19 @@ void CGizmoTransformRender::DrawAxis(const tvector3 &orig, const tvector3 &axis,
 
 	Matrix4x4 ViewProjection = App->Scene->GetCamera()->As<Components::Camera>()->GetViewProjection();
 
-	App->Renderer->DirectBegin();
-	App->Renderer->DirectTopology(PrimitiveTopology_Line_List);
-	App->Renderer->DirectTransform(ViewProjection);
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectPosition(orig.x, orig.y, orig.z);
-	App->Renderer->DirectColor(col.x, col.y, col.z, 1);
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectPosition(orig.x + axis.x, orig.y + axis.y, orig.z + axis.z);
-	App->Renderer->DirectColor(col.x, col.y, col.z, 1);
-	App->Renderer->DirectEnd();
-	App->Renderer->DirectBegin();
-	App->Renderer->DirectTopology(PrimitiveTopology_Triangle_Strip);
-	App->Renderer->DirectTransform(ViewProjection);
+	App->Renderer->Begin();
+	App->Renderer->Topology(PrimitiveTopology_Line_List);
+	App->Renderer->Transform(ViewProjection);
+	App->Renderer->Emit();
+	App->Renderer->Position(orig.x, orig.y, orig.z);
+	App->Renderer->Color(col.x, col.y, col.z, 1);
+	App->Renderer->Emit();
+	App->Renderer->Position(orig.x + axis.x, orig.y + axis.y, orig.z + axis.z);
+	App->Renderer->Color(col.x, col.y, col.z, 1);
+	App->Renderer->End();
+	App->Renderer->Begin();
+	App->Renderer->Topology(PrimitiveTopology_Triangle_Strip);
+	App->Renderer->Transform(ViewProjection);
 
 	for (uint32_t i = 0; i <= 30; i++)
 	{
@@ -103,24 +103,24 @@ void CGizmoTransformRender::DrawAxis(const tvector3 &orig, const tvector3 &axis,
 		pt += axis * fct2;
 		pt += orig;
 
-		App->Renderer->DirectEmit();
-		App->Renderer->DirectPosition(pt.x, pt.y, pt.z);
-		App->Renderer->DirectColor(col.x, col.y, col.z, 1);
+		App->Renderer->Emit();
+		App->Renderer->Position(pt.x, pt.y, pt.z);
+		App->Renderer->Color(col.x, col.y, col.z, 1);
 
 		pt = vtx * cos(((2 * ZPI) / 30.0f) * (float)(i + 1)) * fct;
 		pt += vty * sin(((2 * ZPI) / 30.0f) * (float)(i + 1)) * fct;
 		pt += axis * fct2;
 		pt += orig;
 
-		App->Renderer->DirectEmit();
-		App->Renderer->DirectPosition(pt.x, pt.y, pt.z);
-		App->Renderer->DirectColor(col.x, col.y, col.z, 1);
-		App->Renderer->DirectEmit();
-		App->Renderer->DirectPosition(orig.x + axis.x, orig.y + axis.y, orig.z + axis.z);
-		App->Renderer->DirectColor(col.x, col.y, col.z, 1);
+		App->Renderer->Emit();
+		App->Renderer->Position(pt.x, pt.y, pt.z);
+		App->Renderer->Color(col.x, col.y, col.z, 1);
+		App->Renderer->Emit();
+		App->Renderer->Position(orig.x + axis.x, orig.y + axis.y, orig.z + axis.z);
+		App->Renderer->Color(col.x, col.y, col.z, 1);
 	}
 
-	App->Renderer->DirectEnd();
+	App->Renderer->End();
 }
 void CGizmoTransformRender::DrawCamem(const tvector3 &orig, const tvector3 &vtx, const tvector3 &vty, float ng)
 {
@@ -130,12 +130,12 @@ void CGizmoTransformRender::DrawCamem(const tvector3 &orig, const tvector3 &vtx,
 
 	Matrix4x4 ViewProjection = App->Scene->GetCamera()->As<Components::Camera>()->GetViewProjection();
 
-	App->Renderer->DirectBegin();
-	App->Renderer->DirectTopology(PrimitiveTopology_Triangle_Strip);
-	App->Renderer->DirectTransform(ViewProjection);
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectColor(1, 1, 0, 0.5f);
-	App->Renderer->DirectPosition(orig.x, orig.y, orig.z);
+	App->Renderer->Begin();
+	App->Renderer->Topology(PrimitiveTopology_Triangle_Strip);
+	App->Renderer->Transform(ViewProjection);
+	App->Renderer->Emit();
+	App->Renderer->Color(1, 1, 0, 0.5f);
+	App->Renderer->Position(orig.x, orig.y, orig.z);
 
 	for (uint32_t i = 0; i <= 50; i++)
 	{
@@ -144,21 +144,21 @@ void CGizmoTransformRender::DrawCamem(const tvector3 &orig, const tvector3 &vtx,
 		vt += vty * sin(((ng) / 50)*i);
 		vt += orig;
 
-		App->Renderer->DirectEmit();
-		App->Renderer->DirectColor(1, 1, 0, 0.5f);
-		App->Renderer->DirectPosition(vt.x, vt.y, vt.z);
+		App->Renderer->Emit();
+		App->Renderer->Color(1, 1, 0, 0.5f);
+		App->Renderer->Position(vt.x, vt.y, vt.z);
 	}
 
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectColor(1, 1, 0, 0.5f);
-	App->Renderer->DirectPosition(orig.x, orig.y, orig.z);
-	App->Renderer->DirectEnd();
-	App->Renderer->DirectBegin();
-	App->Renderer->DirectTopology(PrimitiveTopology_Line_Strip);
-	App->Renderer->DirectTransform(ViewProjection);
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectColor(1, 1, 0.2F, 1);
-	App->Renderer->DirectPosition(orig.x, orig.y, orig.z);
+	App->Renderer->Emit();
+	App->Renderer->Color(1, 1, 0, 0.5f);
+	App->Renderer->Position(orig.x, orig.y, orig.z);
+	App->Renderer->End();
+	App->Renderer->Begin();
+	App->Renderer->Topology(PrimitiveTopology_Line_Strip);
+	App->Renderer->Transform(ViewProjection);
+	App->Renderer->Emit();
+	App->Renderer->Color(1, 1, 0.2F, 1);
+	App->Renderer->Position(orig.x, orig.y, orig.z);
 
 	for (INT i = 0; i <= 50; i++)
 	{
@@ -167,15 +167,15 @@ void CGizmoTransformRender::DrawCamem(const tvector3 &orig, const tvector3 &vtx,
 		vt += vty * sin(((ng) / 50)*i);
 		vt += orig;
 
-		App->Renderer->DirectEmit();
-		App->Renderer->DirectColor(1, 1, 0.2F, 1);
-		App->Renderer->DirectPosition(vt.x, vt.y, vt.z);
+		App->Renderer->Emit();
+		App->Renderer->Color(1, 1, 0.2F, 1);
+		App->Renderer->Position(vt.x, vt.y, vt.z);
 	}
 
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectColor(1, 1, 0.2F, 1);
-	App->Renderer->DirectPosition(orig.x, orig.y, orig.z);
-	App->Renderer->DirectEnd();
+	App->Renderer->Emit();
+	App->Renderer->Color(1, 1, 0.2F, 1);
+	App->Renderer->Position(orig.x, orig.y, orig.z);
+	App->Renderer->End();
 }
 void CGizmoTransformRender::DrawQuadAxis(const tvector3 &orig, const tvector3 &axis, const tvector3 &vtx, const tvector3 &vty, float fct, float fct2, const tvector4 &col)
 {
@@ -185,16 +185,16 @@ void CGizmoTransformRender::DrawQuadAxis(const tvector3 &orig, const tvector3 &a
 
 	Matrix4x4 ViewProjection = App->Scene->GetCamera()->As<Components::Camera>()->GetViewProjection();
 
-	App->Renderer->DirectBegin();
-	App->Renderer->DirectTopology(PrimitiveTopology_Line_List);
-	App->Renderer->DirectTransform(ViewProjection);
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectPosition(orig.x, orig.y, orig.z);
-	App->Renderer->DirectColor(col.x, col.y, col.z, 1);
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectPosition(orig.x + axis.x, orig.y + axis.y, orig.z + axis.z);
-	App->Renderer->DirectColor(col.x, col.y, col.z, 1);
-	App->Renderer->DirectEnd();
+	App->Renderer->Begin();
+	App->Renderer->Topology(PrimitiveTopology_Line_List);
+	App->Renderer->Transform(ViewProjection);
+	App->Renderer->Emit();
+	App->Renderer->Position(orig.x, orig.y, orig.z);
+	App->Renderer->Color(col.x, col.y, col.z, 1);
+	App->Renderer->Emit();
+	App->Renderer->Position(orig.x + axis.x, orig.y + axis.y, orig.z + axis.z);
+	App->Renderer->Color(col.x, col.y, col.z, 1);
+	App->Renderer->End();
 }
 void CGizmoTransformRender::DrawQuad(const tvector3& orig, float size, bool bSelected, const tvector3& axisU, const tvector3 &axisV)
 {
@@ -210,102 +210,102 @@ void CGizmoTransformRender::DrawQuad(const tvector3& orig, float size, bool bSel
 	pts[2] = orig + (axisU + axisV) * size;
 	pts[3] = orig + (axisV * size);
 
-	App->Renderer->DirectBegin();
-	App->Renderer->DirectTopology(PrimitiveTopology_Triangle_Strip);
-	App->Renderer->DirectTransform(ViewProjection);
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectPosition(pts[0].x, pts[0].y, pts[0].z);
+	App->Renderer->Begin();
+	App->Renderer->Topology(PrimitiveTopology_Triangle_Strip);
+	App->Renderer->Transform(ViewProjection);
+	App->Renderer->Emit();
+	App->Renderer->Position(pts[0].x, pts[0].y, pts[0].z);
 
 	if (!bSelected)
-		App->Renderer->DirectColor(1, 1, 0, 0.5f);
+		App->Renderer->Color(1, 1, 0, 0.5f);
 	else
-		App->Renderer->DirectColor(1, 1, 1, 0.6f);
+		App->Renderer->Color(1, 1, 1, 0.6f);
 
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectPosition(pts[1].x, pts[1].y, pts[1].z);
+	App->Renderer->Emit();
+	App->Renderer->Position(pts[1].x, pts[1].y, pts[1].z);
 
 	if (!bSelected)
-		App->Renderer->DirectColor(1, 1, 0, 0.5f);
+		App->Renderer->Color(1, 1, 0, 0.5f);
 	else
-		App->Renderer->DirectColor(1, 1, 1, 0.6f);
+		App->Renderer->Color(1, 1, 1, 0.6f);
 
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectPosition(pts[2].x, pts[2].y, pts[2].z);
+	App->Renderer->Emit();
+	App->Renderer->Position(pts[2].x, pts[2].y, pts[2].z);
 
 	if (!bSelected)
-		App->Renderer->DirectColor(1, 1, 0, 0.5f);
+		App->Renderer->Color(1, 1, 0, 0.5f);
 	else
-		App->Renderer->DirectColor(1, 1, 1, 0.6f);
+		App->Renderer->Color(1, 1, 1, 0.6f);
 
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectPosition(pts[0].x, pts[0].y, pts[0].z);
+	App->Renderer->Emit();
+	App->Renderer->Position(pts[0].x, pts[0].y, pts[0].z);
 
 	if (!bSelected)
-		App->Renderer->DirectColor(1, 1, 0, 0.5f);
+		App->Renderer->Color(1, 1, 0, 0.5f);
 	else
-		App->Renderer->DirectColor(1, 1, 1, 0.6f);
+		App->Renderer->Color(1, 1, 1, 0.6f);
 
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectPosition(pts[3].x, pts[3].y, pts[3].z);
+	App->Renderer->Emit();
+	App->Renderer->Position(pts[3].x, pts[3].y, pts[3].z);
 
 	if (!bSelected)
-		App->Renderer->DirectColor(1, 1, 0, 0.5f);
+		App->Renderer->Color(1, 1, 0, 0.5f);
 	else
-		App->Renderer->DirectColor(1, 1, 1, 0.6f);
+		App->Renderer->Color(1, 1, 1, 0.6f);
 
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectPosition(pts[0].x, pts[0].y, pts[0].z);
+	App->Renderer->Emit();
+	App->Renderer->Position(pts[0].x, pts[0].y, pts[0].z);
 
 	if (!bSelected)
-		App->Renderer->DirectColor(1, 1, 0, 0.5f);
+		App->Renderer->Color(1, 1, 0, 0.5f);
 	else
-		App->Renderer->DirectColor(1, 1, 1, 0.6f);
+		App->Renderer->Color(1, 1, 1, 0.6f);
 
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectPosition(pts[2].x, pts[2].y, pts[2].z);
+	App->Renderer->Emit();
+	App->Renderer->Position(pts[2].x, pts[2].y, pts[2].z);
 
 	if (!bSelected)
-		App->Renderer->DirectColor(1, 1, 0, 0.5f);
+		App->Renderer->Color(1, 1, 0, 0.5f);
 	else
-		App->Renderer->DirectColor(1, 1, 1, 0.6f);
+		App->Renderer->Color(1, 1, 1, 0.6f);
 
-	App->Renderer->DirectEnd();
-	App->Renderer->DirectBegin();
-	App->Renderer->DirectTopology(PrimitiveTopology_Line_Strip);
-	App->Renderer->DirectTransform(ViewProjection);
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectPosition(pts[0].x, pts[0].y, pts[0].z);
+	App->Renderer->End();
+	App->Renderer->Begin();
+	App->Renderer->Topology(PrimitiveTopology_Line_Strip);
+	App->Renderer->Transform(ViewProjection);
+	App->Renderer->Emit();
+	App->Renderer->Position(pts[0].x, pts[0].y, pts[0].z);
 
 	if (!bSelected)
-		App->Renderer->DirectColor(1, 1, 0.2f, 1);
+		App->Renderer->Color(1, 1, 0.2f, 1);
 	else
-		App->Renderer->DirectColor(1, 1, 1, 0.6f);
+		App->Renderer->Color(1, 1, 1, 0.6f);
 
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectPosition(pts[1].x, pts[1].y, pts[1].z);
+	App->Renderer->Emit();
+	App->Renderer->Position(pts[1].x, pts[1].y, pts[1].z);
 
 	if (!bSelected)
-		App->Renderer->DirectColor(1, 1, 0.2f, 1);
+		App->Renderer->Color(1, 1, 0.2f, 1);
 	else
-		App->Renderer->DirectColor(1, 1, 1, 0.6f);
+		App->Renderer->Color(1, 1, 1, 0.6f);
 
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectPosition(pts[2].x, pts[2].y, pts[2].z);
+	App->Renderer->Emit();
+	App->Renderer->Position(pts[2].x, pts[2].y, pts[2].z);
 
 	if (!bSelected)
-		App->Renderer->DirectColor(1, 1, 0.2f, 1);
+		App->Renderer->Color(1, 1, 0.2f, 1);
 	else
-		App->Renderer->DirectColor(1, 1, 1, 0.6f);
+		App->Renderer->Color(1, 1, 1, 0.6f);
 
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectPosition(pts[3].x, pts[3].y, pts[3].z);
+	App->Renderer->Emit();
+	App->Renderer->Position(pts[3].x, pts[3].y, pts[3].z);
 
 	if (!bSelected)
-		App->Renderer->DirectColor(1, 1, 0.2f, 1);
+		App->Renderer->Color(1, 1, 0.2f, 1);
 	else
-		App->Renderer->DirectColor(1, 1, 1, 0.6f);
+		App->Renderer->Color(1, 1, 1, 0.6f);
 
-	App->Renderer->DirectEnd();
+	App->Renderer->End();
 }
 void CGizmoTransformRender::DrawTri(const tvector3& orig, float size, bool bSelected, const tvector3& axisU, const tvector3& axisV)
 {
@@ -315,9 +315,9 @@ void CGizmoTransformRender::DrawTri(const tvector3& orig, float size, bool bSele
 
 	Matrix4x4 ViewProjection = App->Scene->GetCamera()->As<Components::Camera>()->GetViewProjection();
 
-	App->Renderer->DirectBegin();
-	App->Renderer->DirectTopology(PrimitiveTopology_Triangle_Strip);
-	App->Renderer->DirectTransform(ViewProjection);
+	App->Renderer->Begin();
+	App->Renderer->Topology(PrimitiveTopology_Triangle_Strip);
+	App->Renderer->Transform(ViewProjection);
 
 	tvector3 pts[3];
 	pts[0] = orig;
@@ -328,67 +328,67 @@ void CGizmoTransformRender::DrawTri(const tvector3& orig, float size, bool bSele
 	pts[1] += orig;
 	pts[2] += orig;
 
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectPosition(pts[0].x, pts[0].y, pts[0].z);
+	App->Renderer->Emit();
+	App->Renderer->Position(pts[0].x, pts[0].y, pts[0].z);
 	if (!bSelected)
-		App->Renderer->DirectColor(1, 1, 0, 0.5f);
+		App->Renderer->Color(1, 1, 0, 0.5f);
 	else
-		App->Renderer->DirectColor(1, 1, 1, 0.6f);
+		App->Renderer->Color(1, 1, 1, 0.6f);
 
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectPosition(pts[1].x, pts[1].y, pts[1].z);
+	App->Renderer->Emit();
+	App->Renderer->Position(pts[1].x, pts[1].y, pts[1].z);
 	if (!bSelected)
-		App->Renderer->DirectColor(1, 1, 0, 0.5f);
+		App->Renderer->Color(1, 1, 0, 0.5f);
 	else
-		App->Renderer->DirectColor(1, 1, 1, 0.6f);
+		App->Renderer->Color(1, 1, 1, 0.6f);
 
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectPosition(pts[2].x, pts[2].y, pts[2].z);
+	App->Renderer->Emit();
+	App->Renderer->Position(pts[2].x, pts[2].y, pts[2].z);
 	if (!bSelected)
-		App->Renderer->DirectColor(1, 1, 0, 0.5f);
+		App->Renderer->Color(1, 1, 0, 0.5f);
 	else
-		App->Renderer->DirectColor(1, 1, 1, 0.6f);
+		App->Renderer->Color(1, 1, 1, 0.6f);
 
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectPosition(pts[0].x, pts[0].y, pts[0].z);
+	App->Renderer->Emit();
+	App->Renderer->Position(pts[0].x, pts[0].y, pts[0].z);
 	if (!bSelected)
-		App->Renderer->DirectColor(1, 1, 0, 0.5f);
+		App->Renderer->Color(1, 1, 0, 0.5f);
 	else
-		App->Renderer->DirectColor(1, 1, 1, 0.6f);
+		App->Renderer->Color(1, 1, 1, 0.6f);
 
-	App->Renderer->DirectEnd();
-	App->Renderer->DirectBegin();
-	App->Renderer->DirectTopology(PrimitiveTopology_Line_Strip);
-	App->Renderer->DirectTransform(ViewProjection);
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectPosition(pts[0].x, pts[0].y, pts[0].z);
+	App->Renderer->End();
+	App->Renderer->Begin();
+	App->Renderer->Topology(PrimitiveTopology_Line_Strip);
+	App->Renderer->Transform(ViewProjection);
+	App->Renderer->Emit();
+	App->Renderer->Position(pts[0].x, pts[0].y, pts[0].z);
 	if (!bSelected)
-		App->Renderer->DirectColor(1, 1, 0.2f, 1);
+		App->Renderer->Color(1, 1, 0.2f, 1);
 	else
-		App->Renderer->DirectColor(1, 1, 1, 0.6f);
+		App->Renderer->Color(1, 1, 1, 0.6f);
 
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectPosition(pts[1].x, pts[1].y, pts[1].z);
+	App->Renderer->Emit();
+	App->Renderer->Position(pts[1].x, pts[1].y, pts[1].z);
 	if (!bSelected)
-		App->Renderer->DirectColor(1, 1, 0.2f, 1);
+		App->Renderer->Color(1, 1, 0.2f, 1);
 	else
-		App->Renderer->DirectColor(1, 1, 1, 0.6f);
+		App->Renderer->Color(1, 1, 1, 0.6f);
 
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectPosition(pts[2].x, pts[2].y, pts[2].z);
+	App->Renderer->Emit();
+	App->Renderer->Position(pts[2].x, pts[2].y, pts[2].z);
 	if (!bSelected)
-		App->Renderer->DirectColor(1, 1, 0.2f, 1);
+		App->Renderer->Color(1, 1, 0.2f, 1);
 	else
-		App->Renderer->DirectColor(1, 1, 1, 0.6f);
+		App->Renderer->Color(1, 1, 1, 0.6f);
 
-	App->Renderer->DirectEmit();
-	App->Renderer->DirectPosition(pts[0].x, pts[0].y, pts[0].z);
+	App->Renderer->Emit();
+	App->Renderer->Position(pts[0].x, pts[0].y, pts[0].z);
 	if (!bSelected)
-		App->Renderer->DirectColor(1, 1, 0.2f, 1);
+		App->Renderer->Color(1, 1, 0.2f, 1);
 	else
-		App->Renderer->DirectColor(1, 1, 1, 0.6f);
+		App->Renderer->Color(1, 1, 1, 0.6f);
 
-	App->Renderer->DirectEnd();
+	App->Renderer->End();
 }
 
 static void ReactApplicationLoop(GUI::Body* Target, Sandbox* App)
@@ -3017,13 +3017,13 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 		Target->Compose(Layout, nullptr);
 
 		int Frame = (int)Base->State.Clip;
-		ReactInspectorInt(Target, Property, &Frame, -1, Base->Clips.size() - 1, "Animation clip");
+		ReactInspectorInt(Target, Property, &Frame, -1, (int)Base->Clips.size() - 1, "Animation clip");
 		Base->State.Clip = Frame;
 
 		if (Base->State.Clip >= 0 && (size_t)Base->State.Clip < Base->Clips.size())
 		{
 			Frame = Base->State.Frame;
-			ReactInspectorInt(Target, Property, &Frame, -1, Base->Clips[Base->State.Clip].Keys.size() - 1, "Animation frame");
+			ReactInspectorInt(Target, Property, &Frame, -1, (int)Base->Clips[Base->State.Clip].Keys.size() - 1, "Animation frame");
 			Base->State.Frame = Frame;
 		}
 
@@ -3196,13 +3196,13 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 		Target->Compose(Layout, nullptr);
 
 		int Frame = (int)Base->State.Clip;
-		ReactInspectorInt(Target, Property, &Frame, -1, Base->Clips.size() - 1, "Animation clip");
+		ReactInspectorInt(Target, Property, &Frame, -1, (int)Base->Clips.size() - 1, "Animation clip");
 		Base->State.Clip = Frame;
 
 		if (Base->State.Clip >= 0 && (size_t)Base->State.Clip < Base->Clips.size())
 		{
 			Frame = Base->State.Frame;
-			ReactInspectorInt(Target, Property, &Frame, -1, Base->Clips[Base->State.Clip].Keys.size() - 1, "Animation frame");
+			ReactInspectorInt(Target, Property, &Frame, -1, (int)Base->Clips[Base->State.Clip].Keys.size() - 1, "Animation frame");
 			Base->State.Frame = Frame;
 		}
 
@@ -3494,7 +3494,7 @@ static void ReactInspectorComponent(GUI::Template* Target, Sandbox* App, Compone
 			}
 
 			Target->Compose(Layout, nullptr);
-			ReactInspectorConst(Target, Property, Base->Skeleton.Pose.size(), "Joints count");
+			ReactInspectorConst(Target, Property, (int)Base->Skeleton.Pose.size(), "Joints count");
 
 			Button->Source.Text = "Unassign source";
 		}
@@ -6286,22 +6286,22 @@ void Sandbox::UpdateGrid(Timer* Time)
 					Matrix4x4 Offset = (Value->Transform->GetRoot() ? Value->Transform->GetRoot()->GetWorld() : Matrix4x4::Identity());
 					for (size_t j = 0; j < Keys->size(); j++)
 					{
-						Renderer->DirectBegin();
-						Renderer->DirectTopology(PrimitiveTopology_Line_Strip);
-						Renderer->DirectTransform(Offset * Scene->GetCamera()->As<Components::Camera>()->GetViewProjection());
-						Renderer->DirectEmit();
-						Renderer->DirectPosition(Keys->at(j).Position.X, Keys->at(j).Position.Y, -Keys->at(j).Position.Z);
-						Renderer->DirectEmit();
+						Renderer->Begin();
+						Renderer->Topology(PrimitiveTopology_Line_Strip);
+						Renderer->Transform(Offset * Scene->GetCamera()->As<Components::Camera>()->GetViewProjection());
+						Renderer->Emit();
+						Renderer->Position(Keys->at(j).Position.X, Keys->at(j).Position.Y, -Keys->at(j).Position.Z);
+						Renderer->Emit();
 
 						if (KeyAnimator->State.Frame == j)
-							Renderer->DirectColor(1, 0, 1, 1);
+							Renderer->Color(1, 0, 1, 1);
 
 						if (j + 1 >= Keys->size())
-							Renderer->DirectPosition(Keys->at(0).Position.X, Keys->at(0).Position.Y, -Keys->at(0).Position.Z);
+							Renderer->Position(Keys->at(0).Position.X, Keys->at(0).Position.Y, -Keys->at(0).Position.Z);
 						else
-							Renderer->DirectPosition(Keys->at(j + 1).Position.X, Keys->at(j + 1).Position.Y, -Keys->at(j + 1).Position.Z);
+							Renderer->Position(Keys->at(j + 1).Position.X, Keys->at(j + 1).Position.Y, -Keys->at(j + 1).Position.Z);
 
-						Renderer->DirectEnd();
+						Renderer->End();
 					}
 				}
 			}
@@ -6327,54 +6327,54 @@ void Sandbox::UpdateGrid(Timer* Time)
 
 		for (int j = 0; j < 4; j++)
 		{
-			Renderer->DirectBegin();
-			Renderer->DirectTopology(PrimitiveTopology_Line_Strip);
-			Renderer->DirectTransform(Origin[j] * Transform * Scene->GetCamera()->As<Components::Camera>()->GetViewProjection());
-			Renderer->DirectEmit();
+			Renderer->Begin();
+			Renderer->Topology(PrimitiveTopology_Line_Strip);
+			Renderer->Transform(Origin[j] * Transform * Scene->GetCamera()->As<Components::Camera>()->GetViewProjection());
+			Renderer->Emit();
 			if (Value == Selection.Might)
-				Renderer->DirectColor(1, 1, 0.75f, 0.15f);
+				Renderer->Color(1, 1, 0.75f, 0.15f);
 			else if (Value != Selection.Entity)
-				Renderer->DirectColor(1, 1, 1, 0.1f);
+				Renderer->Color(1, 1, 1, 0.1f);
 			else
-				Renderer->DirectColor(1, 1, 1, 0.5f);
-			Renderer->DirectPosition(1, 1, 1);
+				Renderer->Color(1, 1, 1, 0.5f);
+			Renderer->Position(1, 1, 1);
 
-			Renderer->DirectEmit();
+			Renderer->Emit();
 			if (Value == Selection.Might)
-				Renderer->DirectColor(1, 1, 0.75f, 0.15f);
+				Renderer->Color(1, 1, 0.75f, 0.15f);
 			else if (Value != Selection.Entity)
-				Renderer->DirectColor(1, 1, 1, 0.1f);
+				Renderer->Color(1, 1, 1, 0.1f);
 			else
-				Renderer->DirectColor(1, 1, 1, 0.5f);
-			Renderer->DirectPosition(-1, 1, 1);
+				Renderer->Color(1, 1, 1, 0.5f);
+			Renderer->Position(-1, 1, 1);
 
-			Renderer->DirectEmit();
+			Renderer->Emit();
 			if (Value == Selection.Might)
-				Renderer->DirectColor(1, 1, 0.75f, 0.15f);
+				Renderer->Color(1, 1, 0.75f, 0.15f);
 			else if (Value != Selection.Entity)
-				Renderer->DirectColor(1, 1, 1, 0.1f);
+				Renderer->Color(1, 1, 1, 0.1f);
 			else
-				Renderer->DirectColor(1, 1, 1, 0.5f);
-			Renderer->DirectPosition(-1, -1, 1);
+				Renderer->Color(1, 1, 1, 0.5f);
+			Renderer->Position(-1, -1, 1);
 
-			Renderer->DirectEmit();
+			Renderer->Emit();
 			if (Value == Selection.Might)
-				Renderer->DirectColor(1, 1, 0.75f, 0.15f);
+				Renderer->Color(1, 1, 0.75f, 0.15f);
 			else if (Value != Selection.Entity)
-				Renderer->DirectColor(1, 1, 1, 0.1f);
+				Renderer->Color(1, 1, 1, 0.1f);
 			else
-				Renderer->DirectColor(1, 1, 1, 0.5f);
-			Renderer->DirectPosition(1, -1, 1);
+				Renderer->Color(1, 1, 1, 0.5f);
+			Renderer->Position(1, -1, 1);
 
-			Renderer->DirectEmit();
+			Renderer->Emit();
 			if (Value == Selection.Might)
-				Renderer->DirectColor(1, 1, 0.75f, 0.15f);
+				Renderer->Color(1, 1, 0.75f, 0.15f);
 			else if (Value != Selection.Entity)
-				Renderer->DirectColor(1, 1, 1, 0.1f);
+				Renderer->Color(1, 1, 1, 0.1f);
 			else
-				Renderer->DirectColor(1, 1, 1, 0.5f);
-			Renderer->DirectPosition(1, 1, 1);
-			Renderer->DirectEnd();
+				Renderer->Color(1, 1, 1, 0.5f);
+			Renderer->Position(1, 1, 1);
+			Renderer->End();
 		}
 	}
 
@@ -6434,25 +6434,25 @@ void Sandbox::UpdateGrid(Timer* Time)
 
 			for (const auto& j : Origin)
 			{
-				Renderer->DirectBegin();
-				Renderer->DirectTopology(PrimitiveTopology_Line_Strip);
-				Renderer->DirectTransform(j * Scene->GetEntity(i)->Transform->GetWorld() * ViewProjection);
-				Renderer->DirectEmit();
-				Renderer->DirectColor(0.5f, 0.5f, 1.0f, 0.75f);
-				Renderer->DirectPosition(1.0f, 1.0f, 1.0f);
-				Renderer->DirectEmit();
-				Renderer->DirectColor(0.5f, 0.5f, 1.0f, 0.75f);
-				Renderer->DirectPosition(-1.0f, 1.0f, 1.0f);
-				Renderer->DirectEmit();
-				Renderer->DirectColor(0.5f, 0.5f, 1.0f, 0.75f);
-				Renderer->DirectPosition(-1.0f, -1.0f, 1.0f);
-				Renderer->DirectEmit();
-				Renderer->DirectColor(0.5f, 0.5f, 1.0f, 0.75f);
-				Renderer->DirectPosition(1.0f, -1.0f, 1.0f);
-				Renderer->DirectEmit();
-				Renderer->DirectColor(0.5f, 0.5f, 1.0f, 0.75f);
-				Renderer->DirectPosition(1.0f, 1.0f, 1.0f);
-				Renderer->DirectEnd();
+				Renderer->Begin();
+				Renderer->Topology(PrimitiveTopology_Line_Strip);
+				Renderer->Transform(j * Scene->GetEntity(i)->Transform->GetWorld() * ViewProjection);
+				Renderer->Emit();
+				Renderer->Color(0.5f, 0.5f, 1.0f, 0.75f);
+				Renderer->Position(1.0f, 1.0f, 1.0f);
+				Renderer->Emit();
+				Renderer->Color(0.5f, 0.5f, 1.0f, 0.75f);
+				Renderer->Position(-1.0f, 1.0f, 1.0f);
+				Renderer->Emit();
+				Renderer->Color(0.5f, 0.5f, 1.0f, 0.75f);
+				Renderer->Position(-1.0f, -1.0f, 1.0f);
+				Renderer->Emit();
+				Renderer->Color(0.5f, 0.5f, 1.0f, 0.75f);
+				Renderer->Position(1.0f, -1.0f, 1.0f);
+				Renderer->Emit();
+				Renderer->Color(0.5f, 0.5f, 1.0f, 0.75f);
+				Renderer->Position(1.0f, 1.0f, 1.0f);
+				Renderer->End();
 			}
 		}
 	}
@@ -6467,14 +6467,14 @@ void Sandbox::UpdateJoint(PoseBuffer* Map, Joint* Base, Matrix4x4* World)
 	*World = *World * Map->GetOffset(Node);
 	Vector3 Position2 = Node->Position.Transform(*World);
 
-	Renderer->DirectBegin();
-	Renderer->DirectTopology(PrimitiveTopology_Line_Strip);
-	Renderer->DirectTransform(Scene->GetCamera()->As<Components::Camera>()->GetViewProjection());
-	Renderer->DirectEmit();
-	Renderer->DirectPosition(Position1.X, Position1.Y, -Position1.Z);
-	Renderer->DirectEmit();
-	Renderer->DirectPosition(Position2.X, Position2.Y, -Position2.Z);
-	Renderer->DirectEnd();
+	Renderer->Begin();
+	Renderer->Topology(PrimitiveTopology_Line_Strip);
+	Renderer->Transform(Scene->GetCamera()->As<Components::Camera>()->GetViewProjection());
+	Renderer->Emit();
+	Renderer->Position(Position1.X, Position1.Y, -Position1.Z);
+	Renderer->Emit();
+	Renderer->Position(Position2.X, Position2.Y, -Position2.Z);
+	Renderer->End();
 
 	for (auto& Child : Base->Childs)
 		UpdateJoint(Map, &Child, World);
