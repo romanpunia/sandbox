@@ -1,0 +1,3106 @@
+<html>
+	<head>
+		<link type="text/css" href="./../css/main.css"/>
+		<link type="text/css" href="./../css/header.css"/>
+		<link type="text/css" href="./../css/hierarchy.css"/>
+		<link type="text/css" href="./../css/preview.css"/>
+		<link type="text/css" href="./../css/inspector.css"/>
+		<link type="text/css" href="./../css/content.css"/>
+		<title>Sandbox</title>
+	</head>
+	<body>
+		<div class="navbar" data-model="system" data-event-click="set_menu(false)" data-event-mouseout="set_menu(false)">
+			<div class="tab">
+				<p>File</p>
+				<div class="tab-menu">
+					<button data-event-click="open_scene">Open</button>
+					<button data-event-click="close_scene">Save</button>
+					<button data-event-click="update_project">Update</button>
+				</div>
+			</div>
+			<div class="tab">
+				<p>Entity</p>
+				<div class="tab-menu">
+					<button data-event-click="add_entity">Create empty</button>
+					<button data-event-click="remove_entity" data-if="sl_entity != -1">Remove current</button>
+					<div class="sub" data-if="sl_entity != -1">
+						<p>Transform</p>
+						<div class="sub-menu">
+							<button data-event-click="move_entity">Move</button>
+							<button data-event-click="rotate_entity">Rotate</button>
+							<button data-event-click="scale_entity">Scale</button>
+						</div>
+					</div>
+					<div class="sub" data-if="sl_entity != -1">
+						<p>Placement</p>
+						<div class="sub-menu">
+							<button data-event-click="place_position">Position</button>
+							<button data-event-click="place_rotation">Rotation</button>
+							<button data-event-click="place_combine">Combine</button>
+						</div>
+					</div>
+					<div class="sub" data-if="sl_entity != -1">
+						<p>Reset</p>
+						<div class="sub-menu">
+							<button data-event-click="reset_position">Position</button>
+							<button data-event-click="reset_rotation">Rotation</button>
+							<button data-event-click="reset_scale">Scale</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tab">
+				<p>Components</p>
+				<div class="tab-menu" data-if="sl_entity != -1">
+					<div class="sub">
+						<p>Animators</p>
+						<div class="sub-menu">
+							<button data-event-click="add_cmp_skin_animator">Skin animator</button>
+							<button data-event-click="add_cmp_key_animator">Key animator</button>
+							<button data-event-click="add_cmp_emitter_animator">Emitter animator</button>
+						</div>
+					</div>
+					<div class="sub">
+						<p>Audio</p>
+						<div class="sub-menu">
+							<button data-event-click="add_cmp_listener">Listener</button>
+							<button data-event-click="add_cmp_source">Source</button>
+						</div>
+					</div>
+					<div class="sub">
+						<p>Audio effects</p>
+						<div class="sub-menu">
+							<button data-event-click="add_cmp_reverb">Reverb</button>
+							<button data-event-click="add_cmp_chorus">Chorus</button>
+							<button data-event-click="add_cmp_distortion">Distortion</button>
+							<button data-event-click="add_cmp_echo">Echo</button>
+							<button data-event-click="add_cmp_flanger">Flanger</button>
+							<button data-event-click="add_cmp_frequency_shifter">Frequency shifter</button>
+							<button data-event-click="add_cmp_vocal_morpher">Vocal morpher</button>
+							<button data-event-click="add_cmp_pitch_shifter">Pitch shifter</button>
+							<button data-event-click="add_cmp_ring_modulator">Ring modulator</button>
+							<button data-event-click="add_cmp_autowah">Autowah</button>
+							<button data-event-click="add_cmp_compressor">Compressor</button>
+							<button data-event-click="add_cmp_equalizer">Equalizer</button>
+						</div>
+					</div>
+					<div class="sub">
+						<p>Geometry</p>
+						<div class="sub-menu">
+							<button data-event-click="add_cmp_model">Model</button>
+							<button data-event-click="add_cmp_skin">Skin</button>
+							<button data-event-click="add_cmp_emitter">Emitter</button>
+							<button data-event-click="add_cmp_decal">Decal</button>
+						</div>
+					</div>
+					<div class="sub">
+						<p>Lighting</p>
+						<div class="sub-menu">
+							<button data-event-click="add_cmp_point_light">Point light</button>
+							<button data-event-click="add_cmp_spot_light">Spot light</button>
+							<button data-event-click="add_cmp_line_light">Line light</button>
+							<button data-event-click="add_cmp_reflection_probe">Reflection probe</button>
+						</div>
+					</div>
+					<div class="sub">
+						<p>Physics</p>
+						<div class="sub-menu">
+							<button data-event-click="add_cmp_rigid_body">Rigid body</button>
+							<button data-event-click="add_cmp_soft_body">Soft body</button>
+							<button data-event-click="add_cmp_slider_constraint">Slider constraint</button>
+							<button data-event-click="add_cmp_acceleration">Acceleration</button>
+							<button data-event-click="add_cmp_fly">Fly</button>
+							<button data-event-click="add_cmp_free_look">Free look</button>
+						</div>
+					</div>
+					<div class="sub">
+						<p>Camera</p>
+						<div class="sub-menu">
+							<button data-event-click="add_cmp_camera">Camera</button>
+							<button data-event-click="add_cmp_3d_camera">3D Camera</button>
+						</div>
+					</div>
+					<div class="sub">
+						<p>Scripting</p>
+						<div class="sub-menu">
+							<button data-event-click="add_cmp_scriptable">Scriptable</button>
+						</div>
+					</div>
+					<div class="sub">
+						<p>Renderers</p>
+						<div class="sub-menu">
+							<button data-event-click="add_rndr_model">Model renderer</button>
+							<button data-event-click="add_rndr_skin">Skin renderer</button>
+							<button data-event-click="add_rndr_emitter">Emitter renderer</button>
+							<button data-event-click="add_rndr_depth">Depth renderer</button>
+							<button data-event-click="add_rndr_lighting">Light renderer</button>
+							<button data-event-click="add_rndr_environment">Environment renderer</button>
+							<button data-event-click="add_rndr_transparency">Transparency renderer</button>
+							<button data-event-click="add_rndr_ssr">SSR renderer</button>
+							<button data-event-click="add_rndr_ssao">SSAO renderer</button>
+							<button data-event-click="add_rndr_ssdo">SSDO renderer</button>
+							<button data-event-click="add_rndr_bloom">Bloom renderer</button>
+							<button data-event-click="add_rndr_dof">DoF renderer</button>
+							<button data-event-click="add_rndr_tone">Tone renderer</button>
+							<button data-event-click="add_rndr_glitch">Glitch renderer</button>
+							<button data-event-click="add_rndr_gui">GUI renderer</button>
+						</div>
+					</div>
+				</div>
+				<div class="tab-message" data-if="sl_entity == -1">
+					<div class="tab-text">Select any entity</div>
+				</div>
+			</div>
+			<div class="tab">
+				<p>Scene</p>
+				<div class="tab-menu">
+					<button data-event-click="open_materials">Materials</button>
+					<button data-event-click="open_settings">Settings</button>
+					<button data-event-click="add_material">Add material</button>
+					<button data-event-click="import_model">Import model</button>
+					<button data-event-click="import_skin_animation">Import skin animation</button>
+					<button data-event-click="export_skin_animation">Export skin animation</button>
+					<button data-event-click="export_key_animation">Export key animation</button>
+					<button data-event-click="import_material">Import material</button>
+					<button data-event-click="export_material">Export material</button>
+					<button data-event-click="deploy_scene">Deploy scene</button>
+				</div>
+			</div>
+		</div>
+		<div class="hierarchy" data-model="system">
+			<div class="header">
+				<p>Hierarchy</p>
+				<button data-event-click="switch_scene">{{ scene_active ? 'Deactivate' : 'Activate' }}</button>
+			</div>
+			<div class="entities" data-event-dragdrop="set_parent">
+				<datagrid source="hierarchy.root" style="height: 100%;">
+					<col fields="id, name, depth, #num_children" formatter="hierarchy" />
+				</datagrid>
+				<div class="menu" data-if="entities_count <= 0">
+					<p class="message">No entities here</p>
+				</div>
+			</div>
+		</div>
+		<div class="inspector" data-model="system">
+			<p class="header">Inspector</p>
+			<div class="container">
+				<div class="menu" data-if="sl_window == 'entity'">
+					<form class="dynamics">
+						<p class="title">Entity parameters</p>
+						<table class="option">
+							<tr>
+								<td class="label">Name</td>
+								<td><input type="text" maxlength="64" id="ent_name" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Position</td>
+								<td><input type="text" maxlength="16" id="ent_pos_x" /></td>
+								<td><input type="text" maxlength="16" id="ent_pos_y" /></td>
+								<td><input type="text" maxlength="16" id="ent_pos_z" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Rotation X</td>
+								<td><input type="range" min="0" max="360" step="0.05" id="ent_rot_x" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Rotation Y</td>
+								<td><input type="range" min="0" max="360" step="0.05" id="ent_rot_y" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Rotation Z</td>
+								<td><input type="range" min="0" max="360" step="0.05" id="ent_rot_z" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Scale</td>
+								<td><input type="text" maxlength="16" id="ent_scale_x" /></td>
+								<td><input type="text" maxlength="16" id="ent_scale_y" /></td>
+								<td><input type="text" maxlength="16" id="ent_scale_z" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Tag</td>
+								<td><input type="text" maxlength="16" id="ent_tag" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Constant scale</td>
+								<td><div class="check"><input type="checkbox" id="ent_const_scale" /></div></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_model">
+						<div class="head">
+							<p class="title">Model component</p>
+							<button data-event-click="remove_cmp('model')">Remove</button>
+						</div>
+						<table class="option" data-if="sl_cmp_model_assigned">
+							<tr>
+								<td class="label">Mesh</td>
+								<td><dataselect source="model.root" fields="id, name" valuefield="id" id="cmp_model_mesh" formatter="model" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_model_source">
+							<tr>
+								<td class="label">Diffuse map</td>
+								<td><button class="source" id="cmp_model_diffuse_source" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_model_source">
+							<tr>
+								<td class="label">Normal map</td>
+								<td><button class="source" id="cmp_model_normal_source" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_model_source">
+							<tr>
+								<td class="label">Metallic map</td>
+								<td><button class="source" id="cmp_model_metallic_source" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_model_source">
+							<tr>
+								<td class="label">Roughness map</td>
+								<td><button class="source" id="cmp_model_roughness_source" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_model_source">
+							<tr>
+								<td class="label">Height map</td>
+								<td><button class="source" id="cmp_model_height_source" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_model_source">
+							<tr>
+								<td class="label">Occlusion map</td>
+								<td><button class="source" id="cmp_model_occlusion_source" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_model_source">
+							<tr>
+								<td class="label">Emission map</td>
+								<td><button class="source" id="cmp_model_emission_source" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_model_source">
+							<tr>
+								<td class="label">Diffuse color</td>
+								<td><input type="text" maxlength="64" id="cmp_model_diffuse" /><div class="color" id="cmp_model_diffuse_color" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_model_source">
+							<tr>
+								<td class="label">Texture offset</td>
+								<td><input type="text" maxlength="16" id="cmp_model_uv_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_model_uv_y" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_model_source">
+							<tr>
+								<td class="label">Height amount</td>
+								<td><input type="text" maxlength="16" id="cmp_model_ht_amnt" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_model_source">
+							<tr>
+								<td class="label">Height bias</td>
+								<td><input type="text" maxlength="16" id="cmp_model_ht_bias" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_model_source">
+							<tr>
+								<td class="label">Material</td>
+								<td><dataselect source="surfaces.root" fields="id, name" valuefield="id" id="cmp_model_material" formatter="surfaces" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Source</td>
+								<td><button class="source" id="cmp_model_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Static</td>
+								<td><div class="check"><input type="checkbox" id="cmp_model_static" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Transparency</td>
+								<td><div class="check"><input type="checkbox" id="cmp_model_alpha" /></div></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_skin">
+						<div class="head">
+							<p class="title">Skin component</p>
+							<button data-event-click="remove_cmp('skin')">Remove</button>
+						</div>
+						<table class="option" data-if="sl_cmp_skin_assigned">
+							<tr>
+								<td class="label">Mesh</td>
+								<td><dataselect source="skin.root" fields="id, name" valuefield="id" id="cmp_skin_mesh" formatter="skin" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_source">
+							<tr>
+								<td class="label">Diffuse map</td>
+								<td><button class="source" id="cmp_skin_diffuse_source" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_source">
+							<tr>
+								<td class="label">Normal map</td>
+								<td><button class="source" id="cmp_skin_normal_source" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_source">
+							<tr>
+								<td class="label">Metallic map</td>
+								<td><button class="source" id="cmp_skin_metallic_source" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_source">
+							<tr>
+								<td class="label">Roughness map</td>
+								<td><button class="source" id="cmp_skin_roughness_source" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_source">
+							<tr>
+								<td class="label">Height map</td>
+								<td><button class="source" id="cmp_skin_height_source" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_source">
+							<tr>
+								<td class="label">Occlusion map</td>
+								<td><button class="source" id="cmp_skin_occlusion_source" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_source">
+							<tr>
+								<td class="label">Emission map</td>
+								<td><button class="source" id="cmp_skin_emission_source" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_source">
+							<tr>
+								<td class="label">Diffuse color</td>
+								<td><input type="text" maxlength="64" id="cmp_skin_diffuse" /><div class="color" id="cmp_skin_diffuse_color" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_source">
+							<tr>
+								<td class="label">Texture offset</td>
+								<td><input type="text" maxlength="16" id="cmp_skin_uv_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_skin_uv_y" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_source">
+							<tr>
+								<td class="label">Height amount</td>
+								<td><input type="text" maxlength="16" id="cmp_skin_ht_amnt" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_source">
+							<tr>
+								<td class="label">Height bias</td>
+								<td><input type="text" maxlength="16" id="cmp_skin_ht_bias" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_source">
+							<tr>
+								<td class="label">Material</td>
+								<td><dataselect source="surfaces.root" fields="id, name" valuefield="id" id="cmp_skin_material" formatter="surfaces" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Source</td>
+								<td><button class="source" id="cmp_skin_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Static</td>
+								<td><div class="check"><input type="checkbox" id="cmp_skin_static" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Transparency</td>
+								<td><div class="check"><input type="checkbox" id="cmp_skin_alpha" /></div></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_skin_joints > 0">
+							<tr>
+								<td class="label">Joint</td>
+								<td><input type="range" min="-1" data-attr-max="sl_cmp_skin_joints" step="1" id="cmp_skin_joint" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_joint >= 0">
+							<tr>
+								<td class="label">Name</td>
+								<td><input type="text" maxlength="64" id="cmp_skin_jname" disabled /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_joint >= 0">
+							<tr>
+								<td class="label">Position</td>
+								<td><input type="text" maxlength="16" id="cmp_skin_jp_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_skin_jp_y" /></td>
+								<td><input type="text" maxlength="16" id="cmp_skin_jp_z" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_joint >= 0">
+							<tr>
+								<td class="label">Rotation X</td>
+								<td><input type="range" min="0" max="360" step="0.05" id="cmp_skin_jr_x" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_joint >= 0">
+							<tr>
+								<td class="label">Rotation Y</td>
+								<td><input type="range" min="0" max="360" step="0.05" id="cmp_skin_jr_y" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_joint >= 0">
+							<tr>
+								<td class="label">Rotation Z</td>
+								<td><input type="range" min="0" max="360" step="0.05" id="cmp_skin_jr_z" /></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_emitter">
+						<div class="head">
+							<p class="title">Emitter component</p>
+							<button data-event-click="remove_cmp('emitter')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Diffuse map</td>
+								<td><button class="source" id="cmp_emitter_diffuse_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Normal map</td>
+								<td><button class="source" id="cmp_emitter_normal_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Metallic map</td>
+								<td><button class="source" id="cmp_emitter_metallic_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Roughness map</td>
+								<td><button class="source" id="cmp_emitter_roughness_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Height map</td>
+								<td><button class="source" id="cmp_emitter_height_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Occlusion map</td>
+								<td><button class="source" id="cmp_emitter_occlusion_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Emission map</td>
+								<td><button class="source" id="cmp_emitter_emission_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Diffuse color</td>
+								<td><input type="text" maxlength="64" id="cmp_emitter_diffuse" /><div class="color" id="cmp_emitter_diffuse_color" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Texture offset</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_uv_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_uv_y" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Height amount</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_ht_amnt" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Height bias</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_ht_bias" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Material</td>
+								<td><dataselect source="surfaces.root" fields="id, name" valuefield="id" id="cmp_emitter_material" formatter="surfaces" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Volume</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_vol_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_vol_y" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_vol_y" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Elements limit</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_elem_limit" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Elements count</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_elem_count" disabled /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Source</td>
+								<td><button class="source" id="cmp_emitter_refill">Refill buffer</button></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Quad-based</td>
+								<td><div class="check"><input type="checkbox" id="cmp_emitter_quad_based" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Connected</td>
+								<td><div class="check"><input type="checkbox" id="cmp_emitter_connected" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Static</td>
+								<td><div class="check"><input type="checkbox" id="cmp_emitter_static" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Transparency</td>
+								<td><div class="check"><input type="checkbox" id="cmp_emitter_alpha" /></div></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_decal">
+						<div class="head">
+							<p class="title">Decal component</p>
+							<button data-event-click="remove_cmp('decal')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Diffuse map</td>
+								<td><button class="source" id="cmp_decal_diffuse_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Normal map</td>
+								<td><button class="source" id="cmp_decal_normal_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Metallic map</td>
+								<td><button class="source" id="cmp_decal_metallic_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Roughness map</td>
+								<td><button class="source" id="cmp_decal_roughness_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Height map</td>
+								<td><button class="source" id="cmp_decal_height_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Occlusion map</td>
+								<td><button class="source" id="cmp_decal_occlusion_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Emission map</td>
+								<td><button class="source" id="cmp_decal_emission_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Diffuse color</td>
+								<td><input type="text" maxlength="64" id="cmp_decal_diffuse" /><div class="color" id="cmp_decal_diffuse_color" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Texture offset</td>
+								<td><input type="text" maxlength="16" id="cmp_decal_uv_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_decal_uv_y" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Height amount</td>
+								<td><input type="text" maxlength="16" id="cmp_decal_ht_amnt" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Height bias</td>
+								<td><input type="text" maxlength="16" id="cmp_decal_ht_bias" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Material</td>
+								<td><dataselect source="surfaces.root" fields="id, name" valuefield="id" id="cmp_decal_material" formatter="surfaces" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Field of view</td>
+								<td><input type="text" maxlength="16" id="cmp_decal_fov" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Distance</td>
+								<td><input type="text" maxlength="16" id="cmp_decal_dist" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Transparency</td>
+								<td><div class="check"><input type="checkbox" id="cmp_emitter_alpha" /></div></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_soft_body">
+						<div class="head">
+							<p class="title">Soft body component</p>
+							<button data-event-click="remove_cmp('soft-body')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Diffuse map</td>
+								<td><button class="source" id="cmp_soft_body_diffuse_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Normal map</td>
+								<td><button class="source" id="cmp_soft_body_normal_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Metallic map</td>
+								<td><button class="source" id="cmp_soft_body_metallic_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Roughness map</td>
+								<td><button class="source" id="cmp_soft_body_roughness_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Height map</td>
+								<td><button class="source" id="cmp_soft_body_height_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Occlusion map</td>
+								<td><button class="source" id="cmp_soft_body_occlusion_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Emission map</td>
+								<td><button class="source" id="cmp_soft_body_emission_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Diffuse color</td>
+								<td><input type="text" maxlength="64" id="cmp_soft_body_diffuse" /><div class="color" id="cmp_soft_body_diffuse_color" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Texture offset</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_uv_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_uv_y" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Height amount</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_ht_amnt" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Height bias</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_ht_bias" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Material</td>
+								<td><dataselect source="surfaces.root" fields="id, name" valuefield="id" id="cmp_soft_body_material" formatter="surfaces" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Source</td>
+								<td><button class="source" id="cmp_soft_body_source" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">VCF</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_vcf" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">DP</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_dp" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">DG</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_dg" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">LF</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_lf" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">PR</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_pr" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">VC</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_vc" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">DF</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_df" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">MT</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_mt" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">CHR</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_chr" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">KHR</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_khr" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">SHR</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_shr" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">AHR</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_ahr" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">SRHR-CL</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_srhr_cl" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">SKHR-CL</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_skhr_cl" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">SSHR-CL</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_sshr_cl" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">SR-SPLT-CL</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_sr_splt_cl" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">SK-SPLT-CL</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_sk_splt_cl" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">SS-SPLT-CL</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_ss_splt_cl" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">Max volume</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_mx_vol" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">Time scale</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_ts" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">Drag</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_drag" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">Max stress</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_mx_strs" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">V iterations</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_vit" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">P iterations</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_pit" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">D iterations</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_dit" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">C iterations</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_cit" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">Anisotropic friction</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_af_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_af_y" /></td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_af_z" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">Wind velocity</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_wv_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_wv_y" /></td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_wv_z" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">Mass</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_mass" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">Restitution</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_rest" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">Hit fraction</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_frac" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">Friction</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_fric" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">Spinning friction</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_spinf" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">Rolling friction</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_rfric" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">Contact damping</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_contdamp" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">Contact stiffness</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_contstf" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">Motion threshold</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_mtt" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">Swept sphere radius</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_srad" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">Deactivation time</td>
+								<td><input type="text" maxlength="16" id="cmp_soft_body_dtime" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">Can be deactivated</td>
+								<td><div class="check"><input type="checkbox" id="cmp_soft_body_deact" /></div></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">Active</td>
+								<td><div class="check"><input type="checkbox" id="cmp_soft_body_active" /></div></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">Ghost</td>
+								<td><div class="check"><input type="checkbox" id="cmp_soft_body_ghost" /></div></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_soft_body_source">
+							<tr>
+								<td class="label">Kinematic</td>
+								<td><div class="check"><input type="checkbox" id="cmp_soft_body_kinemat" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Transparency</td>
+								<td><div class="check"><input type="checkbox" id="cmp_soft_body_alpha" /></div></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_skin_animator">
+						<div class="head">
+							<p class="title">Skin animator component</p>
+							<button data-event-click="remove_cmp('skin-animator')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Source</td>
+								<td><button class="source" id="cmp_skin_animator_source" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_skin_animator_clips >= 0">
+							<tr>
+								<td class="label">Play</td>
+								<td><button class="source" id="cmp_skin_animator_play">Start</button></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_skin_animator_clips >= 0">
+							<tr>
+								<td class="label">Pause</td>
+								<td><button class="source" id="cmp_skin_animator_pause">Freeze</button></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_skin_animator_clips >= 0">
+							<tr>
+								<td class="label">Stop</td>
+								<td><button class="source" id="cmp_skin_animator_stop">Abort</button></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">New clip</td>
+								<td><button class="source" id="cmp_skin_animator_cap">Append</button></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_skin_animator_clips >= 0">
+							<tr>
+								<td class="label">Looped</td>
+								<td><div class="check"><input type="checkbox" id="cmp_skin_animator_loop" /></div></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_skin_animator_clips >= 0">
+							<tr>
+								<td class="label">Clip</td>
+								<td><input type="range" min="-1" data-attr-max="sl_cmp_skin_animator_clips" step="1" id="cmp_skin_animator_clip" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_animator_clip >= 0">
+							<tr>
+								<td class="label">Name</td>
+								<td><input type="text" maxlength="64" id="cmp_skin_animator_сname" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_animator_clip >= 0">
+							<tr>
+								<td class="label">Duration</td>
+								<td><input type="text" maxlength="16" id="cmp_skin_animator_cd" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_animator_clip >= 0">
+							<tr>
+								<td class="label">Rate</td>
+								<td><input type="text" maxlength="16" id="cmp_skin_animator_cr" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_animator_clip >= 0">
+							<tr>
+								<td class="label">Interpolation</td>
+								<td><button class="source" id="cmp_skin_animator_cnorm">Normalize</button></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_animator_clip >= 0">
+							<tr>
+								<td class="label">Empty frame</td>
+								<td><button class="source" id="cmp_skin_animator_cadde">Add empty</button></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_animator_clip >= 0">
+							<tr>
+								<td class="label">Model frame</td>
+								<td><button class="source" id="cmp_skin_animator_caddm">Add model</button></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_animator_clip >= 0">
+							<tr>
+								<td class="label">Erase</td>
+								<td><button class="source" id="cmp_skin_animator_crem">Remove this clip</button></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_skin_animator_clip >= 0">
+							<tr>
+								<td class="label">Frame</td>
+								<td><input type="range" min="-1" data-attr-max="sl_cmp_skin_animator_frames" step="1" id="cmp_skin_animator_frame" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_animator_frame >= 0">
+							<tr>
+								<td class="label">Frame id</td>
+								<td><input type="text" maxlength="16" id="cmp_skin_animator_fname" disabled /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_animator_frame >= 0">
+							<tr>
+								<td class="label">Erase</td>
+								<td><button class="source" id="cmp_skin_animator_frem">Remove this frame</button></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_skin_animator_frame >= 0">
+							<tr>
+								<td class="label">Joint</td>
+								<td><input type="range" min="-1" data-attr-max="sl_cmp_skin_animator_joints" step="1" id="cmp_skin_animator_joint" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_animator_joint >= 0">
+							<tr>
+								<td class="label">Name</td>
+								<td><input type="text" maxlength="64" id="cmp_skin_animator_jname" disabled /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_animator_joint >= 0">
+							<tr>
+								<td class="label">Position</td>
+								<td><input type="text" maxlength="16" id="cmp_skin_animator_jp_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_skin_animator_jp_y" /></td>
+								<td><input type="text" maxlength="16" id="cmp_skin_animator_jp_z" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_animator_joint >= 0">
+							<tr>
+								<td class="label">Rotation X</td>
+								<td><input type="range" min="0" max="360" step="0.05" id="cmp_skin_animator_jr_x" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_animator_joint >= 0">
+							<tr>
+								<td class="label">Rotation Y</td>
+								<td><input type="range" min="0" max="360" step="0.05" id="cmp_skin_animator_jr_y" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_animator_joint >= 0">
+							<tr>
+								<td class="label">Rotation Z</td>
+								<td><input type="range" min="0" max="360" step="0.05" id="cmp_skin_animator_jr_z" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_animator_joint >= 0">
+							<tr>
+								<td class="label">Scale</td>
+								<td><input type="text" maxlength="16" id="cmp_skin_animator_js_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_skin_animator_js_y" /></td>
+								<td><input type="text" maxlength="16" id="cmp_skin_animator_js_z" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_skin_animator_joint >= 0">
+							<tr>
+								<td class="label">Time</td>
+								<td><input type="text" maxlength="16" id="cmp_skin_animator_jt" /></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_key_animator">
+						<div class="head">
+							<p class="title">Key animator component</p>
+							<button data-event-click="remove_cmp('key-animator')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Source</td>
+								<td><button class="source" id="cmp_key_animator_source" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_key_animator_clips >= 0">
+							<tr>
+								<td class="label">Play</td>
+								<td><button class="source" id="cmp_key_animator_play">Start</button></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_key_animator_clips >= 0">
+							<tr>
+								<td class="label">Pause</td>
+								<td><button class="source" id="cmp_key_animator_pause">Freeze</button></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_key_animator_clips >= 0">
+							<tr>
+								<td class="label">Stop</td>
+								<td><button class="source" id="cmp_key_animator_stop">Abort</button></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">New clip</td>
+								<td><button class="source" id="cmp_key_animator_cap">Append</button></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_key_animator_clips >= 0">
+							<tr>
+								<td class="label">Looped</td>
+								<td><div class="check"><input type="checkbox" id="cmp_key_animator_loop" /></div></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_key_animator_clips >= 0">
+							<tr>
+								<td class="label">View paths</td>
+								<td><div class="check"><input type="checkbox" id="cmp_key_animator_vpaths" /></div></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_key_animator_clips >= 0">
+							<tr>
+								<td class="label">Clip</td>
+								<td><input type="range" min="-1" data-attr-max="sl_cmp_key_animator_clips" step="1" id="cmp_key_animator_clip" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_key_animator_clip >= 0">
+							<tr>
+								<td class="label">Name</td>
+								<td><input type="text" maxlength="64" id="cmp_key_animator_сname" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_key_animator_clip >= 0">
+							<tr>
+								<td class="label">Duration</td>
+								<td><input type="text" maxlength="16" id="cmp_key_animator_cd" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_key_animator_clip >= 0">
+							<tr>
+								<td class="label">Rate</td>
+								<td><input type="text" maxlength="16" id="cmp_key_animator_cr" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_key_animator_clip >= 0">
+							<tr>
+								<td class="label">Interpolation</td>
+								<td><button class="source" id="cmp_key_animator_cnorm">Normalize</button></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_key_animator_clip >= 0">
+							<tr>
+								<td class="label">Empty frame</td>
+								<td><button class="source" id="cmp_key_animator_cadde">Add empty</button></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_key_animator_clip >= 0">
+							<tr>
+								<td class="label">Model frame</td>
+								<td><button class="source" id="cmp_key_animator_caddm">Add model</button></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_key_animator_clip >= 0">
+							<tr>
+								<td class="label">View frame</td>
+								<td><button class="source" id="cmp_key_animator_caddv">Add view</button></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_key_animator_clip >= 0">
+							<tr>
+								<td class="label">View-based frame</td>
+								<td><button class="source" id="cmp_key_animator_caddvb">Add view-based</button></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_key_animator_clip >= 0">
+							<tr>
+								<td class="label">Erase frames</td>
+								<td><button class="source" id="cmp_key_animator_cremf">Remove all frames</button></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_key_animator_clip >= 0">
+							<tr>
+								<td class="label">Erase</td>
+								<td><button class="source" id="cmp_key_animator_crem">Remove this clip</button></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_key_animator_clip >= 0">
+							<tr>
+								<td class="label">Frame</td>
+								<td><input type="range" min="-1" data-attr-max="sl_cmp_key_animator_frames" step="1" id="cmp_key_animator_frame" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_key_animator_frame >= 0">
+							<tr>
+								<td class="label">Frame id</td>
+								<td><input type="text" maxlength="16" id="cmp_key_animator_fname" disabled /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_key_animator_frame >= 0">
+							<tr>
+								<td class="label">Position</td>
+								<td><input type="text" maxlength="16" id="cmp_key_animator_fp_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_key_animator_fp_y" /></td>
+								<td><input type="text" maxlength="16" id="cmp_key_animator_fp_z" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_key_animator_frame >= 0">
+							<tr>
+								<td class="label">Rotation X</td>
+								<td><input type="range" min="0" max="360" step="0.05" id="cmp_key_animator_fr_x" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_key_animator_frame >= 0">
+							<tr>
+								<td class="label">Rotation Y</td>
+								<td><input type="range" min="0" max="360" step="0.05" id="cmp_key_animator_fr_y" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_key_animator_frame >= 0">
+							<tr>
+								<td class="label">Rotation Z</td>
+								<td><input type="range" min="0" max="360" step="0.05" id="cmp_key_animator_fr_z" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_key_animator_frame >= 0">
+							<tr>
+								<td class="label">Scale</td>
+								<td><input type="text" maxlength="16" id="cmp_key_animator_fs_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_key_animator_fs_y" /></td>
+								<td><input type="text" maxlength="16" id="cmp_key_animator_fs_z" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_key_animator_frame >= 0">
+							<tr>
+								<td class="label">Time</td>
+								<td><input type="text" maxlength="16" id="cmp_key_animator_ft" /></td>
+							</tr>
+						</table>
+						<table class="option inner" data-if="sl_cmp_key_animator_frame >= 0">
+							<tr>
+								<td class="label">Erase</td>
+								<td><button class="source" id="cmp_key_animator_frem">Remove this frame</button></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_emitter_animator">
+						<div class="head">
+							<p class="title">Emitter animator component</p>
+							<button data-event-click="remove_cmp('emitter-animator')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Diffuse</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_ddx" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_ddy" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_ddz" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_ddw" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Position</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_dpx" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_dpy" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_dpz" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Velocity</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_dvx" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_dvy" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_dvz" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Rotation speed</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_drs" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Scale speed</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_dss" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Noisiness</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_dns" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Iterations</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_it" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Active</td>
+								<td><div class="check"><input type="checkbox" id="cmp_emitter_animator_active" /></div></td>
+							</tr>
+						</table>
+						<p class="title">Diffuse delta</p>
+						<table class="option">
+							<tr>
+								<td class="label">Min</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmin_dx" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmin_dy" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmin_dz" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmin_dw" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Max</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmax_dx" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmax_dy" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmax_dz" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmax_dw" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Accuracy</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_facc_d" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Intensive</td>
+								<td><div class="check"><input type="checkbox" id="cmp_emitter_animator_fint_d" /></div></td>
+							</tr>
+						</table>
+						<p class="title">Position delta</p>
+						<table class="option">
+							<tr>
+								<td class="label">Min</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmin_px" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmin_py" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmin_pz" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Max</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmax_px" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmax_py" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmax_pz" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Accuracy</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_facc_p" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Intensive</td>
+								<td><div class="check"><input type="checkbox" id="cmp_emitter_animator_fint_p" /></div></td>
+							</tr>
+						</table>
+						<p class="title">Velocity delta</p>
+						<table class="option">
+							<tr>
+								<td class="label">Min</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmin_vx" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmin_vy" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmin_vz" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Max</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmax_vx" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmax_vy" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmax_vz" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Accuracy</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_facc_v" /></td>
+							</tr>
+						</table>
+						<p class="title">Noise delta</p>
+						<table class="option">
+							<tr>
+								<td class="label">Min</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmin_nx" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmin_ny" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmin_nz" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Max</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmax_nx" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmax_ny" /></td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmax_nz" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Accuracy</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_facc_n" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Intensive</td>
+								<td><div class="check"><input type="checkbox" id="cmp_emitter_animator_fint_n" /></div></td>
+							</tr>
+						</table>
+						<p class="title">Rotation delta</p>
+						<table class="option">
+							<tr>
+								<td class="label">Min</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmin_r" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Max</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmax_r" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Accuracy</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_facc_r" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Intensive</td>
+								<td><div class="check"><input type="checkbox" id="cmp_emitter_animator_fint_r" /></div></td>
+							</tr>
+						</table>
+						<p class="title">Angular delta</p>
+						<table class="option">
+							<tr>
+								<td class="label">Min</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmin_a" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Max</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_fmax_a" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Accuracy</td>
+								<td><input type="text" maxlength="16" id="cmp_emitter_animator_facc_a" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Intensive</td>
+								<td><div class="check"><input type="checkbox" id="cmp_emitter_animator_fint_a" /></div></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_rigid_body">
+						<div class="head">
+							<p class="title">Rigid body component</p>
+							<button data-event-click="remove_cmp('rigid-body')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Shape</td>
+								<td>
+									<select id="cmp_rigid_body_shape">
+										<option value="none" selected>None</option>
+										<option value="box">Box</option>
+										<option value="sphere">Sphere</option>
+										<option value="capsule">Capsule</option>
+										<option value="cone">Cone</option>
+										<option value="cylinder">Cylinder</option>
+										<option value="other">Other</option>
+									</select>
+								</td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_from_source">
+							<tr>
+								<td class="label">Source</td>
+								<td><button class="source" id="cmp_rigid_body_source" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Velocity</td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_v_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_v_y" /></td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_v_z" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Torque</td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_t_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_t_y" /></td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_t_z" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Gravity</td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_g_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_g_y" /></td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_g_z" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Angular factor</td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_af_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_af_y" /></td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_af_z" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Linear factor</td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_lf_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_lf_y" /></td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_lf_z" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Anisotropic friction</td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_afric_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_afric_y" /></td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_afric_z" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Mass</td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_mass" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Angular damping</td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_ad" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Linear damping</td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_ld" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Contact damping</td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_cd" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Hit fraction</td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_frac" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Restitution</td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_rest" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Friction</td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_fric" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Spinning friction</td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_spinf" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Rolling friction</td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_rollf" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Contact stiffness</td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_stiff" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Angular threshold</td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_ath" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Linear threshold</td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_lth" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Motion threshold</td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_mth" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Swept sphere radius</td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_srad" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Deactivation time</td>
+								<td><input type="text" maxlength="16" id="cmp_rigid_body_dtime" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Can be deactivated</td>
+								<td><div class="check"><input type="checkbox" id="cmp_rigid_body_deact" /></div></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Active</td>
+								<td><div class="check"><input type="checkbox" id="cmp_rigid_body_active" /></div></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Ghost</td>
+								<td><div class="check"><input type="checkbox" id="cmp_rigid_body_ghost" /></div></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_rigid_body_source">
+							<tr>
+								<td class="label">Kinematic</td>
+								<td><div class="check"><input type="checkbox" id="cmp_rigid_body_kinemat" /></div></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_acceleration">
+						<div class="head">
+							<p class="title">Acceleration component</p>
+							<button data-event-click="remove_cmp('acceleration')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Amplitude velocity</td>
+								<td><input type="text" maxlength="16" id="cmp_acceleration_av_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_acceleration_av_y" /></td>
+								<td><input type="text" maxlength="16" id="cmp_acceleration_av_z" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Velocity</td>
+								<td><input type="text" maxlength="16" id="cmp_acceleration_v_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_acceleration_v_y" /></td>
+								<td><input type="text" maxlength="16" id="cmp_acceleration_v_z" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Amplitude torque</td>
+								<td><input type="text" maxlength="16" id="cmp_acceleration_at_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_acceleration_at_y" /></td>
+								<td><input type="text" maxlength="16" id="cmp_acceleration_at_z" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Torque</td>
+								<td><input type="text" maxlength="16" id="cmp_acceleration_t_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_acceleration_t_y" /></td>
+								<td><input type="text" maxlength="16" id="cmp_acceleration_t_z" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Center</td>
+								<td><input type="text" maxlength="16" id="cmp_acceleration_c_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_acceleration_c_y" /></td>
+								<td><input type="text" maxlength="16" id="cmp_acceleration_c_z" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Kinematic</td>
+								<td><div class="check"><input type="checkbox" id="cmp_acceleration_kinemat" /></div></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_slider_constraint">
+						<div class="head">
+							<p class="title">Slider constraint component</p>
+							<button data-event-click="remove_cmp('slider-constraint')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Entity</td>
+								<td><button class="source" id="cmp_slider_constraint_entity" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="!sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Ghost constr.</td>
+								<td><div class="check"><input type="checkbox" id="cmp_slider_constraint_ghost" /></div></td>
+							</tr>
+						</table>
+						<table class="option" data-if="!sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Linear constr.</td>
+								<td><div class="check"><input type="checkbox" id="cmp_slider_constraint_linear" /></div></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Angular motor velocity</td>
+								<td><input type="text" maxlength="16" id="cmp_slider_constraint_amv" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Linear motor velocity</td>
+								<td><input type="text" maxlength="16" id="cmp_slider_constraint_lmv" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Upper linear limit</td>
+								<td><input type="text" maxlength="16" id="cmp_slider_constraint_ull" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Lower linear limit</td>
+								<td><input type="text" maxlength="16" id="cmp_slider_constraint_lll" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Angular damping direction</td>
+								<td><input type="text" maxlength="16" id="cmp_slider_constraint_add" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Linear damping direction</td>
+								<td><input type="text" maxlength="16" id="cmp_slider_constraint_ldd" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Angular damping limit</td>
+								<td><input type="text" maxlength="16" id="cmp_slider_constraint_adl" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Linear damping limit</td>
+								<td><input type="text" maxlength="16" id="cmp_slider_constraint_ldl" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Angular damping limit</td>
+								<td><input type="text" maxlength="16" id="cmp_slider_constraint_adl" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Linear damping ortho</td>
+								<td><input type="text" maxlength="16" id="cmp_slider_constraint_ldo" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Upper angular limit</td>
+								<td><input type="text" maxlength="16" id="cmp_slider_constraint_ual" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Lower angular limit</td>
+								<td><input type="text" maxlength="16" id="cmp_slider_constraint_lal" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Max angular motor force</td>
+								<td><input type="text" maxlength="16" id="cmp_slider_constraint_mamf" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Max linear motor force</td>
+								<td><input type="text" maxlength="16" id="cmp_slider_constraint_mlmf" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Angular restitution direction</td>
+								<td><input type="text" maxlength="16" id="cmp_slider_constraint_ard" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Linear restitution direction</td>
+								<td><input type="text" maxlength="16" id="cmp_slider_constraint_lrd" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Angular softness direction</td>
+								<td><input type="text" maxlength="16" id="cmp_slider_constraint_asd" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Linear softness direction</td>
+								<td><input type="text" maxlength="16" id="cmp_slider_constraint_lsd" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Angular softness limit</td>
+								<td><input type="text" maxlength="16" id="cmp_slider_constraint_asl" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Linear softness limit</td>
+								<td><input type="text" maxlength="16" id="cmp_slider_constraint_lsl" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Angular softness ortho</td>
+								<td><input type="text" maxlength="16" id="cmp_slider_constraint_aso" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Linear softness ortho</td>
+								<td><input type="text" maxlength="16" id="cmp_slider_constraint_lso" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Angular-powered motor</td>
+								<td><div class="check"><input type="checkbox" id="cmp_slider_constraint_apm" /></div></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Linear-powered motor</td>
+								<td><div class="check"><input type="checkbox" id="cmp_slider_constraint_lpm" /></div></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_slider_constraint_entity">
+							<tr>
+								<td class="label">Active</td>
+								<td><div class="check"><input type="checkbox" id="cmp_slider_constraint_active" /></div></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_free_look">
+						<div class="head">
+							<p class="title">Free-look component</p>
+							<button data-event-click="remove_cmp('free-look')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Sensivity</td>
+								<td><input type="text" maxlength="16" id="cmp_free_look_sens" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Rotation input</td>
+								<td><button class="source" id="cmp_free_look_key_rot" /></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_fly">
+						<div class="head">
+							<p class="title">Fly component</p>
+							<button data-event-click="remove_cmp('fly')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Axis</td>
+								<td><input type="text" maxlength="16" id="cmp_fly_ax" /></td>
+								<td><input type="text" maxlength="16" id="cmp_fly_ay" /></td>
+								<td><input type="text" maxlength="16" id="cmp_fly_az" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Speed down</td>
+								<td><input type="text" maxlength="16" id="cmp_fly_sp_down" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Speed normal</td>
+								<td><input type="text" maxlength="16" id="cmp_fly_sp_normal" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Speed up</td>
+								<td><input type="text" maxlength="16" id="cmp_fly_sp_up" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Forward input</td>
+								<td><button class="source" id="cmp_fly_key_forward" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Backward input</td>
+								<td><button class="source" id="cmp_fly_key_backward" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Left input</td>
+								<td><button class="source" id="cmp_fly_key_left" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Right input</td>
+								<td><button class="source" id="cmp_fly_key_right" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Up input</td>
+								<td><button class="source" id="cmp_fly_key_up" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Down input</td>
+								<td><button class="source" id="cmp_fly_key_down" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Fast input</td>
+								<td><button class="source" id="cmp_fly_key_fast" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Slow input</td>
+								<td><button class="source" id="cmp_fly_key_slow" /></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_audio_source">
+						<div class="head">
+							<p class="title">Audio source component</p>
+							<button data-event-click="remove_cmp('audio-source')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Source</td>
+								<td><button class="source" id="cmp_audio_source_clip" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_audio_source_clip">
+							<tr>
+								<td class="label">Play</td>
+								<td><button class="source" id="cmp_audio_source_play">Start</button></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_audio_source_clip">
+							<tr>
+								<td class="label">Pause</td>
+								<td><button class="source" id="cmp_audio_source_pause">Freeze</button></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_audio_source_clip">
+							<tr>
+								<td class="label">Stop</td>
+								<td><button class="source" id="cmp_audio_source_stop">Abort</button></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_audio_source_clip">
+							<tr>
+								<td class="label">Gain</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_gain" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_audio_source_clip">
+							<tr>
+								<td class="label">Pitch</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_pitch" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_audio_source_clip">
+							<tr>
+								<td class="label">Playback (sec.)</td>
+								<td><input type="range" min="0" data-attr-max="sl_cmp_audio_source_length" step="0.01" id="cmp_audio_source_pos" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_audio_source_clip">
+							<tr>
+								<td class="label">Direction</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_dx" /></td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_dy" /></td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_dz" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_audio_source_clip">
+							<tr>
+								<td class="label">Cone inner angle</td>
+								<td><input type="range" min="0" max="360" step="0.05" id="cmp_audio_source_cia" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_audio_source_clip">
+							<tr>
+								<td class="label">Cone outer angle</td>
+								<td><input type="range" min="0" max="360" step="0.05" id="cmp_audio_source_coa" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_audio_source_clip">
+							<tr>
+								<td class="label">Cone outer gain</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_cog" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_audio_source_clip">
+							<tr>
+								<td class="label">Air absorption</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_aa" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_audio_source_clip">
+							<tr>
+								<td class="label">Room roll-off</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_rro" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_audio_source_clip">
+							<tr>
+								<td class="label">Roll-off</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_rr" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_audio_source_clip">
+							<tr>
+								<td class="label">Distance</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_dist" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_audio_source_clip">
+							<tr>
+								<td class="label">Ref-distance</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_rdist" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_audio_source_clip">
+							<tr>
+								<td class="label">Length</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_length" disabled /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_audio_source_clip">
+							<tr>
+								<td class="label">Buffer</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_buffer" disabled /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_audio_source_clip">
+							<tr>
+								<td class="label">Format</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_format" disabled /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_audio_source_clip">
+							<tr>
+								<td class="label">Mono</td>
+								<td><div class="check"><input type="checkbox" id="cmp_audio_source_mono" disabled /></div></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_audio_source_clip">
+							<tr>
+								<td class="label">Looped</td>
+								<td><div class="check"><input type="checkbox" id="cmp_audio_source_loop" /></div></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_audio_source_clip">
+							<tr>
+								<td class="label">Surrounded</td>
+								<td><div class="check"><input type="checkbox" id="cmp_audio_source_3d" /></div></td>
+							</tr>
+						</table>
+						<!-- TODO: Add audio effects -->
+					</form>
+					<form class="dynamics" data-if="sl_cmp_audio_listener">
+						<p class="title">Audio listener component</p>
+						<table class="option">
+							<tr>
+								<td class="label">Gain</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_listener_gain" /></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_point_light">
+						<div class="head">
+							<p class="title">Point light component</p>
+							<button data-event-click="remove_cmp('point-light')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Diffuse color</td>
+								<td><input type="text" maxlength="64" id="cmp_point_light_diffuse" /><div class="color" id="cmp_point_light_diffuse_color" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Emission</td>
+								<td><input type="text" maxlength="16" id="cmp_point_light_emission" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">PCF filter</td>
+								<td><input type="text" maxlength="16" id="cmp_point_light_pcf" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Shadow bias</td>
+								<td><input type="text" maxlength="16" id="cmp_point_light_sd_bias" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Shadow distance</td>
+								<td><input type="text" maxlength="16" id="cmp_point_light_sd_dist" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Shadow softness</td>
+								<td><input type="text" maxlength="16" id="cmp_point_light_sd_soft" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Shadowed</td>
+								<td><div class="check"><input type="checkbox" id="cmp_point_light_sd_active" /></div></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_spot_light">
+						<div class="head">
+							<p class="title">Spot light component</p>
+							<button data-event-click="remove_cmp('spot-light')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Project map</td>
+								<td><button class="source" id="cmp_spot_light_project_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Diffuse color</td>
+								<td><input type="text" maxlength="64" id="cmp_spot_light_diffuse" /><div class="color" id="cmp_spot_light_diffuse_color" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Emission</td>
+								<td><input type="text" maxlength="16" id="cmp_spot_light_emission" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Field of view</td>
+								<td><input type="text" maxlength="16" id="cmp_spot_light_fov" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">PCF filter</td>
+								<td><input type="text" maxlength="16" id="cmp_spot_light_pcf" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Shadow bias</td>
+								<td><input type="text" maxlength="16" id="cmp_spot_light_sd_bias" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Shadow distance</td>
+								<td><input type="text" maxlength="16" id="cmp_spot_light_sd_dist" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Shadow softness</td>
+								<td><input type="text" maxlength="16" id="cmp_spot_light_sd_soft" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Shadowed</td>
+								<td><div class="check"><input type="checkbox" id="cmp_spot_light_sd_active" /></div></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_line_light">
+						<div class="head">
+							<p class="title">Line light component</p>
+							<button data-event-click="remove_cmp('line-light')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Diffuse color</td>
+								<td><input type="text" maxlength="64" id="cmp_line_light_diffuse" /><div class="color" id="cmp_line_light_diffuse_color" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Rlh emission</td>
+								<td><input type="text" maxlength="64" id="cmp_line_light_rlh" /><div class="color" id="cmp_line_light_rlh_color" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Mie emission</td>
+								<td><input type="text" maxlength="64" id="cmp_line_light_mie" /><div class="color" id="cmp_line_light_mie_color" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Emission</td>
+								<td><input type="text" maxlength="16" id="cmp_line_light_emission" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Rlh height</td>
+								<td><input type="text" maxlength="16" id="cmp_line_light_rlhh" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Mie height</td>
+								<td><input type="text" maxlength="16" id="cmp_line_light_mieh" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Mie direction</td>
+								<td><input type="text" maxlength="16" id="cmp_line_light_mied" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Scatter intensity</td>
+								<td><input type="text" maxlength="16" id="cmp_line_light_scatter" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Planet radius</td>
+								<td><input type="text" maxlength="16" id="cmp_line_light_planetr" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Atmosphere radius</td>
+								<td><input type="text" maxlength="16" id="cmp_line_light_atmor" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">PCF filter</td>
+								<td><input type="text" maxlength="16" id="cmp_line_light_pcf" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Shadow bias</td>
+								<td><input type="text" maxlength="16" id="cmp_line_light_sd_bias" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Shadow distance</td>
+								<td><input type="text" maxlength="16" id="cmp_line_light_sd_dist" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Shadow softness</td>
+								<td><input type="text" maxlength="16" id="cmp_line_light_sd_soft" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Shadow far bias</td>
+								<td><input type="text" maxlength="16" id="cmp_line_light_sd_fbias" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Shadow fade power</td>
+								<td><input type="text" maxlength="16" id="cmp_line_light_sd_fp" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Shadow height</td>
+								<td><input type="text" maxlength="16" id="cmp_line_light_sd_height" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Shadowed</td>
+								<td><div class="check"><input type="checkbox" id="cmp_line_light_sd_active" /></div></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_reflection_probe">
+						<div class="head">
+							<p class="title">Reflection probe component</p>
+							<button data-event-click="remove_cmp('reflection-probe')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Probe map</td>
+								<td><button class="source" id="cmp_reflection_probe_source" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Reflection color</td>
+								<td><input type="text" maxlength="64" id="cmp_reflection_probe_refl" /><div class="color" id="cmp_reflection_probe_refl_color" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">View offset</td>
+								<td><input type="text" maxlength="16" id="cmp_reflection_probe_vo_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_reflection_probe_vo_y" /></td>
+								<td><input type="text" maxlength="16" id="cmp_reflection_probe_vo_z" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Rebuild delay</td>
+								<td><input type="text" maxlength="16" id="cmp_reflection_probe_rd" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Capture range</td>
+								<td><input type="text" maxlength="16" id="cmp_reflection_probe_cr" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Emission</td>
+								<td><input type="text" maxlength="16" id="cmp_reflection_probe_emission" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Infinity</td>
+								<td><input type="text" maxlength="16" id="cmp_reflection_probe_inf" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Parallax</td>
+								<td><div class="check"><input type="checkbox" id="cmp_reflection_probe_px" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Static only</td>
+								<td><div class="check"><input type="checkbox" id="cmp_reflection_probe_static" /></div></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_camera">
+						<div class="head">
+							<p class="title">Camera component</p>
+							<button data-event-click="remove_cmp('camera')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Field of view</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_fov" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Width</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_w" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Height</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_h" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Near plane</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_np" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Far plane</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_fp" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Perspective</td>
+								<td><button class="source" id="cmp_camera_perspective">Set perspective projection</button></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Orthographic</td>
+								<td><button class="source" id="cmp_camera_ortho">Set orthographic projection</button></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Preview</td>
+								<td><div class="check"><input type="checkbox" id="cmp_camera_preview" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Frustum culling</td>
+								<td><div class="check"><input type="checkbox" id="cmp_camera_fc" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Occlusion culling</td>
+								<td><div class="check"><input type="checkbox" id="cmp_camera_oc" /></div></td>
+							</tr>
+						</table>
+						<p class="title">Occlusion culling</p>
+						<table class="option">
+							<tr>
+								<td class="label">Render delay</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_oc_rd" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Sorting delay</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_oc_sd" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Stalled frames</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_oc_sf" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Depth buffer</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_oc_db" /></td>
+							</tr>
+						</table>
+						<!-- TODO: Add renderers -->
+					</form>
+					<form class="dynamics" data-if="sl_cmp_scriptable">
+						<div class="head">
+							<p class="title">Scriptable component</p>
+							<button data-event-click="remove_cmp('scriptable')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Source</td>
+								<td><button class="source" id="cmp_scriptable_source" /></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_scriptable_source">
+							<tr>
+								<td class="label">Compiler</td>
+								<td><button class="source" id="cmp_scriptable_recompile">Recompile source</button></td>
+							</tr>
+						</table>
+						<table class="option" data-if="sl_cmp_scriptable_source">
+							<tr>
+								<td class="label">Typeless invocation</td>
+								<td><div class="check"><input type="checkbox" id="cmp_scriptable_ti" /></div></td>
+							</tr>
+						</table>
+						<!-- TODO: Add functions and properties -->
+					</form>
+				</div>
+				<div class="menu" data-if="sl_window == 'material'">
+					<form class="dynamics">
+						<table class="option">
+							<tr>
+								<td class="label">Name</td>
+								<td><input type="text" maxlength="64" id="mat_name" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Emission color</td>
+								<td><input type="text" maxlength="64" id="mat_cemn" /><div class="color" id="mat_cemn_color" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Emission</td>
+								<td><input type="text" maxlength="16" id="mat_memn" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Metallic color</td>
+								<td><input type="text" maxlength="64" id="mat_cmet" /><div class="color" id="mat_cmet_color" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Micro-metallic</td>
+								<td><input type="text" maxlength="16" id="mat_mmet" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Roughness</td>
+								<td><input type="text" maxlength="16" id="mat_rs" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Micro-roughness</td>
+								<td><input type="text" maxlength="16" id="mat_mrs" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Occlusion</td>
+								<td><input type="text" maxlength="16" id="mat_occ" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Micro-occlusion</td>
+								<td><input type="text" maxlength="16" id="mat_mocc" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Fresnel</td>
+								<td><input type="text" maxlength="16" id="mat_fres" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Refraction</td>
+								<td><input type="text" maxlength="16" id="mat_refr" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Transparency</td>
+								<td><input type="text" maxlength="16" id="mat_alpha" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Environment</td>
+								<td><input type="text" maxlength="16" id="mat_env" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Radius</td>
+								<td><input type="text" maxlength="16" id="mat_rad" /></td>
+							</tr>
+						</table>
+					</form>
+					<button class="submit" data-event-click="open_materials">Back</button>
+					<button class="submit" data-event-click="remove_material">Remove</button>
+					<button class="submit" data-event-click="copy_material">Copy</button>
+				</div>
+				<div class="menu" data-if="sl_window == 'materials'">
+					<datagrid source="materials.root" style="display: block; margin-top: 16px;">
+						<col fields="id, name" formatter="materials" />
+					</datagrid>
+					<p class="message" data-if="materials_count <= 0">No materials here</p>
+				</div>
+				<div class="menu" data-if="sl_window == 'settings'">
+					<form class="dynamics">
+						<p class="title">Physics parameters</p>
+						<table class="option">
+							<tr>
+								<td class="label">Gravity</td>
+								<td><input type="text" maxlength="16" id="sc_start_grav_x" /></td>
+								<td><input type="text" maxlength="16" id="sc_start_grav_y" /></td>
+								<td><input type="text" maxlength="16" id="sc_start_grav_z" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Water normal</td>
+								<td><input type="text" maxlength="16" id="sc_wet_norm_x" /></td>
+								<td><input type="text" maxlength="16" id="sc_wet_norm_y" /></td>
+								<td><input type="text" maxlength="16" id="sc_wet_norm_z" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Air density</td>
+								<td><input type="text" maxlength="64" id="sc_air_dens" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Water density</td>
+								<td><input type="text" maxlength="64" id="sc_wet_dens" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Water offset</td>
+								<td><input type="text" maxlength="64" id="sc_wet_off" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Max displacement</td>
+								<td><input type="text" maxlength="64" id="sc_max_disp" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Enable soft bodies</td>
+								<td><div class="check"><input type="checkbox" id="sc_softs" /></div></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics">
+						<p class="title">Simulator parameters</p>
+						<table class="option">
+							<tr>
+								<td class="label">Gravity</td>
+								<td><input type="text" maxlength="16" id="sc_sim_grav_x" /></td>
+								<td><input type="text" maxlength="16" id="sc_sim_grav_y" /></td>
+								<td><input type="text" maxlength="16" id="sc_sim_grav_z" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Time mult.</td>
+								<td><input type="text" maxlength="64" id="sc_sim_time" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Active</td>
+								<td><div class="check"><input type="checkbox" id="sc_sim" /></div></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics">
+						<p class="title">Renderer parameters</p>
+						<table class="option">
+							<tr>
+								<td class="label">Graphics quality</td>
+								<td><input type="text" maxlength="64" id="sc_gp_qual" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Enable HDR</td>
+								<td><div class="check"><input type="checkbox" id="sc_gp_hdr" /></div></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics">
+						<p class="title">Memory parameters</p>
+						<table class="option">
+							<tr>
+								<td class="label">Max entities</td>
+								<td><input type="text" maxlength="64" id="sc_max_ents" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Max components</td>
+								<td><input type="text" maxlength="64" id="sc_max_comps" /></td>
+							</tr>
+						</table>
+					</form>
+					<button class="submit" data-event-click="save_settings">Save</button>
+				</div>
+				<div class="menu" data-if="sl_window == 'import-model' || sl_window == 'import-animation'">
+					<form class="dynamics">
+						<p class="title" data-if="sl_window == 'import-model'">Model importer parameters</p>
+						<p class="title" data-if="sl_window == 'import-animation'">Animation importer parameters</p>
+						<table class="option">
+							<tr>
+								<td class="label">Join identical vertices</td>
+								<td><div class="check"><input type="checkbox" id="im_jiv" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Triangulate</td>
+								<td><div class="check"><input type="checkbox" id="im_tri" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Calc tangent space</td>
+								<td><div class="check"><input type="checkbox" id="im_cts" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Remove component</td>
+								<td><div class="check"><input type="checkbox" id="im_rc" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Make normals</td>
+								<td><div class="check"><input type="checkbox" id="im_mn" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Make smooth normals</td>
+								<td><div class="check"><input type="checkbox" id="im_msn" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Split large meshes</td>
+								<td><div class="check"><input type="checkbox" id="im_slm" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Pre-transform vertices</td>
+								<td><div class="check"><input type="checkbox" id="im_ptv" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Validate data structure</td>
+								<td><div class="check"><input type="checkbox" id="im_vds" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Make left handed</td>
+								<td><div class="check"><input type="checkbox" id="im_mlh" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Improve cache locality</td>
+								<td><div class="check"><input type="checkbox" id="im_icl" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Remove redundant materials</td>
+								<td><div class="check"><input type="checkbox" id="im_rrm" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Fix infacing normals</td>
+								<td><div class="check"><input type="checkbox" id="im_fin" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Sort by type</td>
+								<td><div class="check"><input type="checkbox" id="im_sbt" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Remove degenerates</td>
+								<td><div class="check"><input type="checkbox" id="im_rd" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Remove instances</td>
+								<td><div class="check"><input type="checkbox" id="im_ri" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Remove invalid data</td>
+								<td><div class="check"><input type="checkbox" id="im_rid" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Make UV</td>
+								<td><div class="check"><input type="checkbox" id="im_muv" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Transform UV</td>
+								<td><div class="check"><input type="checkbox" id="im_tuv" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Optimize meshes</td>
+								<td><div class="check"><input type="checkbox" id="im_om" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Optimize graph</td>
+								<td><div class="check"><input type="checkbox" id="im_og" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Flip UVs</td>
+								<td><div class="check"><input type="checkbox" id="im_fuv" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Flip winding order</td>
+								<td><div class="check"><input type="checkbox" id="im_fwo" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Split by bones</td>
+								<td><div class="check"><input type="checkbox" id="im_sbb" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Debone</td>
+								<td><div class="check"><input type="checkbox" id="im_dbn" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Global scaled</td>
+								<td><div class="check"><input type="checkbox" id="im_gs" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Force make normals</td>
+								<td><div class="check"><input type="checkbox" id="im_fmn" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Embed textures</td>
+								<td><div class="check"><input type="checkbox" id="im_et" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Drop normals</td>
+								<td><div class="check"><input type="checkbox" id="im_dn" /></div></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Compute bounding boxes</td>
+								<td><div class="check"><input type="checkbox" id="im_cbb" /></div></td>
+							</tr>
+						</table>
+					</form>
+					<button class="submit" data-if="sl_window == 'import-model'" data-event-click="import_model_action">Import</button>
+					<button class="submit" data-if="sl_window == 'import-animation'" data-event-click="import_skin_animation_action">Import</button>
+				</div>
+				<div class="menu" data-if="sl_window == 'none'">
+					<p class="message">Nothing to inspect</p>
+				</div>
+			</div>
+		</div>
+		<div class="content" data-model="system">
+			<div class="assets">
+				<p class="header">Resources</p>
+				<datagrid source="project.root" style="height: 100%;">
+					<col fields="path, name, depth, #num_children" formatter="project" />
+				</datagrid>
+			</div>
+			<div class="directory">
+				<div class="header">
+					<p>{{ sl_resource ? 'Select file from this directory' : 'Directory' }}</p>
+					<button data-if="sl_resource" data-event-click="cancel_file">Cancel</button>
+				</div>
+				<div class="menu">
+					<datagrid source="files.root" style="height: 100%;">
+						<col fields="name, path" formatter="files" />
+					</datagrid>
+				</div>
+				<div class="menu" data-if="files_count <= 0">
+					<p class="message">Empty directory</p>
+				</div>
+			</div>
+		</div>
+		<div class="preview" data-model="system" data-event-mouseover="set_controls(true)" data-event-mouseout="set_controls(false)" />
+	</body>
+</html>

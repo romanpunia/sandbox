@@ -1,0 +1,136 @@
+body
+{
+	position: relative;
+	overflow: hidden;
+	font-family: "SF UI Display";
+	font-weight: normal;
+	font-style: normal;
+	font-size: 13px;
+	color: rgb(200, 200, 200);
+	width: 100%;
+	height: 100%;
+	cursor: default;
+}
+
+div:drag
+{
+	display: block;
+	width: 200px;
+}
+
+scrollbarvertical
+{
+	width: 12px;
+	z-index: 998;
+}
+
+scrollbarvertical slidertrack
+{
+	border: 1px #222;
+	border-radius: 16px;
+	background-color: #333;
+}
+
+scrollbarvertical sliderbar
+{
+	width: 8px;
+	background-color: #555;
+	border-radius: 16px;
+	margin: 0 2px;
+}
+
+datagridheader
+{
+	margin-bottom: 6px;
+}
+
+datagridcell
+{
+	text-align: left;
+	overflow: hidden;
+}
+
+datagridcell button
+{
+	display: inline-block;
+	position: relative;
+	width: 92%;
+	padding: 2px 4px;
+	border-radius: 4px;
+	box-sizing: border-box;
+	font-size: 13.4px;
+}
+
+datagridcell button:hover
+{
+	background-color: rgb(73, 120, 255);
+	color: #fff;
+}
+
+datagridcell button:active
+{
+	background-color: transparent;
+}
+
+datagridexpand
+{
+	display: inline;
+	width: 100%;
+	margin-left: 1px;
+}
+
+datagridexpand button span
+{
+	position: absolute;
+	top: 5px;
+	left: -10px;
+	width: 8px;
+	height: 8px;
+	decorator: image("../img/arrow.png");
+}
+
+.expanded button span
+{
+	transform: rotateZ(90deg);
+}
+
+spacer
+{
+	display: inline-block;
+	width: 26px;
+	height: 6px;
+}
+
+table
+{
+	box-sizing: border-box;
+	display: table;
+}
+
+tr
+{
+	box-sizing: border-box;
+	display: table-row;
+}
+
+td
+{
+	box-sizing: border-box;
+	display: table-cell;
+}
+
+col
+{
+	box-sizing: border-box;
+	display: table-column;
+}
+
+colgroup
+{
+	display: table-column-group;
+}
+
+thead, tbody, tfoot
+{
+	display: table-row-group;
+}
