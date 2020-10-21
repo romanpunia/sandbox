@@ -1,17 +1,23 @@
 #ifndef SANDBOX_H
 #define SANDBOX_H
-#include "demo.h"
-#include "gizmo.h"
+#include "../app.h"
+#include "../cursor/gizmo.h"
 
 enum Inspector
 {
 	Inspector_None,
-    Inspector_Entity,
-    Inspector_Material,
-    Inspector_Settings,
+	Inspector_Entity,
+	Inspector_Material,
+	Inspector_Settings,
 	Inspector_Materials,
 	Inspector_ImportModel,
 	Inspector_ImportAnimation
+};
+
+struct IFile
+{
+	std::string Path;
+	std::string Name;
 };
 
 class Sandbox : public Application

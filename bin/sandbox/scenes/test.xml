@@ -69,7 +69,7 @@
 			<name s="" />
 			<tag i="-1" />
 			<transform>
-				<position x="-3.433712" y="2.336591" z="5.873259" />
+				<position x="-6.433712" y="2.336591" z="7.873259" />
 				<rotation x="0.530000" y="0.400000" z="0.000000" />
 				<scale x="1.000000" y="1.000000" z="1.000000" />
 				<constant-scale b="false" />
@@ -107,35 +107,7 @@
 								</metadata>
 							</renderer>
 							<renderer>
-								<id i="-873454477" />
-								<active b="true" />
-								<metadata>
-									<size i="128" />
-									<mip-levels i="7" />
-								</metadata>
-							</renderer>
-							<renderer>
 								<id i="-451536084" />
-								<active b="true" />
-								<metadata />
-							</renderer>
-							<renderer>
-								<id i="-2915558991" />
-								<active b="true" />
-								<metadata />
-							</renderer>
-							<renderer>
-								<id i="-2873000682" />
-								<active b="true" />
-								<metadata />
-							</renderer>
-							<renderer>
-								<id i="-2782690299" />
-								<active b="true" />
-								<metadata />
-							</renderer>
-							<renderer>
-								<id i="-1252124601" />
 								<active b="true" />
 								<metadata />
 							</renderer>
@@ -143,18 +115,13 @@
 								<id i="-1262915616" />
 								<active b="true" />
 								<metadata>
-									<high-emission x="0.050000" y="0.050000" z="0.050000" />
-									<low-emission x="0.025000" y="0.025000" z="0.025000" />
+									<high-emission x="0.047059" y="0.047059" z="0.047059" />
+									<low-emission x="0.023529" y="0.023529" z="0.023529" />
 									<sky-emission n="0.000000" />
 									<light-emission n="1.000000" />
 									<sky-color x="1.000000" y="1.000000" z="1.000000" />
 									<recursive-probes b="true" />
 								</metadata>
-							</renderer>
-							<renderer>
-								<id i="-756544832" />
-								<active b="true" />
-								<metadata />
 							</renderer>
 						</renderers>
 					</metadata>

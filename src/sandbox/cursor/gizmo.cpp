@@ -1,5 +1,5 @@
 #include "gizmo.h"
-#include "sandbox.h"
+#include "../core/sandbox.h"
 
 void CGizmoTransformRender::DrawCircle(const tvector3 &orig, float r, float g, float b, const tvector3 &vtx, const tvector3 &vty)
 {

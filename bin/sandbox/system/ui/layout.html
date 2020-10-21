@@ -26,7 +26,7 @@
 					<div class="sub" data-if="sl_entity != -1">
 						<p>Transform</p>
 						<div class="sub-menu">
-							<button data-event-click="move_entity">Move</button>
+							<button data-event-click="entity">Move</button>
 							<button data-event-click="rotate_entity">Rotate</button>
 							<button data-event-click="scale_entity">Scale</button>
 						</div>
@@ -131,6 +131,8 @@
 						<div class="sub-menu">
 							<button data-event-click="add_rndr_model">Model renderer</button>
 							<button data-event-click="add_rndr_skin">Skin renderer</button>
+							<button data-event-click="add_rndr_soft_body">Soft body renderer</button>
+							<button data-event-click="add_rndr_decal">Decal renderer</button>
 							<button data-event-click="add_rndr_emitter">Emitter renderer</button>
 							<button data-event-click="add_rndr_depth">Depth renderer</button>
 							<button data-event-click="add_rndr_lighting">Light renderer</button>
@@ -2271,10 +2273,515 @@
 								<td><div class="check"><input type="checkbox" id="cmp_audio_source_3d" /></div></td>
 							</tr>
 						</table>
-						<!-- TODO: Add audio effects -->
+					</form>
+					<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_reverb">
+						<div class="head">
+							<p class="title">Reverb effect</p>
+							<button data-event-click="remove_aefx('reverb-effect')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Late reverb pan</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_lrp_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_lrp_y" /></td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_lrp_z" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Reflections pan</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_rp_x" /></td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_rp_y" /></td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_rp_z" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Density</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_dens" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Diffusion</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_diff" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Gain</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_gain" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Gain HF</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_gain_hf" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Gain LF</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_gain_lf" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Decay time</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_dectm" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Decay HF ratio</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_dechfr" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Decay LF ratio</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_declfr" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Reflections gain</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_rgain" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Reflections decay</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_rdec" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Echo time</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_etime" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Echo depth</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_edepth" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Modulation time</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_mtime" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Modulation depth</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_mdepth" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Air absorption gain HF</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_aaghf" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">HF reference</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_hfref" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">LF reference</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_lfref" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Room roll-off</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_reverb_rro" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Decay HF limited</td>
+								<td><div class="check"><input type="checkbox" id="cmp_audio_source_reverb_dhfl" /></div></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_chorus">
+						<div class="head">
+							<p class="title">Chorus effect</p>
+							<button data-event-click="remove_aefx('chorus-effect')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Rate</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_chorus_rate" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Depth</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_chorus_depth" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Feedback</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_chorus_fb" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Delay</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_chorus_delay" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Waveform</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_chorus_wform" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Phase</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_chorus_phase" /></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_distortion">
+						<div class="head">
+							<p class="title">Distortion effect</p>
+							<button data-event-click="remove_aefx('distortion-effect')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Edge</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_distortion_edge" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Gain</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_distortion_gain" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Lowpass cut-off</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_distortion_lco" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">EQ center</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_distortion_eqc" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">EQ bandwidth</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_distortion_eqb" /></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_echo">
+						<div class="head">
+							<p class="title">Echo effect</p>
+							<button data-event-click="remove_aefx('echo-effect')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Delay</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_echo_delay" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">LR delay</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_echo_lrdelay" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Damping</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_echo_damping" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Feedback</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_echo_fb" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Spread</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_echo_spread" /></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_flanger">
+						<div class="head">
+							<p class="title">Flanger effect</p>
+							<button data-event-click="remove_aefx('flanger-effect')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Rate</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_flanger_rate" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Depth</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_flanger_depth" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Feedback</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_flanger_fb" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Delay</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_flanger_delay" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Waveform</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_flanger_wform" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Phase</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_flanger_phase" /></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_frequency_shifter">
+						<div class="head">
+							<p class="title">Frequency shifter effect</p>
+							<button data-event-click="remove_aefx('frequency-shifter-effect')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Frequency</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_frequency_shifter_fq" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Left direction</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_frequency_shifter_ld" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Right direction</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_frequency_shifter_rd" /></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_vocal_morpher">
+						<div class="head">
+							<p class="title">Vocal morpher effect</p>
+							<button data-event-click="remove_aefx('vocal-morpher-effect')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Rate</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_vocal_morpher_rate" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Phonemea</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_vocal_morpher_pa" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Phonemea coarse</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_vocal_morpher_pac" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Phonemeb</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_vocal_morpher_pb" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Phonemeb coarse</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_vocal_morpher_pbc" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Waveform</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_vocal_morpher_wform" /></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_pitch_shifter">
+						<div class="head">
+							<p class="title">Pitch shifter effect</p>
+							<button data-event-click="remove_aefx('pitch-shifter-effect')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Coarse tune</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_pitch_shifter_ct" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Fine tune</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_pitch_shifter_ft" /></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_ring_modulator">
+						<div class="head">
+							<p class="title">Ring modulator effect</p>
+							<button data-event-click="remove_aefx('ring-modulator-effect')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Frequency</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_ring_modulator_fq" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Highpass cut-off</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_ring_modulator_hco" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Waveform</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_ring_modulator_wform" /></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_autowah">
+						<div class="head">
+							<p class="title">Autowah effect</p>
+							<button data-event-click="remove_aefx('autowah-effect')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Attack time</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_autowah_at" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Release time</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_autowah_rt" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Resonance</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_autowah_r" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Peak gain</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_autowah_pg" /></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_compressor">
+						<div class="head">
+							<p class="title">Compressor effect</p>
+							<button data-event-click="remove_aefx('compressor-effect')">Remove</button>
+						</div>
+						<p style="margin-left: 16px;">No parameters here</p>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_equalizer">
+						<div class="head">
+							<p class="title">Equalizer effect</p>
+							<button data-event-click="remove_aefx('equalizer-effect')">Remove</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Low gain</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_equalizer_lg" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Low cut-off</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_equalizer_lco" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">High gain</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_equalizer_hg" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">High cut-off</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_equalizer_hco" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Mid1 gain</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_equalizer_m1g" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Mid1 center</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_equalizer_m1c" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Mid1 width</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_equalizer_m1w" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Mid2 gain</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_equalizer_m2g" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Mid2 center</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_equalizer_m2c" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Mid2 width</td>
+								<td><input type="text" maxlength="16" id="cmp_audio_source_equalizer_m2w" /></td>
+							</tr>
+						</table>
 					</form>
 					<form class="dynamics" data-if="sl_cmp_audio_listener">
-						<p class="title">Audio listener component</p>
+						<div class="head">
+							<p class="title">Audio listener component</p>
+							<button data-event-click="remove_cmp('audio-listener')">Remove</button>
+						</div>
 						<table class="option">
 							<tr>
 								<td class="label">Gain</td>
@@ -2658,6 +3165,628 @@
 						</table>
 						<!-- TODO: Add renderers -->
 					</form>
+					<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_model >= 0">
+						<div class="head">
+							<p class="title">Model layer ({{ sl_cmp_camera_model }})</p>
+							<button data-event-click="remove_rndr('model-renderer')">Remove</button>
+							<button style="margin-right: 4px;" data-event-click="toggle_rndr('model-renderer')">Toggle</button>
+							<button style="margin-right: 4px;" data-event-click="down_rndr('model-renderer')">Down</button>
+							<button style="margin-right: 4px;" data-event-click="up_rndr('model-renderer')">Up</button>
+						</div>
+						<p style="margin-left: 16px;">No parameters here</p>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_skin >= 0">
+						<div class="head">
+							<p class="title">Skin layer ({{ sl_cmp_camera_skin }})</p>
+							<button data-event-click="remove_rndr('skin-renderer')">Remove</button>
+							<button style="margin-right: 4px;" data-event-click="toggle_rndr('skin-renderer')">Toggle</button>
+							<button style="margin-right: 4px;" data-event-click="down_rndr('skin-renderer')">Down</button>
+							<button style="margin-right: 4px;" data-event-click="up_rndr('skin-renderer')">Up</button>
+						</div>
+						<p style="margin-left: 16px;">No parameters here</p>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_soft_body >= 0">
+						<div class="head">
+							<p class="title">Soft body layer ({{ sl_cmp_camera_soft_body }})</p>
+							<button data-event-click="remove_rndr('soft-body-renderer')">Remove</button>
+							<button style="margin-right: 4px;" data-event-click="toggle_rndr('soft-body-renderer')">Toggle</button>
+							<button style="margin-right: 4px;" data-event-click="down_rndr('soft-body-renderer')">Down</button>
+							<button style="margin-right: 4px;" data-event-click="up_rndr('soft-body-renderer')">Up</button>
+						</div>
+						<p style="margin-left: 16px;">No parameters here</p>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_decal >= 0">
+						<div class="head">
+							<p class="title">Decal layer ({{ sl_cmp_camera_decal }})</p>
+							<button data-event-click="remove_rndr('decal-renderer')">Remove</button>
+							<button style="margin-right: 4px;" data-event-click="toggle_rndr('decal-renderer')">Toggle</button>
+							<button style="margin-right: 4px;" data-event-click="down_rndr('decal-renderer')">Down</button>
+							<button style="margin-right: 4px;" data-event-click="up_rndr('decal-renderer')">Up</button>
+						</div>
+						<p style="margin-left: 16px;">No parameters here</p>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_emitter >= 0">
+						<div class="head">
+							<p class="title">Emitter layer ({{ sl_cmp_camera_emitter }})</p>
+							<button data-event-click="remove_rndr('emitter-renderer')">Remove</button>
+							<button style="margin-right: 4px;" data-event-click="toggle_rndr('emitter-renderer')">Toggle</button>
+							<button style="margin-right: 4px;" data-event-click="down_rndr('emitter-renderer')">Down</button>
+							<button style="margin-right: 4px;" data-event-click="up_rndr('emitter-renderer')">Up</button>
+						</div>
+						<p style="margin-left: 16px;">No parameters here</p>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_depth >= 0">
+						<div class="head">
+							<p class="title">Depth layer ({{ sl_cmp_camera_depth }})</p>
+							<button data-event-click="remove_rndr('depth-renderer')">Remove</button>
+							<button style="margin-right: 4px;" data-event-click="toggle_rndr('depth-renderer')">Toggle</button>
+							<button style="margin-right: 4px;" data-event-click="down_rndr('depth-renderer')">Down</button>
+							<button style="margin-right: 4px;" data-event-click="up_rndr('depth-renderer')">Up</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Point light resolution</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_depth_plr" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Point light limit</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_depth_pll" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Spot light resolution</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_depth_slr" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Spot light limit</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_depth_sll" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Line light resolution</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_depth_llr" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Line light limit</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_depth_lll" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Shadow distance</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_depth_sd" /></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_lighting >= 0">
+						<div class="head">
+							<p class="title">Lighting layer ({{ sl_cmp_camera_lighting }})</p>
+							<button data-event-click="remove_rndr('lighting-renderer')">Remove</button>
+							<button style="margin-right: 4px;" data-event-click="toggle_rndr('lighting-renderer')">Toggle</button>
+							<button style="margin-right: 4px;" data-event-click="down_rndr('lighting-renderer')">Down</button>
+							<button style="margin-right: 4px;" data-event-click="up_rndr('lighting-renderer')">Up</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">High emission</td>
+								<td><input type="text" maxlength="64" id="cmp_camera_lighting_hc" /><div class="color" id="cmp_camera_lighting_hc_color" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Low emission</td>
+								<td><input type="text" maxlength="64" id="cmp_camera_lighting_lc" /><div class="color" id="cmp_camera_lighting_lc_color" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Sky color</td>
+								<td><input type="text" maxlength="64" id="cmp_camera_lighting_sc" /><div class="color" id="cmp_camera_lighting_sc_color" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Sky emission</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_lighting_se" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Light emission</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_lighting_le" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Sky map</td>
+								<td><button class="source" id="cmp_camera_lighting_sm" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Recursive probes</td>
+								<td><div class="check"><input type="checkbox" id="cmp_camera_lighting_rp" /></div></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_environment >= 0">
+						<div class="head">
+							<p class="title">Environment layer ({{ sl_cmp_camera_environment }})</p>
+							<button data-event-click="remove_rndr('environment-renderer')">Remove</button>
+							<button style="margin-right: 4px;" data-event-click="toggle_rndr('environment-renderer')">Toggle</button>
+							<button style="margin-right: 4px;" data-event-click="down_rndr('environment-renderer')">Down</button>
+							<button style="margin-right: 4px;" data-event-click="up_rndr('environment-renderer')">Up</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Resolution</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_environment_r" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Mip levels</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_environment_ml" /></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_transparency >= 0">
+						<div class="head">
+							<p class="title">Transparency layer ({{ sl_cmp_camera_transparency }})</p>
+							<button data-event-click="remove_rndr('transparency-renderer')">Remove</button>
+							<button style="margin-right: 4px;" data-event-click="toggle_rndr('transparency-renderer')">Toggle</button>
+							<button style="margin-right: 4px;" data-event-click="down_rndr('transparency-renderer')">Down</button>
+							<button style="margin-right: 4px;" data-event-click="up_rndr('transparency-renderer')">Up</button>
+						</div>
+						<p style="margin-left: 16px;">No parameters here</p>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_ssr >= 0">
+						<div class="head">
+							<p class="title">SSR layer ({{ sl_cmp_camera_ssr }})</p>
+							<button data-event-click="remove_rndr('ssr-renderer')">Remove</button>
+							<button style="margin-right: 4px;" data-event-click="toggle_rndr('ssr-renderer')">Toggle</button>
+							<button style="margin-right: 4px;" data-event-click="down_rndr('ssr-renderer')">Down</button>
+							<button style="margin-right: 4px;" data-event-click="up_rndr('ssr-renderer')">Up</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Sample count</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssr_sc" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Blur count</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssr_bc" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Intensity</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssr_i" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Blur</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssr_b" /></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_ssao >= 0">
+						<div class="head">
+							<p class="title">SSAO layer ({{ sl_cmp_camera_ssao }})</p>
+							<button data-event-click="remove_rndr('ssao-renderer')">Remove</button>
+							<button style="margin-right: 4px;" data-event-click="toggle_rndr('ssao-renderer')">Toggle</button>
+							<button style="margin-right: 4px;" data-event-click="down_rndr('ssao-renderer')">Down</button>
+							<button style="margin-right: 4px;" data-event-click="up_rndr('ssao-renderer')">Up</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Sample count</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssao_sc" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Blur count</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssao_bc" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Distance</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssao_d" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Fade</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssao_fd" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Bias</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssao_bs" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Intensity</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssao_i" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Scale</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssao_s" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Radius</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssao_r" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Blur strength</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssao_blr" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Blur power</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssao_blp" /></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_ssdo >= 0">
+						<div class="head">
+							<p class="title">SSDO layer ({{ sl_cmp_camera_ssdo }})</p>
+							<button data-event-click="remove_rndr('ssdo-renderer')">Remove</button>
+							<button style="margin-right: 4px;" data-event-click="toggle_rndr('ssdo-renderer')">Toggle</button>
+							<button style="margin-right: 4px;" data-event-click="down_rndr('ssdo-renderer')">Down</button>
+							<button style="margin-right: 4px;" data-event-click="up_rndr('ssdo-renderer')">Up</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Sample count</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssdo_sc" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Blur count</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssdo_bc" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Distance</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssdo_d" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Fade</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssdo_fd" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Bias</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssdo_bs" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Intensity</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssdo_i" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Scale</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssdo_s" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Radius</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssdo_r" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Blur strength</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssdo_blr" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Blur power</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_ssdo_blp" /></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_bloom >= 0">
+						<div class="head">
+							<p class="title">Bloom layer ({{ sl_cmp_camera_bloom }})</p>
+							<button data-event-click="remove_rndr('bloom-renderer')">Remove</button>
+							<button style="margin-right: 4px;" data-event-click="toggle_rndr('bloom-renderer')">Toggle</button>
+							<button style="margin-right: 4px;" data-event-click="down_rndr('bloom-renderer')">Down</button>
+							<button style="margin-right: 4px;" data-event-click="up_rndr('bloom-renderer')">Up</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Sample count</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_bloom_sc" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Scale</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_bloom_s" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Intensity</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_bloom_i" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Threshold</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_bloom_t" /></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_dof >= 0">
+						<div class="head">
+							<p class="title">DoF layer ({{ sl_cmp_camera_dof }})</p>
+							<button data-event-click="remove_rndr('dof-renderer')">Remove</button>
+							<button style="margin-right: 4px;" data-event-click="toggle_rndr('dof-renderer')">Toggle</button>
+							<button style="margin-right: 4px;" data-event-click="down_rndr('dof-renderer')">Down</button>
+							<button style="margin-right: 4px;" data-event-click="up_rndr('dof-renderer')">Up</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Auto focus distance</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_dof_afd" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Auto focus speed</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_dof_afs" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Auto focus radius</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_dof_afr" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Radius</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_dof_r" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Bokeh</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_dof_b" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Bokeh</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_dof_s" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Near distance</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_dof_nd" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Near range</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_dof_nr" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Far distance</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_dof_fd" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Far range</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_dof_fr" /></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_tone >= 0">
+						<div class="head">
+							<p class="title">Tone layer ({{ sl_cmp_camera_tone }})</p>
+							<button data-event-click="remove_rndr('tone-renderer')">Remove</button>
+							<button style="margin-right: 4px;" data-event-click="toggle_rndr('tone-renderer')">Toggle</button>
+							<button style="margin-right: 4px;" data-event-click="down_rndr('tone-renderer')">Down</button>
+							<button style="margin-right: 4px;" data-event-click="up_rndr('tone-renderer')">Up</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Vignette color</td>
+								<td><input type="text" maxlength="64" id="cmp_camera_tone_vc" /><div class="color" id="cmp_camera_tone_vc_color" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Vignette amount</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_tone_va" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Vignette curve</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_tone_vcv" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Vignette radius</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_tone_vr" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Desaturation gamma</td>
+								<td><input type="text" maxlength="64" id="cmp_camera_tone_dg" /><div class="color" id="cmp_camera_tone_dg_color" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Desaturation intensity</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_tone_di" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Color gamma</td>
+								<td><input type="text" maxlength="64" id="cmp_camera_tone_cg" /><div class="color" id="cmp_camera_tone_cg_color" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Gamma correction</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_tone_gc" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Gamma intensity</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_tone_gi" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Red tone</td>
+								<td><input type="text" maxlength="64" id="cmp_camera_tone_rt" /><div class="color" id="cmp_camera_tone_rt_color" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Green tone</td>
+								<td><input type="text" maxlength="64" id="cmp_camera_tone_gt" /><div class="color" id="cmp_camera_tone_gt_color" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Blue tone</td>
+								<td><input type="text" maxlength="64" id="cmp_camera_tone_bt" /><div class="color" id="cmp_camera_tone_bt_color" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Tone intensity</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_tone_ti" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Aces film</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_tone_af" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Aces film A</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_tone_afa" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Aces film B</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_tone_afb" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Aces film C</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_tone_afc" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Aces film D</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_tone_afd" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Aces film E</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_tone_afe" /></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_glitch >= 0">
+						<div class="head">
+							<p class="title">Glitch layer ({{ sl_cmp_camera_glitch }})</p>
+							<button data-event-click="remove_rndr('glitch-renderer')">Remove</button>
+							<button style="margin-right: 4px;" data-event-click="toggle_rndr('glitch-renderer')">Toggle</button>
+							<button style="margin-right: 4px;" data-event-click="down_rndr('glitch-renderer')">Down</button>
+							<button style="margin-right: 4px;" data-event-click="up_rndr('glitch-renderer')">Up</button>
+						</div>
+						<table class="option">
+							<tr>
+								<td class="label">Color drift</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_glitch_cd" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Horizontal shake</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_glitch_hs" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Scanline jitter</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_glitch_slj" /></td>
+							</tr>
+						</table>
+						<table class="option">
+							<tr>
+								<td class="label">Vertical jump</td>
+								<td><input type="text" maxlength="16" id="cmp_camera_glitch_vj" /></td>
+							</tr>
+						</table>
+					</form>
+					<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_gui >= 0">
+						<div class="head">
+							<p class="title">GUI layer ({{ sl_cmp_camera_gui }})</p>
+							<button data-event-click="remove_rndr('gui-renderer')">Remove</button>
+							<button style="margin-right: 4px;" data-event-click="toggle_rndr('gui-renderer')">Toggle</button>
+							<button style="margin-right: 4px;" data-event-click="down_rndr('gui-renderer')">Down</button>
+							<button style="margin-right: 4px;" data-event-click="up_rndr('gui-renderer')">Up</button>
+						</div>
+						<p style="margin-left: 16px;">No parameters here</p>
+					</form>
 					<form class="dynamics" data-if="sl_cmp_scriptable">
 						<div class="head">
 							<p class="title">Scriptable component</p>
@@ -2681,7 +3810,6 @@
 								<td><div class="check"><input type="checkbox" id="cmp_scriptable_ti" /></div></td>
 							</tr>
 						</table>
-						<!-- TODO: Add functions and properties -->
 					</form>
 				</div>
 				<div class="menu" data-if="sl_window == 'material'">

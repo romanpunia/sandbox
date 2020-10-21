@@ -1,5 +1,6 @@
 #include "app.h"
-#include "sandbox.h"
+#include "core/sandbox.h"
+#include "core/demo.h"
 
 int main()
 {

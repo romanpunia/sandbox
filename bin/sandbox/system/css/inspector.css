@@ -93,9 +93,11 @@
 
 .inspector .dynamics .head button
 {
+	box-sizing: border-box;
 	display: block;
 	float: right;
 	font-weight: bold;
+	color: #999;
 }
 
 .inspector .dynamics .head button:hover
@@ -106,7 +108,7 @@
 
 .inspector .dynamics .head button:active
 {
-	color: #ccc;
+	color: #999;
 }
 
 .inspector .option
@@ -247,6 +249,22 @@
 .inspector .option .source:hover
 {
 	cursor: pointer;
+}
+
+.inspector .option textarea
+{
+	box-sizing: border-box;
+	display: block;
+	width: 100%;
+	border: 1px rgb(44, 44, 44);
+	background-color: rgb(20, 20, 20);
+	border-radius: 6px;
+	padding: 2px 4px;
+}
+
+.inspector .option textarea:hover
+{
+	cursor: text;
 }
 
 .inspector .inner

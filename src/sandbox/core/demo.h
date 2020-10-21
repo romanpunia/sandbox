@@ -1,6 +1,6 @@
 #ifndef DEMO_H
 #define DEMO_H
-#include "app.h"
+#include "../app.h"
 
 class Demo : public Application
 {
