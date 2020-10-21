@@ -8,7 +8,7 @@ void ComponentModel(GUI::Context* UI, Components::Model* Base)
 	if (!App)
 		return;
 
-	Model* LastBase = nullptr;
+	static Model* LastBase = nullptr;
 	if (LastBase != Base->GetDrawable())
 	{
 		App->Models.Model->Update(nullptr);
@@ -46,8 +46,8 @@ void ComponentSkin(GUI::Context* UI, Components::Skin* Base)
 	if (!App)
 		return;
 
-	SkinModel* LastBase = nullptr;
-	int64_t Joint = -1;
+	static SkinModel* LastBase = nullptr;
+	static int64_t Joint = -1;
 
 	if (LastBase != Base->GetDrawable())
 	{
@@ -284,8 +284,8 @@ void ComponentSkinAnimator(GUI::Context* UI, Components::SkinAnimator* Base)
 	if (!App)
 		return;
 
-	Components::SkinAnimator* LastBase = nullptr;
-	int64_t Joint = -1, Frame = -1, Clip = -1;
+	static Components::SkinAnimator* LastBase = nullptr;
+	static int64_t Joint = -1, Frame = -1, Clip = -1;
 
 	if (LastBase != Base)
 	{
@@ -406,8 +406,8 @@ void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base)
 	if (!App)
 		return;
 
-	Components::KeyAnimator* LastBase = nullptr;
-	int64_t Frame = -1, Clip = -1;
+	static Components::KeyAnimator* LastBase = nullptr;
+	static int64_t Frame = -1, Clip = -1;
 
 	if (LastBase != Base)
 	{
@@ -592,7 +592,7 @@ void ComponentRigidBody(GUI::Context* UI, Components::RigidBody* Base)
 	if (!App)
 		return;
 
-	Components::RigidBody* LastBase = nullptr;
+	static Components::RigidBody* LastBase = nullptr;
 	if (LastBase != Base)
 	{
 		int Type = (Base->GetBody() ? Base->GetBody()->GetCollisionShapeType() : Shape_Invalid);
@@ -812,7 +812,7 @@ void ComponentSliderConstraint(GUI::Context* UI, Components::SliderConstraint* B
 	if (!App)
 		return;
 
-	bool Ghost = true, Linear = true;
+	static bool Ghost = true, Linear = true;
 	ResolveSliderConstraint(UI, "cmp_slider_constraint_entity", Base, Ghost, Linear);
 
 	SliderConstraint* Body = Base->GetConstraint();
