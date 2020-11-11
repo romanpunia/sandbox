@@ -117,9 +117,6 @@ void Sandbox::Initialize(Application::Desc* Conf)
 		SetViewModel();
 	});
 	State.GUI->Inject("system/conf.xml");
-#ifdef HTML_DEBUG
-	GUI::Subsystem::SetDebuggerContext(State.GUI);
-#endif
 	State.Draggable = nullptr;
 	State.GizmoScale = 1.25f;
 	State.Status = "Ready";
@@ -193,10 +190,6 @@ void Sandbox::Update(Timer* Time)
 
 	if (Activity->IsKeyDownHit(KeyCode::KeyCode_F6))
 		State.IsInteractive = !State.IsInteractive;
-#ifdef HTML_DEBUG
-	if (Activity->IsKeyDownHit(KeyCode::KeyCode_F7))
-		GUI::Subsystem::SetDebuggerVisibility(!GUI::Subsystem::IsDebuggerVisible());
-#endif
 #endif
 	if (!State.IsCameraActive && Scene->GetCamera()->GetEntity() == State.Camera)
 		State.IsCameraActive = true;
@@ -480,6 +473,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 	Renderer->SetShader(Renderer->GetBasicEffect(), ShaderType_Vertex | ShaderType_Pixel);
 	Renderer->SetDepthStencilState(States.DepthStencil);
 	Renderer->SetBlendState(States.Blend);
+	Renderer->SetRasterizerState(States.BackRasterizer);
 
 	for (uint32_t i = 0; i < Scene->GetEntityCount(); i++)
 	{
@@ -490,7 +484,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 		float Direction = -Value->Transform->Position.LookAtXZ(State.Camera->Transform->Position);
 		Renderer->Render.Diffuse = (Value == Selection.Entity) ? 0.5f : 0.05f;
 		Renderer->Render.WorldViewProjection = Matrix4x4::Create(Value->Transform->Position, 0.5f, Vector3(0, Direction)) * State.Camera->GetComponent<Components::Camera>()->GetViewProjection();
-		Renderer->SetTexture2D(GetIcon(Value), 0);
+		Renderer->SetTexture2D(GetIcon(Value), 1);
 		Renderer->UpdateBuffer(RenderBufferType_Render);
 		Renderer->Draw(6, 0);
 	}
