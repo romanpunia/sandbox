@@ -540,7 +540,7 @@ void ComponentEmitterAnimator(GUI::Context* UI, Components::EmitterAnimator* Bas
 	UI->GetElementById(0, "cmp_emitter_animator_dvz").CastFormFloat(&Base->Velocity.Z);
 	UI->GetElementById(0, "cmp_emitter_animator_drs").CastFormFloat(&Base->RotationSpeed, Mathf::Rad2Deg());
 	UI->GetElementById(0, "cmp_emitter_animator_dss").CastFormFloat(&Base->ScaleSpeed);
-	UI->GetElementById(0, "cmp_emitter_animator_dns").CastFormFloat(&Base->Noisiness);
+	UI->GetElementById(0, "cmp_emitter_animator_dns").CastFormFloat(&Base->Noise);
 	UI->GetElementById(0, "cmp_emitter_animator_it").CastFormInt32(&Base->Spawner.Iterations);
 	UI->GetElementById(0, "cmp_emitter_animator_active").CastFormBoolean(&Base->Simulate);
 	UI->GetElementById(0, "cmp_emitter_animator_fmin_dx").CastFormFloat(&Base->Spawner.Diffusion.Min.X);
@@ -1016,49 +1016,44 @@ void ComponentAudioListener(GUI::Context* UI, Components::AudioListener* Base)
 void ComponentPointLight(GUI::Context* UI, Components::PointLight* Base)
 {
 	ResolveColor3(UI, "cmp_point_light_diffuse", &Base->Diffuse);
-	UI->GetElementById(0, "cmp_point_light_pcf").CastFormInt32(&Base->ShadowIterations);
+	UI->GetElementById(0, "cmp_point_light_pcf").CastFormInt32(&Base->Shadow.Iterations);
 	UI->GetElementById(0, "cmp_point_light_emission").CastFormFloat(&Base->Emission);
-	UI->GetElementById(0, "cmp_point_light_sd_bias").CastFormFloat(&Base->ShadowBias);
-	UI->GetElementById(0, "cmp_point_light_sd_dist").CastFormFloat(&Base->ShadowDistance);
-	UI->GetElementById(0, "cmp_point_light_sd_soft").CastFormFloat(&Base->ShadowSoftness);
-	UI->GetElementById(0, "cmp_point_light_sd_active").CastFormBoolean(&Base->Shadowed);
+	UI->GetElementById(0, "cmp_point_light_sd_bias").CastFormFloat(&Base->Shadow.Bias);
+	UI->GetElementById(0, "cmp_point_light_sd_dist").CastFormFloat(&Base->Shadow.Distance);
+	UI->GetElementById(0, "cmp_point_light_sd_soft").CastFormFloat(&Base->Shadow.Softness);
+	UI->GetElementById(0, "cmp_point_light_sd_active").CastFormBoolean(&Base->Shadow.Enabled);
 }
 void ComponentSpotLight(GUI::Context* UI, Components::SpotLight* Base)
 {
 	ResolveColor3(UI, "cmp_spot_light_diffuse", &Base->Diffuse);
-	ResolveTexture2D(UI, "cmp_spot_light_project_source", Base->GetProjectMap() != nullptr, [Base](Texture2D* New)
-	{
-		Base->SetProjectMap(New);
-	});
-
-	UI->GetElementById(0, "cmp_spot_light_pcf").CastFormInt32(&Base->ShadowIterations);
+	UI->GetElementById(0, "cmp_spot_light_pcf").CastFormInt32(&Base->Shadow.Iterations);
 	UI->GetElementById(0, "cmp_spot_light_emission").CastFormFloat(&Base->Emission);
-	UI->GetElementById(0, "cmp_spot_light_fov").CastFormFloat(&Base->FieldOfView);
-	UI->GetElementById(0, "cmp_spot_light_sd_bias").CastFormFloat(&Base->ShadowBias);
-	UI->GetElementById(0, "cmp_spot_light_sd_dist").CastFormFloat(&Base->ShadowDistance);
-	UI->GetElementById(0, "cmp_spot_light_sd_soft").CastFormFloat(&Base->ShadowSoftness);
-	UI->GetElementById(0, "cmp_spot_light_sd_active").CastFormBoolean(&Base->Shadowed);
+	UI->GetElementById(0, "cmp_spot_light_cutoff").CastFormFloat(&Base->Cutoff);
+	UI->GetElementById(0, "cmp_spot_light_sd_bias").CastFormFloat(&Base->Shadow.Bias);
+	UI->GetElementById(0, "cmp_spot_light_sd_dist").CastFormFloat(&Base->Shadow.Distance);
+	UI->GetElementById(0, "cmp_spot_light_sd_soft").CastFormFloat(&Base->Shadow.Softness);
+	UI->GetElementById(0, "cmp_spot_light_sd_active").CastFormBoolean(&Base->Shadow.Enabled);
 }
 void ComponentLineLight(GUI::Context* UI, Components::LineLight* Base)
 {
 	ResolveColor3(UI, "cmp_line_light_diffuse", &Base->Diffuse);
-	ResolveColor3(UI, "cmp_line_light_rlh", &Base->RlhEmission);
-	ResolveColor3(UI, "cmp_line_light_mie", &Base->MieEmission);
+	ResolveColor3(UI, "cmp_line_light_rlh", &Base->Sky.RlhEmission);
+	ResolveColor3(UI, "cmp_line_light_mie", &Base->Sky.MieEmission);
 	UI->GetElementById(0, "cmp_line_light_emission").CastFormFloat(&Base->Emission);
-	UI->GetElementById(0, "cmp_line_light_rlhh").CastFormFloat(&Base->RlhHeight);
-	UI->GetElementById(0, "cmp_line_light_mieh").CastFormFloat(&Base->MieHeight);
-	UI->GetElementById(0, "cmp_line_light_mied").CastFormFloat(&Base->MieDirection);
-	UI->GetElementById(0, "cmp_line_light_scatter").CastFormFloat(&Base->ScatterIntensity);
-	UI->GetElementById(0, "cmp_line_light_planetr").CastFormFloat(&Base->PlanetRadius);
-	UI->GetElementById(0, "cmp_line_light_atmor").CastFormFloat(&Base->AtmosphereRadius);
-	UI->GetElementById(0, "cmp_line_light_pcf").CastFormInt32(&Base->ShadowIterations);
-	UI->GetElementById(0, "cmp_line_light_sd_bias").CastFormFloat(&Base->ShadowBias);
-	UI->GetElementById(0, "cmp_line_light_sd_dist").CastFormFloat(&Base->ShadowDistance);
-	UI->GetElementById(0, "cmp_line_light_sd_soft").CastFormFloat(&Base->ShadowSoftness);
-	UI->GetElementById(0, "cmp_line_light_sd_fbias").CastFormFloat(&Base->ShadowFarBias);
-	UI->GetElementById(0, "cmp_line_light_sd_fp").CastFormFloat(&Base->ShadowLength);
-	UI->GetElementById(0, "cmp_line_light_sd_height").CastFormFloat(&Base->ShadowHeight);
-	UI->GetElementById(0, "cmp_line_light_sd_active").CastFormBoolean(&Base->Shadowed);
+	UI->GetElementById(0, "cmp_line_light_rlhh").CastFormFloat(&Base->Sky.RlhHeight);
+	UI->GetElementById(0, "cmp_line_light_mieh").CastFormFloat(&Base->Sky.MieHeight);
+	UI->GetElementById(0, "cmp_line_light_mied").CastFormFloat(&Base->Sky.MieDirection);
+	UI->GetElementById(0, "cmp_line_light_scatter").CastFormFloat(&Base->Sky.Intensity);
+	UI->GetElementById(0, "cmp_line_light_inner").CastFormFloat(&Base->Sky.InnerRadius);
+	UI->GetElementById(0, "cmp_line_light_outer").CastFormFloat(&Base->Sky.OuterRadius);
+	UI->GetElementById(0, "cmp_line_light_pcf").CastFormInt32(&Base->Shadow.Iterations);
+	UI->GetElementById(0, "cmp_line_light_sd_bias").CastFormFloat(&Base->Shadow.Bias);
+	UI->GetElementById(0, "cmp_line_light_sd_dist").CastFormFloat(&Base->Shadow.Distance);
+	UI->GetElementById(0, "cmp_line_light_sd_soft").CastFormFloat(&Base->Shadow.Softness);
+	UI->GetElementById(0, "cmp_line_light_sd_fbias").CastFormFloat(&Base->Shadow.FarBias);
+	UI->GetElementById(0, "cmp_line_light_sd_fp").CastFormFloat(&Base->Shadow.Length);
+	UI->GetElementById(0, "cmp_line_light_sd_height").CastFormFloat(&Base->Shadow.Height);
+	UI->GetElementById(0, "cmp_line_light_sd_active").CastFormBoolean(&Base->Shadow.Enabled);
 }
 void ComponentReflectionProbe(GUI::Context* UI, Components::ReflectionProbe* Base)
 {
@@ -1068,14 +1063,14 @@ void ComponentReflectionProbe(GUI::Context* UI, Components::ReflectionProbe* Bas
 		Base->SetDiffuseMap(New);
 	});
 
-	UI->GetElementById(0, "cmp_reflection_probe_vo_x").CastFormFloat(&Base->ViewOffset.X);
-	UI->GetElementById(0, "cmp_reflection_probe_vo_y").CastFormFloat(&Base->ViewOffset.Y);
-	UI->GetElementById(0, "cmp_reflection_probe_vo_z").CastFormFloat(&Base->ViewOffset.Z);
-	UI->GetElementById(0, "cmp_reflection_probe_rd").CastFormDouble(&Base->Rebuild.Delay);
-	UI->GetElementById(0, "cmp_reflection_probe_cr").CastFormFloat(&Base->CaptureRange);
+	UI->GetElementById(0, "cmp_reflection_probe_vo_x").CastFormFloat(&Base->Offset.X);
+	UI->GetElementById(0, "cmp_reflection_probe_vo_y").CastFormFloat(&Base->Offset.Y);
+	UI->GetElementById(0, "cmp_reflection_probe_vo_z").CastFormFloat(&Base->Offset.Z);
+	UI->GetElementById(0, "cmp_reflection_probe_rd").CastFormDouble(&Base->Tick.Delay);
+	UI->GetElementById(0, "cmp_reflection_probe_cr").CastFormFloat(&Base->Range);
 	UI->GetElementById(0, "cmp_reflection_probe_emission").CastFormFloat(&Base->Emission);
 	UI->GetElementById(0, "cmp_reflection_probe_inf").CastFormFloat(&Base->Infinity);
-	UI->GetElementById(0, "cmp_reflection_probe_px").CastFormBoolean(&Base->ParallaxCorrected);
+	UI->GetElementById(0, "cmp_reflection_probe_px").CastFormBoolean(&Base->Parallax);
 	UI->GetElementById(0, "cmp_reflection_probe_static").CastFormBoolean(&Base->StaticMask);
 }
 void ComponentCamera(GUI::Context* UI, Components::Camera* Base)
