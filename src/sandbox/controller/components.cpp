@@ -1016,7 +1016,7 @@ void ComponentAudioListener(GUI::Context* UI, Components::AudioListener* Base)
 void ComponentPointLight(GUI::Context* UI, Components::PointLight* Base)
 {
 	ResolveColor3(UI, "cmp_point_light_diffuse", &Base->Diffuse);
-	UI->GetElementById(0, "cmp_point_light_pcf").CastFormInt32(&Base->Shadow.Iterations);
+	UI->GetElementById(0, "cmp_point_light_pcf").CastFormUInt32(&Base->Shadow.Iterations);
 	UI->GetElementById(0, "cmp_point_light_emission").CastFormFloat(&Base->Emission);
 	UI->GetElementById(0, "cmp_point_light_sd_bias").CastFormFloat(&Base->Shadow.Bias);
 	UI->GetElementById(0, "cmp_point_light_sd_dist").CastFormFloat(&Base->Shadow.Distance);
@@ -1026,7 +1026,7 @@ void ComponentPointLight(GUI::Context* UI, Components::PointLight* Base)
 void ComponentSpotLight(GUI::Context* UI, Components::SpotLight* Base)
 {
 	ResolveColor3(UI, "cmp_spot_light_diffuse", &Base->Diffuse);
-	UI->GetElementById(0, "cmp_spot_light_pcf").CastFormInt32(&Base->Shadow.Iterations);
+	UI->GetElementById(0, "cmp_spot_light_pcf").CastFormUInt32(&Base->Shadow.Iterations);
 	UI->GetElementById(0, "cmp_spot_light_emission").CastFormFloat(&Base->Emission);
 	UI->GetElementById(0, "cmp_spot_light_cutoff").CastFormFloat(&Base->Cutoff);
 	UI->GetElementById(0, "cmp_spot_light_sd_bias").CastFormFloat(&Base->Shadow.Bias);
@@ -1036,6 +1036,32 @@ void ComponentSpotLight(GUI::Context* UI, Components::SpotLight* Base)
 }
 void ComponentLineLight(GUI::Context* UI, Components::LineLight* Base)
 {
+	Sandbox* App = Sandbox::Get()->As<Sandbox>();
+	if (!App)
+		return;
+
+	App->Models.System->SetInteger("sl_cmp_line_light_cascades", Base->Shadow.Cascades);
+	if (UI->GetElementById(0, "cmp_line_light_sd_casc").CastFormUInt32(&Base->Shadow.Cascades))
+		Base->Shadow.Cascades = Math<uint32_t>::Clamp(Base->Shadow.Cascades, 0, 6);
+
+	if (UI->GetElementById(0, "cmp_line_light_sd_dist0").CastFormFloat(&Base->Shadow.Distance[0]))
+		Base->Shadow.Distance[0] = Mathf::Max(0, Base->Shadow.Distance[0]);
+
+	if (UI->GetElementById(0, "cmp_line_light_sd_dist1").CastFormFloat(&Base->Shadow.Distance[1]))
+		Base->Shadow.Distance[1] = Mathf::Max(Base->Shadow.Distance[0] + 1.0f, Base->Shadow.Distance[1]);
+
+	if (UI->GetElementById(0, "cmp_line_light_sd_dist2").CastFormFloat(&Base->Shadow.Distance[2]))
+		Base->Shadow.Distance[2] = Mathf::Max(Base->Shadow.Distance[1] + 1.0f, Base->Shadow.Distance[2]);
+
+	if (UI->GetElementById(0, "cmp_line_light_sd_dist3").CastFormFloat(&Base->Shadow.Distance[3]))
+		Base->Shadow.Distance[3] = Mathf::Max(Base->Shadow.Distance[2] + 1.0f, Base->Shadow.Distance[3]);
+
+	if (UI->GetElementById(0, "cmp_line_light_sd_dist4").CastFormFloat(&Base->Shadow.Distance[4]))
+		Base->Shadow.Distance[4] = Mathf::Max(Base->Shadow.Distance[3] + 1.0f, Base->Shadow.Distance[4]);
+
+	if (UI->GetElementById(0, "cmp_line_light_sd_dist5").CastFormFloat(&Base->Shadow.Distance[5]))
+		Base->Shadow.Distance[5] = Mathf::Max(Base->Shadow.Distance[4] + 1.0f, Base->Shadow.Distance[5]);
+
 	ResolveColor3(UI, "cmp_line_light_diffuse", &Base->Diffuse);
 	ResolveColor3(UI, "cmp_line_light_rlh", &Base->Sky.RlhEmission);
 	ResolveColor3(UI, "cmp_line_light_mie", &Base->Sky.MieEmission);
@@ -1046,13 +1072,10 @@ void ComponentLineLight(GUI::Context* UI, Components::LineLight* Base)
 	UI->GetElementById(0, "cmp_line_light_scatter").CastFormFloat(&Base->Sky.Intensity);
 	UI->GetElementById(0, "cmp_line_light_inner").CastFormFloat(&Base->Sky.InnerRadius);
 	UI->GetElementById(0, "cmp_line_light_outer").CastFormFloat(&Base->Sky.OuterRadius);
-	UI->GetElementById(0, "cmp_line_light_pcf").CastFormInt32(&Base->Shadow.Iterations);
+	UI->GetElementById(0, "cmp_line_light_pcf").CastFormUInt32(&Base->Shadow.Iterations);
 	UI->GetElementById(0, "cmp_line_light_sd_bias").CastFormFloat(&Base->Shadow.Bias);
-	UI->GetElementById(0, "cmp_line_light_sd_dist").CastFormFloat(&Base->Shadow.Distance);
 	UI->GetElementById(0, "cmp_line_light_sd_soft").CastFormFloat(&Base->Shadow.Softness);
-	UI->GetElementById(0, "cmp_line_light_sd_fbias").CastFormFloat(&Base->Shadow.FarBias);
-	UI->GetElementById(0, "cmp_line_light_sd_fp").CastFormFloat(&Base->Shadow.Length);
-	UI->GetElementById(0, "cmp_line_light_sd_height").CastFormFloat(&Base->Shadow.Height);
+	UI->GetElementById(0, "cmp_line_light_sd_off").CastFormFloat(&Base->Shadow.Offset);
 	UI->GetElementById(0, "cmp_line_light_sd_active").CastFormBoolean(&Base->Shadow.Enabled);
 }
 void ComponentReflectionProbe(GUI::Context* UI, Components::ReflectionProbe* Base)

@@ -10,13 +10,13 @@ Entry:
 		Application::Desc Init;
 		Init.GraphicsDevice.VSyncMode = VSync_Disabled;
 		Init.GraphicsDevice.Backend = RenderBackend_D3D11;
-		Init.GraphicsDevice.Debug = false;
+		Init.GraphicsDevice.Debug = true;
 		Init.Activity.FreePosition = true;
 		Init.Activity.Title = "Sandbox";
 		Init.Activity.Hidden = true;
 		Init.Directory = "sandbox";
 
-		Application* App = new Sandbox(&Init);
+		Application* App = new Sandbox(&Init, "./scenes/test.xml");
 		App->Run(&Init);
 		delete App;
 

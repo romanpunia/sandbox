@@ -108,7 +108,7 @@ public:
 	} States;
 
 public:
-	explicit Sandbox(Application::Desc* Conf);
+	explicit Sandbox(Application::Desc* Conf, const std::string& Path = "");
 	virtual ~Sandbox() override;
 	void KeyEvent(KeyCode Key, KeyMod Mod, int Virtual, int Repeat, bool Pressed) override;
 	void WindowEvent(WindowState State, int X, int Y) override;

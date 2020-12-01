@@ -5,8 +5,9 @@
 #include "../controller/renderers.h"
 #include "../controller/effects.h"
 
-Sandbox::Sandbox(Application::Desc* Conf) : Application(Conf)
+Sandbox::Sandbox(Application::Desc* Conf, const std::string& Path) : Application(Conf)
 {
+	Resource.NextPath = Path;
 }
 Sandbox::~Sandbox()
 {
@@ -97,7 +98,6 @@ void Sandbox::Initialize(Application::Desc* Conf)
 	Icons.Source = Content->Load<Texture2D>("system/img/source.png");
 	Icons.Emitter = Content->Load<Texture2D>("system/img/emitter.png");
 	Resource.CurrentPath = Content->GetEnvironment();
-	Resource.NextPath = Demo::GetSource();
 	Resource.Gizmo[0] = CreateMoveGizmo();
 	Resource.Gizmo[1] = CreateRotateGizmo();
 	Resource.Gizmo[2] = CreateScaleGizmo();
@@ -158,7 +158,7 @@ void Sandbox::Render(Timer* Time)
 {
 	Renderer->Clear(0, 0, 0);
 	Renderer->ClearDepth();
-	Renderer->SetSamplerState(States.Sampler);
+	Renderer->SetSamplerState(States.Sampler, 0);
 
 	Scene->Render(Time);
 	if (State.IsInteractive && State.Camera == Scene->GetCamera()->GetEntity())
@@ -1065,6 +1065,7 @@ void Sandbox::SetViewModel()
 	Models.System->SetBoolean("sl_cmp_point_light", false);
 	Models.System->SetBoolean("sl_cmp_spot_light", false);
 	Models.System->SetBoolean("sl_cmp_line_light", false);
+	Models.System->SetInteger("sl_cmp_line_light_cascades", -1);
 	Models.System->SetBoolean("sl_cmp_reflection_probe", false);
 	Models.System->SetBoolean("sl_cmp_camera", false);
 	Models.System->SetInteger("sl_cmp_camera_model", -1);
