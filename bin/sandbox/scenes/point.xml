@@ -1,0 +1,195 @@
+<scene>
+	<metadata>
+		<components i="65536" />
+		<entities i="32768" />
+		<render-quality n="1.000000" />
+		<enable-hdr b="false" />
+		<simulator>
+			<enable-soft-body b="true" />
+			<max-displacement n="1000.000000" />
+			<air-density n="1.200000" />
+			<water-offset n="0.000000" />
+			<water-density n="0.000000" />
+			<water-normal x="0.000000" y="0.000000" z="0.000000" />
+			<gravity x="0.000000" y="-10.000000" z="0.000000" />
+		</simulator>
+	</metadata>
+	<materials>
+		<material>
+			<name s="Material" />
+			<emission x="0.000000" y="0.000000" z="0.000000" w="0.000000" />
+			<metallic x="0.800000" y="0.800000" z="0.800000" w="0.000000" />
+			<roughness x="0.120000" y="0.900000" />
+			<fresnel n="0.100000" />
+			<refraction n="0.000000" />
+			<transparency n="0.000000" />
+			<environment n="0.000000" />
+			<occlusion x="1.000000" y="1.000000" />
+			<radius n="0.000000" />
+			<id n="0.000000" />
+		</material>
+	</materials>
+	<entities>
+		<entity>
+			<name s="" />
+			<tag i="-1" />
+			<transform>
+				<position x="0.000000" y="0.000000" z="0.000000" />
+				<rotation x="0.000000" y="0.000000" z="0.000000" />
+				<scale x="100.000000" y="1.000000" z="100.000000" />
+				<constant-scale b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="-678071591" />
+					<active b="true" />
+					<metadata>
+						<model s="./models/cube/mesh.xml" />
+						<surfaces>
+							<surface>
+								<name s="Cube" />
+								<diffuse-map s="./materials/paving-stones/diffuse.jpg" />
+								<normal-map s="./materials/paving-stones/normal.jpg" />
+								<roughness-map s="./materials/paving-stones/roughness.jpg" />
+								<occlusion-map s="./materials/paving-stones/occlusion.jpg" />
+								<diffuse x="1.000000" y="1.000000" z="1.000000" />
+								<texcoord x="100.000000" y="100.000000" />
+								<height-amount n="-0.300000" />
+								<height-bias n="-0.030000" />
+								<material i="0" />
+							</surface>
+						</surfaces>
+						<transparency b="false" />
+						<static b="true" />
+					</metadata>
+				</component>
+			</components>
+		</entity>
+		<entity>
+			<name s="" />
+			<tag i="-1" />
+			<transform>
+				<position x="4.923321" y="4.428683" z="6.703328" />
+				<rotation x="0.500000" y="-0.665000" z="0.000000" />
+				<scale x="1.000000" y="1.000000" z="1.000000" />
+				<constant-scale b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="-3303215611" />
+					<active b="true" />
+					<metadata>
+						<mode i="0" />
+						<projection m11="0.672151" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.303225" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000100" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100010" m44="0.000000" />
+						<field-of-view n="75.000000" />
+						<far-plane n="1000.000000" />
+						<near-plane n="0.100000" />
+						<width n="-1.000000" />
+						<height n="-1.000000" />
+						<occlusion-delay n="5.000000" />
+						<occlusion-stall i="1" />
+						<occlusion-size i="256" />
+						<sorting-delay n="5.000000" />
+						<frustum-cull b="true" />
+						<occlusion-cull b="false" />
+						<renderers />
+					</metadata>
+				</component>
+			</components>
+		</entity>
+		<entity>
+			<name s="" />
+			<tag i="-1" />
+			<transform>
+				<position x="8.519547" y="9.042652" z="-15.853952" />
+				<rotation x="0.650000" y="-1.950000" z="0.000000" />
+				<scale x="200.000000" y="200.000000" z="200.000000" />
+				<constant-scale b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="-1899663186" />
+					<active b="true" />
+					<metadata>
+						<projection m11="1.000000" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.001001" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100100" m44="0.000000" />
+						<view m11="0.000000" m12="-0.000000" m13="1.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="-1.000000" m32="0.000000" m33="0.000000" m34="0.000000" m41="15.853952" m42="-9.042652" m43="-8.519547" m44="1.000000" />
+						<diffuse x="1.000000" y="1.000000" z="1.000000" />
+						<emission n="10.000000" />
+						<disperse n="9.000000" />
+						<shadow-softness n="10.000000" />
+						<shadow-distance n="100.000000" />
+						<shadow-bias n="-0.002750" />
+						<shadow-iterations i="64" />
+						<shadow-enabled b="true" />
+					</metadata>
+				</component>
+			</components>
+		</entity>
+		<entity>
+			<name s="" />
+			<tag i="-1" />
+			<transform>
+				<position x="0.000000" y="1.490191" z="-0.000000" />
+				<rotation x="0.660662" y="-0.000000" z="-0.000000" />
+				<scale x="1.000000" y="1.000000" z="1.000000" />
+				<constant-scale b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="-678071591" />
+					<active b="true" />
+					<metadata>
+						<model s="./models/monkey/mesh.xml" />
+						<surfaces>
+							<surface>
+								<name s="Suzanne" />
+								<diffuse x="1.000000" y="1.000000" z="1.000000" />
+								<texcoord x="1.000000" y="1.000000" />
+								<height-amount n="0.000000" />
+								<height-bias n="0.000000" />
+								<material i="0" />
+							</surface>
+						</surfaces>
+						<transparency b="false" />
+						<static b="true" />
+					</metadata>
+				</component>
+			</components>
+		</entity>
+		<entity>
+			<name s="" />
+			<tag i="-1" />
+			<transform>
+				<position x="5.491381" y="1.980797" z="-0.000000" />
+				<rotation x="0.000000" y="0.000000" z="0.000000" />
+				<scale x="1.000000" y="1.000000" z="1.000000" />
+				<constant-scale b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="-678071591" />
+					<active b="true" />
+					<metadata>
+						<model s="./models/cube/mesh.xml" />
+						<surfaces>
+							<surface>
+								<name s="Cube" />
+								<diffuse-map s="./materials/paving-stones/diffuse.jpg" />
+								<normal-map s="./materials/paving-stones/normal.jpg" />
+								<roughness-map s="./materials/paving-stones/roughness.jpg" />
+								<occlusion-map s="./materials/paving-stones/occlusion.jpg" />
+								<diffuse x="1.000000" y="1.000000" z="1.000000" />
+								<texcoord x="1.000000" y="1.000000" />
+								<height-amount n="-0.300000" />
+								<height-bias n="-0.030000" />
+								<material i="0" />
+							</surface>
+						</surfaces>
+						<transparency b="false" />
+						<static b="true" />
+					</metadata>
+				</component>
+			</components>
+		</entity>
+	</entities>
+</scene>

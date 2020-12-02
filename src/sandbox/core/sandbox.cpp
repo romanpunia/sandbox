@@ -558,6 +558,8 @@ void Sandbox::UpdateGrid(Timer* Time)
 			Transform = Value->GetComponent<Components::Skin>()->GetBoundingBox();
 		else if (Value->GetComponent<Components::Model>())
 			Transform = Value->GetComponent<Components::Model>()->GetBoundingBox();
+		else if (Value->GetComponent<Components::PointLight>() || Value->GetComponent<Components::SpotLight>() || Value->GetComponent<Components::LineLight>())
+			Transform = Value->Transform->GetWorldUnscaled();
 		else
 			Transform = Value->Transform->GetWorld();
 

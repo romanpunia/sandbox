@@ -1018,6 +1018,7 @@ void ComponentPointLight(GUI::Context* UI, Components::PointLight* Base)
 	ResolveColor3(UI, "cmp_point_light_diffuse", &Base->Diffuse);
 	UI->GetElementById(0, "cmp_point_light_pcf").CastFormUInt32(&Base->Shadow.Iterations);
 	UI->GetElementById(0, "cmp_point_light_emission").CastFormFloat(&Base->Emission);
+	UI->GetElementById(0, "cmp_point_light_disp").CastFormFloat(&Base->Disperse);
 	UI->GetElementById(0, "cmp_point_light_sd_bias").CastFormFloat(&Base->Shadow.Bias);
 	UI->GetElementById(0, "cmp_point_light_sd_dist").CastFormFloat(&Base->Shadow.Distance);
 	UI->GetElementById(0, "cmp_point_light_sd_soft").CastFormFloat(&Base->Shadow.Softness);
@@ -1028,6 +1029,7 @@ void ComponentSpotLight(GUI::Context* UI, Components::SpotLight* Base)
 	ResolveColor3(UI, "cmp_spot_light_diffuse", &Base->Diffuse);
 	UI->GetElementById(0, "cmp_spot_light_pcf").CastFormUInt32(&Base->Shadow.Iterations);
 	UI->GetElementById(0, "cmp_spot_light_emission").CastFormFloat(&Base->Emission);
+	UI->GetElementById(0, "cmp_spot_light_disp").CastFormFloat(&Base->Disperse);
 	UI->GetElementById(0, "cmp_spot_light_cutoff").CastFormFloat(&Base->Cutoff);
 	UI->GetElementById(0, "cmp_spot_light_sd_bias").CastFormFloat(&Base->Shadow.Bias);
 	UI->GetElementById(0, "cmp_spot_light_sd_dist").CastFormFloat(&Base->Shadow.Distance);
@@ -1066,6 +1068,7 @@ void ComponentLineLight(GUI::Context* UI, Components::LineLight* Base)
 	ResolveColor3(UI, "cmp_line_light_rlh", &Base->Sky.RlhEmission);
 	ResolveColor3(UI, "cmp_line_light_mie", &Base->Sky.MieEmission);
 	UI->GetElementById(0, "cmp_line_light_emission").CastFormFloat(&Base->Emission);
+	UI->GetElementById(0, "cmp_line_light_disp").CastFormFloat(&Base->Disperse);
 	UI->GetElementById(0, "cmp_line_light_rlhh").CastFormFloat(&Base->Sky.RlhHeight);
 	UI->GetElementById(0, "cmp_line_light_mieh").CastFormFloat(&Base->Sky.MieHeight);
 	UI->GetElementById(0, "cmp_line_light_mied").CastFormFloat(&Base->Sky.MieDirection);
