@@ -988,6 +988,9 @@ void Sandbox::InspectMaterial()
 	if (State.GUI->GetElementById(0, "mat_cmet").CastFormColor(&Base->Metallic, false))
 		State.GUI->GetElementById(0, "mat_cmet_color").SetProperty("background-color", Form("rgb(%u, %u, %u)", (unsigned int)(Base->Metallic.X * 255.0f), (unsigned int)(Base->Metallic.Y * 255.0f), (unsigned int)(Base->Metallic.Z * 255.0f)).R());
 
+	State.GUI->GetElementById(0, "mat_scat_x").CastFormFloat(&Base->Scatter.X);
+	State.GUI->GetElementById(0, "mat_scat_y").CastFormFloat(&Base->Scatter.Y);
+	State.GUI->GetElementById(0, "mat_scat_z").CastFormFloat(&Base->Scatter.Z);
 	State.GUI->GetElementById(0, "mat_memn").CastFormFloat(&Base->Emission.W);
 	State.GUI->GetElementById(0, "mat_mmet").CastFormFloat(&Base->Metallic.W);
 	State.GUI->GetElementById(0, "mat_rs").CastFormFloat(&Base->Roughness.X);
@@ -1357,7 +1360,11 @@ void Sandbox::SetViewModel()
 	Models.System->SetCallback("copy_material", [this](GUI::IEvent& Event, const PropertyList& Args)
 	{
 		if (Selection.Material != nullptr)
+		{
 			Selection.Material = Scene->AddMaterial(Scene->GetMaterialName(Selection.Material->Id) + "*", *Selection.Material);
+			Models.Materials->Update(nullptr);
+			Models.Surfaces->Update(nullptr);
+		}
 	});
 	Models.System->SetCallback("open_settings", [this](GUI::IEvent& Event, const PropertyList& Args)
 	{
@@ -1366,6 +1373,7 @@ void Sandbox::SetViewModel()
 	Models.System->SetCallback("add_material", [this](GUI::IEvent& Event, const PropertyList& Args)
 	{
 		SetSelection(Inspector_Material, Scene->AddMaterial("Material", Material()));
+		Models.Materials->Update(nullptr);
 		Models.Surfaces->Update(nullptr);
 	});
 	Models.System->SetCallback("import_model", [this](GUI::IEvent& Event, const PropertyList& Args)

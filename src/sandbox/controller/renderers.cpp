@@ -20,6 +20,16 @@ void RendererLighting(GUI::Context* UI, Renderers::Lighting* Base)
 	ResolveColor3(UI, "cmp_camera_lighting_hc", &Base->AmbientLight.HighEmission);
 	ResolveColor3(UI, "cmp_camera_lighting_lc", &Base->AmbientLight.LowEmission);
 	ResolveColor3(UI, "cmp_camera_lighting_sc", &Base->AmbientLight.SkyColor);
+	ResolveColor3(UI, "cmp_camera_lighting_fc", &Base->AmbientLight.FogColor);
+	UI->GetElementById(0, "cmp_camera_lighting_ff_x").CastFormFloat(&Base->AmbientLight.FogFar.X);
+	UI->GetElementById(0, "cmp_camera_lighting_ff_y").CastFormFloat(&Base->AmbientLight.FogFar.Y);
+	UI->GetElementById(0, "cmp_camera_lighting_ff_z").CastFormFloat(&Base->AmbientLight.FogFar.Z);
+	UI->GetElementById(0, "cmp_camera_lighting_fn_x").CastFormFloat(&Base->AmbientLight.FogNear.X);
+	UI->GetElementById(0, "cmp_camera_lighting_fn_y").CastFormFloat(&Base->AmbientLight.FogNear.Y);
+	UI->GetElementById(0, "cmp_camera_lighting_fn_z").CastFormFloat(&Base->AmbientLight.FogNear.Z);
+	UI->GetElementById(0, "cmp_camera_lighting_fno").CastFormFloat(&Base->AmbientLight.FogNearOff);
+	UI->GetElementById(0, "cmp_camera_lighting_ffo").CastFormFloat(&Base->AmbientLight.FogFarOff);
+	UI->GetElementById(0, "cmp_camera_lighting_fa").CastFormFloat(&Base->AmbientLight.FogAmount);
 	UI->GetElementById(0, "cmp_camera_lighting_se").CastFormFloat(&Base->AmbientLight.SkyEmission);
 	UI->GetElementById(0, "cmp_camera_lighting_le").CastFormFloat(&Base->AmbientLight.LightEmission);
 	UI->GetElementById(0, "cmp_camera_lighting_rp").CastFormBoolean(&Base->RecursiveProbes);
