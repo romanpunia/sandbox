@@ -9,6 +9,7 @@ void RendererDepth(GUI::Context* UI, Renderers::Depth* Base)
 	UI->GetElementById(0, "cmp_camera_depth_sll").CastFormUInt64(&Base->Renderers.SpotLightLimits);
 	UI->GetElementById(0, "cmp_camera_depth_llr").CastFormUInt64(&Base->Renderers.LineLightResolution);
 	UI->GetElementById(0, "cmp_camera_depth_lll").CastFormUInt64(&Base->Renderers.LineLightLimits);
+	UI->GetElementById(0, "cmp_camera_depth_rd").CastFormDouble(&Base->Tick.Delay);
 	UI->GetElementById(0, "cmp_camera_depth_sd").CastFormFloat(&Base->ShadowDistance);
 }
 void RendererLighting(GUI::Context* UI, Renderers::Lighting* Base)

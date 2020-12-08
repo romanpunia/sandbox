@@ -39,7 +39,7 @@ public:
 		std::function<void(const std::string&)> OnResource;
 		std::function<void(Entity*)> OnEntity;
 		GUI::Context* GUI = nullptr;
-		FileTree* Directory;
+		FileTree* Directory = nullptr;
 		Entity* Camera = nullptr;
 		Entity* Draggable = nullptr;
 		std::string Status;

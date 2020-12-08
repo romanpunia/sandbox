@@ -169,7 +169,7 @@ void Sandbox::Render(Timer* Time)
 
 	Scene->Submit();
 	if (State.IsInteractive && State.GUI != nullptr)
-		State.GUI->RenderLists(Renderer->GetRenderTarget()->GetTarget());
+		State.GUI->RenderLists(Renderer->GetRenderTarget()->GetTarget(0));
 
 	Renderer->Submit();
 }
