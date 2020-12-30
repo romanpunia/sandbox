@@ -1,0 +1,104 @@
+<div class="tab">
+	<p>Components</p>
+	<div class="tab-menu" data-if="sl_entity != -1">
+		<div class="sub">
+			<p>Animators</p>
+			<div class="sub-menu">
+				<button data-event-click="add_cmp_skin_animator">Skin animator</button>
+				<button data-event-click="add_cmp_key_animator">Key animator</button>
+				<button data-event-click="add_cmp_emitter_animator">Emitter animator</button>
+			</div>
+		</div>
+		<div class="sub">
+			<p>Audio</p>
+			<div class="sub-menu">
+				<button data-event-click="add_cmp_listener">Listener</button>
+				<button data-event-click="add_cmp_source">Source</button>
+			</div>
+		</div>
+		<div class="sub">
+			<p>Audio effects</p>
+			<div class="sub-menu">
+				<button data-event-click="add_cmp_reverb">Reverb</button>
+				<button data-event-click="add_cmp_chorus">Chorus</button>
+				<button data-event-click="add_cmp_distortion">Distortion</button>
+				<button data-event-click="add_cmp_echo">Echo</button>
+				<button data-event-click="add_cmp_flanger">Flanger</button>
+				<button data-event-click="add_cmp_frequency_shifter">Frequency shifter</button>
+				<button data-event-click="add_cmp_vocal_morpher">Vocal morpher</button>
+				<button data-event-click="add_cmp_pitch_shifter">Pitch shifter</button>
+				<button data-event-click="add_cmp_ring_modulator">Ring modulator</button>
+				<button data-event-click="add_cmp_autowah">Autowah</button>
+				<button data-event-click="add_cmp_compressor">Compressor</button>
+				<button data-event-click="add_cmp_equalizer">Equalizer</button>
+			</div>
+		</div>
+		<div class="sub">
+			<p>Geometry</p>
+			<div class="sub-menu">
+				<button data-event-click="add_cmp_model">Model</button>
+				<button data-event-click="add_cmp_skin">Skin</button>
+				<button data-event-click="add_cmp_emitter">Emitter</button>
+				<button data-event-click="add_cmp_decal">Decal</button>
+			</div>
+		</div>
+		<div class="sub">
+			<p>Lighting</p>
+			<div class="sub-menu">
+				<button data-event-click="add_cmp_point_light">Point light</button>
+				<button data-event-click="add_cmp_spot_light">Spot light</button>
+				<button data-event-click="add_cmp_line_light">Line light</button>
+				<button data-event-click="add_cmp_reflection_probe">Reflection probe</button>
+			</div>
+		</div>
+		<div class="sub">
+			<p>Physics</p>
+			<div class="sub-menu">
+				<button data-event-click="add_cmp_rigid_body">Rigid body</button>
+				<button data-event-click="add_cmp_soft_body">Soft body</button>
+				<button data-event-click="add_cmp_slider_constraint">Slider constraint</button>
+				<button data-event-click="add_cmp_acceleration">Acceleration</button>
+				<button data-event-click="add_cmp_fly">Fly</button>
+				<button data-event-click="add_cmp_free_look">Free look</button>
+			</div>
+		</div>
+		<div class="sub">
+			<p>Camera</p>
+			<div class="sub-menu">
+				<button data-event-click="add_cmp_camera">Camera</button>
+				<button data-event-click="add_cmp_3d_camera">3D Camera</button>
+			</div>
+		</div>
+		<div class="sub">
+			<p>Scripting</p>
+			<div class="sub-menu">
+				<button data-event-click="add_cmp_scriptable">Scriptable</button>
+			</div>
+		</div>
+		<div class="sub">
+			<p>Renderers</p>
+			<div class="sub-menu">
+				<button data-event-click="add_rndr_model">Model renderer</button>
+				<button data-event-click="add_rndr_skin">Skin renderer</button>
+				<button data-event-click="add_rndr_soft_body">Soft body renderer</button>
+				<button data-event-click="add_rndr_decal">Decal renderer</button>
+				<button data-event-click="add_rndr_emitter">Emitter renderer</button>
+				<button data-event-click="add_rndr_depth">Depth renderer</button>
+				<button data-event-click="add_rndr_lighting">Light renderer</button>
+				<button data-event-click="add_rndr_environment">Environment renderer</button>
+				<button data-event-click="add_rndr_transparency">Transparency renderer</button>
+				<button data-event-click="add_rndr_ssr">SSR renderer</button>
+				<button data-event-click="add_rndr_ssao">SSAO renderer</button>
+				<button data-event-click="add_rndr_ssdo">SSDO renderer</button>
+				<button data-event-click="add_rndr_bloom">Bloom renderer</button>
+				<button data-event-click="add_rndr_dof">DoF renderer</button>
+				<button data-event-click="add_rndr_tone">Tone renderer</button>
+				<button data-event-click="add_rndr_glitch">Glitch renderer</button>
+				<button data-event-click="add_rndr_gui">GUI renderer</button>
+			</div>
+		</div>
+	</div>
+	<div class="tab-message" data-if="sl_entity == -1">
+		<div class="tab-text">Select any entity</div>
+	</div>
+</div>

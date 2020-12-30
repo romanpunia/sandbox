@@ -1,0 +1,139 @@
+<div class="head">
+	<p class="title">Skin component</p>
+	<button data-event-click="remove_cmp('skin')">Remove</button>
+</div>
+<table class="option" data-if="sl_cmp_skin_assigned">
+	<tr>
+		<td class="label">Mesh</td>
+		<td><dataselect source="skin.root" fields="id, name" valuefield="id" id="cmp_skin_mesh" formatter="skin" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_skin_source">
+	<tr>
+		<td class="label">Diffuse map</td>
+		<td><button class="source" id="cmp_skin_diffuse_source" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_skin_source">
+	<tr>
+		<td class="label">Normal map</td>
+		<td><button class="source" id="cmp_skin_normal_source" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_skin_source">
+	<tr>
+		<td class="label">Metallic map</td>
+		<td><button class="source" id="cmp_skin_metallic_source" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_skin_source">
+	<tr>
+		<td class="label">Roughness map</td>
+		<td><button class="source" id="cmp_skin_roughness_source" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_skin_source">
+	<tr>
+		<td class="label">Height map</td>
+		<td><button class="source" id="cmp_skin_height_source" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_skin_source">
+	<tr>
+		<td class="label">Occlusion map</td>
+		<td><button class="source" id="cmp_skin_occlusion_source" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_skin_source">
+	<tr>
+		<td class="label">Emission map</td>
+		<td><button class="source" id="cmp_skin_emission_source" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_skin_source">
+	<tr>
+		<td class="label">Diffuse color</td>
+		<td><input type="text" maxlength="64" id="cmp_skin_diffuse" /><div class="color" id="cmp_skin_diffuse_color" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_skin_source">
+	<tr>
+		<td class="label">Texture offset</td>
+		<td><input type="text" maxlength="16" id="cmp_skin_uv_x" /></td>
+		<td><input type="text" maxlength="16" id="cmp_skin_uv_y" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_skin_source">
+	<tr>
+		<td class="label">Height amount</td>
+		<td><input type="text" maxlength="16" id="cmp_skin_ht_amnt" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_skin_source">
+	<tr>
+		<td class="label">Height bias</td>
+		<td><input type="text" maxlength="16" id="cmp_skin_ht_bias" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_skin_source">
+	<tr>
+		<td class="label">Material</td>
+		<td><dataselect source="surfaces.root" fields="id, name" valuefield="id" id="cmp_skin_material" formatter="surfaces" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Source</td>
+		<td><button class="source" id="cmp_skin_source" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Static</td>
+		<td><div class="check"><input type="checkbox" id="cmp_skin_static" /></div></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Transparency</td>
+		<td><div class="check"><input type="checkbox" id="cmp_skin_alpha" /></div></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_skin_joints > 0">
+	<tr>
+		<td class="label">Joint</td>
+		<td><input type="range" min="-1" data-attr-max="sl_cmp_skin_joints" step="1" id="cmp_skin_joint" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_skin_joint >= 0">
+	<tr>
+		<td class="label">Name</td>
+		<td><input type="text" maxlength="64" id="cmp_skin_jname" disabled /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_skin_joint >= 0">
+	<tr>
+		<td class="label">Position</td>
+		<td><input type="text" maxlength="16" id="cmp_skin_jp_x" /></td>
+		<td><input type="text" maxlength="16" id="cmp_skin_jp_y" /></td>
+		<td><input type="text" maxlength="16" id="cmp_skin_jp_z" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_skin_joint >= 0">
+	<tr>
+		<td class="label">Rotation X</td>
+		<td><input type="range" min="0" max="360" step="0.05" id="cmp_skin_jr_x" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_skin_joint >= 0">
+	<tr>
+		<td class="label">Rotation Y</td>
+		<td><input type="range" min="0" max="360" step="0.05" id="cmp_skin_jr_y" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_skin_joint >= 0">
+	<tr>
+		<td class="label">Rotation Z</td>
+		<td><input type="range" min="0" max="360" step="0.05" id="cmp_skin_jr_z" /></td>
+	</tr>
+</table>

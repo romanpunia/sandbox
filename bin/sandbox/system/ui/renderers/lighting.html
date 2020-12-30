@@ -1,0 +1,89 @@
+<div class="head">
+	<p class="title">Lighting layer ({{ sl_cmp_camera_lighting }})</p>
+	<button data-event-click="remove_rndr('lighting-renderer')">Remove</button>
+	<button style="margin-right: 4px;" data-event-click="toggle_rndr('lighting-renderer')">Toggle</button>
+	<button style="margin-right: 4px;" data-event-click="down_rndr('lighting-renderer')">Down</button>
+	<button style="margin-right: 4px;" data-event-click="up_rndr('lighting-renderer')">Up</button>
+</div>
+<table class="option">
+	<tr>
+		<td class="label">High emission</td>
+		<td><input type="text" maxlength="64" id="cmp_camera_lighting_hc" /><div class="color" id="cmp_camera_lighting_hc_color" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Low emission</td>
+		<td><input type="text" maxlength="64" id="cmp_camera_lighting_lc" /><div class="color" id="cmp_camera_lighting_lc_color" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Sky color</td>
+		<td><input type="text" maxlength="64" id="cmp_camera_lighting_sc" /><div class="color" id="cmp_camera_lighting_sc_color" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Fog color</td>
+		<td><input type="text" maxlength="64" id="cmp_camera_lighting_fc" /><div class="color" id="cmp_camera_lighting_fc_color" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Fog amount</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_lighting_fa" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Fog far density</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_lighting_ff_x" /></td>
+		<td><input type="text" maxlength="16" id="cmp_camera_lighting_ff_y" /></td>
+		<td><input type="text" maxlength="16" id="cmp_camera_lighting_ff_z" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Fog far falloff</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_lighting_ffo" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Fog near density</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_lighting_fn_x" /></td>
+		<td><input type="text" maxlength="16" id="cmp_camera_lighting_fn_y" /></td>
+		<td><input type="text" maxlength="16" id="cmp_camera_lighting_fn_z" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Fog near falloff</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_lighting_fno" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Sky emission</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_lighting_se" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Light emission</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_lighting_le" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Sky map</td>
+		<td><button class="source" id="cmp_camera_lighting_sm" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Recursive probes</td>
+		<td><div class="check"><input type="checkbox" id="cmp_camera_lighting_rp" /></div></td>
+	</tr>
+</table>

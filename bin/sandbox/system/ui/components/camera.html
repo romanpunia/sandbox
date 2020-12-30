@@ -1,0 +1,89 @@
+<div class="head">
+	<p class="title">Camera component</p>
+	<button data-event-click="remove_cmp('camera')">Remove</button>
+</div>
+<table class="option">
+	<tr>
+		<td class="label">Field of view</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_fov" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Width</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_w" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Height</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_h" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Near plane</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_np" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Far plane</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_fp" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Perspective</td>
+		<td><button class="source" id="cmp_camera_perspective">Set perspective projection</button></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Orthographic</td>
+		<td><button class="source" id="cmp_camera_ortho">Set orthographic projection</button></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Preview</td>
+		<td><div class="check"><input type="checkbox" id="cmp_camera_preview" /></div></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Frustum culling</td>
+		<td><div class="check"><input type="checkbox" id="cmp_camera_fc" /></div></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Occlusion culling</td>
+		<td><div class="check"><input type="checkbox" id="cmp_camera_oc" /></div></td>
+	</tr>
+</table>
+<p class="title">Occlusion culling</p>
+<table class="option">
+	<tr>
+		<td class="label">Render delay</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_oc_rd" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Sorting delay</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_oc_sd" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Stalled frames</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_oc_sf" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Depth buffer</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_oc_db" /></td>
+	</tr>
+</table>

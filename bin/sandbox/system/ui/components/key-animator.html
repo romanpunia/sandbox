@@ -1,0 +1,170 @@
+<div class="head">
+	<p class="title">Key animator component</p>
+	<button data-event-click="remove_cmp('key-animator')">Remove</button>
+</div>
+<table class="option">
+	<tr>
+		<td class="label">Source</td>
+		<td><button class="source" id="cmp_key_animator_source" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_key_animator_clips >= 0">
+	<tr>
+		<td class="label">Play</td>
+		<td><button class="source" id="cmp_key_animator_play">Start</button></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_key_animator_clips >= 0">
+	<tr>
+		<td class="label">Pause</td>
+		<td><button class="source" id="cmp_key_animator_pause">Freeze</button></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_key_animator_clips >= 0">
+	<tr>
+		<td class="label">Stop</td>
+		<td><button class="source" id="cmp_key_animator_stop">Abort</button></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">New clip</td>
+		<td><button class="source" id="cmp_key_animator_cap">Append</button></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_key_animator_clips >= 0">
+	<tr>
+		<td class="label">Looped</td>
+		<td><div class="check"><input type="checkbox" id="cmp_key_animator_loop" /></div></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_key_animator_clips >= 0">
+	<tr>
+		<td class="label">View paths</td>
+		<td><div class="check"><input type="checkbox" id="cmp_key_animator_vpaths" /></div></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_key_animator_clips >= 0">
+	<tr>
+		<td class="label">Clip</td>
+		<td><input type="range" min="-1" data-attr-max="sl_cmp_key_animator_clips" step="1" id="cmp_key_animator_clip" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_key_animator_clip >= 0">
+	<tr>
+		<td class="label">Name</td>
+		<td><input type="text" maxlength="64" id="cmp_key_animator_сname" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_key_animator_clip >= 0">
+	<tr>
+		<td class="label">Duration</td>
+		<td><input type="text" maxlength="16" id="cmp_key_animator_cd" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_key_animator_clip >= 0">
+	<tr>
+		<td class="label">Rate</td>
+		<td><input type="text" maxlength="16" id="cmp_key_animator_cr" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_key_animator_clip >= 0">
+	<tr>
+		<td class="label">Interpolation</td>
+		<td><button class="source" id="cmp_key_animator_cnorm">Normalize</button></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_key_animator_clip >= 0">
+	<tr>
+		<td class="label">Empty frame</td>
+		<td><button class="source" id="cmp_key_animator_cadde">Add empty</button></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_key_animator_clip >= 0">
+	<tr>
+		<td class="label">Model frame</td>
+		<td><button class="source" id="cmp_key_animator_caddm">Add model</button></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_key_animator_clip >= 0">
+	<tr>
+		<td class="label">View frame</td>
+		<td><button class="source" id="cmp_key_animator_caddv">Add view</button></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_key_animator_clip >= 0">
+	<tr>
+		<td class="label">View-based frame</td>
+		<td><button class="source" id="cmp_key_animator_caddvb">Add view-based</button></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_key_animator_clip >= 0">
+	<tr>
+		<td class="label">Erase frames</td>
+		<td><button class="source" id="cmp_key_animator_cremf">Remove all frames</button></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_key_animator_clip >= 0">
+	<tr>
+		<td class="label">Erase</td>
+		<td><button class="source" id="cmp_key_animator_crem">Remove this clip</button></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_key_animator_clip >= 0">
+	<tr>
+		<td class="label">Frame</td>
+		<td><input type="range" min="-1" data-attr-max="sl_cmp_key_animator_frames" step="1" id="cmp_key_animator_frame" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_key_animator_frame >= 0">
+	<tr>
+		<td class="label">Frame id</td>
+		<td><input type="text" maxlength="16" id="cmp_key_animator_fname" disabled /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_key_animator_frame >= 0">
+	<tr>
+		<td class="label">Position</td>
+		<td><input type="text" maxlength="16" id="cmp_key_animator_fp_x" /></td>
+		<td><input type="text" maxlength="16" id="cmp_key_animator_fp_y" /></td>
+		<td><input type="text" maxlength="16" id="cmp_key_animator_fp_z" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_key_animator_frame >= 0">
+	<tr>
+		<td class="label">Rotation X</td>
+		<td><input type="range" min="0" max="360" step="0.05" id="cmp_key_animator_fr_x" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_key_animator_frame >= 0">
+	<tr>
+		<td class="label">Rotation Y</td>
+		<td><input type="range" min="0" max="360" step="0.05" id="cmp_key_animator_fr_y" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_key_animator_frame >= 0">
+	<tr>
+		<td class="label">Rotation Z</td>
+		<td><input type="range" min="0" max="360" step="0.05" id="cmp_key_animator_fr_z" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_key_animator_frame >= 0">
+	<tr>
+		<td class="label">Scale</td>
+		<td><input type="text" maxlength="16" id="cmp_key_animator_fs_x" /></td>
+		<td><input type="text" maxlength="16" id="cmp_key_animator_fs_y" /></td>
+		<td><input type="text" maxlength="16" id="cmp_key_animator_fs_z" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_key_animator_frame >= 0">
+	<tr>
+		<td class="label">Time</td>
+		<td><input type="text" maxlength="16" id="cmp_key_animator_ft" /></td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_key_animator_frame >= 0">
+	<tr>
+		<td class="label">Erase</td>
+		<td><button class="source" id="cmp_key_animator_frem">Remove this frame</button></td>
+	</tr>
+</table>

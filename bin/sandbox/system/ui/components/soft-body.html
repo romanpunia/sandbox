@@ -1,0 +1,351 @@
+<div class="head">
+	<p class="title">Soft body component</p>
+	<button data-event-click="remove_cmp('soft-body')">Remove</button>
+</div>
+<table class="option">
+	<tr>
+		<td class="label">Diffuse map</td>
+		<td><button class="source" id="cmp_soft_body_diffuse_source" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Normal map</td>
+		<td><button class="source" id="cmp_soft_body_normal_source" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Metallic map</td>
+		<td><button class="source" id="cmp_soft_body_metallic_source" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Roughness map</td>
+		<td><button class="source" id="cmp_soft_body_roughness_source" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Height map</td>
+		<td><button class="source" id="cmp_soft_body_height_source" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Occlusion map</td>
+		<td><button class="source" id="cmp_soft_body_occlusion_source" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Emission map</td>
+		<td><button class="source" id="cmp_soft_body_emission_source" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Diffuse color</td>
+		<td><input type="text" maxlength="64" id="cmp_soft_body_diffuse" /><div class="color" id="cmp_soft_body_diffuse_color" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Texture offset</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_uv_x" /></td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_uv_y" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Height amount</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_ht_amnt" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Height bias</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_ht_bias" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Material</td>
+		<td><dataselect source="surfaces.root" fields="id, name" valuefield="id" id="cmp_soft_body_material" formatter="surfaces" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Source</td>
+		<td><button class="source" id="cmp_soft_body_source" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">VCF</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_vcf" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">DP</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_dp" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">DG</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_dg" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">LF</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_lf" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">PR</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_pr" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">VC</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_vc" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">DF</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_df" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">MT</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_mt" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">CHR</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_chr" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">KHR</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_khr" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">SHR</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_shr" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">AHR</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_ahr" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">SRHR-CL</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_srhr_cl" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">SKHR-CL</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_skhr_cl" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">SSHR-CL</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_sshr_cl" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">SR-SPLT-CL</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_sr_splt_cl" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">SK-SPLT-CL</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_sk_splt_cl" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">SS-SPLT-CL</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_ss_splt_cl" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">Max volume</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_mx_vol" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">Time scale</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_ts" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">Drag</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_drag" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">Max stress</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_mx_strs" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">V iterations</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_vit" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">P iterations</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_pit" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">D iterations</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_dit" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">C iterations</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_cit" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">Anisotropic friction</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_af_x" /></td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_af_y" /></td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_af_z" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">Wind velocity</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_wv_x" /></td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_wv_y" /></td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_wv_z" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">Mass</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_mass" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">Restitution</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_rest" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">Hit fraction</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_frac" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">Friction</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_fric" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">Spinning friction</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_spinf" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">Rolling friction</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_rfric" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">Contact damping</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_contdamp" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">Contact stiffness</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_contstf" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">Motion threshold</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_mtt" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">Swept sphere radius</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_srad" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">Deactivation time</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_dtime" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">Can be deactivated</td>
+		<td><div class="check"><input type="checkbox" id="cmp_soft_body_deact" /></div></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">Active</td>
+		<td><div class="check"><input type="checkbox" id="cmp_soft_body_active" /></div></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">Ghost</td>
+		<td><div class="check"><input type="checkbox" id="cmp_soft_body_ghost" /></div></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">Kinematic</td>
+		<td><div class="check"><input type="checkbox" id="cmp_soft_body_kinemat" /></div></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Transparency</td>
+		<td><div class="check"><input type="checkbox" id="cmp_soft_body_alpha" /></div></td>
+	</tr>
+</table>

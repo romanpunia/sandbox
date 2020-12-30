@@ -1,0 +1,172 @@
+<div class="head">
+	<p class="title">Slider constraint component</p>
+	<button data-event-click="remove_cmp('slider-constraint')">Remove</button>
+</div>
+<table class="option">
+	<tr>
+		<td class="label">Entity</td>
+		<td><button class="source" id="cmp_slider_constraint_entity" /></td>
+	</tr>
+</table>
+<table class="option" data-if="!sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Ghost constr.</td>
+		<td><div class="check"><input type="checkbox" id="cmp_slider_constraint_ghost" /></div></td>
+	</tr>
+</table>
+<table class="option" data-if="!sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Linear constr.</td>
+		<td><div class="check"><input type="checkbox" id="cmp_slider_constraint_linear" /></div></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Angular motor velocity</td>
+		<td><input type="text" maxlength="16" id="cmp_slider_constraint_amv" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Linear motor velocity</td>
+		<td><input type="text" maxlength="16" id="cmp_slider_constraint_lmv" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Upper linear limit</td>
+		<td><input type="text" maxlength="16" id="cmp_slider_constraint_ull" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Lower linear limit</td>
+		<td><input type="text" maxlength="16" id="cmp_slider_constraint_lll" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Angular damping direction</td>
+		<td><input type="text" maxlength="16" id="cmp_slider_constraint_add" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Linear damping direction</td>
+		<td><input type="text" maxlength="16" id="cmp_slider_constraint_ldd" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Angular damping limit</td>
+		<td><input type="text" maxlength="16" id="cmp_slider_constraint_adl" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Linear damping limit</td>
+		<td><input type="text" maxlength="16" id="cmp_slider_constraint_ldl" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Angular damping limit</td>
+		<td><input type="text" maxlength="16" id="cmp_slider_constraint_adl" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Linear damping ortho</td>
+		<td><input type="text" maxlength="16" id="cmp_slider_constraint_ldo" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Upper angular limit</td>
+		<td><input type="text" maxlength="16" id="cmp_slider_constraint_ual" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Lower angular limit</td>
+		<td><input type="text" maxlength="16" id="cmp_slider_constraint_lal" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Max angular motor force</td>
+		<td><input type="text" maxlength="16" id="cmp_slider_constraint_mamf" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Max linear motor force</td>
+		<td><input type="text" maxlength="16" id="cmp_slider_constraint_mlmf" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Angular restitution direction</td>
+		<td><input type="text" maxlength="16" id="cmp_slider_constraint_ard" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Linear restitution direction</td>
+		<td><input type="text" maxlength="16" id="cmp_slider_constraint_lrd" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Angular softness direction</td>
+		<td><input type="text" maxlength="16" id="cmp_slider_constraint_asd" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Linear softness direction</td>
+		<td><input type="text" maxlength="16" id="cmp_slider_constraint_lsd" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Angular softness limit</td>
+		<td><input type="text" maxlength="16" id="cmp_slider_constraint_asl" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Linear softness limit</td>
+		<td><input type="text" maxlength="16" id="cmp_slider_constraint_lsl" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Angular softness ortho</td>
+		<td><input type="text" maxlength="16" id="cmp_slider_constraint_aso" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Linear softness ortho</td>
+		<td><input type="text" maxlength="16" id="cmp_slider_constraint_lso" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Angular-powered motor</td>
+		<td><div class="check"><input type="checkbox" id="cmp_slider_constraint_apm" /></div></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Linear-powered motor</td>
+		<td><div class="check"><input type="checkbox" id="cmp_slider_constraint_lpm" /></div></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_slider_constraint_entity">
+	<tr>
+		<td class="label">Active</td>
+		<td><div class="check"><input type="checkbox" id="cmp_slider_constraint_active" /></div></td>
+	</tr>
+</table>

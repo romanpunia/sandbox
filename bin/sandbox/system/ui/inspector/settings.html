@@ -1,0 +1,103 @@
+<form class="dynamics">
+	<p class="title">Physics parameters</p>
+	<table class="option">
+		<tr>
+			<td class="label">Gravity</td>
+			<td><input type="text" maxlength="16" id="sc_start_grav_x" /></td>
+			<td><input type="text" maxlength="16" id="sc_start_grav_y" /></td>
+			<td><input type="text" maxlength="16" id="sc_start_grav_z" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Water normal</td>
+			<td><input type="text" maxlength="16" id="sc_wet_norm_x" /></td>
+			<td><input type="text" maxlength="16" id="sc_wet_norm_y" /></td>
+			<td><input type="text" maxlength="16" id="sc_wet_norm_z" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Air density</td>
+			<td><input type="text" maxlength="64" id="sc_air_dens" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Water density</td>
+			<td><input type="text" maxlength="64" id="sc_wet_dens" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Water offset</td>
+			<td><input type="text" maxlength="64" id="sc_wet_off" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Max displacement</td>
+			<td><input type="text" maxlength="64" id="sc_max_disp" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Enable soft bodies</td>
+			<td><div class="check"><input type="checkbox" id="sc_softs" /></div></td>
+		</tr>
+	</table>
+</form>
+<form class="dynamics">
+	<p class="title">Simulator parameters</p>
+	<table class="option">
+		<tr>
+			<td class="label">Gravity</td>
+			<td><input type="text" maxlength="16" id="sc_sim_grav_x" /></td>
+			<td><input type="text" maxlength="16" id="sc_sim_grav_y" /></td>
+			<td><input type="text" maxlength="16" id="sc_sim_grav_z" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Time mult.</td>
+			<td><input type="text" maxlength="64" id="sc_sim_time" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Active</td>
+			<td><div class="check"><input type="checkbox" id="sc_sim" /></div></td>
+		</tr>
+	</table>
+</form>
+<form class="dynamics">
+	<p class="title">Renderer parameters</p>
+	<table class="option">
+		<tr>
+			<td class="label">Graphics quality</td>
+			<td><input type="text" maxlength="64" id="sc_gp_qual" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Enable HDR</td>
+			<td><div class="check"><input type="checkbox" id="sc_gp_hdr" /></div></td>
+		</tr>
+	</table>
+</form>
+<form class="dynamics">
+	<p class="title">Memory parameters</p>
+	<table class="option">
+		<tr>
+			<td class="label">Max entities</td>
+			<td><input type="text" maxlength="64" id="sc_max_ents" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Max components</td>
+			<td><input type="text" maxlength="64" id="sc_max_comps" /></td>
+		</tr>
+	</table>
+</form>
+<button class="submit" data-event-click="save_settings">Save</button>

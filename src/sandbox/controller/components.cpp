@@ -1108,14 +1108,20 @@ void ComponentCamera(GUI::Context* UI, Components::Camera* Base)
 	uint64_t Size = Base->GetRenderer()->GetDepthSize();
 	uint64_t Stalls = Base->GetRenderer()->StallFrames;
 	bool Preview = !App->State.IsCameraActive;
+	bool FC = Base->GetRenderer()->HasFrustumCulling();
+	bool OC = Base->GetRenderer()->HasOcclusionCulling();
+
+	if (UI->GetElementById(0, "cmp_camera_fc").CastFormBoolean(&FC))
+		Base->GetRenderer()->SetFrustumCulling(FC);
+
+	if (UI->GetElementById(0, "cmp_camera_oc").CastFormBoolean(&OC))
+		Base->GetRenderer()->SetOcclusionCulling(FC);
 
 	UI->GetElementById(0, "cmp_camera_fov").CastFormFloat(&Base->FieldOfView);
 	UI->GetElementById(0, "cmp_camera_w").CastFormFloat(&Base->Width);
 	UI->GetElementById(0, "cmp_camera_h").CastFormFloat(&Base->Height);
 	UI->GetElementById(0, "cmp_camera_np").CastFormFloat(&Base->NearPlane);
 	UI->GetElementById(0, "cmp_camera_fp").CastFormFloat(&Base->FarPlane);
-	UI->GetElementById(0, "cmp_camera_fc").CastFormBoolean(&Base->GetRenderer()->EnableFrustumCull);
-	UI->GetElementById(0, "cmp_camera_oc").CastFormBoolean(&Base->GetRenderer()->EnableOcclusionCull);
 	UI->GetElementById(0, "cmp_camera_oc_rd").CastFormDouble(&Base->GetRenderer()->Occlusion.Delay);
 	UI->GetElementById(0, "cmp_camera_oc_sd").CastFormDouble(&Base->GetRenderer()->Sorting.Delay);
 	UI->GetElementById(0, "cmp_camera_oc_sf").CastFormUInt64(&Stalls);
@@ -1139,8 +1145,8 @@ void ComponentCamera(GUI::Context* UI, Components::Camera* Base)
 
 			if (App->Scene->IsActive())
 			{
-				Main->GetRenderer()->EnableOcclusionCull = false;
-				Main->GetRenderer()->EnableFrustumCull = false;
+				Main->GetRenderer()->SetOcclusionCulling(false, true);
+				Main->GetRenderer()->SetFrustumCulling(true, true);
 			}
 			else
 				Main->GetRenderer()->ClearCull();
