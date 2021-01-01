@@ -115,7 +115,7 @@ public:
 	void ScriptHook(VMGlobal* Global) override;
 	void Initialize(Application::Desc* Conf) override;
 	void Render(Timer* Time) override;
-	void Update(Timer* Time) override;
+	void Update(Timer* Time);
 	void UpdateHierarchy();
     void UpdateProject();
     void UpdateScene();

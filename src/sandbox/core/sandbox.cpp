@@ -60,7 +60,7 @@ void Sandbox::WindowEvent(WindowState NewState, int X, int Y)
 			Activity->Message.Result([this](int Button)
 			{
 				if (Button == 2)
-					Restate(ApplicationState_Terminated);
+					Stop();
 			});
 			break;
 		default:
@@ -72,6 +72,8 @@ void Sandbox::ScriptHook(VMGlobal* Global)
 }
 void Sandbox::Initialize(Application::Desc* Conf)
 {
+	Enqueue<Sandbox, &Sandbox::Update>();
+
 	State.Camera = new ::Entity(nullptr);
 	State.Camera->AddComponent<Components::Camera>();
 	State.Camera->AddComponent<Components::FreeLook>();
@@ -558,6 +560,8 @@ void Sandbox::UpdateGrid(Timer* Time)
 			Transform = Value->GetComponent<Components::Skin>()->GetBoundingBox();
 		else if (Value->GetComponent<Components::Model>())
 			Transform = Value->GetComponent<Components::Model>()->GetBoundingBox();
+		else if (Value->GetComponent<Components::SoftBody>())
+			Transform = Value->GetComponent<Components::SoftBody>()->GetBoundingBox();
 		else if (Value->GetComponent<Components::PointLight>() || Value->GetComponent<Components::SpotLight>() || Value->GetComponent<Components::LineLight>())
 			Transform = Value->Transform->GetWorldUnscaled();
 		else
@@ -1246,7 +1250,7 @@ void Sandbox::SetViewModel()
 	Models.System->SetCallback("import_model_action", [this](GUI::IEvent& Event, const PropertyList& Args)
 	{
 		std::string From;
-		if (!OS::WantFileOpen("Import mesh", Content->GetEnvironment(), "*.dae,*.fbx,*.gltf,*.glb,*.blend,*.3ds,*.ase,*.obj,*.ifc,*.xgl,*.zgl,*.ply,*.lwo,*.lws,*.lxo,*.stl,*.x,*.ac,*.ms3d", "", false, &From))
+		if (!OS::WantFileOpen("Import mesh", Content->GetEnvironment(), "*.dae,*.fbx,*.gltf,*.glb,*.blend,*.3d,*.3ds,*.ase,*.obj,*.ifc,*.xgl,*.zgl,*.ply,*.lwo,*.lws,*.lxo,*.stl,*.x,*.ac,*.ms3d,*.mdl,*.md2,.*md3", "", false, &From))
 			return;
 
 		if (!OS::FileExists(From.c_str()))
@@ -1288,7 +1292,7 @@ void Sandbox::SetViewModel()
 	Models.System->SetCallback("import_skin_animation_action", [this](GUI::IEvent& Event, const PropertyList& Args)
 	{
 		std::string From;
-		if (!OS::WantFileOpen("Import animation from mesh", Content->GetEnvironment(), "*.dae,*.fbx,*.gltf,*.glb,*.blend,*.3ds,*.ase,*.obj,*.ifc,*.xgl,*.zgl,*.ply,*.lwo,*.lws,*.lxo,*.stl,*.x,*.ac,*.ms3d", "", false, &From))
+		if (!OS::WantFileOpen("Import animation from mesh", Content->GetEnvironment(), "*.dae,*.fbx,*.gltf,*.glb,*.blend,*.3d,*.3ds,*.ase,*.obj,*.ifc,*.xgl,*.zgl,*.ply,*.lwo,*.lws,*.lxo,*.stl,*.x,*.ac,*.ms3d,*.mdl,*.md2,.*md3", "", false, &From))
 			return;
 
 		if (!OS::FileExists(From.c_str()))
@@ -1527,7 +1531,7 @@ void Sandbox::SetViewModel()
 				if (Button == 2)
 				{
 					Demo::SetSource(Resource.ScenePath);
-					Restate(ApplicationState_Terminated);
+					Stop();
 				}
 			});
 		}
@@ -2572,6 +2576,8 @@ void Sandbox::GetEntityCell()
 			Transform = Value->GetComponent<Components::Model>()->GetBoundingBox();
 		else if (Value->GetComponent<Components::Skin>())
 			Transform = Value->GetComponent<Components::Skin>()->GetBoundingBox();
+		else if (Value->GetComponent<Components::SoftBody>())
+			Transform = Value->GetComponent<Components::SoftBody>()->GetBoundingBox();
 		else
 			Transform = Value->Transform->GetWorld();
 

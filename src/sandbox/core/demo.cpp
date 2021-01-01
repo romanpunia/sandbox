@@ -22,7 +22,7 @@ void Demo::WindowEvent(WindowState NewState, int X, int Y)
 			Activity->Message.Result([this](int Button)
 			{
 				if (Button == 2)
-					Restate(ApplicationState_Terminated);
+					Stop();
 			});
 			break;
 		default:
@@ -36,21 +36,12 @@ void Demo::Initialize(Application::Desc* Conf)
 {
 	Scene = Content->Load<SceneGraph>(Source);
 	if (!Scene)
-		return Restate(ApplicationState_Terminated);
+		return Stop();
 
 	Scene->ScriptHook();
-	Enqueue([this](Timer* Time)
-	{
-		Scene->Synchronize(Time);
-	});
-	Enqueue([this](Timer* Time)
-	{
-		Scene->Simulation(Time);
-	});
-}
-void Demo::Update(Timer* Time)
-{
-	Scene->Update(Time);
+	Enqueue<Demo, &Demo::Update>();
+	Enqueue<Demo, &Demo::Synchronize>();
+	Enqueue<Demo, &Demo::Simulation>();
 }
 void Demo::Render(Timer* Time)
 {
@@ -61,6 +52,18 @@ void Demo::Render(Timer* Time)
 	Scene->Submit();
 
 	Renderer->Submit();
+}
+void Demo::Update(Timer* Time)
+{
+	Scene->Update(Time);
+}
+void Demo::Simulation(Timer* Time)
+{
+	Scene->Simulation(Time);
+}
+void Demo::Synchronize(Timer* Time)
+{
+	Scene->Synchronize(Time);
 }
 void Demo::SetSource(const std::string& Resource)
 {

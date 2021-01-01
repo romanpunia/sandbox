@@ -17,7 +17,7 @@ Entry:
 		Init.Directory = "sandbox";
 
 		Application* App = new Sandbox(&Init, "./scenes/spot.xml");
-		App->Run(&Init);
+		App->Start(&Init);
 		delete App;
 
 		if (Demo::GetSource().empty())
@@ -33,7 +33,7 @@ Entry:
 		Init.Threading = EventWorkflow_Multithreaded;
 
 		App = new Demo(&Init);
-		App->Run(&Init);
+		App->Start(&Init);
 		delete App;
 
 		goto Entry;

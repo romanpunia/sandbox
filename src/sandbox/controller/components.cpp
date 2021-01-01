@@ -170,7 +170,7 @@ void ComponentSoftBody(GUI::Context* UI, Components::SoftBody* Base)
 		UI->GetElementById(0, "cmp_soft_body_mt").CastFormFloat(&Desc.Config.MT);
 		UI->GetElementById(0, "cmp_soft_body_chr").CastFormFloat(&Desc.Config.CHR);
 		UI->GetElementById(0, "cmp_soft_body_khr").CastFormFloat(&Desc.Config.KHR);
-		UI->GetElementById(0, "cmp_soft_body_shk").CastFormFloat(&Desc.Config.SHR);
+		UI->GetElementById(0, "cmp_soft_body_shr").CastFormFloat(&Desc.Config.SHR);
 		UI->GetElementById(0, "cmp_soft_body_ahr").CastFormFloat(&Desc.Config.AHR);
 		UI->GetElementById(0, "cmp_soft_body_srhr_cl").CastFormFloat(&Desc.Config.SRHR_CL);
 		UI->GetElementById(0, "cmp_soft_body_skhr_cl").CastFormFloat(&Desc.Config.SKHR_CL);
@@ -182,6 +182,8 @@ void ComponentSoftBody(GUI::Context* UI, Components::SoftBody* Base)
 		UI->GetElementById(0, "cmp_soft_body_ts").CastFormFloat(&Desc.Config.TimeScale);
 		UI->GetElementById(0, "cmp_soft_body_drag").CastFormFloat(&Desc.Config.Drag);
 		UI->GetElementById(0, "cmp_soft_body_mx_strs").CastFormFloat(&Desc.Config.MaxStress);
+		UI->GetElementById(0, "cmp_soft_body_cltrs").CastFormInt32(&Desc.Config.Clusters);
+		UI->GetElementById(0, "cmp_soft_body_constrs").CastFormInt32(&Desc.Config.Constraints);
 		UI->GetElementById(0, "cmp_soft_body_vit").CastFormInt32(&Desc.Config.VIterations);
 		UI->GetElementById(0, "cmp_soft_body_pit").CastFormInt32(&Desc.Config.PIterations);
 		UI->GetElementById(0, "cmp_soft_body_dit").CastFormInt32(&Desc.Config.DIterations);
@@ -277,6 +279,9 @@ void ComponentSoftBody(GUI::Context* UI, Components::SoftBody* Base)
 	bool Alpha = Base->HasTransparency();
 	if (UI->GetElementById(0, "cmp_soft_body_alpha").CastFormBoolean(&Alpha))
 		Base->SetTransparency(Alpha);
+
+	if (UI->GetElementById(0, "cmp_soft_body_regen").IsActive())
+		Base->Regenerate();
 }
 void ComponentSkinAnimator(GUI::Context* UI, Components::SkinAnimator* Base)
 {

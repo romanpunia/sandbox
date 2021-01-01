@@ -77,6 +77,12 @@
 </table>
 <table class="option">
 	<tr>
+		<td class="label">Transparency</td>
+		<td><div class="check"><input type="checkbox" id="cmp_soft_body_alpha" /></div></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
 		<td class="label">Source</td>
 		<td><button class="source" id="cmp_soft_body_source" /></td>
 	</tr>
@@ -215,6 +221,18 @@
 </table>
 <table class="option" data-if="sl_cmp_soft_body_source">
 	<tr>
+		<td class="label">Clisters</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_cltrs" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
+		<td class="label">Constraints</td>
+		<td><input type="text" maxlength="16" id="cmp_soft_body_constrs" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_soft_body_source">
+	<tr>
 		<td class="label">V iterations</td>
 		<td><input type="text" maxlength="16" id="cmp_soft_body_vit" /></td>
 	</tr>
@@ -343,9 +361,9 @@
 		<td><div class="check"><input type="checkbox" id="cmp_soft_body_kinemat" /></div></td>
 	</tr>
 </table>
-<table class="option">
+<table class="option" data-if="sl_cmp_soft_body_source">
 	<tr>
-		<td class="label">Transparency</td>
-		<td><div class="check"><input type="checkbox" id="cmp_soft_body_alpha" /></div></td>
+		<td class="label">Regenerate</td>
+		<td><button class="source" id="cmp_soft_body_regen">Apply</button></td>
 	</tr>
 </table>
