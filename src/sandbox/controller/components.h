@@ -20,7 +20,7 @@ extern void ComponentAudioListener(GUI::Context* UI, Components::AudioListener* 
 extern void ComponentPointLight(GUI::Context* UI, Components::PointLight* Base);
 extern void ComponentSpotLight(GUI::Context* UI, Components::SpotLight* Base);
 extern void ComponentLineLight(GUI::Context* UI, Components::LineLight* Base);
-extern void ComponentReflectionProbe(GUI::Context* UI, Components::ReflectionProbe* Base);
+extern void ComponentSurfaceLight(GUI::Context* UI, Components::SurfaceLight* Base);
 extern void ComponentCamera(GUI::Context* UI, Components::Camera* Base);
 extern void ComponentScriptable(GUI::Context* UI, Components::Scriptable* Base);
 #endif

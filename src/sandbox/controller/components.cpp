@@ -1086,23 +1086,23 @@ void ComponentLineLight(GUI::Context* UI, Components::LineLight* Base)
 	UI->GetElementById(0, "cmp_line_light_sd_off").CastFormFloat(&Base->Shadow.Offset);
 	UI->GetElementById(0, "cmp_line_light_sd_active").CastFormBoolean(&Base->Shadow.Enabled);
 }
-void ComponentReflectionProbe(GUI::Context* UI, Components::ReflectionProbe* Base)
+void ComponentSurfaceLight(GUI::Context* UI, Components::SurfaceLight* Base)
 {
-	ResolveColor3(UI, "cmp_reflection_probe_refl", &Base->Diffuse);
-	ResolveTexture2D(UI, "cmp_reflection_probe_source", Base->GetDiffuseMap() != nullptr, [Base](Texture2D* New)
+	ResolveColor3(UI, "cmp_surface_light_refl", &Base->Diffuse);
+	ResolveTexture2D(UI, "cmp_surface_light_source", Base->GetDiffuseMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetDiffuseMap(New);
 	});
 
-	UI->GetElementById(0, "cmp_reflection_probe_vo_x").CastFormFloat(&Base->Offset.X);
-	UI->GetElementById(0, "cmp_reflection_probe_vo_y").CastFormFloat(&Base->Offset.Y);
-	UI->GetElementById(0, "cmp_reflection_probe_vo_z").CastFormFloat(&Base->Offset.Z);
-	UI->GetElementById(0, "cmp_reflection_probe_rd").CastFormDouble(&Base->Tick.Delay);
-	UI->GetElementById(0, "cmp_reflection_probe_cr").CastFormFloat(&Base->Range);
-	UI->GetElementById(0, "cmp_reflection_probe_emission").CastFormFloat(&Base->Emission);
-	UI->GetElementById(0, "cmp_reflection_probe_inf").CastFormFloat(&Base->Infinity);
-	UI->GetElementById(0, "cmp_reflection_probe_px").CastFormBoolean(&Base->Parallax);
-	UI->GetElementById(0, "cmp_reflection_probe_static").CastFormBoolean(&Base->StaticMask);
+	UI->GetElementById(0, "cmp_surface_light_vo_x").CastFormFloat(&Base->Offset.X);
+	UI->GetElementById(0, "cmp_surface_light_vo_y").CastFormFloat(&Base->Offset.Y);
+	UI->GetElementById(0, "cmp_surface_light_vo_z").CastFormFloat(&Base->Offset.Z);
+	UI->GetElementById(0, "cmp_surface_light_rd").CastFormDouble(&Base->Tick.Delay);
+	UI->GetElementById(0, "cmp_surface_light_cr").CastFormFloat(&Base->Range);
+	UI->GetElementById(0, "cmp_surface_light_emission").CastFormFloat(&Base->Emission);
+	UI->GetElementById(0, "cmp_surface_light_inf").CastFormFloat(&Base->Infinity);
+	UI->GetElementById(0, "cmp_surface_light_px").CastFormBoolean(&Base->Parallax);
+	UI->GetElementById(0, "cmp_surface_light_static").CastFormBoolean(&Base->StaticMask);
 }
 void ComponentCamera(GUI::Context* UI, Components::Camera* Base)
 {

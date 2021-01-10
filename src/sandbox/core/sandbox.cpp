@@ -865,8 +865,8 @@ void Sandbox::InspectEntity()
 	if (Models.System->SetBoolean("sl_cmp_line_light", Base->GetComponent<Components::LineLight>() != nullptr)->GetBoolean())
 		ComponentLineLight(State.GUI, Base->GetComponent<Components::LineLight>());
 
-	if (Models.System->SetBoolean("sl_cmp_reflection_probe", Base->GetComponent<Components::ReflectionProbe>() != nullptr)->GetBoolean())
-		ComponentReflectionProbe(State.GUI, Base->GetComponent<Components::ReflectionProbe>());
+	if (Models.System->SetBoolean("sl_cmp_surface_light", Base->GetComponent<Components::SurfaceLight>() != nullptr)->GetBoolean())
+		ComponentSurfaceLight(State.GUI, Base->GetComponent<Components::SurfaceLight>());
 
 	if (Models.System->SetBoolean("sl_cmp_camera", Base->GetComponent<Components::Camera>() != nullptr)->GetBoolean())
 	{
@@ -1075,7 +1075,7 @@ void Sandbox::SetViewModel()
 	Models.System->SetBoolean("sl_cmp_spot_light", false);
 	Models.System->SetBoolean("sl_cmp_line_light", false);
 	Models.System->SetInteger("sl_cmp_line_light_cascades", -1);
-	Models.System->SetBoolean("sl_cmp_reflection_probe", false);
+	Models.System->SetBoolean("sl_cmp_surface_light", false);
 	Models.System->SetBoolean("sl_cmp_camera", false);
 	Models.System->SetInteger("sl_cmp_camera_model", -1);
 	Models.System->SetInteger("sl_cmp_camera_skin", -1);
@@ -1868,10 +1868,10 @@ void Sandbox::SetViewModel()
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::LineLight>();
 	});
-	Models.System->SetCallback("add_cmp_reflection_probe", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_surface_light", [this](GUI::IEvent& Event, const PropertyList& Args)
 	{
 		if (Selection.Entity != nullptr)
-			Selection.Entity->AddComponent<Components::ReflectionProbe>();
+			Selection.Entity->AddComponent<Components::SurfaceLight>();
 	});
 	Models.System->SetCallback("add_cmp_rigid_body", [this](GUI::IEvent& Event, const PropertyList& Args)
 	{
@@ -2570,7 +2570,7 @@ void Sandbox::GetEntityCell()
 		Matrix4x4 Transform;
 		if (Value->GetComponent<Components::PointLight>() ||
 			Value->GetComponent<Components::SpotLight>() ||
-			Value->GetComponent<Components::ReflectionProbe>())
+			Value->GetComponent<Components::SurfaceLight>())
 			Transform = Value->Transform->GetWorldUnscaled();
 		else if (Value->GetComponent<Components::Model>())
 			Transform = Value->GetComponent<Components::Model>()->GetBoundingBox();
@@ -2636,9 +2636,9 @@ void Sandbox::GetEntitySync()
 	if (SpotLight != nullptr)
 		SpotLight->GetEntity()->Transform->GetLocalScale()->Set(SpotLight->GetRange());
 
-	Components::ReflectionProbe* ReflectionProbe = Selection.Entity->GetComponent<Components::ReflectionProbe>();
-	if (ReflectionProbe != nullptr)
-		ReflectionProbe->GetEntity()->Transform->GetLocalScale()->Set(ReflectionProbe->GetRange());
+	Components::SurfaceLight* SurfaceLight = Selection.Entity->GetComponent<Components::SurfaceLight>();
+	if (SurfaceLight != nullptr)
+		SurfaceLight->GetEntity()->Transform->GetLocalScale()->Set(SurfaceLight->GetRange());
 
 	Components::Decal* Decal = Selection.Entity->GetComponent<Components::Decal>();
 	if (Decal != nullptr)
@@ -2736,7 +2736,7 @@ Texture2D* Sandbox::GetIcon(Entity* Value)
 		Value->GetComponent<Components::LineLight>())
 		return Icons.Light;
 
-	if (Value->GetComponent<Components::ReflectionProbe>())
+	if (Value->GetComponent<Components::SurfaceLight>())
 		return Icons.Probe;
 
 	if (Value->GetComponent<Components::AudioListener>())
@@ -2786,7 +2786,7 @@ std::string Sandbox::GetLabel(Entity* Value)
 	if (Value->GetComponent<Components::LineLight>())
 		return "[Line light]";
 
-	if (Value->GetComponent<Components::ReflectionProbe>())
+	if (Value->GetComponent<Components::SurfaceLight>())
 		return "[Reflection probe]";
 
 	if (Value->GetComponent<Components::AudioListener>())
