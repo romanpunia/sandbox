@@ -2,9 +2,7 @@
 #define RENDERERS_H
 #include "../app.h"
 
-extern void RendererDepth(GUI::Context* UI, Renderers::Depth* Base);
 extern void RendererLighting(GUI::Context* UI, Renderers::Lighting* Base);
-extern void RendererEnvironment(GUI::Context* UI, Renderers::Environment* Base);
 extern void RendererSSR(GUI::Context* UI, Renderers::SSR* Base);
 extern void RendererSSAO(GUI::Context* UI, Renderers::SSAO* Base);
 extern void RendererSSDO(GUI::Context* UI, Renderers::SSDO* Base);

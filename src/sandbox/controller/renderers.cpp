@@ -1,27 +1,21 @@
 #include "renderers.h"
 #include "resolvers.h"
 
-void RendererDepth(GUI::Context* UI, Renderers::Depth* Base)
-{
-	UI->GetElementById(0, "cmp_camera_depth_plr").CastFormUInt64(&Base->Renderers.PointLightResolution);
-	UI->GetElementById(0, "cmp_camera_depth_pll").CastFormUInt64(&Base->Renderers.PointLightLimits);
-	UI->GetElementById(0, "cmp_camera_depth_slr").CastFormUInt64(&Base->Renderers.SpotLightResolution);
-	UI->GetElementById(0, "cmp_camera_depth_sll").CastFormUInt64(&Base->Renderers.SpotLightLimits);
-	UI->GetElementById(0, "cmp_camera_depth_llr").CastFormUInt64(&Base->Renderers.LineLightResolution);
-	UI->GetElementById(0, "cmp_camera_depth_lll").CastFormUInt64(&Base->Renderers.LineLightLimits);
-	UI->GetElementById(0, "cmp_camera_depth_rd").CastFormDouble(&Base->Tick.Delay);
-	UI->GetElementById(0, "cmp_camera_depth_sd").CastFormFloat(&Base->ShadowDistance);
-}
 void RendererLighting(GUI::Context* UI, Renderers::Lighting* Base)
 {
-	ResolveTexture2D(UI, "cmp_camera_lighting_sm", Base->GetSkyMap() != nullptr, [Base](Texture2D* New)
-	{
-		Base->SetSkyMap(New);
-	});
+	ResolveTexture2D(UI, "cmp_camera_lighting_sm", Base->GetSkyMap() != nullptr, [Base](Texture2D* New) { Base->SetSkyMap(New); });
 	ResolveColor3(UI, "cmp_camera_lighting_hc", &Base->AmbientLight.HighEmission);
 	ResolveColor3(UI, "cmp_camera_lighting_lc", &Base->AmbientLight.LowEmission);
 	ResolveColor3(UI, "cmp_camera_lighting_sc", &Base->AmbientLight.SkyColor);
 	ResolveColor3(UI, "cmp_camera_lighting_fc", &Base->AmbientLight.FogColor);
+	UI->GetElementById(0, "cmp_camera_lighting_plr").CastFormUInt64(&Base->Shadows.PointLightResolution);
+	UI->GetElementById(0, "cmp_camera_lighting_pll").CastFormUInt64(&Base->Shadows.PointLightLimits);
+	UI->GetElementById(0, "cmp_camera_lighting_slr").CastFormUInt64(&Base->Shadows.SpotLightResolution);
+	UI->GetElementById(0, "cmp_camera_lighting_sll").CastFormUInt64(&Base->Shadows.SpotLightLimits);
+	UI->GetElementById(0, "cmp_camera_lighting_llr").CastFormUInt64(&Base->Shadows.LineLightResolution);
+	UI->GetElementById(0, "cmp_camera_lighting_lll").CastFormUInt64(&Base->Shadows.LineLightLimits);
+	UI->GetElementById(0, "cmp_camera_lighting_rd").CastFormDouble(&Base->Shadows.Tick.Delay);
+	UI->GetElementById(0, "cmp_camera_lighting_sd").CastFormFloat(&Base->Shadows.Distance);
 	UI->GetElementById(0, "cmp_camera_lighting_ff_x").CastFormFloat(&Base->AmbientLight.FogFar.X);
 	UI->GetElementById(0, "cmp_camera_lighting_ff_y").CastFormFloat(&Base->AmbientLight.FogFar.Y);
 	UI->GetElementById(0, "cmp_camera_lighting_ff_z").CastFormFloat(&Base->AmbientLight.FogFar.Z);
@@ -33,13 +27,13 @@ void RendererLighting(GUI::Context* UI, Renderers::Lighting* Base)
 	UI->GetElementById(0, "cmp_camera_lighting_fa").CastFormFloat(&Base->AmbientLight.FogAmount);
 	UI->GetElementById(0, "cmp_camera_lighting_se").CastFormFloat(&Base->AmbientLight.SkyEmission);
 	UI->GetElementById(0, "cmp_camera_lighting_le").CastFormFloat(&Base->AmbientLight.LightEmission);
-	UI->GetElementById(0, "cmp_camera_lighting_rp").CastFormBoolean(&Base->RecursiveProbes);
-}
-void RendererEnvironment(GUI::Context* UI, Renderers::Environment* Base)
-{
-	UI->GetElementById(0, "cmp_camera_environment_ml").CastFormUInt64(&Base->MipLevels);
-	if (UI->GetElementById(0, "cmp_camera_environment_r").CastFormUInt64(&Base->Size))
-		Base->SetCaptureSize(Base->Size);
+
+	bool Recursive = (Base->AmbientLight.Recursive > 0.0f);
+	if (UI->GetElementById(0, "cmp_camera_lighting_rp").CastFormBoolean(&Recursive))
+		Base->AmbientLight.Recursive = (Recursive ? 1.0f : 0.0f);
+
+	if (UI->GetElementById(0, "cmp_camera_lighting_r").CastFormUInt64(&Base->Surfaces.Size))
+		Base->SetSurfaceBufferSize(Base->Surfaces.Size);
 }
 void RendererSSR(GUI::Context* UI, Renderers::SSR* Base)
 {

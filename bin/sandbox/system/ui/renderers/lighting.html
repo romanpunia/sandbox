@@ -5,6 +5,7 @@
 	<button style="margin-right: 4px;" data-event-click="down_rndr('lighting-renderer')">Down</button>
 	<button style="margin-right: 4px;" data-event-click="up_rndr('lighting-renderer')">Up</button>
 </div>
+<p class="title">Lighting options</p>
 <table class="option">
 	<tr>
 		<td class="label">High emission</td>
@@ -81,9 +82,65 @@
 		<td><button class="source" id="cmp_camera_lighting_sm" /></td>
 	</tr>
 </table>
+<p class="title">Shadows options</p>
 <table class="option">
 	<tr>
-		<td class="label">Recursive probes</td>
+		<td class="label">Point light resolution</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_lighting_plr" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Point light limit</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_lighting_pll" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Spot light resolution</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_lighting_slr" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Spot light limit</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_lighting_sll" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Line light resolution</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_lighting_llr" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Line light limit</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_lighting_lll" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Shadow distance</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_lighting_sd" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Rebuild delay</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_lighting_rd" /></td>
+	</tr>
+</table>
+<p class="title">Surfaces options</p>
+<table class="option">
+	<tr>
+		<td class="label">Recursive surfaces</td>
 		<td><div class="check"><input type="checkbox" id="cmp_camera_lighting_rp" /></div></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Resolution</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_lighting_r" /></td>
 	</tr>
 </table>

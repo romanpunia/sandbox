@@ -87,6 +87,7 @@ void Sandbox::Initialize(Application::Desc* Conf)
 	States.BackRasterizer = Renderer->GetRasterizerState("cull-back");
 	States.Blend = Renderer->GetBlendState("additive");
 	States.Sampler = Renderer->GetSamplerState("trilinear-x16");
+	States.Layout = Renderer->GetInputLayout("shape-vertex");
 	Icons.Empty = Content->Load<Texture2D>("system/img/empty.png");
 	Icons.Animation = Content->Load<Texture2D>("system/img/animation.png");
 	Icons.Body = Content->Load<Texture2D>("system/img/body.png");
@@ -449,8 +450,6 @@ void Sandbox::UpdateScene()
 
 	Scene->AddEntity(State.Camera);
 	Scene->SetCamera(State.Camera);
-	Scene->GetRenderer()->AddRenderer<Renderers::Depth>();
-	Scene->GetRenderer()->AddRenderer<Renderers::Environment>();
 	Scene->GetRenderer()->AddRenderer<Renderers::Model>();
 	Scene->GetRenderer()->AddRenderer<Renderers::Skin>();
 	Scene->GetRenderer()->AddRenderer<Renderers::SoftBody>();
@@ -472,6 +471,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 		Matrix4x4::Create({ -2, 0, 0 }, 1,{ 0, Math<float>::Deg2Rad() * (90), 0 })
 	};
 
+	Renderer->SetInputLayout(States.Layout);
 	Renderer->SetShader(Renderer->GetBasicEffect(), ShaderType_Vertex | ShaderType_Pixel);
 	Renderer->SetDepthStencilState(States.DepthStencil);
 	Renderer->SetBlendState(States.Blend);
@@ -879,14 +879,8 @@ void Sandbox::InspectEntity()
 		Models.System->SetInteger("sl_cmp_camera_gui", Camera->GetRenderer()->GetOffset<Renderers::UserInterface>());
 		Models.System->SetInteger("sl_cmp_camera_transparency", Camera->GetRenderer()->GetOffset<Renderers::Transparency>());
 
-		if (Models.System->SetInteger("sl_cmp_camera_depth", Camera->GetRenderer()->GetOffset<Renderers::Depth>())->GetInteger() >= 0)
-			RendererDepth(State.GUI, Camera->GetRenderer()->GetRenderer<Renderers::Depth>());
-		
 		if (Models.System->SetInteger("sl_cmp_camera_lighting", Camera->GetRenderer()->GetOffset<Renderers::Lighting>())->GetInteger() >= 0)
 			RendererLighting(State.GUI, Camera->GetRenderer()->GetRenderer<Renderers::Lighting>());
-
-		if (Models.System->SetInteger("sl_cmp_camera_environment", Camera->GetRenderer()->GetOffset<Renderers::Environment>())->GetInteger() >= 0)
-			RendererEnvironment(State.GUI, Camera->GetRenderer()->GetRenderer<Renderers::Environment>());
 
 		if (Models.System->SetInteger("sl_cmp_camera_ssr", Camera->GetRenderer()->GetOffset<Renderers::SSR>())->GetInteger() >= 0)
 			RendererSSR(State.GUI, Camera->GetRenderer()->GetRenderer<Renderers::SSR>());
@@ -1914,8 +1908,6 @@ void Sandbox::SetViewModel()
 			return;
 
 		Components::Camera* Camera = Selection.Entity->AddComponent<Components::Camera>();
-		Camera->GetRenderer()->AddRenderer<Renderers::Depth>();
-		Camera->GetRenderer()->AddRenderer<Renderers::Environment>();
 		Camera->GetRenderer()->AddRenderer<Renderers::Model>();
 		Camera->GetRenderer()->AddRenderer<Renderers::Skin>();
 		Camera->GetRenderer()->AddRenderer<Renderers::SoftBody>();
@@ -1984,17 +1976,6 @@ void Sandbox::SetViewModel()
 			Source->GetRenderer()->AddRenderer<Renderers::Emitter>();
 		}
 	});
-	Models.System->SetCallback("add_rndr_depth", [this](GUI::IEvent& Event, const PropertyList& Args)
-	{
-		if (Selection.Entity != nullptr)
-		{
-			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::Camera>();
-
-			Source->GetRenderer()->AddRenderer<Renderers::Depth>();
-		}
-	});
 	Models.System->SetCallback("add_rndr_lighting", [this](GUI::IEvent& Event, const PropertyList& Args)
 	{
 		if (Selection.Entity != nullptr)
@@ -2004,17 +1985,6 @@ void Sandbox::SetViewModel()
 				Source = Selection.Entity->AddComponent<Components::Camera>();
 
 			Source->GetRenderer()->AddRenderer<Renderers::Lighting>();
-		}
-	});
-	Models.System->SetCallback("add_rndr_environment", [this](GUI::IEvent& Event, const PropertyList& Args)
-	{
-		if (Selection.Entity != nullptr)
-		{
-			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::Camera>();
-
-			Source->GetRenderer()->AddRenderer<Renderers::Environment>();
 		}
 	});
 	Models.System->SetCallback("add_rndr_transparency", [this](GUI::IEvent& Event, const PropertyList& Args)

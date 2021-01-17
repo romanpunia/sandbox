@@ -105,6 +105,7 @@ public:
 		RasterizerState* BackRasterizer = nullptr;
 		BlendState* Blend = nullptr;
 		SamplerState* Sampler = nullptr;
+		InputLayout* Layout = nullptr;
 	} States;
 
 public:

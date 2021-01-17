@@ -16,7 +16,7 @@ Entry:
 		Init.Activity.Hidden = true;
 		Init.Directory = "sandbox";
 
-		Application* App = new Sandbox(&Init, "./scenes/spot.xml");
+		Application* App = new Sandbox(&Init, "./scenes/demo.xml");
 		App->Start(&Init);
 		delete App;
 
