@@ -27,13 +27,23 @@ void RendererLighting(GUI::Context* UI, Renderers::Lighting* Base)
 	UI->GetElementById(0, "cmp_camera_lighting_fa").CastFormFloat(&Base->AmbientLight.FogAmount);
 	UI->GetElementById(0, "cmp_camera_lighting_se").CastFormFloat(&Base->AmbientLight.SkyEmission);
 	UI->GetElementById(0, "cmp_camera_lighting_le").CastFormFloat(&Base->AmbientLight.LightEmission);
+	UI->GetElementById(0, "cmp_camera_lighting_gdx").CastFormFloat(&Base->IndirectLight.Distance.X);
+	UI->GetElementById(0, "cmp_camera_lighting_gdy").CastFormFloat(&Base->IndirectLight.Distance.Y);
+	UI->GetElementById(0, "cmp_camera_lighting_gdz").CastFormFloat(&Base->IndirectLight.Distance.Z);
+	UI->GetElementById(0, "cmp_camera_lighting_gtick").CastFormDouble(&Base->IndirectLight.Tick.Delay);
+	UI->GetElementById(0, "cmp_camera_lighting_gactive").CastFormBoolean(&Base->IndirectLight.Enabled);
 
 	bool Recursive = (Base->AmbientLight.Recursive > 0.0f);
 	if (UI->GetElementById(0, "cmp_camera_lighting_rp").CastFormBoolean(&Recursive))
 		Base->AmbientLight.Recursive = (Recursive ? 1.0f : 0.0f);
 
-	if (UI->GetElementById(0, "cmp_camera_lighting_r").CastFormUInt64(&Base->Surfaces.Size))
-		Base->SetSurfaceBufferSize(Base->Surfaces.Size);
+	uint64_t Size = Base->IndirectLight.Size;
+	if (UI->GetElementById(0, "cmp_camera_lighting_gsize").CastFormUInt64(&Size) && Size > 0)
+		Base->SetVoxelBufferSize(Size);
+
+	Size = Base->Surfaces.Size;
+	if (UI->GetElementById(0, "cmp_camera_lighting_r").CastFormUInt64(&Size) && Size > 0)
+		Base->SetSurfaceBufferSize(Size);
 }
 void RendererSSR(GUI::Context* UI, Renderers::SSR* Base)
 {

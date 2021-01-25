@@ -1024,6 +1024,9 @@ void ComponentPointLight(GUI::Context* UI, Components::PointLight* Base)
 	UI->GetElementById(0, "cmp_point_light_pcf").CastFormUInt32(&Base->Shadow.Iterations);
 	UI->GetElementById(0, "cmp_point_light_emission").CastFormFloat(&Base->Emission);
 	UI->GetElementById(0, "cmp_point_light_disp").CastFormFloat(&Base->Disperse);
+	UI->GetElementById(0, "cmp_point_light_srange").CastFormFloat(&Base->Size.Range);
+	UI->GetElementById(0, "cmp_point_light_sc1").CastFormFloat(&Base->Size.C1);
+	UI->GetElementById(0, "cmp_point_light_sc2").CastFormFloat(&Base->Size.C2);
 	UI->GetElementById(0, "cmp_point_light_sd_bias").CastFormFloat(&Base->Shadow.Bias);
 	UI->GetElementById(0, "cmp_point_light_sd_dist").CastFormFloat(&Base->Shadow.Distance);
 	UI->GetElementById(0, "cmp_point_light_sd_soft").CastFormFloat(&Base->Shadow.Softness);
@@ -1036,6 +1039,9 @@ void ComponentSpotLight(GUI::Context* UI, Components::SpotLight* Base)
 	UI->GetElementById(0, "cmp_spot_light_emission").CastFormFloat(&Base->Emission);
 	UI->GetElementById(0, "cmp_spot_light_disp").CastFormFloat(&Base->Disperse);
 	UI->GetElementById(0, "cmp_spot_light_cutoff").CastFormFloat(&Base->Cutoff);
+	UI->GetElementById(0, "cmp_spot_light_srange").CastFormFloat(&Base->Size.Range);
+	UI->GetElementById(0, "cmp_spot_light_sc1").CastFormFloat(&Base->Size.C1);
+	UI->GetElementById(0, "cmp_spot_light_sc2").CastFormFloat(&Base->Size.C2);
 	UI->GetElementById(0, "cmp_spot_light_sd_bias").CastFormFloat(&Base->Shadow.Bias);
 	UI->GetElementById(0, "cmp_spot_light_sd_dist").CastFormFloat(&Base->Shadow.Distance);
 	UI->GetElementById(0, "cmp_spot_light_sd_soft").CastFormFloat(&Base->Shadow.Softness);
@@ -1098,7 +1104,9 @@ void ComponentSurfaceLight(GUI::Context* UI, Components::SurfaceLight* Base)
 	UI->GetElementById(0, "cmp_surface_light_vo_y").CastFormFloat(&Base->Offset.Y);
 	UI->GetElementById(0, "cmp_surface_light_vo_z").CastFormFloat(&Base->Offset.Z);
 	UI->GetElementById(0, "cmp_surface_light_rd").CastFormDouble(&Base->Tick.Delay);
-	UI->GetElementById(0, "cmp_surface_light_cr").CastFormFloat(&Base->Range);
+	UI->GetElementById(0, "cmp_surface_light_srange").CastFormFloat(&Base->Size.Range);
+	UI->GetElementById(0, "cmp_surface_light_sc1").CastFormFloat(&Base->Size.C1);
+	UI->GetElementById(0, "cmp_surface_light_sc2").CastFormFloat(&Base->Size.C2);
 	UI->GetElementById(0, "cmp_surface_light_emission").CastFormFloat(&Base->Emission);
 	UI->GetElementById(0, "cmp_surface_light_inf").CastFormFloat(&Base->Infinity);
 	UI->GetElementById(0, "cmp_surface_light_px").CastFormBoolean(&Base->Parallax);
