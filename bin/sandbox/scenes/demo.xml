@@ -64,7 +64,6 @@
 							<surface>
 								<name s="Cube" />
 								<diffuse-map s="./materials/paving-stones/diffuse.jpg" />
-								<normal-map s="./materials/paving-stones/normal.jpg" />
 								<roughness-map s="./materials/paving-stones/roughness.jpg" />
 								<occlusion-map s="./materials/paving-stones/occlusion.jpg" />
 								<diffuse x="1.000000" y="1.000000" z="1.000000" />
@@ -131,7 +130,6 @@
 							<surface>
 								<name s="Cube" />
 								<diffuse-map s="./materials/paving-stones/diffuse.jpg" />
-								<normal-map s="./materials/paving-stones/normal.jpg" />
 								<roughness-map s="./materials/paving-stones/roughness.jpg" />
 								<occlusion-map s="./materials/paving-stones/occlusion.jpg" />
 								<diffuse x="1.000000" y="1.000000" z="1.000000" />

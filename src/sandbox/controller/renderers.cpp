@@ -4,10 +4,10 @@
 void RendererLighting(GUI::Context* UI, Renderers::Lighting* Base)
 {
 	ResolveTexture2D(UI, "cmp_camera_lighting_sm", Base->GetSkyMap() != nullptr, [Base](Texture2D* New) { Base->SetSkyMap(New); });
-	ResolveColor3(UI, "cmp_camera_lighting_hc", &Base->AmbientLight.HighEmission);
-	ResolveColor3(UI, "cmp_camera_lighting_lc", &Base->AmbientLight.LowEmission);
-	ResolveColor3(UI, "cmp_camera_lighting_sc", &Base->AmbientLight.SkyColor);
-	ResolveColor3(UI, "cmp_camera_lighting_fc", &Base->AmbientLight.FogColor);
+	ResolveColor3(UI, "cmp_camera_lighting_hc", &Base->Ambient.HighEmission);
+	ResolveColor3(UI, "cmp_camera_lighting_lc", &Base->Ambient.LowEmission);
+	ResolveColor3(UI, "cmp_camera_lighting_sc", &Base->Ambient.SkyColor);
+	ResolveColor3(UI, "cmp_camera_lighting_fc", &Base->Ambient.FogColor);
 	UI->GetElementById(0, "cmp_camera_lighting_plr").CastFormUInt64(&Base->Shadows.PointLightResolution);
 	UI->GetElementById(0, "cmp_camera_lighting_pll").CastFormUInt64(&Base->Shadows.PointLightLimits);
 	UI->GetElementById(0, "cmp_camera_lighting_slr").CastFormUInt64(&Base->Shadows.SpotLightResolution);
@@ -16,28 +16,29 @@ void RendererLighting(GUI::Context* UI, Renderers::Lighting* Base)
 	UI->GetElementById(0, "cmp_camera_lighting_lll").CastFormUInt64(&Base->Shadows.LineLightLimits);
 	UI->GetElementById(0, "cmp_camera_lighting_rd").CastFormDouble(&Base->Shadows.Tick.Delay);
 	UI->GetElementById(0, "cmp_camera_lighting_sd").CastFormFloat(&Base->Shadows.Distance);
-	UI->GetElementById(0, "cmp_camera_lighting_ff_x").CastFormFloat(&Base->AmbientLight.FogFar.X);
-	UI->GetElementById(0, "cmp_camera_lighting_ff_y").CastFormFloat(&Base->AmbientLight.FogFar.Y);
-	UI->GetElementById(0, "cmp_camera_lighting_ff_z").CastFormFloat(&Base->AmbientLight.FogFar.Z);
-	UI->GetElementById(0, "cmp_camera_lighting_fn_x").CastFormFloat(&Base->AmbientLight.FogNear.X);
-	UI->GetElementById(0, "cmp_camera_lighting_fn_y").CastFormFloat(&Base->AmbientLight.FogNear.Y);
-	UI->GetElementById(0, "cmp_camera_lighting_fn_z").CastFormFloat(&Base->AmbientLight.FogNear.Z);
-	UI->GetElementById(0, "cmp_camera_lighting_fno").CastFormFloat(&Base->AmbientLight.FogNearOff);
-	UI->GetElementById(0, "cmp_camera_lighting_ffo").CastFormFloat(&Base->AmbientLight.FogFarOff);
-	UI->GetElementById(0, "cmp_camera_lighting_fa").CastFormFloat(&Base->AmbientLight.FogAmount);
-	UI->GetElementById(0, "cmp_camera_lighting_se").CastFormFloat(&Base->AmbientLight.SkyEmission);
-	UI->GetElementById(0, "cmp_camera_lighting_le").CastFormFloat(&Base->AmbientLight.LightEmission);
-	UI->GetElementById(0, "cmp_camera_lighting_gdx").CastFormFloat(&Base->IndirectLight.Distance.X);
-	UI->GetElementById(0, "cmp_camera_lighting_gdy").CastFormFloat(&Base->IndirectLight.Distance.Y);
-	UI->GetElementById(0, "cmp_camera_lighting_gdz").CastFormFloat(&Base->IndirectLight.Distance.Z);
-	UI->GetElementById(0, "cmp_camera_lighting_gtick").CastFormDouble(&Base->IndirectLight.Tick.Delay);
-	UI->GetElementById(0, "cmp_camera_lighting_gactive").CastFormBoolean(&Base->IndirectLight.Enabled);
+	UI->GetElementById(0, "cmp_camera_lighting_ff_x").CastFormFloat(&Base->Ambient.FogFar.X);
+	UI->GetElementById(0, "cmp_camera_lighting_ff_y").CastFormFloat(&Base->Ambient.FogFar.Y);
+	UI->GetElementById(0, "cmp_camera_lighting_ff_z").CastFormFloat(&Base->Ambient.FogFar.Z);
+	UI->GetElementById(0, "cmp_camera_lighting_fn_x").CastFormFloat(&Base->Ambient.FogNear.X);
+	UI->GetElementById(0, "cmp_camera_lighting_fn_y").CastFormFloat(&Base->Ambient.FogNear.Y);
+	UI->GetElementById(0, "cmp_camera_lighting_fn_z").CastFormFloat(&Base->Ambient.FogNear.Z);
+	UI->GetElementById(0, "cmp_camera_lighting_fno").CastFormFloat(&Base->Ambient.FogNearOff);
+	UI->GetElementById(0, "cmp_camera_lighting_ffo").CastFormFloat(&Base->Ambient.FogFarOff);
+	UI->GetElementById(0, "cmp_camera_lighting_fa").CastFormFloat(&Base->Ambient.FogAmount);
+	UI->GetElementById(0, "cmp_camera_lighting_se").CastFormFloat(&Base->Ambient.SkyEmission);
+	UI->GetElementById(0, "cmp_camera_lighting_le").CastFormFloat(&Base->Ambient.LightEmission);
+	UI->GetElementById(0, "cmp_camera_lighting_grs").CastFormFloat(&Base->Voxelizer.RayStep);
+	UI->GetElementById(0, "cmp_camera_lighting_gdx").CastFormFloat(&Base->GI.Distance.X);
+	UI->GetElementById(0, "cmp_camera_lighting_gdy").CastFormFloat(&Base->GI.Distance.Y);
+	UI->GetElementById(0, "cmp_camera_lighting_gdz").CastFormFloat(&Base->GI.Distance.Z);
+	UI->GetElementById(0, "cmp_camera_lighting_gtick").CastFormDouble(&Base->GI.Tick.Delay);
+	UI->GetElementById(0, "cmp_camera_lighting_gactive").CastFormBoolean(&Base->GI.Enabled);
 
-	bool Recursive = (Base->AmbientLight.Recursive > 0.0f);
+	bool Recursive = (Base->Ambient.Recursive > 0.0f);
 	if (UI->GetElementById(0, "cmp_camera_lighting_rp").CastFormBoolean(&Recursive))
-		Base->AmbientLight.Recursive = (Recursive ? 1.0f : 0.0f);
+		Base->Ambient.Recursive = (Recursive ? 1.0f : 0.0f);
 
-	uint64_t Size = Base->IndirectLight.Size;
+	uint64_t Size = Base->GI.Size;
 	if (UI->GetElementById(0, "cmp_camera_lighting_gsize").CastFormUInt64(&Size) && Size > 0)
 		Base->SetVoxelBufferSize(Size);
 
