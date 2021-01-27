@@ -27,12 +27,19 @@ void RendererLighting(GUI::Context* UI, Renderers::Lighting* Base)
 	UI->GetElementById(0, "cmp_camera_lighting_fa").CastFormFloat(&Base->Ambient.FogAmount);
 	UI->GetElementById(0, "cmp_camera_lighting_se").CastFormFloat(&Base->Ambient.SkyEmission);
 	UI->GetElementById(0, "cmp_camera_lighting_le").CastFormFloat(&Base->Ambient.LightEmission);
+	UI->GetElementById(0, "cmp_camera_lighting_gaoi").CastFormFloat(&Base->Voxelizer.Shadows);
+	UI->GetElementById(0, "cmp_camera_lighting_gaos").CastFormFloat(&Base->Voxelizer.Occlusion);
 	UI->GetElementById(0, "cmp_camera_lighting_grs").CastFormFloat(&Base->Voxelizer.RayStep);
+	UI->GetElementById(0, "cmp_camera_lighting_gi").CastFormFloat(&Base->Voxelizer.Intensity);
 	UI->GetElementById(0, "cmp_camera_lighting_gdx").CastFormFloat(&Base->GI.Distance.X);
 	UI->GetElementById(0, "cmp_camera_lighting_gdy").CastFormFloat(&Base->GI.Distance.Y);
 	UI->GetElementById(0, "cmp_camera_lighting_gdz").CastFormFloat(&Base->GI.Distance.Z);
 	UI->GetElementById(0, "cmp_camera_lighting_gtick").CastFormDouble(&Base->GI.Tick.Delay);
 	UI->GetElementById(0, "cmp_camera_lighting_gactive").CastFormBoolean(&Base->GI.Enabled);
+
+	unsigned int MaxSteps = Base->Voxelizer.MaxSteps;
+	if (UI->GetElementById(0, "cmp_camera_lighting_gms").CastFormUInt32(&MaxSteps))
+		Base->Voxelizer.MaxSteps = MaxSteps;
 
 	bool Recursive = (Base->Ambient.Recursive > 0.0f);
 	if (UI->GetElementById(0, "cmp_camera_lighting_rp").CastFormBoolean(&Recursive))
