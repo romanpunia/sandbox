@@ -166,7 +166,7 @@ void Sandbox::Render(Timer* Time)
 	Scene->Render(Time);
 	if (State.IsInteractive && State.Camera == Scene->GetCamera()->GetEntity())
 	{
-		Scene->SetSurface();
+		Scene->SetMRT(TargetType_Main, false);
 		UpdateGrid(Time);
 	}
 
@@ -431,7 +431,6 @@ void Sandbox::UpdateScene()
 		SceneGraph::Desc I;
 		I.Device = Renderer;
 		I.Queue = Queue;
-		I.Cache = Shaders;
 		I.Manager = VM;
 		I.Simulator.EnableSoftBody = true;
 
@@ -457,6 +456,7 @@ void Sandbox::UpdateScene()
 	Scene->GetRenderer()->AddRenderer<Renderers::Decal>();
 	Scene->GetRenderer()->AddRenderer<Renderers::Lighting>();
 	Scene->GetRenderer()->AddRenderer<Renderers::Transparency>();
+	Scene->GetRenderer()->AddRenderer<Renderers::Tone>();
 
 	Resource.ScenePath = Resource.NextPath;
 	Resource.NextPath.clear();
@@ -888,9 +888,6 @@ void Sandbox::InspectEntity()
 		if (Models.System->SetInteger("sl_cmp_camera_ssao", Camera->GetRenderer()->GetOffset<Renderers::SSAO>())->GetInteger() >= 0)
 			RendererSSAO(State.GUI, Camera->GetRenderer()->GetRenderer<Renderers::SSAO>());
 
-		if (Models.System->SetInteger("sl_cmp_camera_ssdo", Camera->GetRenderer()->GetOffset<Renderers::SSDO>())->GetInteger() >= 0)
-			RendererSSDO(State.GUI, Camera->GetRenderer()->GetRenderer<Renderers::SSDO>());
-
 		if (Models.System->SetInteger("sl_cmp_camera_bloom", Camera->GetRenderer()->GetOffset<Renderers::Bloom>())->GetInteger() >= 0)
 			RendererBloom(State.GUI, Camera->GetRenderer()->GetRenderer<Renderers::Bloom>());
 
@@ -1082,7 +1079,6 @@ void Sandbox::SetViewModel()
 	Models.System->SetInteger("sl_cmp_camera_transparency", -1);
 	Models.System->SetInteger("sl_cmp_camera_ssr", -1);
 	Models.System->SetInteger("sl_cmp_camera_ssao", -1);
-	Models.System->SetInteger("sl_cmp_camera_ssdo", -1);
 	Models.System->SetInteger("sl_cmp_camera_bloom", -1);
 	Models.System->SetInteger("sl_cmp_camera_dof", -1);
 	Models.System->SetInteger("sl_cmp_camera_tone", -1);
@@ -2020,17 +2016,7 @@ void Sandbox::SetViewModel()
 			Source->GetRenderer()->AddRenderer<Renderers::SSAO>();
 		}
 	});
-	Models.System->SetCallback("add_rndr_ssdo", [this](GUI::IEvent& Event, const PropertyList& Args)
-	{
-		if (Selection.Entity != nullptr)
-		{
-			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::Camera>();
 
-			Source->GetRenderer()->AddRenderer<Renderers::SSDO>();
-		}
-	});
 	Models.System->SetCallback("add_rndr_bloom", [this](GUI::IEvent& Event, const PropertyList& Args)
 	{
 		if (Selection.Entity != nullptr)
