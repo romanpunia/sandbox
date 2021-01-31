@@ -5,6 +5,7 @@
 extern void RendererLighting(GUI::Context* UI, Renderers::Lighting* Base);
 extern void RendererSSR(GUI::Context* UI, Renderers::SSR* Base);
 extern void RendererSSAO(GUI::Context* UI, Renderers::SSAO* Base);
+extern void RendererMotionBlur(GUI::Context* UI, Renderers::MotionBlur* Base);
 extern void RendererBloom(GUI::Context* UI, Renderers::Bloom* Base);
 extern void RendererDoF(GUI::Context* UI, Renderers::DoF* Base);
 extern void RendererTone(GUI::Context* UI, Renderers::Tone* Base);

@@ -456,7 +456,6 @@ void Sandbox::UpdateScene()
 	Scene->GetRenderer()->AddRenderer<Renderers::Decal>();
 	Scene->GetRenderer()->AddRenderer<Renderers::Lighting>();
 	Scene->GetRenderer()->AddRenderer<Renderers::Transparency>();
-	Scene->GetRenderer()->AddRenderer<Renderers::Tone>();
 
 	Resource.ScenePath = Resource.NextPath;
 	Resource.NextPath.clear();
@@ -888,6 +887,9 @@ void Sandbox::InspectEntity()
 		if (Models.System->SetInteger("sl_cmp_camera_ssao", Camera->GetRenderer()->GetOffset<Renderers::SSAO>())->GetInteger() >= 0)
 			RendererSSAO(State.GUI, Camera->GetRenderer()->GetRenderer<Renderers::SSAO>());
 
+		if (Models.System->SetInteger("sl_cmp_camera_motionblur", Camera->GetRenderer()->GetOffset<Renderers::MotionBlur>())->GetInteger() >= 0)
+			RendererMotionBlur(State.GUI, Camera->GetRenderer()->GetRenderer<Renderers::MotionBlur>());
+
 		if (Models.System->SetInteger("sl_cmp_camera_bloom", Camera->GetRenderer()->GetOffset<Renderers::Bloom>())->GetInteger() >= 0)
 			RendererBloom(State.GUI, Camera->GetRenderer()->GetRenderer<Renderers::Bloom>());
 
@@ -1079,6 +1081,7 @@ void Sandbox::SetViewModel()
 	Models.System->SetInteger("sl_cmp_camera_transparency", -1);
 	Models.System->SetInteger("sl_cmp_camera_ssr", -1);
 	Models.System->SetInteger("sl_cmp_camera_ssao", -1);
+	Models.System->SetInteger("sl_cmp_camera_motionblur", -1);
 	Models.System->SetInteger("sl_cmp_camera_bloom", -1);
 	Models.System->SetInteger("sl_cmp_camera_dof", -1);
 	Models.System->SetInteger("sl_cmp_camera_tone", -1);
@@ -2016,7 +2019,17 @@ void Sandbox::SetViewModel()
 			Source->GetRenderer()->AddRenderer<Renderers::SSAO>();
 		}
 	});
+	Models.System->SetCallback("add_rndr_motionblur", [this](GUI::IEvent& Event, const PropertyList& Args)
+	{
+		if (Selection.Entity != nullptr)
+		{
+			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
+			if (!Source)
+				Source = Selection.Entity->AddComponent<Components::Camera>();
 
+			Source->GetRenderer()->AddRenderer<Renderers::MotionBlur>();
+		}
+	});
 	Models.System->SetCallback("add_rndr_bloom", [this](GUI::IEvent& Event, const PropertyList& Args)
 	{
 		if (Selection.Entity != nullptr)

@@ -74,6 +74,12 @@ void RendererSSAO(GUI::Context* UI, Renderers::SSAO* Base)
 	UI->GetElementById(0, "cmp_camera_ssao_blr").CastFormFloat(&Base->Fibo.Blur);
 	UI->GetElementById(0, "cmp_camera_ssao_blp").CastFormFloat(&Base->Fibo.Power);
 }
+void RendererMotionBlur(GUI::Context* UI, Renderers::MotionBlur* Base)
+{
+	UI->GetElementById(0, "cmp_camera_motionblur_sc").CastFormFloat(&Base->Motion.Samples);
+	UI->GetElementById(0, "cmp_camera_motionblur_bl").CastFormFloat(&Base->Motion.Blur);
+	UI->GetElementById(0, "cmp_camera_motionblur_mn").CastFormFloat(&Base->Motion.Motion);
+}
 void RendererBloom(GUI::Context* UI, Renderers::Bloom* Base)
 {;
 	UI->GetElementById(0, "cmp_camera_bloom_i").CastFormFloat(&Base->Extraction.Intensity);
@@ -114,6 +120,11 @@ void RendererTone(GUI::Context* UI, Renderers::Tone* Base)
 	UI->GetElementById(0, "cmp_camera_tone_exp").CastFormFloat(&Base->Mapping.Exposure);
 	UI->GetElementById(0, "cmp_camera_tone_eint").CastFormFloat(&Base->Mapping.EIntensity);
 	UI->GetElementById(0, "cmp_camera_tone_egm").CastFormFloat(&Base->Mapping.EGamma);
+	UI->GetElementById(0, "cmp_camera_tone_aint").CastFormFloat(&Base->Mapping.Adaptation);
+	UI->GetElementById(0, "cmp_camera_tone_agr").CastFormFloat(&Base->Mapping.AGray);
+	UI->GetElementById(0, "cmp_camera_tone_awh").CastFormFloat(&Base->Mapping.AWhite);
+	UI->GetElementById(0, "cmp_camera_tone_abl").CastFormFloat(&Base->Mapping.ABlack);
+	UI->GetElementById(0, "cmp_camera_tone_asp").CastFormFloat(&Base->Mapping.ASpeed);
 }
 void RendererGlitch(GUI::Context* UI, Renderers::Glitch* Base)
 {
