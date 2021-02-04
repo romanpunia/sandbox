@@ -1112,6 +1112,20 @@ void ComponentSurfaceLight(GUI::Context* UI, Components::SurfaceLight* Base)
 	UI->GetElementById(0, "cmp_surface_light_px").CastFormBoolean(&Base->Parallax);
 	UI->GetElementById(0, "cmp_surface_light_static").CastFormBoolean(&Base->StaticMask);
 }
+void ComponentIlluminator(GUI::Context* UI, Components::Illuminator* Base)
+{
+	UI->GetElementById(0, "cmp_illuminator_rd").CastFormDouble(&Base->Tick.Delay);
+	UI->GetElementById(0, "cmp_illuminator_rs").CastFormFloat(&Base->RayStep);
+	UI->GetElementById(0, "cmp_illuminator_ms").CastFormFloat(&Base->MaxSteps);
+	UI->GetElementById(0, "cmp_illuminator_d").CastFormFloat(&Base->Distance);
+	UI->GetElementById(0, "cmp_illuminator_i").CastFormFloat(&Base->Intensity);
+	UI->GetElementById(0, "cmp_illuminator_o").CastFormFloat(&Base->Occlusion);
+	UI->GetElementById(0, "cmp_illuminator_s").CastFormFloat(&Base->Shadows);
+
+	uint32 Size = (uint32)Base->GetBufferSize();
+	if (UI->GetElementById(0, "cmp_illuminator_sz").CastFormUInt32(&Size) && Size != Base->GetBufferSize())
+		Base->SetBufferSize(Size);
+}
 void ComponentCamera(GUI::Context* UI, Components::Camera* Base)
 {
 	Sandbox* App = Sandbox::Get()->As<Sandbox>();

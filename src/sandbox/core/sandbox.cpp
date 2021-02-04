@@ -161,7 +161,7 @@ void Sandbox::Render(Timer* Time)
 {
 	Renderer->Clear(0, 0, 0);
 	Renderer->ClearDepth();
-	Renderer->SetSamplerState(States.Sampler, 0);
+	Renderer->SetSamplerState(States.Sampler, 0, TH_PS);
 
 	Scene->Render(Time);
 	if (State.IsInteractive && State.Camera == Scene->GetCamera()->GetEntity())
@@ -471,7 +471,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 	};
 
 	Renderer->SetInputLayout(States.Layout);
-	Renderer->SetShader(Renderer->GetBasicEffect(), ShaderType_Vertex | ShaderType_Pixel);
+	Renderer->SetShader(Renderer->GetBasicEffect(), TH_VS | TH_PS);
 	Renderer->SetDepthStencilState(States.DepthStencil);
 	Renderer->SetBlendState(States.Blend);
 	Renderer->SetRasterizerState(States.BackRasterizer);
@@ -485,7 +485,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 		float Direction = -Value->Transform->Position.LookAtXZ(State.Camera->Transform->Position);
 		Renderer->Render.Diffuse = (Value == Selection.Entity) ? 0.5f : 0.05f;
 		Renderer->Render.WorldViewProjection = Matrix4x4::Create(Value->Transform->Position, 0.5f, Vector3(0, Direction)) * State.Camera->GetComponent<Components::Camera>()->GetViewProjection();
-		Renderer->SetTexture2D(GetIcon(Value), 1);
+		Renderer->SetTexture2D(GetIcon(Value), 1, TH_PS);
 		Renderer->UpdateBuffer(RenderBufferType_Render);
 		Renderer->Draw(6, 0);
 	}
@@ -867,6 +867,9 @@ void Sandbox::InspectEntity()
 	if (Models.System->SetBoolean("sl_cmp_surface_light", Base->GetComponent<Components::SurfaceLight>() != nullptr)->GetBoolean())
 		ComponentSurfaceLight(State.GUI, Base->GetComponent<Components::SurfaceLight>());
 
+	if (Models.System->SetBoolean("sl_cmp_illuminator", Base->GetComponent<Components::Illuminator>() != nullptr)->GetBoolean())
+		ComponentIlluminator(State.GUI, Base->GetComponent<Components::Illuminator>());
+
 	if (Models.System->SetBoolean("sl_cmp_camera", Base->GetComponent<Components::Camera>() != nullptr)->GetBoolean())
 	{
 		auto* Camera = Base->GetComponent<Components::Camera>();
@@ -1069,6 +1072,7 @@ void Sandbox::SetViewModel()
 	Models.System->SetBoolean("sl_cmp_line_light", false);
 	Models.System->SetInteger("sl_cmp_line_light_cascades", -1);
 	Models.System->SetBoolean("sl_cmp_surface_light", false);
+	Models.System->SetBoolean("sl_cmp_illuminator", false);
 	Models.System->SetBoolean("sl_cmp_camera", false);
 	Models.System->SetInteger("sl_cmp_camera_model", -1);
 	Models.System->SetInteger("sl_cmp_camera_skin", -1);
@@ -1865,6 +1869,11 @@ void Sandbox::SetViewModel()
 	{
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::SurfaceLight>();
+	});
+	Models.System->SetCallback("add_cmp_illuminator", [this](GUI::IEvent& Event, const PropertyList& Args)
+	{
+		if (Selection.Entity != nullptr)
+			Selection.Entity->AddComponent<Components::Illuminator>();
 	});
 	Models.System->SetCallback("add_cmp_rigid_body", [this](GUI::IEvent& Event, const PropertyList& Args)
 	{
@@ -2705,7 +2714,8 @@ Texture2D* Sandbox::GetIcon(Entity* Value)
 		Value->GetComponent<Components::LineLight>())
 		return Icons.Light;
 
-	if (Value->GetComponent<Components::SurfaceLight>())
+	if (Value->GetComponent<Components::SurfaceLight>() ||
+		Value->GetComponent<Components::Illuminator>())
 		return Icons.Probe;
 
 	if (Value->GetComponent<Components::AudioListener>())
@@ -2756,7 +2766,10 @@ std::string Sandbox::GetLabel(Entity* Value)
 		return "[Line light]";
 
 	if (Value->GetComponent<Components::SurfaceLight>())
-		return "[Reflection probe]";
+		return "[Surface light]";
+
+	if (Value->GetComponent<Components::Illuminator>())
+		return "[Illuminator]";
 
 	if (Value->GetComponent<Components::AudioListener>())
 		return "[Audio listener]";

@@ -27,15 +27,7 @@ void RendererLighting(GUI::Context* UI, Renderers::Lighting* Base)
 	UI->GetElementById(0, "cmp_camera_lighting_fa").CastFormFloat(&Base->AmbientLight.FogAmount);
 	UI->GetElementById(0, "cmp_camera_lighting_se").CastFormFloat(&Base->AmbientLight.SkyEmission);
 	UI->GetElementById(0, "cmp_camera_lighting_le").CastFormFloat(&Base->AmbientLight.LightEmission);
-	UI->GetElementById(0, "cmp_camera_lighting_gaoi").CastFormFloat(&Base->VoxelBuffer.Shadows);
-	UI->GetElementById(0, "cmp_camera_lighting_gaos").CastFormFloat(&Base->VoxelBuffer.Occlusion);
-	UI->GetElementById(0, "cmp_camera_lighting_grs").CastFormFloat(&Base->VoxelBuffer.RayStep);
-	UI->GetElementById(0, "cmp_camera_lighting_gi").CastFormFloat(&Base->VoxelBuffer.Intensity);
-	UI->GetElementById(0, "cmp_camera_lighting_gdx").CastFormFloat(&Base->Radiance.Distance.X);
-	UI->GetElementById(0, "cmp_camera_lighting_gdy").CastFormFloat(&Base->Radiance.Distance.Y);
-	UI->GetElementById(0, "cmp_camera_lighting_gdz").CastFormFloat(&Base->Radiance.Distance.Z);
-	UI->GetElementById(0, "cmp_camera_lighting_gtick").CastFormDouble(&Base->Radiance.Tick.Delay);
-	UI->GetElementById(0, "cmp_camera_lighting_gactive").CastFormBoolean(&Base->Radiance.Enabled);
+	UI->GetElementById(0, "cmp_camera_lighting_gi").CastFormBoolean(&Base->EnableGI);
 
 	unsigned int MaxSteps = Base->VoxelBuffer.MaxSteps;
 	if (UI->GetElementById(0, "cmp_camera_lighting_gms").CastFormUInt32(&MaxSteps))
@@ -45,11 +37,7 @@ void RendererLighting(GUI::Context* UI, Renderers::Lighting* Base)
 	if (UI->GetElementById(0, "cmp_camera_lighting_rp").CastFormBoolean(&Recursive))
 		Base->AmbientLight.Recursive = (Recursive ? 1.0f : 0.0f);
 
-	uint64_t Size = Base->Radiance.Size;
-	if (UI->GetElementById(0, "cmp_camera_lighting_gsize").CastFormUInt64(&Size) && Size > 0)
-		Base->SetVoxelBufferSize(Size);
-
-	Size = Base->Surfaces.Size;
+	uint64_t Size = Base->Surfaces.Size;
 	if (UI->GetElementById(0, "cmp_camera_lighting_r").CastFormUInt64(&Size) && Size > 0)
 		Base->SetSurfaceBufferSize(Size);
 }
