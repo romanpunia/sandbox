@@ -420,8 +420,8 @@ void Sandbox::UpdateScene()
 	VM->ClearCache();
 	if (!Resource.NextPath.empty())
 	{
-		PropertyArgs Args;
-		Args["active"] = Property(false);
+		VariantArgs Args;
+		Args["active"] = Var::Boolean(false);
 
 		Scene = Content->Load<SceneGraph>(Resource.NextPath, Args);
 	}
@@ -1093,7 +1093,7 @@ void Sandbox::SetViewModel()
 	Models.System->SetInteger("sl_cmp_camera_gui", -1);
 	Models.System->SetBoolean("sl_cmp_scriptable", false);
 	Models.System->SetBoolean("sl_cmp_scriptable_source", false);
-	Models.System->SetCallback("set_parent", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("set_parent", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		GUI::IElement Target = (Rml::Element*)Event.GetPointer("drag_element");
 		if (!Target.IsValid())
@@ -1118,7 +1118,7 @@ void Sandbox::SetViewModel()
 
 		State.IsOutdated = true;
 	});
-	Models.System->SetCallback("set_entity", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("set_entity", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Args.size() != 1)
 			return;
@@ -1136,12 +1136,12 @@ void Sandbox::SetViewModel()
 		else
 			SetSelection(Inspector_None);
 	});
-	Models.System->SetCallback("set_controls", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("set_controls", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Args.size() == 1)
 			State.IsSceneFocused = Args[0].GetBoolean();
 	});
-	Models.System->SetCallback("set_menu", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("set_menu", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Args.size() != 1)
 			return;
@@ -1177,16 +1177,16 @@ void Sandbox::SetViewModel()
 				Tab.SetClass("transfer", false);
 		}
 	});
-	Models.System->SetCallback("set_directory", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("set_directory", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
-		SetDirectory(Models.Project->Get()->GetTarget<FileTree>()->Find(Args[0].ToString()));
+		SetDirectory(Models.Project->Get()->GetTarget<FileTree>()->Find(Args[0].Serialize()));
 	});
-	Models.System->SetCallback("set_file", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("set_file", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Args.size() != 1)
 			return;
 
-		std::string Resource = Args[0].ToString();
+		std::string Resource = Args[0].Serialize();
 		if (Resource.empty() || !State.OnResource)
 			return;
 
@@ -1195,14 +1195,14 @@ void Sandbox::SetViewModel()
 
 		Callback(Resource);
 	});
-	Models.System->SetCallback("set_material", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("set_material", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Args.size() != 1)
 			return;
 
 		SetSelection(Inspector_Material, Scene->GetMaterialById(Args[0].GetInteger()));
 	});
-	Models.System->SetCallback("save_settings", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("save_settings", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		SceneGraph::Desc& Conf = Scene->GetConf();
 		Conf.Device = Renderer;
@@ -1210,12 +1210,12 @@ void Sandbox::SetViewModel()
 
 		Scene->Configure(Conf);
 	});
-	Models.System->SetCallback("switch_scene", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("switch_scene", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (!Scene->IsActive())
 		{
-			PropertyArgs Args;
-			Args["type"] = Property("XML");
+			VariantArgs Args;
+			Args["type"] = Var::String("XML");
 
 			Scene->RemoveEntity(State.Camera, false);
 			Content->Save<SceneGraph>("./system/cache.xml", Scene, Args);
@@ -1244,7 +1244,7 @@ void Sandbox::SetViewModel()
 			UpdateScene();
 		}
 	});
-	Models.System->SetCallback("import_model_action", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("import_model_action", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		std::string From;
 		if (!OS::WantFileOpen("Import mesh", Content->GetEnvironment(), "*.dae,*.fbx,*.gltf,*.glb,*.blend,*.3d,*.3ds,*.ase,*.obj,*.ifc,*.xgl,*.zgl,*.ply,*.lwo,*.lws,*.lxo,*.stl,*.x,*.ac,*.ms3d,*.mdl,*.md2,.*md3", "", false, &From))
@@ -1260,16 +1260,16 @@ void Sandbox::SetViewModel()
 			if (Doc != nullptr)
 			{
 				std::string To;
-				if (!OS::WantFileSave("Save mesh", Content->GetEnvironment(), "*.xml,*.json,*.tmv", "Serialized mesh (*.xml, *.json, *.tmv)", &To))
+				if (!OS::WantFileSave("Save mesh", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized mesh (*.xml, *.json, *.jsonb)", &To))
 					return;
 
-				PropertyArgs Args;
-				if (Stroke(&To).EndsWith(".tmv"))
-					Args["type"] = Property("BIN");
+				VariantArgs Args;
+				if (Stroke(&To).EndsWith(".jsonb"))
+					Args["type"] = Var::String("JSONB");
 				else if (Stroke(&To).EndsWith(".json"))
-					Args["type"] = Property("JSON");
+					Args["type"] = Var::String("JSON");
 				else
-					Args["type"] = Property("XML");
+					Args["type"] = Var::String("XML");
 
 				Content->Save<Document>(To, Doc, Args);
 				TH_RELEASE(Doc);
@@ -1286,7 +1286,7 @@ void Sandbox::SetViewModel()
 		this->Activity->Message.Button(AlertConfirm_Return, "OK", 1);
 		this->Activity->Message.Result(nullptr);
 	});
-	Models.System->SetCallback("import_skin_animation_action", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("import_skin_animation_action", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		std::string From;
 		if (!OS::WantFileOpen("Import animation from mesh", Content->GetEnvironment(), "*.dae,*.fbx,*.gltf,*.glb,*.blend,*.3d,*.3ds,*.ase,*.obj,*.ifc,*.xgl,*.zgl,*.ply,*.lwo,*.lws,*.lxo,*.stl,*.x,*.ac,*.ms3d,*.mdl,*.md2,.*md3", "", false, &From))
@@ -1302,16 +1302,16 @@ void Sandbox::SetViewModel()
 			if (Doc != nullptr)
 			{
 				std::string To;
-				if (!OS::WantFileSave("Save animation", Content->GetEnvironment(), "*.xml,*.json,*.tsc", "Serialized skin animation (*.xml, *.json, *.tsc)", &To))
+				if (!OS::WantFileSave("Save animation", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized skin animation (*.xml, *.json, *.jsonb)", &To))
 					return;
 
-				PropertyArgs Args;
-				if (Stroke(&To).EndsWith(".tsc"))
-					Args["type"] = Property("BIN");
+				VariantArgs Args;
+				if (Stroke(&To).EndsWith(".jsonb"))
+					Args["type"] = Var::String("JSONB");
 				else if (Stroke(&To).EndsWith(".json"))
-					Args["type"] = Property("JSON");
+					Args["type"] = Var::String("JSON");
 				else
-					Args["type"] = Property("XML");
+					Args["type"] = Var::String("XML");
 
 				Content->Save<Document>(To, Doc, Args);
 				TH_RELEASE(Doc);
@@ -1328,28 +1328,28 @@ void Sandbox::SetViewModel()
 		this->Activity->Message.Button(AlertConfirm_Return, "OK", 1);
 		this->Activity->Message.Result(nullptr);
 	});
-	Models.System->SetCallback("update_hierarchy", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("update_hierarchy", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		State.IsOutdated = true;
 	});
-	Models.System->SetCallback("update_project", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("update_project", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		UpdateProject();
 	});
-	Models.System->SetCallback("remove_cmp", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("remove_cmp", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Args.size() != 1)
 			return;
 
 		if (Selection.Entity != nullptr)
-			Selection.Entity->RemoveComponent(TH_COMPONENT_HASH(Args[0].ToString()));
+			Selection.Entity->RemoveComponent(TH_COMPONENT_HASH(Args[0].Serialize()));
 	});
-	Models.System->SetCallback("open_materials", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("open_materials", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		SetSelection(Inspector_Materials);
 		Models.Materials->Update(nullptr);
 	});
-	Models.System->SetCallback("remove_material", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("remove_material", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Material != nullptr)
 			Scene->RemoveMaterial((uint64_t)Selection.Material->Id);
@@ -1358,7 +1358,7 @@ void Sandbox::SetViewModel()
 		Models.Materials->Update(nullptr);
 		Models.Surfaces->Update(nullptr);
 	});
-	Models.System->SetCallback("copy_material", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("copy_material", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Material != nullptr)
 		{
@@ -1367,25 +1367,25 @@ void Sandbox::SetViewModel()
 			Models.Surfaces->Update(nullptr);
 		}
 	});
-	Models.System->SetCallback("open_settings", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("open_settings", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		SetSelection(Inspector_Settings);
 	});
-	Models.System->SetCallback("add_material", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_material", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		SetSelection(Inspector_Material, Scene->AddMaterial("Material", Material()));
 		Models.Materials->Update(nullptr);
 		Models.Surfaces->Update(nullptr);
 	});
-	Models.System->SetCallback("import_model", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("import_model", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		SetSelection(Inspector_ImportModel);
 	});
-	Models.System->SetCallback("import_skin_animation", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("import_skin_animation", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		SetSelection(Inspector_ImportAnimation);
 	});
-	Models.System->SetCallback("export_skin_animation", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("export_skin_animation", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (!Selection.Entity || !Selection.Entity->GetComponent<Components::SkinAnimator>())
 		{
@@ -1396,23 +1396,22 @@ void Sandbox::SetViewModel()
 		}
 
 		std::string Path;
-		if (!OS::WantFileSave("Save skin animation", Content->GetEnvironment(), "*.xml,*.json,*.tsc", "Serialized skin animation (*.xml, *.json, *.tsc)", &Path))
+		if (!OS::WantFileSave("Save skin animation", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized skin animation (*.xml, *.json, *.jsonb)", &Path))
 			return;
 
-		Document* Result = new Document();
-		Result->Name = "skin-animation";
+		Document* Result = Document::Object();
+		Result->Key = "skin-animation";
 
 		auto* Animator = Selection.Entity->GetComponent<Components::SkinAnimator>();
-		if (!NMake::Pack(Result, Animator->Clips))
-			return;
+		NMake::Pack(Result, Animator->Clips);
 
-		PropertyArgs Map;
-		if (Stroke(&Path).EndsWith(".tsc"))
-			Map["type"] = Property("BIN");
+		VariantArgs Map;
+		if (Stroke(&Path).EndsWith(".jsonb"))
+			Map["type"] = Var::String("JSONB");
 		else if (Stroke(&Path).EndsWith(".json"))
-			Map["type"] = Property("JSON");
+			Map["type"] = Var::String("JSON");
 		else
-			Map["type"] = Property("XML");
+			Map["type"] = Var::String("XML");
 
 		if (!Content->Save<Document>(Path, Result, Map))
 			this->Activity->Message.Setup(AlertType_Error, "Sandbox", "Skin animation cannot be saved");
@@ -1423,7 +1422,7 @@ void Sandbox::SetViewModel()
 		this->Activity->Message.Button(AlertConfirm_Return, "OK", 1);
 		this->Activity->Message.Result(nullptr);
 	});
-	Models.System->SetCallback("export_key_animation", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("export_key_animation", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (!Selection.Entity || !Selection.Entity->GetComponent<Components::KeyAnimator>())
 		{
@@ -1434,23 +1433,22 @@ void Sandbox::SetViewModel()
 		}
 
 		std::string Path;
-		if (!OS::WantFileSave("Save key animation", Content->GetEnvironment(), "*.xml,*.json,*.tkc", "Serialized key animation (*.xml, *.json, *.tsc)", &Path))
+		if (!OS::WantFileSave("Save key animation", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized key animation (*.xml, *.json, *.jsonb)", &Path))
 			return;
 
-		Document* Result = new Document();
-		Result->Name = "key-animation";
+		Document* Result = Document::Object();
+		Result->Key = "key-animation";
 
 		auto* Animator = Selection.Entity->GetComponent<Components::KeyAnimator>();
-		if (!NMake::Pack(Result, Animator->Clips))
-			return;
+		NMake::Pack(Result, Animator->Clips);
 
-		PropertyArgs Map;
-		if (Stroke(&Path).EndsWith(".tkc"))
-			Map["type"] = Property("BIN");
+		VariantArgs Map;
+		if (Stroke(&Path).EndsWith(".jsonb"))
+			Map["type"] = Var::String("JSONB");
 		else if (Stroke(&Path).EndsWith(".json"))
-			Map["type"] = Property("JSON");
+			Map["type"] = Var::String("JSON");
 		else
-			Map["type"] = Property("XML");
+			Map["type"] = Var::String("XML");
 
 		if (!Content->Save<Document>(Path, Result, Map))
 			this->Activity->Message.Setup(AlertType_Error, "Sandbox", "Key animation cannot be saved");
@@ -1461,7 +1459,7 @@ void Sandbox::SetViewModel()
 		this->Activity->Message.Button(AlertConfirm_Return, "OK", 1);
 		this->Activity->Message.Result(nullptr);
 	});
-	Models.System->SetCallback("import_material", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("import_material", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		GetResource("material", [this](const std::string& File)
 		{
@@ -1479,7 +1477,7 @@ void Sandbox::SetViewModel()
 			SetSelection(Inspector_Material, Scene->AddMaterial(Name, New));
 		});
 	});
-	Models.System->SetCallback("export_material", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("export_material", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (!Selection.Material)
 		{
@@ -1490,22 +1488,20 @@ void Sandbox::SetViewModel()
 		}
 
 		std::string Path;
-		if (!OS::WantFileSave("Save material", Content->GetEnvironment(), "*.xml,*.json,*.tmd", "Serialized material (*.xml, *.json, *.tmd)", &Path))
+		if (!OS::WantFileSave("Save material", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized material (*.xml, *.json, *.jsonb)", &Path))
 			return;
 
-		Document* Result = new Document();
-		Result->Name = "material";
+		Document* Result = Document::Object();
+		Result->Key = "material";
+		NMake::Pack(Result, *Selection.Material);
 
-		if (!NMake::Pack(Result, *Selection.Material))
-			return;
-
-		PropertyArgs Map;
-		if (Stroke(&Path).EndsWith(".tmd"))
-			Map["type"] = Property("BIN");
+		VariantArgs Map;
+		if (Stroke(&Path).EndsWith(".jsonb"))
+			Map["type"] = Var::String("JSONB");
 		else if (Stroke(&Path).EndsWith(".json"))
-			Map["type"] = Property("JSON");
+			Map["type"] = Var::String("JSON");
 		else
-			Map["type"] = Property("XML");
+			Map["type"] = Var::String("XML");
 
 		if (!Content->Save<Document>(Path, Result, Map))
 			this->Activity->Message.Setup(AlertType_Error, "Sandbox", "Material cannot be saved");
@@ -1516,7 +1512,7 @@ void Sandbox::SetViewModel()
 		this->Activity->Message.Button(AlertConfirm_Return, "OK", 1);
 		this->Activity->Message.Result(nullptr);
 	});
-	Models.System->SetCallback("deploy_scene", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("deploy_scene", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (!Resource.ScenePath.empty())
 		{
@@ -1539,26 +1535,26 @@ void Sandbox::SetViewModel()
 			this->Activity->Message.Result(nullptr);
 		}
 	});
-	Models.System->SetCallback("open_scene", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("open_scene", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		GetResource("scene", [this](const std::string& File)
 		{
 			this->Resource.NextPath = File;
 		});
 	});
-	Models.System->SetCallback("close_scene", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("close_scene", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		std::string Path;
-		if (!OS::WantFileSave("Save scene", Content->GetEnvironment(), "*.xml,*.json,*.tsg", "Serialized scene (*.xml, *.json, *.tsg)", &Path))
+		if (!OS::WantFileSave("Save scene", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized scene (*.xml, *.json, *.jsonb)", &Path))
 			return;
 
-		PropertyArgs Map;
-		if (Stroke(&Path).EndsWith(".tsg"))
-			Map["type"] = Property("BIN");
+		VariantArgs Map;
+		if (Stroke(&Path).EndsWith(".jsonb"))
+			Map["type"] = Var::String("JSONB");
 		else if (Stroke(&Path).EndsWith(".json"))
-			Map["type"] = Property("JSON");
+			Map["type"] = Var::String("JSON");
 		else
-			Map["type"] = Property("XML");
+			Map["type"] = Var::String("XML");
 
 		Scene->RemoveEntity(State.Camera, false);
 		Content->Save<SceneGraph>(Path, Scene, Map);
@@ -1572,17 +1568,17 @@ void Sandbox::SetViewModel()
 		this->Activity->Message.Button(AlertConfirm_Return, "OK", 1);
 		this->Activity->Message.Result(nullptr);
 	});
-	Models.System->SetCallback("cancel_file", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("cancel_file", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		GetResource("", nullptr);
 	});
-	Models.System->SetCallback("add_entity", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_entity", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		Entity* Value = new Entity(Scene);
 		if (Scene->AddEntity(Value))
 			SetSelection(Inspector_Entity, Value);
 	});
-	Models.System->SetCallback("remove_entity", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("remove_entity", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1590,28 +1586,28 @@ void Sandbox::SetViewModel()
 			SetSelection(Inspector_None);
 		}
 	});
-	Models.System->SetCallback("move_entity", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("move_entity", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		Selection.Gizmo = Resource.Gizmo[Selection.Move = 0];
 		Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
 		Selection.Gizmo->SetDisplayScale(State.GizmoScale);
 		Selection.Gizmo->SetLocation(IGizmo::LOCATE_WORLD);
 	});
-	Models.System->SetCallback("rotate_entity", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("rotate_entity", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		Selection.Gizmo = Resource.Gizmo[Selection.Move = 1];
 		Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
 		Selection.Gizmo->SetDisplayScale(State.GizmoScale);
 		Selection.Gizmo->SetLocation(IGizmo::LOCATE_WORLD);
 	});
-	Models.System->SetCallback("scale_entity", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("scale_entity", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		Selection.Gizmo = Resource.Gizmo[Selection.Move = 2];
 		Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
 		Selection.Gizmo->SetDisplayScale(State.GizmoScale);
 		Selection.Gizmo->SetLocation(IGizmo::LOCATE_WORLD);
 	});
-	Models.System->SetCallback("place_position", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("place_position", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1620,7 +1616,7 @@ void Sandbox::SetViewModel()
 			GetEntitySync();
 		}
 	});
-	Models.System->SetCallback("place_rotation", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("place_rotation", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1634,7 +1630,7 @@ void Sandbox::SetViewModel()
 			GetEntitySync();
 		}
 	});
-	Models.System->SetCallback("place_combine", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("place_combine", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1649,7 +1645,7 @@ void Sandbox::SetViewModel()
 			GetEntitySync();
 		}
 	});
-	Models.System->SetCallback("reset_position", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("reset_position", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1657,7 +1653,7 @@ void Sandbox::SetViewModel()
 			GetEntitySync();
 		}
 	});
-	Models.System->SetCallback("reset_rotation", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("reset_rotation", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1665,7 +1661,7 @@ void Sandbox::SetViewModel()
 			GetEntitySync();
 		}
 	});
-	Models.System->SetCallback("reset_scale", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("reset_scale", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1673,32 +1669,32 @@ void Sandbox::SetViewModel()
 			GetEntitySync();
 		}
 	});
-	Models.System->SetCallback("add_cmp_skin_animator", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_skin_animator", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::SkinAnimator>();
 	});
-	Models.System->SetCallback("add_cmp_key_animator", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_key_animator", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::KeyAnimator>();
 	});
-	Models.System->SetCallback("add_cmp_emitter_animator", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_emitter_animator", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::EmitterAnimator>();
 	});
-	Models.System->SetCallback("add_cmp_listener", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_listener", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::AudioListener>();
 	});
-	Models.System->SetCallback("add_cmp_source", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_source", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::AudioSource>();
 	});
-	Models.System->SetCallback("add_cmp_reverb", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_reverb", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1709,7 +1705,7 @@ void Sandbox::SetViewModel()
 			Source->GetSource()->AddEffect(new Effects::Reverb());
 		}
 	});
-	Models.System->SetCallback("add_cmp_chorus", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_chorus", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1720,7 +1716,7 @@ void Sandbox::SetViewModel()
 			Source->GetSource()->AddEffect(new Effects::Chorus());
 		}
 	});
-	Models.System->SetCallback("add_cmp_distortion", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_distortion", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1731,7 +1727,7 @@ void Sandbox::SetViewModel()
 			Source->GetSource()->AddEffect(new Effects::Distortion());
 		}
 	});
-	Models.System->SetCallback("add_cmp_echo", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_echo", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1742,7 +1738,7 @@ void Sandbox::SetViewModel()
 			Source->GetSource()->AddEffect(new Effects::Echo());
 		}
 	});
-	Models.System->SetCallback("add_cmp_flanger", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_flanger", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1753,7 +1749,7 @@ void Sandbox::SetViewModel()
 			Source->GetSource()->AddEffect(new Effects::Flanger());
 		}
 	});
-	Models.System->SetCallback("add_cmp_frequency_shifter", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_frequency_shifter", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1764,7 +1760,7 @@ void Sandbox::SetViewModel()
 			Source->GetSource()->AddEffect(new Effects::FrequencyShifter());
 		}
 	});
-	Models.System->SetCallback("add_cmp_vocal_morpher", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_vocal_morpher", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1775,7 +1771,7 @@ void Sandbox::SetViewModel()
 			Source->GetSource()->AddEffect(new Effects::VocalMorpher());
 		}
 	});
-	Models.System->SetCallback("add_cmp_pitch_shifter", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_pitch_shifter", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1786,7 +1782,7 @@ void Sandbox::SetViewModel()
 			Source->GetSource()->AddEffect(new Effects::PitchShifter());
 		}
 	});
-	Models.System->SetCallback("add_cmp_ring_modulator", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_ring_modulator", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1797,7 +1793,7 @@ void Sandbox::SetViewModel()
 			Source->GetSource()->AddEffect(new Effects::RingModulator());
 		}
 	});
-	Models.System->SetCallback("add_cmp_autowah", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_autowah", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1808,7 +1804,7 @@ void Sandbox::SetViewModel()
 			Source->GetSource()->AddEffect(new Effects::Autowah());
 		}
 	});
-	Models.System->SetCallback("add_cmp_compressor", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_compressor", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1819,7 +1815,7 @@ void Sandbox::SetViewModel()
 			Source->GetSource()->AddEffect(new Effects::Compressor());
 		}
 	});
-	Models.System->SetCallback("add_cmp_equalizer", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_equalizer", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1830,87 +1826,87 @@ void Sandbox::SetViewModel()
 			Source->GetSource()->AddEffect(new Effects::Equalizer());
 		}
 	});
-	Models.System->SetCallback("add_cmp_model", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_model", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::Model>();
 	});
-	Models.System->SetCallback("add_cmp_skin", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_skin", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::Skin>();
 	});
-	Models.System->SetCallback("add_cmp_emitter", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_emitter", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::Emitter>();
 	});
-	Models.System->SetCallback("add_cmp_decal", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_decal", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::Decal>();
 	});
-	Models.System->SetCallback("add_cmp_point_light", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_point_light", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::PointLight>();
 	});
-	Models.System->SetCallback("add_cmp_spot_light", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_spot_light", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::SpotLight>();
 	});
-	Models.System->SetCallback("add_cmp_line_light", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_line_light", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::LineLight>();
 	});
-	Models.System->SetCallback("add_cmp_surface_light", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_surface_light", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::SurfaceLight>();
 	});
-	Models.System->SetCallback("add_cmp_illuminator", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_illuminator", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::Illuminator>();
 	});
-	Models.System->SetCallback("add_cmp_rigid_body", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_rigid_body", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::RigidBody>();
 	});
-	Models.System->SetCallback("add_cmp_soft_body", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_soft_body", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::SoftBody>();
 	});
-	Models.System->SetCallback("add_cmp_slider_constraint", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_slider_constraint", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::SliderConstraint>();
 	});
-	Models.System->SetCallback("add_cmp_acceleration", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_acceleration", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::Acceleration>();
 	});
-	Models.System->SetCallback("add_cmp_fly", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_fly", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::Fly>();
 	});
-	Models.System->SetCallback("add_cmp_free_look", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_free_look", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::FreeLook>();
 	});
-	Models.System->SetCallback("add_cmp_camera", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_camera", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::Camera>();
 	});
-	Models.System->SetCallback("add_cmp_3d_camera", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_3d_camera", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (!Selection.Entity)
 			return;
@@ -1924,12 +1920,12 @@ void Sandbox::SetViewModel()
 		Camera->GetRenderer()->AddRenderer<Renderers::Lighting>();
 		Camera->GetRenderer()->AddRenderer<Renderers::Transparency>();
 	});
-	Models.System->SetCallback("add_cmp_scriptable", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_cmp_scriptable", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 			Selection.Entity->AddComponent<Components::Scriptable>();
 	});
-	Models.System->SetCallback("add_rndr_model", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_rndr_model", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1940,7 +1936,7 @@ void Sandbox::SetViewModel()
 			Source->GetRenderer()->AddRenderer<Renderers::Model>();
 		}
 	});
-	Models.System->SetCallback("add_rndr_skin", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_rndr_skin", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1951,7 +1947,7 @@ void Sandbox::SetViewModel()
 			Source->GetRenderer()->AddRenderer<Renderers::Skin>();
 		}
 	});
-	Models.System->SetCallback("add_rndr_soft_body", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_rndr_soft_body", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1962,7 +1958,7 @@ void Sandbox::SetViewModel()
 			Source->GetRenderer()->AddRenderer<Renderers::SoftBody>();
 		}
 	});
-	Models.System->SetCallback("add_rndr_decal", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_rndr_decal", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1973,7 +1969,7 @@ void Sandbox::SetViewModel()
 			Source->GetRenderer()->AddRenderer<Renderers::Decal>();
 		}
 	});
-	Models.System->SetCallback("add_rndr_emitter", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_rndr_emitter", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1984,7 +1980,7 @@ void Sandbox::SetViewModel()
 			Source->GetRenderer()->AddRenderer<Renderers::Emitter>();
 		}
 	});
-	Models.System->SetCallback("add_rndr_lighting", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_rndr_lighting", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -1995,7 +1991,7 @@ void Sandbox::SetViewModel()
 			Source->GetRenderer()->AddRenderer<Renderers::Lighting>();
 		}
 	});
-	Models.System->SetCallback("add_rndr_transparency", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_rndr_transparency", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -2006,7 +2002,7 @@ void Sandbox::SetViewModel()
 			Source->GetRenderer()->AddRenderer<Renderers::Transparency>();
 		}
 	});
-	Models.System->SetCallback("add_rndr_ssr", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_rndr_ssr", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -2017,7 +2013,7 @@ void Sandbox::SetViewModel()
 			Source->GetRenderer()->AddRenderer<Renderers::SSR>();
 		}
 	});
-	Models.System->SetCallback("add_rndr_ssao", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_rndr_ssao", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -2028,7 +2024,7 @@ void Sandbox::SetViewModel()
 			Source->GetRenderer()->AddRenderer<Renderers::SSAO>();
 		}
 	});
-	Models.System->SetCallback("add_rndr_motionblur", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_rndr_motionblur", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -2039,7 +2035,7 @@ void Sandbox::SetViewModel()
 			Source->GetRenderer()->AddRenderer<Renderers::MotionBlur>();
 		}
 	});
-	Models.System->SetCallback("add_rndr_bloom", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_rndr_bloom", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -2050,7 +2046,7 @@ void Sandbox::SetViewModel()
 			Source->GetRenderer()->AddRenderer<Renderers::Bloom>();
 		}
 	});
-	Models.System->SetCallback("add_rndr_dof", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_rndr_dof", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -2061,7 +2057,7 @@ void Sandbox::SetViewModel()
 			Source->GetRenderer()->AddRenderer<Renderers::DoF>();
 		}
 	});
-	Models.System->SetCallback("add_rndr_tone", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_rndr_tone", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -2072,7 +2068,7 @@ void Sandbox::SetViewModel()
 			Source->GetRenderer()->AddRenderer<Renderers::Tone>();
 		}
 	});
-	Models.System->SetCallback("add_rndr_glitch", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_rndr_glitch", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -2083,7 +2079,7 @@ void Sandbox::SetViewModel()
 			Source->GetRenderer()->AddRenderer<Renderers::Glitch>();
 		}
 	});
-	Models.System->SetCallback("add_rndr_gui", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("add_rndr_gui", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
@@ -2094,41 +2090,41 @@ void Sandbox::SetViewModel()
 			Source->GetRenderer()->AddRenderer<Renderers::UserInterface>();
 		}
 	});
-	Models.System->SetCallback("up_rndr", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("up_rndr", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr && Args.size() == 1)
 		{
 			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
 			if (Source != nullptr)
-				Source->GetRenderer()->MoveRenderer(TH_COMPONENT_HASH(Args[0].ToString()), -1);
+				Source->GetRenderer()->MoveRenderer(TH_COMPONENT_HASH(Args[0].Serialize()), -1);
 		}
 	});
-	Models.System->SetCallback("down_rndr", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("down_rndr", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr && Args.size() == 1)
 		{
 			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
 			if (Source != nullptr)
-				Source->GetRenderer()->MoveRenderer(TH_COMPONENT_HASH(Args[0].ToString()), 1);
+				Source->GetRenderer()->MoveRenderer(TH_COMPONENT_HASH(Args[0].Serialize()), 1);
 		}
 	});
-	Models.System->SetCallback("remove_rndr", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("remove_rndr", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr && Args.size() == 1)
 		{
 			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
 			if (Source != nullptr)
-				Source->GetRenderer()->RemoveRenderer(TH_COMPONENT_HASH(Args[0].ToString()));
+				Source->GetRenderer()->RemoveRenderer(TH_COMPONENT_HASH(Args[0].Serialize()));
 		}
 	});
-	Models.System->SetCallback("toggle_rndr", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("toggle_rndr", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr && Args.size() == 1)
 		{
 			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
 			if (Source != nullptr)
 			{
-				auto* Renderer = Source->GetRenderer()->GetRenderer(TH_COMPONENT_HASH(Args[0].ToString()));
+				auto* Renderer = Source->GetRenderer()->GetRenderer(TH_COMPONENT_HASH(Args[0].Serialize()));
 				if (Renderer != nullptr)
 				{
 					Renderer->Active = !Renderer->Active;
@@ -2141,13 +2137,13 @@ void Sandbox::SetViewModel()
 			}
 		}
 	});
-	Models.System->SetCallback("remove_aefx", [this](GUI::IEvent& Event, const PropertyList& Args)
+	Models.System->SetCallback("remove_aefx", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr && Args.size() == 1)
 		{
 			auto* Source = Selection.Entity->GetComponent<Components::AudioSource>();
 			if (Source != nullptr)
-				Source->GetSource()->RemoveEffectById(TH_COMPONENT_HASH(Args[0].ToString()));
+				Source->GetSource()->RemoveEffectById(TH_COMPONENT_HASH(Args[0].Serialize()));
 		}
 	});
 
