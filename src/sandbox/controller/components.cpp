@@ -1121,6 +1121,7 @@ void ComponentIlluminator(GUI::Context* UI, Components::Illuminator* Base)
 	UI->GetElementById(0, "cmp_illuminator_i").CastFormFloat(&Base->Intensity);
 	UI->GetElementById(0, "cmp_illuminator_o").CastFormFloat(&Base->Occlusion);
 	UI->GetElementById(0, "cmp_illuminator_s").CastFormFloat(&Base->Shadows);
+	UI->GetElementById(0, "cmp_illuminator_b").CastFormFloat(&Base->Bleeding);
 
 	uint32 Size = (uint32)Base->GetBufferSize();
 	if (UI->GetElementById(0, "cmp_illuminator_sz").CastFormUInt32(&Size) && Size != Base->GetBufferSize())
