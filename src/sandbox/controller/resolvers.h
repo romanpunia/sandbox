@@ -8,7 +8,6 @@ extern void ResolveTexture2D(GUI::Context* UI, const std::string& Id, bool Assig
 extern void ResolveKeyCode(GUI::Context* UI, const std::string& Id, KeyMap* Output);
 extern bool ResolveColor4(GUI::Context* UI, const std::string& Id, Vector4* Output);
 extern bool ResolveColor3(GUI::Context* UI, const std::string& Id, Vector3* Output);
-extern void ResolveAppearance(GUI::Context* UI, const std::string& Id, Appearance* Output);
 extern void ResolveModel(GUI::Context* UI, const std::string& Id, Components::Model* Output);
 extern void ResolveSkin(GUI::Context* UI, const std::string& Id, Components::Skin* Output);
 extern void ResolveSoftBody(GUI::Context* UI, const std::string& Id, Components::SoftBody* Output);

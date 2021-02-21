@@ -134,47 +134,6 @@ bool ResolveColor3(GUI::Context* UI, const std::string& Id, Vector3* Output)
 	UI->GetElementById(0, Id + "_color").SetProperty("background-color", Form("rgb(%u, %u, %u)", (unsigned int)(Output->X * 255.0f), (unsigned int)(Output->Y * 255.0f), (unsigned int)(Output->Z * 255.0f)).R());
 	return true;
 }
-void ResolveAppearance(GUI::Context* UI, const std::string& Id, Appearance* Output)
-{
-	if (!Output)
-		return;
-
-	ResolveColor3(UI, Id + "_diffuse", &Output->Diffuse);
-	ResolveTexture2D(UI, Id + "_diffuse_source", Output->GetDiffuseMap() != nullptr, [Output](Texture2D* New)
-	{
-		Output->SetDiffuseMap(New);
-	});
-	ResolveTexture2D(UI, Id + "_normal_source", Output->GetNormalMap() != nullptr, [Output](Texture2D* New)
-	{
-		Output->SetNormalMap(New);
-	});
-	ResolveTexture2D(UI, Id + "_metallic_source", Output->GetMetallicMap() != nullptr, [Output](Texture2D* New)
-	{
-		Output->SetMetallicMap(New);
-	});
-	ResolveTexture2D(UI, Id + "_roughness_source", Output->GetRoughnessMap() != nullptr, [Output](Texture2D* New)
-	{
-		Output->SetRoughnessMap(New);
-	});
-	ResolveTexture2D(UI, Id + "_height_source", Output->GetHeightMap() != nullptr, [Output](Texture2D* New)
-	{
-		Output->SetHeightMap(New);
-	});
-	ResolveTexture2D(UI, Id + "_occlusion_source", Output->GetOcclusionMap() != nullptr, [Output](Texture2D* New)
-	{
-		Output->SetOcclusionMap(New);
-	});
-	ResolveTexture2D(UI, Id + "_emission_source", Output->GetEmissionMap() != nullptr, [Output](Texture2D* New)
-	{
-		Output->SetEmissionMap(New);
-	});
-
-	UI->GetElementById(0, Id + "_material").CastFormInt64(&Output->Material);
-	UI->GetElementById(0, Id + "_uv_x").CastFormFloat(&Output->TexCoord.X);
-	UI->GetElementById(0, Id + "_uv_y").CastFormFloat(&Output->TexCoord.Y);
-	UI->GetElementById(0, Id + "_ht_amnt").CastFormFloat(&Output->HeightAmount);
-	UI->GetElementById(0, Id + "_ht_bias").CastFormFloat(&Output->HeightBias);
-}
 void ResolveModel(GUI::Context* UI, const std::string& Id, Components::Model* Output)
 {
 	GUI::IElement Source = UI->GetElementById(0, Id);

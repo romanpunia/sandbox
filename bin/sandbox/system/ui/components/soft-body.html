@@ -4,50 +4,14 @@
 </div>
 <table class="option">
 	<tr>
-		<td class="label">Diffuse map</td>
-		<td><button class="source" id="cmp_soft_body_diffuse_source" /></td>
+		<td class="label">Material</td>
+		<td><dataselect source="surfaces.root" fields="id, name" valuefield="id" id="cmp_soft_body_material" formatter="surfaces" /></td>
 	</tr>
 </table>
 <table class="option">
 	<tr>
-		<td class="label">Normal map</td>
-		<td><button class="source" id="cmp_soft_body_normal_source" /></td>
-	</tr>
-</table>
-<table class="option">
-	<tr>
-		<td class="label">Metallic map</td>
-		<td><button class="source" id="cmp_soft_body_metallic_source" /></td>
-	</tr>
-</table>
-<table class="option">
-	<tr>
-		<td class="label">Roughness map</td>
-		<td><button class="source" id="cmp_soft_body_roughness_source" /></td>
-	</tr>
-</table>
-<table class="option">
-	<tr>
-		<td class="label">Height map</td>
-		<td><button class="source" id="cmp_soft_body_height_source" /></td>
-	</tr>
-</table>
-<table class="option">
-	<tr>
-		<td class="label">Occlusion map</td>
-		<td><button class="source" id="cmp_soft_body_occlusion_source" /></td>
-	</tr>
-</table>
-<table class="option">
-	<tr>
-		<td class="label">Emission map</td>
-		<td><button class="source" id="cmp_soft_body_emission_source" /></td>
-	</tr>
-</table>
-<table class="option">
-	<tr>
-		<td class="label">Diffuse color</td>
-		<td><input type="text" maxlength="64" id="cmp_soft_body_diffuse" /><div class="color" id="cmp_soft_body_diffuse_color" /></td>
+		<td class="label">Source</td>
+		<td><button class="source" id="cmp_soft_body_source" /></td>
 	</tr>
 </table>
 <table class="option">
@@ -59,32 +23,8 @@
 </table>
 <table class="option">
 	<tr>
-		<td class="label">Height amount</td>
-		<td><input type="text" maxlength="16" id="cmp_soft_body_ht_amnt" /></td>
-	</tr>
-</table>
-<table class="option">
-	<tr>
-		<td class="label">Height bias</td>
-		<td><input type="text" maxlength="16" id="cmp_soft_body_ht_bias" /></td>
-	</tr>
-</table>
-<table class="option">
-	<tr>
-		<td class="label">Material</td>
-		<td><dataselect source="surfaces.root" fields="id, name" valuefield="id" id="cmp_soft_body_material" formatter="surfaces" /></td>
-	</tr>
-</table>
-<table class="option">
-	<tr>
 		<td class="label">Transparency</td>
 		<td><div class="check"><input type="checkbox" id="cmp_soft_body_alpha" /></div></td>
-	</tr>
-</table>
-<table class="option">
-	<tr>
-		<td class="label">Source</td>
-		<td><button class="source" id="cmp_soft_body_source" /></td>
 	</tr>
 </table>
 <table class="option" data-if="sl_cmp_soft_body_source" data-if="sl_cmp_soft_body_source">

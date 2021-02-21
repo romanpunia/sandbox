@@ -2,77 +2,70 @@
 #include "resolvers.h"
 #include "../core/sandbox.h"
 
-void ComponentModel(GUI::Context* UI, Components::Model* Base)
+void ComponentModel(GUI::Context* UI, Components::Model* Base, bool Changed)
 {
 	Sandbox* App = Sandbox::Get()->As<Sandbox>();
-	if (!App)
-		return;
+	static Material* LastMaterial = nullptr;
+	static MeshBuffer* LastMesh = nullptr;
 
-	static Model* LastBase = nullptr;
-	if (LastBase != Base->GetDrawable())
+	if (Changed)
 	{
 		App->Models.Model->Update(nullptr);
-		LastBase = Base->GetDrawable();
+		App->Models.Surfaces->Update(nullptr);
+		LastMaterial = nullptr;
+		LastMesh = nullptr;
 	}
 
-	GUI::IElement Mesh = UI->GetElementById(0, "cmp_model_mesh");
-	if (!Mesh.IsValid())
-		return;
-
-	std::string Ptr = Mesh.GetFormValue();
+	App->Models.System->SetBoolean("sl_cmp_model_source", Base->GetDrawable() && LastMesh != nullptr);
 	App->Models.System->SetBoolean("sl_cmp_model_assigned", Base->GetDrawable());
 
-	if (Base->GetDrawable() && !Ptr.empty() && Ptr != "0")
-	{
-		MeshBuffer* Buffer = (MeshBuffer*)(void*)(intptr_t)Stroke(&Ptr).ToInt64();
-		App->Models.System->SetBoolean("sl_cmp_model_source", true);
-
-		if (Buffer != nullptr)
-			ResolveAppearance(UI, "cmp_model", Base->GetSurface(Buffer));
-	}
-	else
-		App->Models.System->SetBoolean("sl_cmp_model_source", false);
-
 	ResolveModel(UI, "cmp_model_source", Base);
+	UI->GetElementById(0, "cmp_model_uv_x").CastFormFloat(&Base->TexCoord.X);
+	UI->GetElementById(0, "cmp_model_uv_y").CastFormFloat(&Base->TexCoord.Y);
 	UI->GetElementById(0, "cmp_model_static").CastFormBoolean(&Base->Static);
+
+	if (UI->GetElementById(0, "cmp_model_mesh").CastFormPointer((void**)&LastMesh))
+		LastMaterial = (LastMesh ? Base->GetMaterial(LastMesh) : nullptr);
+
+	if (LastMesh != nullptr && UI->GetElementById(0, "cmp_model_material").CastFormPointer((void**)&LastMaterial))
+		Base->SetMaterial(LastMesh, LastMaterial);
 
 	bool Alpha = Base->HasTransparency();
 	if (UI->GetElementById(0, "cmp_model_alpha").CastFormBoolean(&Alpha))
 		Base->SetTransparency(Alpha);
 }
-void ComponentSkin(GUI::Context* UI, Components::Skin* Base)
+void ComponentSkin(GUI::Context* UI, Components::Skin* Base, bool Changed)
 {
 	Sandbox* App = Sandbox::Get()->As<Sandbox>();
-	if (!App)
-		return;
+	static Material* LastMaterial = nullptr;
+	static SkinMeshBuffer* LastMesh = nullptr;
+	static int64_t LastJoint = -1;
 
-	static SkinModel* LastBase = nullptr;
-	static int64_t Joint = -1;
-
-	if (LastBase != Base->GetDrawable())
+	if (Changed)
 	{
 		App->Models.Skin->Update(nullptr);
-		LastBase = Base->GetDrawable();
-		Joint = -1;
+		App->Models.Surfaces->Update(nullptr);
+		LastMaterial = nullptr;
+		LastMesh = nullptr;
+		LastJoint = -1;
 	}
 
-	GUI::IElement Mesh = UI->GetElementById(0, "cmp_skin_mesh");
-	if (!Mesh.IsValid())
-		return;
+	App->Models.System->SetBoolean("sl_cmp_skin_source", Base->GetDrawable() && LastMesh != nullptr);
+	App->Models.System->SetBoolean("sl_cmp_skin_assigned", Base->GetDrawable());
+	App->Models.System->SetInteger("sl_cmp_skin_joint", LastJoint);
 
-	App->Models.System->SetInteger("sl_cmp_skin_joint", Joint);
 	if (Base->GetDrawable() != nullptr)
 	{
 		App->Models.System->SetInteger("sl_cmp_skin_joints", (int64_t)Base->Skeleton.Pose.size() - 1);
-		UI->GetElementById(0, "cmp_skin_joint").CastFormInt64(&Joint);
+		UI->GetElementById(0, "cmp_skin_joint").CastFormInt64(&LastJoint);
 
-		if (Joint != -1)
+		if (LastJoint != -1)
 		{
-			auto Current = Base->Skeleton.Pose.find(Joint);
+			auto Current = Base->Skeleton.Pose.find(LastJoint);
 			if (Current != Base->Skeleton.Pose.end())
 			{
-				auto* Sub = Base->GetDrawable()->FindJoint(Joint);
-				std::string Name = (Sub ? Sub->Name : "Unnamed") + (" (" + std::to_string(Joint) + ")");
+				auto* Sub = Base->GetDrawable()->FindJoint(LastJoint);
+				std::string Name = (Sub ? Sub->Name : "Unnamed") + (" (" + std::to_string(LastJoint) + ")");
 
 				UI->GetElementById(0, "cmp_skin_jname").CastFormString(&Name);
 				UI->GetElementById(0, "cmp_skin_jp_x").CastFormFloat(&Current->second.Position.X);
@@ -87,38 +80,38 @@ void ComponentSkin(GUI::Context* UI, Components::Skin* Base)
 	else
 		App->Models.System->SetInteger("sl_cmp_skin_joints", 0);
 
-	std::string Ptr = Mesh.GetFormValue();
-	App->Models.System->SetBoolean("sl_cmp_skin_assigned", Base->GetDrawable());
-
-	if (Base->GetDrawable() && !Ptr.empty() && Ptr != "0")
-	{
-		MeshBuffer* Buffer = (MeshBuffer*)(void*)(intptr_t)Stroke(&Ptr).ToInt64();
-		App->Models.System->SetBoolean("sl_cmp_skin_source", true);
-
-		if (Buffer != nullptr)
-			ResolveAppearance(UI, "cmp_skin", Base->GetSurface(Buffer));
-	}
-	else
-		App->Models.System->SetBoolean("sl_cmp_skin_source", false);
-
 	ResolveSkin(UI, "cmp_skin_source", Base);
+	UI->GetElementById(0, "cmp_skin_uv_x").CastFormFloat(&Base->TexCoord.X);
+	UI->GetElementById(0, "cmp_skin_uv_y").CastFormFloat(&Base->TexCoord.Y);
 	UI->GetElementById(0, "cmp_skin_static").CastFormBoolean(&Base->Static);
+
+	if (UI->GetElementById(0, "cmp_skin_mesh").CastFormPointer((void**)&LastMesh))
+		LastMaterial = (LastMesh ? Base->GetMaterial(LastMesh) : nullptr);
+
+	if (LastMesh != nullptr && UI->GetElementById(0, "cmp_skin_material").CastFormPointer((void**)&LastMaterial))
+		Base->SetMaterial(LastMesh, LastMaterial);
 
 	bool Alpha = Base->HasTransparency();
 	if (UI->GetElementById(0, "cmp_skin_alpha").CastFormBoolean(&Alpha))
 		Base->SetTransparency(Alpha);
 }
-void ComponentEmitter(GUI::Context* UI, Components::Emitter* Base)
+void ComponentEmitter(GUI::Context* UI, Components::Emitter* Base, bool Changed)
 {
 	Sandbox* App = Sandbox::Get()->As<Sandbox>();
-	if (!App)
-		return;
+	static Material* LastMaterial = nullptr;
+
+	if (Changed)
+	{
+		App->Models.Surfaces->Update(nullptr);
+		LastMaterial = nullptr;
+	}
 
 	int Count = (int)Base->GetBuffer()->GetArray()->Size();
-	ResolveAppearance(UI, "cmp_emitter", Base->GetSurface());
 	UI->GetElementById(0, "cmp_emitter_vol_x").CastFormFloat(&Base->Volume.X);
 	UI->GetElementById(0, "cmp_emitter_vol_y").CastFormFloat(&Base->Volume.Y);
 	UI->GetElementById(0, "cmp_emitter_vol_z").CastFormFloat(&Base->Volume.Z);
+	UI->GetElementById(0, "cmp_emitter_uv_x").CastFormFloat(&Base->TexCoord.X);
+	UI->GetElementById(0, "cmp_emitter_uv_y").CastFormFloat(&Base->TexCoord.Y);
 	UI->GetElementById(0, "cmp_emitter_elem_limit").CastFormInt32(&App->State.ElementsLimit);
 	UI->GetElementById(0, "cmp_emitter_elem_count").CastFormInt32(&Count);
 	UI->GetElementById(0, "cmp_emitter_quad_based").CastFormBoolean(&Base->QuadBased);
@@ -136,25 +129,46 @@ void ComponentEmitter(GUI::Context* UI, Components::Emitter* Base)
 		App->Renderer->UpdateBufferSize(Base->GetBuffer(), App->State.ElementsLimit);
 	}
 
+	if (UI->GetElementById(0, "cmp_emitter_material").CastFormPointer((void**)&LastMaterial))
+		Base->SetMaterial(nullptr, LastMaterial);
+
 	bool Alpha = Base->HasTransparency();
 	if (UI->GetElementById(0, "cmp_emitter_alpha").CastFormBoolean(&Alpha))
 		Base->SetTransparency(Alpha);
 }
-void ComponentDecal(GUI::Context* UI, Components::Decal* Base)
+void ComponentDecal(GUI::Context* UI, Components::Decal* Base, bool Changed)
 {
-	ResolveAppearance(UI, "cmp_decal", Base->GetSurface());
+	Sandbox* App = Sandbox::Get()->As<Sandbox>();
+	static Material* LastMaterial = nullptr;
+
+	if (Changed)
+	{
+		App->Models.Surfaces->Update(nullptr);
+		LastMaterial = nullptr;
+	}
+
 	UI->GetElementById(0, "cmp_decal_fov").CastFormFloat(&Base->FieldOfView);
 	UI->GetElementById(0, "cmp_decal_dist").CastFormFloat(&Base->Distance);
+	UI->GetElementById(0, "cmp_decal_uv_x").CastFormFloat(&Base->TexCoord.X);
+	UI->GetElementById(0, "cmp_decal_uv_y").CastFormFloat(&Base->TexCoord.Y);
+
+	if (UI->GetElementById(0, "cmp_decal_material").CastFormPointer((void**)&LastMaterial))
+		Base->SetMaterial(nullptr, LastMaterial);
 
 	bool Alpha = Base->HasTransparency();
 	if (UI->GetElementById(0, "cmp_decal_alpha").CastFormBoolean(&Alpha))
 		Base->SetTransparency(Alpha);
 }
-void ComponentSoftBody(GUI::Context* UI, Components::SoftBody* Base)
+void ComponentSoftBody(GUI::Context* UI, Components::SoftBody* Base, bool Changed)
 {
 	Sandbox* App = Sandbox::Get()->As<Sandbox>();
-	if (!App)
-		return;
+	static Material* LastMaterial = nullptr;
+
+	if (Changed)
+	{
+		App->Models.Surfaces->Update(nullptr);
+		LastMaterial = nullptr;
+	}
 
 	SoftBody* Body = Base->GetBody();
 	if (Body != nullptr)
@@ -273,17 +287,21 @@ void ComponentSoftBody(GUI::Context* UI, Components::SoftBody* Base)
 	else
 		App->Models.System->SetBoolean("sl_cmp_soft_body_source", false);
 
-	ResolveAppearance(UI, "cmp_soft_body", Base->GetSurface());
 	ResolveSoftBody(UI, "cmp_soft_body_source", Base);
+	UI->GetElementById(0, "cmp_soft_body_uv_x").CastFormFloat(&Base->TexCoord.X);
+	UI->GetElementById(0, "cmp_soft_body_uv_y").CastFormFloat(&Base->TexCoord.Y);
+
+	if (UI->GetElementById(0, "cmp_soft_body_regen").IsActive())
+		Base->Regenerate();
+
+	if (UI->GetElementById(0, "cmp_soft_body_material").CastFormPointer((void**)&LastMaterial))
+		Base->SetMaterial(nullptr, LastMaterial);
 
 	bool Alpha = Base->HasTransparency();
 	if (UI->GetElementById(0, "cmp_soft_body_alpha").CastFormBoolean(&Alpha))
 		Base->SetTransparency(Alpha);
-
-	if (UI->GetElementById(0, "cmp_soft_body_regen").IsActive())
-		Base->Regenerate();
 }
-void ComponentSkinAnimator(GUI::Context* UI, Components::SkinAnimator* Base)
+void ComponentSkinAnimator(GUI::Context* UI, Components::SkinAnimator* Base, bool Changed)
 {
 	Sandbox* App = Sandbox::Get()->As<Sandbox>();
 	if (!App)
@@ -405,7 +423,7 @@ void ComponentSkinAnimator(GUI::Context* UI, Components::SkinAnimator* Base)
 	if (UI->GetElementById(0, "cmp_skin_animator_stop").IsActive())
 		Base->Stop();
 }
-void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base)
+void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base, bool Changed)
 {
 	Sandbox* App = Sandbox::Get()->As<Sandbox>();
 	if (!App)
@@ -531,7 +549,7 @@ void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base)
 	if (UI->GetElementById(0, "cmp_key_animator_stop").IsActive())
 		Base->Stop();
 }
-void ComponentEmitterAnimator(GUI::Context* UI, Components::EmitterAnimator* Base)
+void ComponentEmitterAnimator(GUI::Context* UI, Components::EmitterAnimator* Base, bool Changed)
 {
 	UI->GetElementById(0, "cmp_emitter_animator_ddx").CastFormFloat(&Base->Diffuse.X);
 	UI->GetElementById(0, "cmp_emitter_animator_ddy").CastFormFloat(&Base->Diffuse.Y);
@@ -591,7 +609,7 @@ void ComponentEmitterAnimator(GUI::Context* UI, Components::EmitterAnimator* Bas
 	UI->GetElementById(0, "cmp_emitter_animator_facc_a").CastFormFloat(&Base->Spawner.Angular.Accuracy);
 	UI->GetElementById(0, "cmp_emitter_animator_fint_a").CastFormBoolean(&Base->Spawner.Angular.Intensity);
 }
-void ComponentRigidBody(GUI::Context* UI, Components::RigidBody* Base)
+void ComponentRigidBody(GUI::Context* UI, Components::RigidBody* Base, bool Changed)
 {
 	Sandbox* App = Sandbox::Get()->As<Sandbox>();
 	if (!App)
@@ -792,7 +810,7 @@ void ComponentRigidBody(GUI::Context* UI, Components::RigidBody* Base)
 	else
 		App->Models.System->SetBoolean("sl_cmp_rigid_body_source", false);
 }
-void ComponentAcceleration(GUI::Context* UI, Components::Acceleration* Base)
+void ComponentAcceleration(GUI::Context* UI, Components::Acceleration* Base, bool Changed)
 {
 	UI->GetElementById(0, "cmp_acceleration_av_x").CastFormFloat(&Base->AmplitudeVelocity.X);
 	UI->GetElementById(0, "cmp_acceleration_av_y").CastFormFloat(&Base->AmplitudeVelocity.Y);
@@ -811,7 +829,7 @@ void ComponentAcceleration(GUI::Context* UI, Components::Acceleration* Base)
 	UI->GetElementById(0, "cmp_acceleration_c_z").CastFormFloat(&Base->ConstantCenter.Z);
 	UI->GetElementById(0, "cmp_acceleration_kinemat").CastFormBoolean(&Base->Kinematic);
 }
-void ComponentSliderConstraint(GUI::Context* UI, Components::SliderConstraint* Base)
+void ComponentSliderConstraint(GUI::Context* UI, Components::SliderConstraint* Base, bool Changed)
 {
 	Sandbox* App = Sandbox::Get()->As<Sandbox>();
 	if (!App)
@@ -932,12 +950,12 @@ void ComponentSliderConstraint(GUI::Context* UI, Components::SliderConstraint* B
 		UI->GetElementById(0, "cmp_slider_constraint_linear").CastFormBoolean(&Linear);
 	}
 }
-void ComponentFreeLook(GUI::Context* UI, Components::FreeLook* Base)
+void ComponentFreeLook(GUI::Context* UI, Components::FreeLook* Base, bool Changed)
 {
 	ResolveKeyCode(UI, "cmp_free_look_key_rot", &Base->Rotate);
 	UI->GetElementById(0, "cmp_free_look_sens").CastFormFloat(&Base->Sensivity);
 }
-void ComponentFly(GUI::Context* UI, Components::Fly* Base)
+void ComponentFly(GUI::Context* UI, Components::Fly* Base, bool Changed)
 {
 	ResolveKeyCode(UI, "cmp_fly_key_forward", &Base->Forward);
 	ResolveKeyCode(UI, "cmp_fly_key_backward", &Base->Backward);
@@ -954,7 +972,7 @@ void ComponentFly(GUI::Context* UI, Components::Fly* Base)
 	UI->GetElementById(0, "cmp_fly_sp_normal").CastFormFloat(&Base->SpeedNormal);
 	UI->GetElementById(0, "cmp_fly_sp_up").CastFormFloat(&Base->SpeedUp);
 }
-void ComponentAudioSource(GUI::Context* UI, Components::AudioSource* Base)
+void ComponentAudioSource(GUI::Context* UI, Components::AudioSource* Base, bool Changed)
 {
 	Sandbox* App = Sandbox::Get()->As<Sandbox>();
 	if (!App)
@@ -1014,11 +1032,11 @@ void ComponentAudioSource(GUI::Context* UI, Components::AudioSource* Base)
 		App->Models.System->SetFloat("sl_cmp_audio_source_length", 0.0f);
 	}
 }
-void ComponentAudioListener(GUI::Context* UI, Components::AudioListener* Base)
+void ComponentAudioListener(GUI::Context* UI, Components::AudioListener* Base, bool Changed)
 {
 	UI->GetElementById(0, "cmp_audio_listener_gain").CastFormFloat(&Base->Gain);
 }
-void ComponentPointLight(GUI::Context* UI, Components::PointLight* Base)
+void ComponentPointLight(GUI::Context* UI, Components::PointLight* Base, bool Changed)
 {
 	ResolveColor3(UI, "cmp_point_light_diffuse", &Base->Diffuse);
 	UI->GetElementById(0, "cmp_point_light_pcf").CastFormUInt32(&Base->Shadow.Iterations);
@@ -1032,7 +1050,7 @@ void ComponentPointLight(GUI::Context* UI, Components::PointLight* Base)
 	UI->GetElementById(0, "cmp_point_light_sd_soft").CastFormFloat(&Base->Shadow.Softness);
 	UI->GetElementById(0, "cmp_point_light_sd_active").CastFormBoolean(&Base->Shadow.Enabled);
 }
-void ComponentSpotLight(GUI::Context* UI, Components::SpotLight* Base)
+void ComponentSpotLight(GUI::Context* UI, Components::SpotLight* Base, bool Changed)
 {
 	ResolveColor3(UI, "cmp_spot_light_diffuse", &Base->Diffuse);
 	UI->GetElementById(0, "cmp_spot_light_pcf").CastFormUInt32(&Base->Shadow.Iterations);
@@ -1047,7 +1065,7 @@ void ComponentSpotLight(GUI::Context* UI, Components::SpotLight* Base)
 	UI->GetElementById(0, "cmp_spot_light_sd_soft").CastFormFloat(&Base->Shadow.Softness);
 	UI->GetElementById(0, "cmp_spot_light_sd_active").CastFormBoolean(&Base->Shadow.Enabled);
 }
-void ComponentLineLight(GUI::Context* UI, Components::LineLight* Base)
+void ComponentLineLight(GUI::Context* UI, Components::LineLight* Base, bool Changed)
 {
 	Sandbox* App = Sandbox::Get()->As<Sandbox>();
 	if (!App)
@@ -1092,7 +1110,7 @@ void ComponentLineLight(GUI::Context* UI, Components::LineLight* Base)
 	UI->GetElementById(0, "cmp_line_light_sd_off").CastFormFloat(&Base->Shadow.Offset);
 	UI->GetElementById(0, "cmp_line_light_sd_active").CastFormBoolean(&Base->Shadow.Enabled);
 }
-void ComponentSurfaceLight(GUI::Context* UI, Components::SurfaceLight* Base)
+void ComponentSurfaceLight(GUI::Context* UI, Components::SurfaceLight* Base, bool Changed)
 {
 	ResolveColor3(UI, "cmp_surface_light_refl", &Base->Diffuse);
 	ResolveTexture2D(UI, "cmp_surface_light_source", Base->GetDiffuseMap() != nullptr, [Base](Texture2D* New)
@@ -1112,7 +1130,7 @@ void ComponentSurfaceLight(GUI::Context* UI, Components::SurfaceLight* Base)
 	UI->GetElementById(0, "cmp_surface_light_px").CastFormBoolean(&Base->Parallax);
 	UI->GetElementById(0, "cmp_surface_light_static").CastFormBoolean(&Base->StaticMask);
 }
-void ComponentIlluminator(GUI::Context* UI, Components::Illuminator* Base)
+void ComponentIlluminator(GUI::Context* UI, Components::Illuminator* Base, bool Changed)
 {
 	UI->GetElementById(0, "cmp_illuminator_rd").CastFormDouble(&Base->Tick.Delay);
 	UI->GetElementById(0, "cmp_illuminator_rs").CastFormFloat(&Base->RayStep);
@@ -1127,7 +1145,7 @@ void ComponentIlluminator(GUI::Context* UI, Components::Illuminator* Base)
 	if (UI->GetElementById(0, "cmp_illuminator_sz").CastFormUInt32(&Size) && Size != Base->GetBufferSize())
 		Base->SetBufferSize(Size);
 }
-void ComponentCamera(GUI::Context* UI, Components::Camera* Base)
+void ComponentCamera(GUI::Context* UI, Components::Camera* Base, bool Changed)
 {
 	Sandbox* App = Sandbox::Get()->As<Sandbox>();
 	if (!App)
@@ -1192,7 +1210,7 @@ void ComponentCamera(GUI::Context* UI, Components::Camera* Base)
 		App->State.IsCameraActive = true;
 	}
 }
-void ComponentScriptable(GUI::Context* UI, Components::Scriptable* Base)
+void ComponentScriptable(GUI::Context* UI, Components::Scriptable* Base, bool Changed)
 {
 	Sandbox* App = Sandbox::Get()->As<Sandbox>();
 	if (!App)

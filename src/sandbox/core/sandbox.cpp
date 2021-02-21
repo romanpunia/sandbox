@@ -483,8 +483,8 @@ void Sandbox::UpdateGrid(Timer* Time)
 			continue;
 
 		float Direction = -Value->Transform->Position.LookAtXZ(State.Camera->Transform->Position);
-		Renderer->Render.Diffuse = (Value == Selection.Entity) ? 0.5f : 0.05f;
-		Renderer->Render.WorldViewProjection = Matrix4x4::Create(Value->Transform->Position, 0.5f, Vector3(0, Direction)) * State.Camera->GetComponent<Components::Camera>()->GetViewProjection();
+		Renderer->Render.TexCoord = (Value == Selection.Entity ? 0.5f : 0.05f);
+		Renderer->Render.WorldViewProj = Matrix4x4::Create(Value->Transform->Position, 0.5f, Vector3(0, Direction)) * State.Camera->GetComponent<Components::Camera>()->GetViewProjection();
 		Renderer->SetTexture2D(GetIcon(Value), 1, TH_PS);
 		Renderer->UpdateBuffer(RenderBufferType_Render);
 		Renderer->Draw(6, 0);
@@ -619,46 +619,46 @@ void Sandbox::UpdateGrid(Timer* Time)
 		}
 	}
 
-	if (Selection.Material != nullptr && Scene->GetMaterialById((uint64_t)Selection.Material->Id) != nullptr && Selection.Window == Inspector_Material)
+	if (Selection.Material != nullptr && Selection.Window == Inspector_Material)
 	{
 		Matrix4x4 ViewProjection = Scene->GetCamera()->As<Components::Camera>()->GetViewProjection();
 		for (uint32_t i = 0; i < Scene->GetEntityCount(); i++)
 		{
 			Entity* Entity = Scene->GetEntity(i);
-			int64_t MaterialId = -1;
+			Material* Source = nullptr;
 
 			if (Entity->GetComponent<Components::Model>())
 			{
 				auto* It = Entity->GetComponent<Components::Model>();
-				for (auto& Face : It->GetSurfaces())
+				for (auto& Face : It->GetMaterials())
 				{
-					if (Face.second.Material != (uint64_t)Selection.Material->Id)
-						continue;
-
-					MaterialId = Face.second.Material;
-					break;
+					if (Face.second == Selection.Material)
+					{
+						Source = Face.second;
+						break;
+					}
 				}
 			}
 			else if (Entity->GetComponent<Components::Skin>())
 			{
 				auto* It = Entity->GetComponent<Components::Skin>();
-				for (auto& Face : It->GetSurfaces())
+				for (auto& Face : It->GetMaterials())
 				{
-					if (Face.second.Material != (uint64_t)Selection.Material->Id)
-						continue;
-
-					MaterialId = Face.second.Material;
-					break;
+					if (Face.second == Selection.Material)
+					{
+						Source = Face.second;
+						break;
+					}
 				}
 			}
 			else if (Entity->GetComponent<Components::Emitter>())
-				MaterialId = Entity->GetComponent<Components::Emitter>()->GetSurface()->Material;
+				Source = Entity->GetComponent<Components::Emitter>()->GetMaterial();
 			else if (Entity->GetComponent<Components::SoftBody>())
-				MaterialId = Entity->GetComponent<Components::SoftBody>()->GetSurface()->Material;
+				Source = Entity->GetComponent<Components::SoftBody>()->GetMaterial();
 			else if (Entity->GetComponent<Components::Decal>())
-				MaterialId = Entity->GetComponent<Components::Decal>()->GetSurface()->Material;
+				Source = Entity->GetComponent<Components::Decal>()->GetMaterial();
 
-			if (MaterialId < 0 || MaterialId != (int64_t)Selection.Material->Id)
+			if (Source != Selection.Material)
 				continue;
 
 			for (const auto& j : Origin)
@@ -715,7 +715,7 @@ void Sandbox::UpdateSystem()
 	Models.System->SetInteger("materials_count", Scene->GetMaterialCount());
 	Models.System->SetBoolean("scene_active", Scene->IsActive());
 	Models.System->SetBoolean("sl_resource", !State.Filename.empty());
-	Models.System->SetInteger("sl_material", Selection.Material ? Selection.Material->Id : -1);
+	Models.System->SetInteger("sl_material", Selection.Material ? Selection.Material->GetSlot() : -1);
 	Models.System->SetInteger("sl_entity", Selection.Entity ? Selection.Entity->Id : -1);
 
 	switch (Selection.Window)
@@ -751,9 +751,14 @@ void Sandbox::UpdateSystem()
 }
 void Sandbox::InspectEntity()
 {
-	Entity* Base = Selection.Entity;
+	static Entity* LastBase = nullptr;
 	if (!Selection.Entity)
 		return;
+
+	Entity* Base = Selection.Entity;
+	bool Changed = (LastBase != Base);
+	if (Changed)
+		LastBase = Base;
 
 	if (State.GUI->GetElementById(0, "ent_name").CastFormString(&Base->Name))
 		Models.Hierarchy->Update(Base);
@@ -773,43 +778,43 @@ void Sandbox::InspectEntity()
 	State.GUI->GetElementById(0, "ent_const_scale").CastFormBoolean(&Base->Transform->ConstantScale);
 
 	if (Models.System->SetBoolean("sl_cmp_model", Base->GetComponent<Components::Model>() != nullptr)->GetBoolean())
-		ComponentModel(State.GUI, Base->GetComponent<Components::Model>());
+		ComponentModel(State.GUI, Base->GetComponent<Components::Model>(), Changed);
 
 	if (Models.System->SetBoolean("sl_cmp_skin", Base->GetComponent<Components::Skin>() != nullptr)->GetBoolean())
-		ComponentSkin(State.GUI, Base->GetComponent<Components::Skin>());
+		ComponentSkin(State.GUI, Base->GetComponent<Components::Skin>(), Changed);
 
 	if (Models.System->SetBoolean("sl_cmp_emitter", Base->GetComponent<Components::Emitter>() != nullptr)->GetBoolean())
-		ComponentEmitter(State.GUI, Base->GetComponent<Components::Emitter>());
+		ComponentEmitter(State.GUI, Base->GetComponent<Components::Emitter>(), Changed);
 
 	if (Models.System->SetBoolean("sl_cmp_soft_body", Base->GetComponent<Components::SoftBody>() != nullptr)->GetBoolean())
-		ComponentSoftBody(State.GUI, Base->GetComponent<Components::SoftBody>());
+		ComponentSoftBody(State.GUI, Base->GetComponent<Components::SoftBody>(), Changed);
 
 	if (Models.System->SetBoolean("sl_cmp_decal", Base->GetComponent<Components::Decal>() != nullptr)->GetBoolean())
-		ComponentDecal(State.GUI, Base->GetComponent<Components::Decal>());
+		ComponentDecal(State.GUI, Base->GetComponent<Components::Decal>(), Changed);
 
 	if (Models.System->SetBoolean("sl_cmp_skin_animator", Base->GetComponent<Components::SkinAnimator>() != nullptr)->GetBoolean())
-		ComponentSkinAnimator(State.GUI, Base->GetComponent<Components::SkinAnimator>());
+		ComponentSkinAnimator(State.GUI, Base->GetComponent<Components::SkinAnimator>(), Changed);
 
 	if (Models.System->SetBoolean("sl_cmp_key_animator", Base->GetComponent<Components::KeyAnimator>() != nullptr)->GetBoolean())
-		ComponentKeyAnimator(State.GUI, Base->GetComponent<Components::KeyAnimator>());
+		ComponentKeyAnimator(State.GUI, Base->GetComponent<Components::KeyAnimator>(), Changed);
 
 	if (Models.System->SetBoolean("sl_cmp_emitter_animator", Base->GetComponent<Components::EmitterAnimator>() != nullptr)->GetBoolean())
-		ComponentEmitterAnimator(State.GUI, Base->GetComponent<Components::EmitterAnimator>());
+		ComponentEmitterAnimator(State.GUI, Base->GetComponent<Components::EmitterAnimator>(), Changed);
 
 	if (Models.System->SetBoolean("sl_cmp_rigid_body", Base->GetComponent<Components::RigidBody>() != nullptr)->GetBoolean())
-		ComponentRigidBody(State.GUI, Base->GetComponent<Components::RigidBody>());
+		ComponentRigidBody(State.GUI, Base->GetComponent<Components::RigidBody>(), Changed);
 
 	if (Models.System->SetBoolean("sl_cmp_acceleration", Base->GetComponent<Components::Acceleration>() != nullptr)->GetBoolean())
-		ComponentAcceleration(State.GUI, Base->GetComponent<Components::Acceleration>());
+		ComponentAcceleration(State.GUI, Base->GetComponent<Components::Acceleration>(), Changed);
 
 	if (Models.System->SetBoolean("sl_cmp_slider_constraint", Base->GetComponent<Components::SliderConstraint>() != nullptr)->GetBoolean())
-		ComponentSliderConstraint(State.GUI, Base->GetComponent<Components::SliderConstraint>());
+		ComponentSliderConstraint(State.GUI, Base->GetComponent<Components::SliderConstraint>(), Changed);
 
 	if (Models.System->SetBoolean("sl_cmp_free_look", Base->GetComponent<Components::FreeLook>() != nullptr)->GetBoolean())
-		ComponentFreeLook(State.GUI, Base->GetComponent<Components::FreeLook>());
+		ComponentFreeLook(State.GUI, Base->GetComponent<Components::FreeLook>(), Changed);
 
 	if (Models.System->SetBoolean("sl_cmp_fly", Base->GetComponent<Components::Fly>() != nullptr)->GetBoolean())
-		ComponentFly(State.GUI, Base->GetComponent<Components::Fly>());
+		ComponentFly(State.GUI, Base->GetComponent<Components::Fly>(), Changed);
 
 	if (Models.System->SetBoolean("sl_cmp_audio_source", Base->GetComponent<Components::AudioSource>() != nullptr)->GetBoolean())
 	{
@@ -849,26 +854,26 @@ void Sandbox::InspectEntity()
 		if (Models.System->SetBoolean("sl_cmp_audio_source_equalizer", Source->GetSource()->GetEffect<Effects::Equalizer>() != nullptr)->GetBoolean())
 			EffectEqualizer(State.GUI, Source->GetSource()->GetEffect<Effects::Equalizer>());
 
-		ComponentAudioSource(State.GUI, Source);
+		ComponentAudioSource(State.GUI, Source, Changed);
 	}
 
 	if (Models.System->SetBoolean("sl_cmp_audio_listener", Base->GetComponent<Components::AudioListener>() != nullptr)->GetBoolean())
-		ComponentAudioListener(State.GUI, Base->GetComponent<Components::AudioListener>());
+		ComponentAudioListener(State.GUI, Base->GetComponent<Components::AudioListener>(), Changed);
 
 	if (Models.System->SetBoolean("sl_cmp_point_light", Base->GetComponent<Components::PointLight>() != nullptr)->GetBoolean())
-		ComponentPointLight(State.GUI, Base->GetComponent<Components::PointLight>());
+		ComponentPointLight(State.GUI, Base->GetComponent<Components::PointLight>(), Changed);
 
 	if (Models.System->SetBoolean("sl_cmp_spot_light", Base->GetComponent<Components::SpotLight>() != nullptr)->GetBoolean())
-		ComponentSpotLight(State.GUI, Base->GetComponent<Components::SpotLight>());
+		ComponentSpotLight(State.GUI, Base->GetComponent<Components::SpotLight>(), Changed);
 
 	if (Models.System->SetBoolean("sl_cmp_line_light", Base->GetComponent<Components::LineLight>() != nullptr)->GetBoolean())
-		ComponentLineLight(State.GUI, Base->GetComponent<Components::LineLight>());
+		ComponentLineLight(State.GUI, Base->GetComponent<Components::LineLight>(), Changed);
 
 	if (Models.System->SetBoolean("sl_cmp_surface_light", Base->GetComponent<Components::SurfaceLight>() != nullptr)->GetBoolean())
-		ComponentSurfaceLight(State.GUI, Base->GetComponent<Components::SurfaceLight>());
+		ComponentSurfaceLight(State.GUI, Base->GetComponent<Components::SurfaceLight>(), Changed);
 
 	if (Models.System->SetBoolean("sl_cmp_illuminator", Base->GetComponent<Components::Illuminator>() != nullptr)->GetBoolean())
-		ComponentIlluminator(State.GUI, Base->GetComponent<Components::Illuminator>());
+		ComponentIlluminator(State.GUI, Base->GetComponent<Components::Illuminator>(), Changed);
 
 	if (Models.System->SetBoolean("sl_cmp_camera", Base->GetComponent<Components::Camera>() != nullptr)->GetBoolean())
 	{
@@ -905,11 +910,11 @@ void Sandbox::InspectEntity()
 		if (Models.System->SetInteger("sl_cmp_camera_glitch", Camera->GetRenderer()->GetOffset<Renderers::Glitch>())->GetInteger() >= 0)
 			RendererGlitch(State.GUI, Camera->GetRenderer()->GetRenderer<Renderers::Glitch>());
 
-		ComponentCamera(State.GUI, Camera);
+		ComponentCamera(State.GUI, Camera, Changed);
 	}
 
 	if (Models.System->SetBoolean("sl_cmp_scriptable", Base->GetComponent<Components::Scriptable>() != nullptr)->GetBoolean())
-		ComponentScriptable(State.GUI, Base->GetComponent<Components::Scriptable>());
+		ComponentScriptable(State.GUI, Base->GetComponent<Components::Scriptable>(), Changed);
 }
 void Sandbox::InspectSettings()
 {
@@ -975,33 +980,62 @@ void Sandbox::InspectImporter()
 void Sandbox::InspectMaterial()
 {
 	Material* Base = Selection.Material;
-	if (!Selection.Material)
+	if (!Base)
 		return;
 
-	std::string Name = Scene->GetMaterialName(Base->Id);
-	if (State.GUI->GetElementById(0, "mat_name").CastFormString(&Name))
-		Scene->SetMaterialName(Base->Id, Name);
+	ResolveTexture2D(State.GUI, "mat_diffuse_source", Base->GetDiffuseMap() != nullptr, [Base](Texture2D* New)
+	{
+		Base->SetDiffuseMap(New);
+	});
+	ResolveTexture2D(State.GUI, "mat_normal_source", Base->GetNormalMap() != nullptr, [Base](Texture2D* New)
+	{
+		Base->SetNormalMap(New);
+	});
+	ResolveTexture2D(State.GUI, "mat_metallic_source", Base->GetMetallicMap() != nullptr, [Base](Texture2D* New)
+	{
+		Base->SetMetallicMap(New);
+	});
+	ResolveTexture2D(State.GUI, "mat_roughness_source", Base->GetRoughnessMap() != nullptr, [Base](Texture2D* New)
+	{
+		Base->SetRoughnessMap(New);
+	});
+	ResolveTexture2D(State.GUI, "mat_height_source", Base->GetHeightMap() != nullptr, [Base](Texture2D* New)
+	{
+		Base->SetHeightMap(New);
+	});
+	ResolveTexture2D(State.GUI, "mat_occlusion_source", Base->GetOcclusionMap() != nullptr, [Base](Texture2D* New)
+	{
+		Base->SetOcclusionMap(New);
+	});
+	ResolveTexture2D(State.GUI, "mat_emission_source", Base->GetEmissionMap() != nullptr, [Base](Texture2D* New)
+	{
+		Base->SetEmissionMap(New);
+	});
 
-	if (State.GUI->GetElementById(0, "mat_cemn").CastFormColor(&Base->Emission, false))
-		State.GUI->GetElementById(0, "mat_cemn_color").SetProperty("background-color", Form("rgb(%u, %u, %u)", (unsigned int)(Base->Emission.X * 255.0f), (unsigned int)(Base->Emission.Y * 255.0f), (unsigned int)(Base->Emission.Z * 255.0f)).R());
+	ResolveColor3(State.GUI, "mat_diffuse", &Base->Surface.Diffuse);
+	if (State.GUI->GetElementById(0, "mat_cemn").CastFormColor(&Base->Surface.Emission, false))
+		State.GUI->GetElementById(0, "mat_cemn_color").SetProperty("background-color", Form("rgb(%u, %u, %u)", (unsigned int)(Base->Surface.Emission.X * 255.0f), (unsigned int)(Base->Surface.Emission.Y * 255.0f), (unsigned int)(Base->Surface.Emission.Z * 255.0f)).R());
 
-	if (State.GUI->GetElementById(0, "mat_cmet").CastFormColor(&Base->Metallic, false))
-		State.GUI->GetElementById(0, "mat_cmet_color").SetProperty("background-color", Form("rgb(%u, %u, %u)", (unsigned int)(Base->Metallic.X * 255.0f), (unsigned int)(Base->Metallic.Y * 255.0f), (unsigned int)(Base->Metallic.Z * 255.0f)).R());
+	if (State.GUI->GetElementById(0, "mat_cmet").CastFormColor(&Base->Surface.Metallic, false))
+		State.GUI->GetElementById(0, "mat_cmet_color").SetProperty("background-color", Form("rgb(%u, %u, %u)", (unsigned int)(Base->Surface.Metallic.X * 255.0f), (unsigned int)(Base->Surface.Metallic.Y * 255.0f), (unsigned int)(Base->Surface.Metallic.Z * 255.0f)).R());
 
-	State.GUI->GetElementById(0, "mat_scat_x").CastFormFloat(&Base->Scatter.X);
-	State.GUI->GetElementById(0, "mat_scat_y").CastFormFloat(&Base->Scatter.Y);
-	State.GUI->GetElementById(0, "mat_scat_z").CastFormFloat(&Base->Scatter.Z);
-	State.GUI->GetElementById(0, "mat_memn").CastFormFloat(&Base->Emission.W);
-	State.GUI->GetElementById(0, "mat_mmet").CastFormFloat(&Base->Metallic.W);
-	State.GUI->GetElementById(0, "mat_rs").CastFormFloat(&Base->Roughness.X);
-	State.GUI->GetElementById(0, "mat_mrs").CastFormFloat(&Base->Roughness.Y);
-	State.GUI->GetElementById(0, "mat_occ").CastFormFloat(&Base->Occlusion.X);
-	State.GUI->GetElementById(0, "mat_mocc").CastFormFloat(&Base->Occlusion.Y);
-	State.GUI->GetElementById(0, "mat_fres").CastFormFloat(&Base->Fresnel);
-	State.GUI->GetElementById(0, "mat_refr").CastFormFloat(&Base->Refraction);
-	State.GUI->GetElementById(0, "mat_alpha").CastFormFloat(&Base->Transparency);
-	State.GUI->GetElementById(0, "mat_env").CastFormFloat(&Base->Environment);
-	State.GUI->GetElementById(0, "mat_rad").CastFormFloat(&Base->Radius);
+	State.GUI->GetElementById(0, "mat_name").CastFormString(&Base->Name);
+	State.GUI->GetElementById(0, "mat_scat_x").CastFormFloat(&Base->Surface.Scatter.X);
+	State.GUI->GetElementById(0, "mat_scat_y").CastFormFloat(&Base->Surface.Scatter.Y);
+	State.GUI->GetElementById(0, "mat_scat_z").CastFormFloat(&Base->Surface.Scatter.Z);
+	State.GUI->GetElementById(0, "mat_memn").CastFormFloat(&Base->Surface.Emission.W);
+	State.GUI->GetElementById(0, "mat_mmet").CastFormFloat(&Base->Surface.Metallic.W);
+	State.GUI->GetElementById(0, "mat_rs").CastFormFloat(&Base->Surface.Roughness.X);
+	State.GUI->GetElementById(0, "mat_mrs").CastFormFloat(&Base->Surface.Roughness.Y);
+	State.GUI->GetElementById(0, "mat_occ").CastFormFloat(&Base->Surface.Occlusion.X);
+	State.GUI->GetElementById(0, "mat_mocc").CastFormFloat(&Base->Surface.Occlusion.Y);
+	State.GUI->GetElementById(0, "mat_fres").CastFormFloat(&Base->Surface.Fresnel);
+	State.GUI->GetElementById(0, "mat_refr").CastFormFloat(&Base->Surface.Refraction);
+	State.GUI->GetElementById(0, "mat_alpha").CastFormFloat(&Base->Surface.Transparency);
+	State.GUI->GetElementById(0, "mat_env").CastFormFloat(&Base->Surface.Environment);
+	State.GUI->GetElementById(0, "mat_rad").CastFormFloat(&Base->Surface.Radius);
+	State.GUI->GetElementById(0, "mat_ht_amnt").CastFormFloat(&Base->Surface.Height);
+	State.GUI->GetElementById(0, "mat_ht_bias").CastFormFloat(&Base->Surface.Bias);
 }
 void Sandbox::SetViewModel()
 {
@@ -1200,7 +1234,7 @@ void Sandbox::SetViewModel()
 		if (Args.size() != 1)
 			return;
 
-		SetSelection(Inspector_Material, Scene->GetMaterialById(Args[0].GetInteger()));
+		SetSelection(Inspector_Material, (Material*)GUI::IElement::ToPointer(Args[0].GetBlob()));
 	});
 	Models.System->SetCallback("save_settings", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
@@ -1352,7 +1386,7 @@ void Sandbox::SetViewModel()
 	Models.System->SetCallback("remove_material", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Material != nullptr)
-			Scene->RemoveMaterial((uint64_t)Selection.Material->Id);
+			Scene->RemoveMaterial(Selection.Material);
 
 		SetSelection(Inspector_Materials);
 		Models.Materials->Update(nullptr);
@@ -1362,7 +1396,7 @@ void Sandbox::SetViewModel()
 	{
 		if (Selection.Material != nullptr)
 		{
-			Selection.Material = Scene->AddMaterial(Scene->GetMaterialName(Selection.Material->Id) + "*", *Selection.Material);
+			Selection.Material = Scene->CloneMaterial(Selection.Material, Selection.Material->Name + "*");
 			Models.Materials->Update(nullptr);
 			Models.Surfaces->Update(nullptr);
 		}
@@ -1373,7 +1407,7 @@ void Sandbox::SetViewModel()
 	});
 	Models.System->SetCallback("add_material", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
-		SetSelection(Inspector_Material, Scene->AddMaterial("Material", Material()));
+		SetSelection(Inspector_Material, Scene->AddMaterial("Material " + std::to_string(Scene->GetMaterialCount() + 1)));
 		Models.Materials->Update(nullptr);
 		Models.Surfaces->Update(nullptr);
 	});
@@ -1467,14 +1501,15 @@ void Sandbox::SetViewModel()
 			if (!Result)
 				return;
 
-			Material New;
-			if (!NMake::Unpack(Result, &New))
+			Material* Surface = Scene->AddMaterial("");
+			if (!Surface)
 				return;
 
-			std::string Name = File;
-			GetPathName(Name);
+			NMake::Unpack(Result, Surface, Content);
+			SetSelection(Inspector_Material, Surface);
 
-			SetSelection(Inspector_Material, Scene->AddMaterial(Name, New));
+			Surface->Name = File;
+			GetPathName(Surface->Name);
 		});
 	});
 	Models.System->SetCallback("export_material", [this](GUI::IEvent& Event, const VariantList& Args)
@@ -1493,7 +1528,8 @@ void Sandbox::SetViewModel()
 
 		Document* Result = Document::Object();
 		Result->Key = "material";
-		NMake::Pack(Result, *Selection.Material);
+
+		NMake::Pack(Result, Selection.Material, Content);
 
 		VariantArgs Map;
 		if (Stroke(&Path).EndsWith(".jsonb"))
@@ -2269,21 +2305,21 @@ void Sandbox::SetViewModel()
 		if (Data.size() != 2)
 			return;
 		
-		Result = "<button class=\"selection\" data-event-click=\"set_material(" + Data[0] + ")\">" + GUI::Subsystem::EscapeHTML(Data[1]) + "</button>";
+		Result = "<button class=\"selection\" data-event-click=\"set_material('" + Data[0] + "')\">" + GUI::Subsystem::EscapeHTML(Data[1]) + "</button>";
 	});
 	Models.Materials->SetColumnCallback([this](GUI::DataRow* Node, const std::string& Column, std::string& Result)
 	{
 		Material* Target = Node->GetTarget<Material>();
 		if (Column == "name")
 		{
-			Result = Scene->GetMaterialName(Target->Id);
+			Result = Target->Name;
 			if (Result.empty())
-				Result = "Material " + std::to_string((uint64_t)Target->Id);
+				Result = "Material " + std::to_string(Target->GetSlot());
 			else
-				Result += " " + std::to_string((uint64_t)Target->Id);
+				Result += " " + std::to_string(Target->GetSlot());
 		}
 		else if (Column == "id")
-			Result = std::to_string((int64_t)Target->Id);
+			Result = GUI::IElement::FromPointer(Target);
 	});
 	Models.Materials->SetChangeCallback([this](GUI::DataRow* Node)
 	{
@@ -2292,11 +2328,7 @@ void Sandbox::SetViewModel()
 			return;
 
 		for (uint64_t i = 0; i < Scene->GetMaterialCount(); i++)
-			Node->AddChild(new Material(*Scene->GetMaterialById(i)));
-	});
-	Models.Materials->SetDestroyCallback([](void* Target)
-	{
-		delete (Material*)Target;
+			Node->AddChild(Scene->GetMaterial(i));
 	});
 
 	Models.Surfaces = State.GUI->SetDataSource("surfaces");
@@ -2314,19 +2346,19 @@ void Sandbox::SetViewModel()
 		{
 			if (Column == "name")
 			{
-				Result = Scene->GetMaterialName(Target->Id);
+				Result = Target->Name;
 				if (Result.empty())
-					Result = "Material " + std::to_string((uint64_t)Target->Id);
+					Result = "Material " + std::to_string(Target->GetSlot());
 				else
-					Result += " " + std::to_string((uint64_t)Target->Id);
+					Result += " " + std::to_string(Target->GetSlot());
 			}
 			else if (Column == "id")
-				Result = std::to_string((int64_t)Target->Id);
+				Result = GUI::IElement::FromPointer(Target);
 		}
 		else if (Column == "name")
 			Result = "None";
 		else if (Column == "id")
-			Result = "-1";
+			Result = GUI::IElement::FromPointer(nullptr);
 	});
 	Models.Surfaces->SetChangeCallback([this](GUI::DataRow* Node)
 	{
@@ -2339,11 +2371,7 @@ void Sandbox::SetViewModel()
 			return;
 
 		for (uint64_t i = 0; i < Scene->GetMaterialCount(); i++)
-			Node->AddChild(new Material(*Scene->GetMaterialById(i)));
-	});
-	Models.Surfaces->SetDestroyCallback([](void* Target)
-	{
-		delete (Material*)Target;
+			Node->AddChild(Scene->GetMaterial(i));
 	});
 
 	Models.Model = State.GUI->SetDataSource("model");
@@ -2369,12 +2397,12 @@ void Sandbox::SetViewModel()
 			if (Column == "name")
 				Result = (Target->Name.empty() ? "Unknown" : Target->Name);
 			else if (Column == "id")
-				Result = std::to_string((intptr_t)(void*)Target);
+				Result = GUI::IElement::FromPointer(Target);
 		}
 		else if (Column == "name")
 			Result = "None";
 		else if (Column == "id")
-			Result = "0";
+			Result = GUI::IElement::FromPointer(nullptr);
 	});
 	Models.Model->SetChangeCallback([this](GUI::DataRow* Node)
 	{
@@ -2417,12 +2445,12 @@ void Sandbox::SetViewModel()
 			if (Column == "name")
 				Result = (Target->Name.empty() ? "Unknown" : Target->Name);
 			else if (Column == "id")
-				Result = std::to_string((intptr_t)(void*)Target);
+				Result = GUI::IElement::FromPointer(Target);
 		}
 		else if (Column == "name")
 			Result = "None";
 		else if (Column == "id")
-			Result = "0";
+			Result = GUI::IElement::FromPointer(nullptr);
 	});
 	Models.Skin->SetChangeCallback([this](GUI::DataRow* Node)
 	{
