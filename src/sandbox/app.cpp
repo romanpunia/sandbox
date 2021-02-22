@@ -4,7 +4,7 @@
 
 int main()
 {
-	Tomahawk::Initialize();
+	Tomahawk::Initialize(Tomahawk::TPreset_Game, Tomahawk::TMem_Heap);
 Entry:
 	{
 		Application::Desc Init;
@@ -16,7 +16,7 @@ Entry:
 		Init.Activity.Hidden = true;
 		Init.Directory = "sandbox";
 
-		Application* App = new Sandbox(&Init, "./scenes/demo.xml");
+		Application* App = new Sandbox(&Init);
 		App->Start(&Init);
 		delete App;
 

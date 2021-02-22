@@ -428,10 +428,7 @@ void Sandbox::UpdateScene()
 
 	if (Scene == nullptr)
 	{
-		SceneGraph::Desc I;
-		I.Device = Renderer;
-		I.Queue = Queue;
-		I.Manager = VM;
+		SceneGraph::Desc I = SceneGraph::Desc::Get(this);
 		I.Simulator.EnableSoftBody = true;
 
 		Scene = new SceneGraph(I);
