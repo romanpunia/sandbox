@@ -1278,10 +1278,10 @@ void Sandbox::SetViewModel()
 	Models.System->SetCallback("import_model_action", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		std::string From;
-		if (!OS::WantFileOpen("Import mesh", Content->GetEnvironment(), "*.dae,*.fbx,*.gltf,*.glb,*.blend,*.3d,*.3ds,*.ase,*.obj,*.ifc,*.xgl,*.zgl,*.ply,*.lwo,*.lws,*.lxo,*.stl,*.x,*.ac,*.ms3d,*.mdl,*.md2,.*md3", "", false, &From))
+		if (!OS::Input::Open("Import mesh", Content->GetEnvironment(), "*.dae,*.fbx,*.gltf,*.glb,*.blend,*.3d,*.3ds,*.ase,*.obj,*.ifc,*.xgl,*.zgl,*.ply,*.lwo,*.lws,*.lxo,*.stl,*.x,*.ac,*.ms3d,*.mdl,*.md2,.*md3", "", false, &From))
 			return;
 
-		if (!OS::FileExists(From.c_str()))
+		if (!OS::File::IsExists(From.c_str()))
 			return;
 
 		Processors::Model* Processor = Content->GetProcessor<Model>()->As<Processors::Model>();
@@ -1291,7 +1291,7 @@ void Sandbox::SetViewModel()
 			if (Doc != nullptr)
 			{
 				std::string To;
-				if (!OS::WantFileSave("Save mesh", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized mesh (*.xml, *.json, *.jsonb)", &To))
+				if (!OS::Input::Save("Save mesh", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized mesh (*.xml, *.json, *.jsonb)", &To))
 					return;
 
 				VariantArgs Args;
@@ -1320,10 +1320,10 @@ void Sandbox::SetViewModel()
 	Models.System->SetCallback("import_skin_animation_action", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		std::string From;
-		if (!OS::WantFileOpen("Import animation from mesh", Content->GetEnvironment(), "*.dae,*.fbx,*.gltf,*.glb,*.blend,*.3d,*.3ds,*.ase,*.obj,*.ifc,*.xgl,*.zgl,*.ply,*.lwo,*.lws,*.lxo,*.stl,*.x,*.ac,*.ms3d,*.mdl,*.md2,.*md3", "", false, &From))
+		if (!OS::Input::Open("Import animation from mesh", Content->GetEnvironment(), "*.dae,*.fbx,*.gltf,*.glb,*.blend,*.3d,*.3ds,*.ase,*.obj,*.ifc,*.xgl,*.zgl,*.ply,*.lwo,*.lws,*.lxo,*.stl,*.x,*.ac,*.ms3d,*.mdl,*.md2,.*md3", "", false, &From))
 			return;
 
-		if (!OS::FileExists(From.c_str()))
+		if (!OS::File::IsExists(From.c_str()))
 			return;
 
 		Processors::SkinModel* Processor = Content->GetProcessor<Model>()->As<Processors::SkinModel>();
@@ -1333,7 +1333,7 @@ void Sandbox::SetViewModel()
 			if (Doc != nullptr)
 			{
 				std::string To;
-				if (!OS::WantFileSave("Save animation", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized skin animation (*.xml, *.json, *.jsonb)", &To))
+				if (!OS::Input::Save("Save animation", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized skin animation (*.xml, *.json, *.jsonb)", &To))
 					return;
 
 				VariantArgs Args;
@@ -1427,7 +1427,7 @@ void Sandbox::SetViewModel()
 		}
 
 		std::string Path;
-		if (!OS::WantFileSave("Save skin animation", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized skin animation (*.xml, *.json, *.jsonb)", &Path))
+		if (!OS::Input::Save("Save skin animation", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized skin animation (*.xml, *.json, *.jsonb)", &Path))
 			return;
 
 		Document* Result = Document::Object();
@@ -1464,7 +1464,7 @@ void Sandbox::SetViewModel()
 		}
 
 		std::string Path;
-		if (!OS::WantFileSave("Save key animation", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized key animation (*.xml, *.json, *.jsonb)", &Path))
+		if (!OS::Input::Save("Save key animation", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized key animation (*.xml, *.json, *.jsonb)", &Path))
 			return;
 
 		Document* Result = Document::Object();
@@ -1520,7 +1520,7 @@ void Sandbox::SetViewModel()
 		}
 
 		std::string Path;
-		if (!OS::WantFileSave("Save material", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized material (*.xml, *.json, *.jsonb)", &Path))
+		if (!OS::Input::Save("Save material", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized material (*.xml, *.json, *.jsonb)", &Path))
 			return;
 
 		Document* Result = Document::Object();
@@ -1578,7 +1578,7 @@ void Sandbox::SetViewModel()
 	Models.System->SetCallback("close_scene", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		std::string Path;
-		if (!OS::WantFileSave("Save scene", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized scene (*.xml, *.json, *.jsonb)", &Path))
+		if (!OS::Input::Save("Save scene", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized scene (*.xml, *.json, *.jsonb)", &Path))
 			return;
 
 		VariantArgs Map;
