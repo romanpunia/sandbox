@@ -1,7 +1,8 @@
 <scene>
 	<metadata>
-		<components i="65536" />
+		<materials i="16384" />
 		<entities i="32768" />
+		<components i="65536" />
 		<render-quality n="1.000000" />
 		<enable-hdr b="false" />
 		<simulator>
@@ -16,60 +17,109 @@
 	</metadata>
 	<materials>
 		<material>
-			<name s="Main" />
 			<emission x="0.000000" y="0.000000" z="0.000000" w="0.000000" />
-			<metallic x="0.000000" y="0.000000" z="0.000000" w="0.000000" />
+			<metallic x="0.592157" y="0.200000" z="0.200000" w="0.000000" />
+			<diffuse x="1.000000" y="0.000000" z="0.000000" />
 			<scatter x="0.100000" y="16.000000" z="0.000000" />
-			<roughness x="1.000000" y="0.000000" />
-			<fresnel n="0.000000" />
-			<refraction n="0.000000" />
-			<transparency n="0.000000" />
-			<environment n="0.000000" />
+			<roughness x="0.950000" y="0.000000" />
 			<occlusion x="1.000000" y="0.000000" />
-			<radius n="0.000000" />
-			<id n="0.000000" />
-		</material>
-		<material>
-			<name s="Lamp" />
-			<emission x="0.909804" y="0.694118" z="0.474510" w="1.000000" />
-			<metallic x="0.000000" y="0.000000" z="0.000000" w="0.000000" />
-			<scatter x="0.100000" y="16.000000" z="0.000000" />
-			<roughness x="1.000000" y="0.000000" />
 			<fresnel n="0.000000" />
 			<refraction n="0.000000" />
 			<transparency n="0.000000" />
 			<environment n="0.000000" />
-			<occlusion x="0.000000" y="0.000000" />
 			<radius n="0.000000" />
-			<id n="1.000000" />
+			<height n="0.000000" />
+			<bias n="0.000000" />
+			<name s="red-wall" />
+			<slot i="0" />
 		</material>
 		<material>
-			<name s="Reflect" />
-			<emission x="0.000000" y="0.000000" z="0.000000" w="0.000000" />
-			<metallic x="0.933333" y="0.933333" z="0.933333" w="0.000000" />
+			<emission x="1.000000" y="1.000000" z="1.000000" w="10.000000" />
+			<metallic x="0.039216" y="0.039216" z="0.039216" w="0.000000" />
+			<diffuse x="1.000000" y="1.000000" z="1.000000" />
 			<scatter x="0.100000" y="16.000000" z="0.000000" />
-			<roughness x="0.400000" y="0.100000" />
+			<roughness x="0.500000" y="0.000000" />
+			<occlusion x="0.000000" y="0.000000" />
+			<fresnel n="0.000000" />
+			<refraction n="0.000000" />
+			<transparency n="0.000000" />
+			<environment n="0.000000" />
+			<radius n="0.000000" />
+			<height n="0.000000" />
+			<bias n="0.000000" />
+			<name s="lamp" />
+			<slot i="1" />
+		</material>
+		<material>
+			<roughness-map s="H:/dev/sandbox/bin/sandbox/materials/paving-stones/roughness.jpg" />
+			<emission x="0.000000" y="0.000000" z="0.000000" w="0.000000" />
+			<metallic x="0.674510" y="0.674510" z="0.674510" w="0.000000" />
+			<diffuse x="1.000000" y="1.000000" z="1.000000" />
+			<scatter x="0.100000" y="16.000000" z="0.000000" />
+			<roughness x="0.320000" y="0.100000" />
+			<occlusion x="1.500000" y="0.000000" />
 			<fresnel n="0.050000" />
 			<refraction n="0.000000" />
 			<transparency n="0.000000" />
 			<environment n="0.000000" />
-			<occlusion x="1.500000" y="0.000000" />
 			<radius n="0.000000" />
-			<id n="2.000000" />
+			<height n="0.000000" />
+			<bias n="0.000000" />
+			<name s="ball" />
+			<slot i="2" />
 		</material>
 		<material>
-			<name s="Box" />
 			<emission x="0.000000" y="0.000000" z="0.000000" w="0.000000" />
 			<metallic x="0.000000" y="0.000000" z="0.000000" w="0.000000" />
+			<diffuse x="1.000000" y="1.000000" z="1.000000" />
 			<scatter x="0.100000" y="16.000000" z="0.000000" />
 			<roughness x="1.000000" y="0.000000" />
+			<occlusion x="1.000000" y="0.000000" />
 			<fresnel n="0.000000" />
 			<refraction n="0.000000" />
 			<transparency n="0.000000" />
 			<environment n="0.000000" />
-			<occlusion x="1.000000" y="0.000000" />
 			<radius n="0.000000" />
-			<id n="3.000000" />
+			<height n="0.000000" />
+			<bias n="0.000000" />
+			<name s="box" />
+			<slot i="3" />
+		</material>
+		<material>
+			<emission x="0.000000" y="0.000000" z="0.000000" w="0.000000" />
+			<metallic x="0.200000" y="0.592157" z="0.200000" w="0.000000" />
+			<diffuse x="0.000000" y="1.000000" z="0.000000" />
+			<scatter x="0.100000" y="16.000000" z="0.000000" />
+			<roughness x="0.950000" y="0.000000" />
+			<occlusion x="1.000000" y="0.000000" />
+			<fresnel n="0.000000" />
+			<refraction n="0.000000" />
+			<transparency n="0.000000" />
+			<environment n="0.000000" />
+			<radius n="0.000000" />
+			<height n="0.000000" />
+			<bias n="0.000000" />
+			<name s="green-wall" />
+			<slot i="4" />
+		</material>
+		<material>
+			<diffuse-map s="H:/dev/sandbox/bin/sandbox/materials/fabric/diffuse.jpg" />
+			<metallic-map s="H:/dev/sandbox/bin/sandbox/materials/fabric/metallic.jpg" />
+			<emission x="0.000000" y="0.000000" z="0.000000" w="0.000000" />
+			<metallic x="0.121569" y="0.121569" z="0.121569" w="0.150000" />
+			<diffuse x="1.000000" y="1.000000" z="1.000000" />
+			<scatter x="0.100000" y="16.000000" z="0.000000" />
+			<roughness x="0.950000" y="0.000000" />
+			<occlusion x="1.000000" y="0.000000" />
+			<fresnel n="0.000000" />
+			<refraction n="0.000000" />
+			<transparency n="0.000000" />
+			<environment n="0.000000" />
+			<radius n="0.000000" />
+			<height n="0.000000" />
+			<bias n="0.000000" />
+			<name s="wall" />
+			<slot i="5" />
 		</material>
 	</materials>
 	<entities>
@@ -87,17 +137,14 @@
 					<id i="-678071591" />
 					<active b="true" />
 					<metadata>
-						<model s="./models/cube/mesh.xml" />
-						<surfaces>
-							<surface>
+						<model s="H:/dev/sandbox/bin/sandbox/models/cube/mesh.xml" />
+						<materials>
+							<material>
 								<name s="Cube" />
-								<diffuse x="1.000000" y="1.000000" z="1.000000" />
-								<texcoord x="10.000000" y="10.000000" />
-								<height-amount n="-0.000000" />
-								<height-bias n="0.000000" />
-								<material i="0" />
-							</surface>
-						</surfaces>
+								<slot i="5" />
+							</material>
+						</materials>
+						<texcoord x="2.000000" y="2.000000" />
 						<transparency b="false" />
 						<static b="true" />
 					</metadata>
@@ -166,7 +213,7 @@
 							</renderer>
 							<renderer>
 								<id i="-40449310" />
-								<active b="true" />
+								<active b="false" />
 								<metadata>
 									<grayscale n="-0.050000" />
 									<aces n="0.675000" />
@@ -232,17 +279,14 @@
 					<id i="-678071591" />
 					<active b="true" />
 					<metadata>
-						<model s="./models/cube/mesh.xml" />
-						<surfaces>
-							<surface>
+						<model s="H:/dev/sandbox/bin/sandbox/models/cube/mesh.xml" />
+						<materials>
+							<material>
 								<name s="Cube" />
-								<diffuse x="1.000000" y="1.000000" z="1.000000" />
-								<texcoord x="1.000000" y="1.000000" />
-								<height-amount n="0.000000" />
-								<height-bias n="0.000000" />
-								<material i="3" />
-							</surface>
-						</surfaces>
+								<slot i="3" />
+							</material>
+						</materials>
+						<texcoord x="1.000000" y="1.000000" />
 						<transparency b="false" />
 						<static b="true" />
 					</metadata>
@@ -263,17 +307,14 @@
 					<id i="-678071591" />
 					<active b="true" />
 					<metadata>
-						<model s="./models/cube/mesh.xml" />
-						<surfaces>
-							<surface>
+						<model s="H:/dev/sandbox/bin/sandbox/models/cube/mesh.xml" />
+						<materials>
+							<material>
 								<name s="Cube" />
-								<diffuse x="1.000000" y="1.000000" z="1.000000" />
-								<texcoord x="10.000000" y="10.000000" />
-								<height-amount n="-0.000000" />
-								<height-bias n="0.000000" />
-								<material i="0" />
-							</surface>
-						</surfaces>
+								<slot i="5" />
+							</material>
+						</materials>
+						<texcoord x="2.000000" y="2.000000" />
 						<transparency b="false" />
 						<static b="true" />
 					</metadata>
@@ -320,17 +361,14 @@
 					<id i="-678071591" />
 					<active b="true" />
 					<metadata>
-						<model s="./models/cube/mesh.xml" />
-						<surfaces>
-							<surface>
+						<model s="H:/dev/sandbox/bin/sandbox/models/cube/mesh.xml" />
+						<materials>
+							<material>
 								<name s="Cube" />
-								<diffuse x="1.000000" y="0.000000" z="0.000000" />
-								<texcoord x="10.000000" y="10.000000" />
-								<height-amount n="-0.000000" />
-								<height-bias n="0.000000" />
-								<material i="0" />
-							</surface>
-						</surfaces>
+								<slot i="0" />
+							</material>
+						</materials>
+						<texcoord x="1.000000" y="1.000000" />
 						<transparency b="false" />
 						<static b="true" />
 					</metadata>
@@ -351,17 +389,14 @@
 					<id i="-678071591" />
 					<active b="true" />
 					<metadata>
-						<model s="./models/cube/mesh.xml" />
-						<surfaces>
-							<surface>
+						<model s="H:/dev/sandbox/bin/sandbox/models/cube/mesh.xml" />
+						<materials>
+							<material>
 								<name s="Cube" />
-								<diffuse x="0.000000" y="0.666667" z="0.000000" />
-								<texcoord x="10.000000" y="10.000000" />
-								<height-amount n="-0.000000" />
-								<height-bias n="0.000000" />
-								<material i="0" />
-							</surface>
-						</surfaces>
+								<slot i="4" />
+							</material>
+						</materials>
+						<texcoord x="1.000000" y="1.000000" />
 						<transparency b="false" />
 						<static b="true" />
 					</metadata>
@@ -382,18 +417,14 @@
 					<id i="-678071591" />
 					<active b="true" />
 					<metadata>
-						<model s="./models/sphere/mesh.xml" />
-						<surfaces>
-							<surface>
+						<model s="H:/dev/sandbox/bin/sandbox/models/sphere/mesh.xml" />
+						<materials>
+							<material>
 								<name s="Sphere.001" />
-								<roughness-map s="./materials/paving-stones/roughness.jpg" />
-								<diffuse x="1.000000" y="1.000000" z="1.000000" />
-								<texcoord x="4.000000" y="4.000000" />
-								<height-amount n="0.000000" />
-								<height-bias n="0.000000" />
-								<material i="2" />
-							</surface>
-						</surfaces>
+								<slot i="2" />
+							</material>
+						</materials>
+						<texcoord x="3.000000" y="3.000000" />
 						<transparency b="false" />
 						<static b="true" />
 					</metadata>
@@ -414,17 +445,14 @@
 					<id i="-678071591" />
 					<active b="true" />
 					<metadata>
-						<model s="./models/cube/mesh.xml" />
-						<surfaces>
-							<surface>
+						<model s="H:/dev/sandbox/bin/sandbox/models/cube/mesh.xml" />
+						<materials>
+							<material>
 								<name s="Cube" />
-								<diffuse x="1.000000" y="1.000000" z="1.000000" />
-								<texcoord x="10.000000" y="10.000000" />
-								<height-amount n="-0.000000" />
-								<height-bias n="0.000000" />
-								<material i="0" />
-							</surface>
-						</surfaces>
+								<slot i="5" />
+							</material>
+						</materials>
+						<texcoord x="2.000000" y="2.000000" />
 						<transparency b="false" />
 						<static b="true" />
 					</metadata>
@@ -435,7 +463,7 @@
 			<name s="" />
 			<tag i="-1" />
 			<transform>
-				<position x="-3.075371" y="12.018447" z="-0.000000" />
+				<position x="-3.075371" y="11.226677" z="-0.000000" />
 				<rotation x="0.000000" y="0.000000" z="0.000000" />
 				<scale x="1.000000" y="1.000000" z="1.000000" />
 				<constant-scale b="false" />
@@ -446,14 +474,14 @@
 					<active b="true" />
 					<metadata>
 						<projection m11="1.000000" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.001001" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100100" m44="0.000000" />
-						<view m11="0.000000" m12="-0.000000" m13="1.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="-1.000000" m32="0.000000" m33="0.000000" m34="0.000000" m41="-0.000000" m42="-12.018447" m43="3.075371" m44="1.000000" />
+						<view m11="0.000000" m12="-0.000000" m13="1.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="-1.000000" m32="0.000000" m33="0.000000" m34="0.000000" m41="-0.000000" m42="-11.226677" m43="3.075371" m44="1.000000" />
 						<size>
-							<range n="17.000000" />
-							<c1 n="0.600000" />
+							<range n="18.500000" />
+							<c1 n="0.360000" />
 							<c2 n="0.600000" />
 						</size>
-						<diffuse x="0.909804" y="0.694118" z="0.474510" />
-						<emission n="6.000000" />
+						<diffuse x="1.000000" y="1.000000" z="1.000000" />
+						<emission n="8.000000" />
 						<disperse n="0.400000" />
 						<shadow-softness n="6.000000" />
 						<shadow-distance n="100.000000" />
@@ -478,17 +506,14 @@
 					<id i="-678071591" />
 					<active b="true" />
 					<metadata>
-						<model s="./models/cube/mesh.xml" />
-						<surfaces>
-							<surface>
+						<model s="H:/dev/sandbox/bin/sandbox/models/cube/mesh.xml" />
+						<materials>
+							<material>
 								<name s="Cube" />
-								<diffuse x="1.000000" y="1.000000" z="1.000000" />
-								<texcoord x="1.000000" y="1.000000" />
-								<height-amount n="0.000000" />
-								<height-bias n="0.000000" />
-								<material i="1" />
-							</surface>
-						</surfaces>
+								<slot i="1" />
+							</material>
+						</materials>
+						<texcoord x="1.000000" y="1.000000" />
 						<transparency b="false" />
 						<static b="true" />
 					</metadata>

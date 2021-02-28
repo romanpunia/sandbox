@@ -29,8 +29,7 @@ Entry:
 		Init.Activity.Title = "Demo";
 		Init.Activity.Hidden = false;
 		Init.Activity.Maximized = true;
-		Init.Directory = "sandbox";
-		Init.Threading = EventWorkflow_Multithreaded;
+		Init.Async = true;
 
 		App = new Demo(&Init);
 		App->Start(&Init);

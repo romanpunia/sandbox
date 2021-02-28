@@ -1235,11 +1235,7 @@ void Sandbox::SetViewModel()
 	});
 	Models.System->SetCallback("save_settings", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
-		SceneGraph::Desc& Conf = Scene->GetConf();
-		Conf.Device = Renderer;
-		Conf.Queue = Queue;
-
-		Scene->Configure(Conf);
+		Scene->Configure(Scene->GetConf());
 	});
 	Models.System->SetCallback("switch_scene", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
