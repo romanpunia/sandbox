@@ -2,7 +2,7 @@
 #define APP_H
 #include <tomahawk/tomahawk.h>
 
-using namespace Tomahawk::Rest;
+using namespace Tomahawk::Core;
 using namespace Tomahawk::Audio;
 using namespace Tomahawk::Compute;
 using namespace Tomahawk::Engine;

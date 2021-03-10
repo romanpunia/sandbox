@@ -1291,9 +1291,9 @@ void Sandbox::SetViewModel()
 					return;
 
 				VariantArgs Args;
-				if (Stroke(&To).EndsWith(".jsonb"))
+				if (Parser(&To).EndsWith(".jsonb"))
 					Args["type"] = Var::String("JSONB");
-				else if (Stroke(&To).EndsWith(".json"))
+				else if (Parser(&To).EndsWith(".json"))
 					Args["type"] = Var::String("JSON");
 				else
 					Args["type"] = Var::String("XML");
@@ -1333,9 +1333,9 @@ void Sandbox::SetViewModel()
 					return;
 
 				VariantArgs Args;
-				if (Stroke(&To).EndsWith(".jsonb"))
+				if (Parser(&To).EndsWith(".jsonb"))
 					Args["type"] = Var::String("JSONB");
-				else if (Stroke(&To).EndsWith(".json"))
+				else if (Parser(&To).EndsWith(".json"))
 					Args["type"] = Var::String("JSON");
 				else
 					Args["type"] = Var::String("XML");
@@ -1433,9 +1433,9 @@ void Sandbox::SetViewModel()
 		NMake::Pack(Result, Animator->Clips);
 
 		VariantArgs Map;
-		if (Stroke(&Path).EndsWith(".jsonb"))
+		if (Parser(&Path).EndsWith(".jsonb"))
 			Map["type"] = Var::String("JSONB");
-		else if (Stroke(&Path).EndsWith(".json"))
+		else if (Parser(&Path).EndsWith(".json"))
 			Map["type"] = Var::String("JSON");
 		else
 			Map["type"] = Var::String("XML");
@@ -1470,9 +1470,9 @@ void Sandbox::SetViewModel()
 		NMake::Pack(Result, Animator->Clips);
 
 		VariantArgs Map;
-		if (Stroke(&Path).EndsWith(".jsonb"))
+		if (Parser(&Path).EndsWith(".jsonb"))
 			Map["type"] = Var::String("JSONB");
-		else if (Stroke(&Path).EndsWith(".json"))
+		else if (Parser(&Path).EndsWith(".json"))
 			Map["type"] = Var::String("JSON");
 		else
 			Map["type"] = Var::String("XML");
@@ -1525,9 +1525,9 @@ void Sandbox::SetViewModel()
 		NMake::Pack(Result, Selection.Material, Content);
 
 		VariantArgs Map;
-		if (Stroke(&Path).EndsWith(".jsonb"))
+		if (Parser(&Path).EndsWith(".jsonb"))
 			Map["type"] = Var::String("JSONB");
-		else if (Stroke(&Path).EndsWith(".json"))
+		else if (Parser(&Path).EndsWith(".json"))
 			Map["type"] = Var::String("JSON");
 		else
 			Map["type"] = Var::String("XML");
@@ -1578,9 +1578,9 @@ void Sandbox::SetViewModel()
 			return;
 
 		VariantArgs Map;
-		if (Stroke(&Path).EndsWith(".jsonb"))
+		if (Parser(&Path).EndsWith(".jsonb"))
 			Map["type"] = Var::String("JSONB");
-		else if (Stroke(&Path).EndsWith(".json"))
+		else if (Parser(&Path).EndsWith(".json"))
 			Map["type"] = Var::String("JSON");
 		else
 			Map["type"] = Var::String("XML");
@@ -2235,7 +2235,7 @@ void Sandbox::SetViewModel()
 			bool IsRoot = (Node == Models.Project->Get());
 			for (auto& Item : Target->Directories)
 			{
-				if (IsRoot && Stroke(&Item->Path).EndsWith("system"))
+				if (IsRoot && Parser(&Item->Path).EndsWith("system"))
 					continue;
 
 				Node->AddChild(Item);
