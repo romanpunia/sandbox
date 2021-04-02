@@ -1654,7 +1654,7 @@ void Sandbox::SetViewModel()
 
 			auto* Source = Selection.Entity->GetComponent<Components::AudioSource>();
 			if (Source != nullptr)
-				Source->GetSync().Direction = -Scene->GetCamera()->GetEntity()->Transform->Rotation.DepthDirection();
+				Source->GetSync().Direction = -Scene->GetCamera()->GetEntity()->Transform->Rotation.dDirection();
 
 			GetEntitySync();
 		}
@@ -1669,7 +1669,7 @@ void Sandbox::SetViewModel()
 
 			auto* Source = Selection.Entity->GetComponent<Components::AudioSource>();
 			if (Source != nullptr)
-				Source->GetSync().Direction = -Scene->GetCamera()->GetEntity()->Transform->Rotation.DepthDirection();
+				Source->GetSync().Direction = -Scene->GetCamera()->GetEntity()->Transform->Rotation.dDirection();
 
 			GetEntitySync();
 		}
