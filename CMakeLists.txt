@@ -1,10 +1,9 @@
 cmake_minimum_required(VERSION 3.6)
 cmake_policy(SET CMP0054 NEW)
 
-#Set standard toolchain file if any
-if (DEFINED ENV{VCPKG_ROOT} AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-    set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
-endif()
+#Setup toolchain file if needed
+set(TH_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../tomahawk CACHE STRING "Tomahawk directory" FORCE)
+include(${TH_DIRECTORY}/lib/toolchain.cmake)
 
 #Project's metadata
 project(sandbox)
