@@ -18,7 +18,7 @@ Entry:
 
 		Application* App = new Sandbox(&Init);
 		App->Start(&Init);
-		delete App;
+		TH_CLEAR(App);
 
 		if (Demo::GetSource().empty())
 		{
@@ -33,7 +33,7 @@ Entry:
 
 		App = new Demo(&Init);
 		App->Start(&Init);
-		delete App;
+		TH_CLEAR(App);
 
 		goto Entry;
 	}

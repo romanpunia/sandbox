@@ -25,13 +25,13 @@ class Sandbox : public Application
 public:
     struct
     {
+		uint64_t Move = 0;
         FileTree* Directory = nullptr;
         Material* Material = nullptr;
 		Entity* Might = nullptr;
         Entity* Entity = nullptr;
         IGizmo* Gizmo = nullptr;
-        uint64_t Move;
-        Inspector Window;
+        Inspector Window = Inspector_None;
     } Selection;
 
     struct
@@ -47,19 +47,19 @@ public:
 		std::string Target;
         Vector2 Cursor;
         Matrix4x4 Gizmo;
-        float GizmoScale;
+        float GizmoScale = 1.0f;
 		float Frames = 0.0f;
-        bool IsPathTracked;
-        bool IsSceneFocused;
-        bool IsCameraActive;
-		bool IsTraceMode;
-		bool IsDraggable;
-		bool IsDragHovered;
-		bool IsInteractive;
-		bool IsOutdated;
-		bool IsCaptured;
-		uint32_t MeshImportOpts;
-		int ElementsLimit;
+        bool IsPathTracked = false;
+        bool IsSceneFocused = false;
+        bool IsCameraActive = false;
+		bool IsTraceMode = false;
+		bool IsDraggable = false;
+		bool IsDragHovered = false;
+		bool IsInteractive = false;
+		bool IsOutdated = false;
+		bool IsCaptured = false;
+		uint32_t MeshImportOpts = 0;
+		int ElementsLimit = 0;
     } State;
 
 	struct

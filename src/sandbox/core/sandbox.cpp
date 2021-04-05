@@ -446,13 +446,15 @@ void Sandbox::UpdateScene()
 
 	Scene->AddEntity(State.Camera);
 	Scene->SetCamera(State.Camera);
-	Scene->GetRenderer()->AddRenderer<Renderers::Model>();
-	Scene->GetRenderer()->AddRenderer<Renderers::Skin>();
-	Scene->GetRenderer()->AddRenderer<Renderers::SoftBody>();
-	Scene->GetRenderer()->AddRenderer<Renderers::Emitter>();
-	Scene->GetRenderer()->AddRenderer<Renderers::Decal>();
-	Scene->GetRenderer()->AddRenderer<Renderers::Lighting>();
-	Scene->GetRenderer()->AddRenderer<Renderers::Transparency>();
+
+	auto* fRenderer = Scene->GetRenderer();
+	fRenderer->AddRenderer<Renderers::Model>();
+	fRenderer->AddRenderer<Renderers::Skin>();
+	fRenderer->AddRenderer<Renderers::SoftBody>();
+	fRenderer->AddRenderer<Renderers::Emitter>();
+	fRenderer->AddRenderer<Renderers::Decal>();
+	fRenderer->AddRenderer<Renderers::Lighting>();
+	fRenderer->AddRenderer<Renderers::Transparency>();
 
 	Resource.ScenePath = Resource.NextPath;
 	Resource.NextPath.clear();
@@ -520,20 +522,27 @@ void Sandbox::UpdateGrid(Timer* Time)
 					Matrix4x4 Offset = (Value->Transform->GetRoot() ? Value->Transform->GetRoot()->GetWorld() : Matrix4x4::Identity());
 					for (size_t j = 0; j < Keys->size(); j++)
 					{
+						auto& Pos = Keys->at(j).Position;
 						Renderer->Begin();
 						Renderer->Topology(PrimitiveTopology_Line_Strip);
 						Renderer->Transform(Offset * Scene->GetCamera()->As<Components::Camera>()->GetViewProjection());
 						Renderer->Emit();
-						Renderer->Position(Keys->at(j).Position.X, Keys->at(j).Position.Y, -Keys->at(j).Position.Z);
+						Renderer->Position(Pos.X, Pos.Y, -Pos.Z);
 						Renderer->Emit();
 
 						if (KeyAnimator->State.Frame == j)
 							Renderer->Color(1, 0, 1, 1);
 
 						if (j + 1 >= Keys->size())
-							Renderer->Position(Keys->at(0).Position.X, Keys->at(0).Position.Y, -Keys->at(0).Position.Z);
+						{
+							auto& xPos = Keys->at(0).Position;
+							Renderer->Position(xPos.X, xPos.Y, -xPos.Z);
+						}
 						else
-							Renderer->Position(Keys->at(j + 1).Position.X, Keys->at(j + 1).Position.Y, -Keys->at(j + 1).Position.Z);
+						{
+							auto& xPos = Keys->at(j + 1).Position;
+							Renderer->Position(xPos.X, xPos.Y, -xPos.Z);
+						}
 
 						Renderer->End();
 					}
@@ -760,15 +769,18 @@ void Sandbox::InspectEntity()
 	if (State.GUI->GetElementById(0, "ent_name").CastFormString(&Base->Name))
 		Models.Hierarchy->Update(Base);
 
-	if (State.GUI->GetElementById(0, "ent_pos_x").CastFormFloat(&Base->Transform->GetLocalPosition()->X) ||
-		State.GUI->GetElementById(0, "ent_pos_y").CastFormFloat(&Base->Transform->GetLocalPosition()->Y) ||
-		State.GUI->GetElementById(0, "ent_pos_z").CastFormFloat(&Base->Transform->GetLocalPosition()->Z) ||
-		State.GUI->GetElementById(0, "ent_rot_x").CastFormFloat(&Base->Transform->GetLocalRotation()->X, Mathf::Rad2Deg()) ||
-		State.GUI->GetElementById(0, "ent_rot_y").CastFormFloat(&Base->Transform->GetLocalRotation()->Y, Mathf::Rad2Deg()) ||
-		State.GUI->GetElementById(0, "ent_rot_z").CastFormFloat(&Base->Transform->GetLocalRotation()->Z, Mathf::Rad2Deg()) ||
-		State.GUI->GetElementById(0, "ent_scale_x").CastFormFloat(&Base->Transform->GetLocalScale()->X) ||
-		State.GUI->GetElementById(0, "ent_scale_y").CastFormFloat(&Base->Transform->GetLocalScale()->Y) ||
-		State.GUI->GetElementById(0, "ent_scale_z").CastFormFloat(&Base->Transform->GetLocalScale()->Z))
+	auto* lPosition = Base->Transform->GetLocalPosition();
+	auto* lRotation = Base->Transform->GetLocalRotation();
+	auto* lScale = Base->Transform->GetLocalScale();
+	if (State.GUI->GetElementById(0, "ent_pos_x").CastFormFloat(&lPosition->X) ||
+		State.GUI->GetElementById(0, "ent_pos_y").CastFormFloat(&lPosition->Y) ||
+		State.GUI->GetElementById(0, "ent_pos_z").CastFormFloat(&lPosition->Z) ||
+		State.GUI->GetElementById(0, "ent_rot_x").CastFormFloat(&lRotation->X, Mathf::Rad2Deg()) ||
+		State.GUI->GetElementById(0, "ent_rot_y").CastFormFloat(&lRotation->Y, Mathf::Rad2Deg()) ||
+		State.GUI->GetElementById(0, "ent_rot_z").CastFormFloat(&lRotation->Z, Mathf::Rad2Deg()) ||
+		State.GUI->GetElementById(0, "ent_scale_x").CastFormFloat(&lScale->X) ||
+		State.GUI->GetElementById(0, "ent_scale_y").CastFormFloat(&lScale->Y) ||
+		State.GUI->GetElementById(0, "ent_scale_z").CastFormFloat(&lScale->Z))
 		GetEntitySync();
 
 	State.GUI->GetElementById(0, "ent_tag").CastFormInt64(&Base->Tag);
@@ -875,37 +887,38 @@ void Sandbox::InspectEntity()
 	if (Models.System->SetBoolean("sl_cmp_camera", Base->GetComponent<Components::Camera>() != nullptr)->GetBoolean())
 	{
 		auto* Camera = Base->GetComponent<Components::Camera>();
-		Models.System->SetInteger("sl_cmp_camera_model", Camera->GetRenderer()->GetOffset<Renderers::Model>());
-		Models.System->SetInteger("sl_cmp_camera_skin", Camera->GetRenderer()->GetOffset<Renderers::Skin>());
-		Models.System->SetInteger("sl_cmp_camera_soft_body", Camera->GetRenderer()->GetOffset<Renderers::SoftBody>());
-		Models.System->SetInteger("sl_cmp_camera_decal", Camera->GetRenderer()->GetOffset<Renderers::Decal>());
-		Models.System->SetInteger("sl_cmp_camera_emitter", Camera->GetRenderer()->GetOffset<Renderers::Emitter>());
-		Models.System->SetInteger("sl_cmp_camera_gui", Camera->GetRenderer()->GetOffset<Renderers::UserInterface>());
-		Models.System->SetInteger("sl_cmp_camera_transparency", Camera->GetRenderer()->GetOffset<Renderers::Transparency>());
+		auto* fRenderer = Camera->GetRenderer();
+		Models.System->SetInteger("sl_cmp_camera_model", fRenderer->GetOffset<Renderers::Model>());
+		Models.System->SetInteger("sl_cmp_camera_skin", fRenderer->GetOffset<Renderers::Skin>());
+		Models.System->SetInteger("sl_cmp_camera_soft_body", fRenderer->GetOffset<Renderers::SoftBody>());
+		Models.System->SetInteger("sl_cmp_camera_decal", fRenderer->GetOffset<Renderers::Decal>());
+		Models.System->SetInteger("sl_cmp_camera_emitter", fRenderer->GetOffset<Renderers::Emitter>());
+		Models.System->SetInteger("sl_cmp_camera_gui", fRenderer->GetOffset<Renderers::UserInterface>());
+		Models.System->SetInteger("sl_cmp_camera_transparency", fRenderer->GetOffset<Renderers::Transparency>());
 
-		if (Models.System->SetInteger("sl_cmp_camera_lighting", Camera->GetRenderer()->GetOffset<Renderers::Lighting>())->GetInteger() >= 0)
-			RendererLighting(State.GUI, Camera->GetRenderer()->GetRenderer<Renderers::Lighting>());
+		if (Models.System->SetInteger("sl_cmp_camera_lighting", fRenderer->GetOffset<Renderers::Lighting>())->GetInteger() >= 0)
+			RendererLighting(State.GUI, fRenderer->GetRenderer<Renderers::Lighting>());
 
-		if (Models.System->SetInteger("sl_cmp_camera_ssr", Camera->GetRenderer()->GetOffset<Renderers::SSR>())->GetInteger() >= 0)
-			RendererSSR(State.GUI, Camera->GetRenderer()->GetRenderer<Renderers::SSR>());
+		if (Models.System->SetInteger("sl_cmp_camera_ssr", fRenderer->GetOffset<Renderers::SSR>())->GetInteger() >= 0)
+			RendererSSR(State.GUI, fRenderer->GetRenderer<Renderers::SSR>());
 
-		if (Models.System->SetInteger("sl_cmp_camera_ssao", Camera->GetRenderer()->GetOffset<Renderers::SSAO>())->GetInteger() >= 0)
-			RendererSSAO(State.GUI, Camera->GetRenderer()->GetRenderer<Renderers::SSAO>());
+		if (Models.System->SetInteger("sl_cmp_camera_ssao", fRenderer->GetOffset<Renderers::SSAO>())->GetInteger() >= 0)
+			RendererSSAO(State.GUI, fRenderer->GetRenderer<Renderers::SSAO>());
 
-		if (Models.System->SetInteger("sl_cmp_camera_motionblur", Camera->GetRenderer()->GetOffset<Renderers::MotionBlur>())->GetInteger() >= 0)
-			RendererMotionBlur(State.GUI, Camera->GetRenderer()->GetRenderer<Renderers::MotionBlur>());
+		if (Models.System->SetInteger("sl_cmp_camera_motionblur", fRenderer->GetOffset<Renderers::MotionBlur>())->GetInteger() >= 0)
+			RendererMotionBlur(State.GUI, fRenderer->GetRenderer<Renderers::MotionBlur>());
 
-		if (Models.System->SetInteger("sl_cmp_camera_bloom", Camera->GetRenderer()->GetOffset<Renderers::Bloom>())->GetInteger() >= 0)
-			RendererBloom(State.GUI, Camera->GetRenderer()->GetRenderer<Renderers::Bloom>());
+		if (Models.System->SetInteger("sl_cmp_camera_bloom", fRenderer->GetOffset<Renderers::Bloom>())->GetInteger() >= 0)
+			RendererBloom(State.GUI, fRenderer->GetRenderer<Renderers::Bloom>());
 
-		if (Models.System->SetInteger("sl_cmp_camera_dof", Camera->GetRenderer()->GetOffset<Renderers::DoF>())->GetInteger() >= 0)
-			RendererDoF(State.GUI, Camera->GetRenderer()->GetRenderer<Renderers::DoF>());
+		if (Models.System->SetInteger("sl_cmp_camera_dof", fRenderer->GetOffset<Renderers::DoF>())->GetInteger() >= 0)
+			RendererDoF(State.GUI, fRenderer->GetRenderer<Renderers::DoF>());
 
-		if (Models.System->SetInteger("sl_cmp_camera_tone", Camera->GetRenderer()->GetOffset<Renderers::Tone>())->GetInteger() >= 0)
-			RendererTone(State.GUI, Camera->GetRenderer()->GetRenderer<Renderers::Tone>());
+		if (Models.System->SetInteger("sl_cmp_camera_tone", fRenderer->GetOffset<Renderers::Tone>())->GetInteger() >= 0)
+			RendererTone(State.GUI, fRenderer->GetRenderer<Renderers::Tone>());
 
-		if (Models.System->SetInteger("sl_cmp_camera_glitch", Camera->GetRenderer()->GetOffset<Renderers::Glitch>())->GetInteger() >= 0)
-			RendererGlitch(State.GUI, Camera->GetRenderer()->GetRenderer<Renderers::Glitch>());
+		if (Models.System->SetInteger("sl_cmp_camera_glitch", fRenderer->GetOffset<Renderers::Glitch>())->GetInteger() >= 0)
+			RendererGlitch(State.GUI, fRenderer->GetRenderer<Renderers::Glitch>());
 
 		ComponentCamera(State.GUI, Camera, Changed);
 	}
@@ -1217,14 +1230,14 @@ void Sandbox::SetViewModel()
 		if (Args.size() != 1)
 			return;
 
-		std::string Resource = Args[0].Serialize();
-		if (Resource.empty() || !State.OnResource)
+		std::string fResource = Args[0].Serialize();
+		if (fResource.empty() || !State.OnResource)
 			return;
 
 		auto Callback = State.OnResource;
 		GetResource("__got__", nullptr);
 
-		Callback(Resource);
+		Callback(fResource);
 	});
 	Models.System->SetCallback("set_material", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
@@ -1941,13 +1954,14 @@ void Sandbox::SetViewModel()
 			return;
 
 		Components::Camera* Camera = Selection.Entity->AddComponent<Components::Camera>();
-		Camera->GetRenderer()->AddRenderer<Renderers::Model>();
-		Camera->GetRenderer()->AddRenderer<Renderers::Skin>();
-		Camera->GetRenderer()->AddRenderer<Renderers::SoftBody>();
-		Camera->GetRenderer()->AddRenderer<Renderers::Emitter>();
-		Camera->GetRenderer()->AddRenderer<Renderers::Decal>();
-		Camera->GetRenderer()->AddRenderer<Renderers::Lighting>();
-		Camera->GetRenderer()->AddRenderer<Renderers::Transparency>();
+		auto* fRenderer = Camera->GetRenderer();
+		fRenderer->AddRenderer<Renderers::Model>();
+		fRenderer->AddRenderer<Renderers::Skin>();
+		fRenderer->AddRenderer<Renderers::SoftBody>();
+		fRenderer->AddRenderer<Renderers::Emitter>();
+		fRenderer->AddRenderer<Renderers::Decal>();
+		fRenderer->AddRenderer<Renderers::Lighting>();
+		fRenderer->AddRenderer<Renderers::Transparency>();
 	});
 	Models.System->SetCallback("add_cmp_scriptable", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
@@ -2153,14 +2167,14 @@ void Sandbox::SetViewModel()
 			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
 			if (Source != nullptr)
 			{
-				auto* Renderer = Source->GetRenderer()->GetRenderer(TH_COMPONENT_HASH(Args[0].Serialize()));
-				if (Renderer != nullptr)
+				auto* fRenderer = Source->GetRenderer()->GetRenderer(TH_COMPONENT_HASH(Args[0].Serialize()));
+				if (fRenderer != nullptr)
 				{
-					Renderer->Active = !Renderer->Active;
-					if (Renderer->Active)
+					fRenderer->Active = !fRenderer->Active;
+					if (fRenderer->Active)
 					{
-						Renderer->Deactivate();
-						Renderer->Activate();
+						fRenderer->Deactivate();
+						fRenderer->Activate();
 					}
 				}
 			}
@@ -2476,7 +2490,7 @@ void Sandbox::SetDirectory(FileTree* Base)
 		GetPathName(Name);
 
 		IFile* File = new IFile();
-		File->Name = Name;
+		File->Name = std::move(Name);
 		File->Path = Item;
 
 		Models.Files->Get()->AddChild(File);
@@ -2830,8 +2844,9 @@ std::string Sandbox::GetName(Entity* Value)
 {
 	std::string Result;
 	if (Value == nullptr)
-		Result = "[Empty] unknown";
-	else if (Value->Name.empty())
+		return "[Empty] unknown";
+
+	if (Value->Name.empty())
 		Result = GetLabel(Value);
 	else
 		Result = GetLabel(Value) + " " + Value->Name;

@@ -371,8 +371,9 @@ void ComponentSkinAnimator(GUI::Context* UI, Components::SkinAnimator* Base, boo
 		{
 			for (size_t i = 0; i < IClip.Keys.size(); i++)
 			{
-				for (size_t j = 0; j < IClip.Keys[i].Pose.size(); j++)
-					IClip.Keys[i].Pose[j].Rotation = IClip.Keys[i].Pose[j].Rotation.rLerp();
+				auto& fClip = IClip.Keys[i];
+				for (size_t j = 0; j < fClip.Pose.size(); j++)
+					fClip.Pose[j].Rotation = fClip.Pose[j].Rotation.rLerp();
 			}
 		}
 
@@ -406,7 +407,7 @@ void ComponentSkinAnimator(GUI::Context* UI, Components::SkinAnimator* Base, boo
 	}
 
 	if (UI->GetElementById(0, "cmp_skin_animator_cap").IsActive())
-		Base->Clips.push_back(SkinAnimatorClip());
+		Base->Clips.emplace_back();
 
 	std::string Path = Base->GetPath();
 	ResolveSkinAnimator(UI, "cmp_skin_animator_source", Base);
@@ -492,29 +493,32 @@ void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base, bool 
 
 		if (UI->GetElementById(0, "cmp_key_animator_caddm").IsActive())
 		{
+			auto* fTransform = Base->GetEntity()->Transform;
 			AnimatorKey Key;
-			Key.Scale = Base->GetEntity()->Transform->Scale;
-			Key.Position = Base->GetEntity()->Transform->Position;
-			Key.Rotation = Base->GetEntity()->Transform->Rotation.rLerp();
+			Key.Scale = fTransform->Scale;
+			Key.Position = fTransform->Position;
+			Key.Rotation = fTransform->Rotation.rLerp();
 
 			IClip.Keys.push_back(Key);
 		}
 
 		if (UI->GetElementById(0, "cmp_key_animator_caddm").IsActive())
 		{
+			auto* fTransform = App->Scene->GetCamera()->GetEntity()->Transform;
 			AnimatorKey Key;
-			Key.Scale = App->Scene->GetCamera()->GetEntity()->Transform->Scale;
-			Key.Position = App->Scene->GetCamera()->GetEntity()->Transform->Position;
-			Key.Rotation = App->Scene->GetCamera()->GetEntity()->Transform->Rotation.rLerp();
+			Key.Scale = fTransform->Scale;
+			Key.Position = fTransform->Position;
+			Key.Rotation = fTransform->Rotation.rLerp();
 
 			IClip.Keys.push_back(Key);
 		}
 
 		if (UI->GetElementById(0, "cmp_key_animator_caddm").IsActive())
 		{
+			auto* fTransform = App->Scene->GetCamera()->GetEntity()->Transform;
 			AnimatorKey Key;
-			Key.Scale = App->Scene->GetCamera()->GetEntity()->Transform->Scale;
-			Key.Position = App->Scene->GetCamera()->GetEntity()->Transform->Position;
+			Key.Scale = fTransform->Scale;
+			Key.Position = fTransform->Position;
 			Key.Rotation = 0;
 
 			IClip.Keys.push_back(Key);
@@ -530,7 +534,7 @@ void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base, bool 
 		App->Models.System->SetInteger("sl_cmp_key_animator_frames", -1);
 
 	if (UI->GetElementById(0, "cmp_key_animator_cap").IsActive())
-		Base->Clips.push_back(KeyAnimatorClip());
+		Base->Clips.emplace_back();
 
 	std::string Path = Base->GetPath();
 	ResolveKeyAnimator(UI, "cmp_key_animator_source", Base);
@@ -1151,25 +1155,26 @@ void ComponentCamera(GUI::Context* UI, Components::Camera* Base, bool Changed)
 	if (!App)
 		return;
 
-	uint64_t Size = Base->GetRenderer()->GetDepthSize();
-	uint64_t Stalls = Base->GetRenderer()->StallFrames;
+	auto* fRenderer = Base->GetRenderer();
+	uint64_t Size = fRenderer->GetDepthSize();
+	uint64_t Stalls = fRenderer->StallFrames;
 	bool Preview = !App->State.IsCameraActive;
-	bool FC = Base->GetRenderer()->HasFrustumCulling();
-	bool OC = Base->GetRenderer()->HasOcclusionCulling();
+	bool FC = fRenderer->HasFrustumCulling();
+	bool OC = fRenderer->HasOcclusionCulling();
 
 	if (UI->GetElementById(0, "cmp_camera_fc").CastFormBoolean(&FC))
-		Base->GetRenderer()->SetFrustumCulling(FC);
+		fRenderer->SetFrustumCulling(FC);
 
 	if (UI->GetElementById(0, "cmp_camera_oc").CastFormBoolean(&OC))
-		Base->GetRenderer()->SetOcclusionCulling(FC);
+		fRenderer->SetOcclusionCulling(FC);
 
 	UI->GetElementById(0, "cmp_camera_fov").CastFormFloat(&Base->FieldOfView);
 	UI->GetElementById(0, "cmp_camera_w").CastFormFloat(&Base->Width);
 	UI->GetElementById(0, "cmp_camera_h").CastFormFloat(&Base->Height);
 	UI->GetElementById(0, "cmp_camera_np").CastFormFloat(&Base->NearPlane);
 	UI->GetElementById(0, "cmp_camera_fp").CastFormFloat(&Base->FarPlane);
-	UI->GetElementById(0, "cmp_camera_oc_rd").CastFormDouble(&Base->GetRenderer()->Occlusion.Delay);
-	UI->GetElementById(0, "cmp_camera_oc_sd").CastFormDouble(&Base->GetRenderer()->Sorting.Delay);
+	UI->GetElementById(0, "cmp_camera_oc_rd").CastFormDouble(&fRenderer->Occlusion.Delay);
+	UI->GetElementById(0, "cmp_camera_oc_sd").CastFormDouble(&fRenderer->Sorting.Delay);
 	UI->GetElementById(0, "cmp_camera_oc_sf").CastFormUInt64(&Stalls);
 	UI->GetElementById(0, "cmp_camera_oc_db").CastFormUInt64(&Size);
 
@@ -1178,9 +1183,9 @@ void ComponentCamera(GUI::Context* UI, Components::Camera* Base, bool Changed)
 	else if (UI->GetElementById(0, "cmp_camera_ortho").IsActive())
 		Base->Mode = Components::Camera::ProjectionMode_Orthographic;
 
-	Base->GetRenderer()->StallFrames = Stalls;
-	if (Size != Base->GetRenderer()->GetDepthSize())
-		Base->GetRenderer()->SetDepthSize(Size);
+	fRenderer->StallFrames = Stalls;
+	if (Size != fRenderer->GetDepthSize())
+		fRenderer->SetDepthSize(Size);
 
 	if (UI->GetElementById(0, "cmp_camera_preview").CastFormBoolean(&Preview))
 	{

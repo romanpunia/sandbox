@@ -16,8 +16,8 @@ void EffectReverb(GUI::Context* UI, Effects::Reverb* Base)
 	UI->GetElementById(0, "cmp_audio_source_reverb_dectm").CastFormFloat(&Base->DecayTime);
 	UI->GetElementById(0, "cmp_audio_source_reverb_dechfr").CastFormFloat(&Base->DecayHFRatio);
 	UI->GetElementById(0, "cmp_audio_source_reverb_declfr").CastFormFloat(&Base->DecayLFRatio);
-	UI->GetElementById(0, "cmp_audio_source_reverb_declfr").CastFormFloat(&Base->ReflectionsGain);
-	UI->GetElementById(0, "cmp_audio_source_reverb_declfr").CastFormFloat(&Base->ReflectionsDelay);
+	UI->GetElementById(0, "cmp_audio_source_reverb_rgain").CastFormFloat(&Base->ReflectionsGain);
+	UI->GetElementById(0, "cmp_audio_source_reverb_rdec").CastFormFloat(&Base->ReflectionsDelay);
 	UI->GetElementById(0, "cmp_audio_source_reverb_etime").CastFormFloat(&Base->EchoTime);
 	UI->GetElementById(0, "cmp_audio_source_reverb_edepth").CastFormFloat(&Base->EchoDepth);
 	UI->GetElementById(0, "cmp_audio_source_reverb_mtime").CastFormFloat(&Base->ModulationTime);
