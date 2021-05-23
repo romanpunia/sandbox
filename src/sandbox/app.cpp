@@ -4,7 +4,7 @@
 
 int main()
 {
-	Tomahawk::Initialize(Tomahawk::TPreset_Game, Tomahawk::TMem_Heap);
+	Tomahawk::Initialize(Tomahawk::TPreset_Game);
 Entry:
 	{
 		Application::Desc Init;
