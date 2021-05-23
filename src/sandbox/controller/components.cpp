@@ -322,7 +322,7 @@ void ComponentSkinAnimator(GUI::Context* UI, Components::SkinAnimator* Base, boo
 	App->Models.System->SetInteger("sl_cmp_skin_animator_joint", Joint);
 	UI->GetElementById(0, "cmp_skin_animator_clip").CastFormInt64(&Clip);
 
-	if (Clip >= 0 && Clip < Base->Clips.size())
+	if (Clip >= 0 && Clip < (int64_t)Base->Clips.size())
 	{
 		auto& IClip = Base->Clips[Clip];
 		App->Models.System->SetInteger("sl_cmp_skin_animator_frames", (int64_t)IClip.Keys.size() - 1);
@@ -331,14 +331,14 @@ void ComponentSkinAnimator(GUI::Context* UI, Components::SkinAnimator* Base, boo
 		UI->GetElementById(0, "cmp_skin_animator_cr").CastFormFloat(&IClip.Rate);
 		UI->GetElementById(0, "cmp_skin_animator_frame").CastFormInt64(&Frame);
 
-		if (Frame >= 0 && Frame < IClip.Keys.size())
+		if (Frame >= 0 && Frame < (int64_t)IClip.Keys.size())
 		{
 			auto& Array = IClip.Keys[Frame].Pose;
 			App->Models.System->SetInteger("sl_cmp_skin_animator_joints", (int64_t)Array.size() - 1);
 			UI->GetElementById(0, "cmp_skin_animator_joint").CastFormInt64(&Joint);
 			UI->GetElementById(0, "cmp_skin_animator_fname").CastFormInt64(&Frame);
 
-			if (Joint >= 0 && Joint < Array.size())
+			if (Joint >= 0 && Joint < (int64_t)Array.size())
 			{
 				auto& Current = Array[Joint];
 				auto* Skin = Base->GetSkin();
@@ -444,7 +444,7 @@ void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base, bool 
 	App->Models.System->SetInteger("sl_cmp_key_animator_frame", Frame);
 	UI->GetElementById(0, "cmp_key_animator_clip").CastFormInt64(&Clip);
 
-	if (Clip >= 0 && Clip < Base->Clips.size())
+	if (Clip >= 0 && Clip < (int64_t)Base->Clips.size())
 	{
 		auto& IClip = Base->Clips[Clip];
 		App->Models.System->SetInteger("sl_cmp_key_animator_frames", (int64_t)IClip.Keys.size() - 1);
@@ -453,7 +453,7 @@ void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base, bool 
 		UI->GetElementById(0, "cmp_key_animator_cr").CastFormFloat(&IClip.Rate);
 		UI->GetElementById(0, "cmp_key_animator_frame").CastFormInt64(&Frame);
 
-		if (Frame >= 0 && Frame < IClip.Keys.size())
+		if (Frame >= 0 && Frame < (int64_t)IClip.Keys.size())
 		{
 			auto& Current = IClip.Keys[Frame];
 			UI->GetElementById(0, "cmp_key_animator_fname").CastFormInt64(&Frame);

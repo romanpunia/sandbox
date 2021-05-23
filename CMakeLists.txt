@@ -1,8 +1,15 @@
 cmake_minimum_required(VERSION 3.6)
-cmake_policy(SET CMP0054 NEW)
+if (POLICY CMP0077)
+	cmake_policy(SET CMP0077 NEW)
+else()
+	cmake_policy(SET CMP0054 NEW)
+endif()
 
 #Setup toolchain file if needed
-set(TH_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../tomahawk CACHE STRING "Tomahawk directory" FORCE)
+set(TH_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../tomahawk CACHE STRING "Tomahawk directory")
+set(TH_USE_POSTGRESQL OFF CACHE BOOL "PostgreSQL is not used")
+set(TH_USE_MONGOC OFF CACHE BOOL "MongoDB is not used")
+set(TH_WITH_SIMD ON CACHE BOOL "SIMD is preferred for games")
 include(${TH_DIRECTORY}/lib/toolchain.cmake)
 
 #Project's metadata
@@ -40,7 +47,9 @@ endforeach()
 add_executable(sandbox ${SOURCE})
 set_target_properties(sandbox PROPERTIES
 		OUTPUT_NAME "sandboxd"
-		CXX_STANDARD_REQUIRED 14
+		CXX_STANDARD 14
+		CXX_STANDARD_REQUIRED ON
+		CXX_EXTENSIONS OFF
 		VERSION ${PROJECT_VERSION}
 		SOVERSION ${PROJECT_VERSION})
 target_compile_definitions(sandbox PRIVATE -DTH_EXPORT)
@@ -54,14 +63,14 @@ if (NOT MSVC)
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mwindows -D_WIN32_WINNT=0x0600")
     elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wformat=0 -std=c++14 -O0 -fexceptions")
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wformat=0 -O0 -fexceptions")
             set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-implicit-function-declaration -lz -O0 -fexceptions")
         else()
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wformat=0 -std=c++14 -msse2 -fexceptions")
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wformat=0 -msse2 -fexceptions")
             set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-implicit-function-declaration -lz -msse2 -fexceptions")
         endif()
     elseif (CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wformat=0 -std=c++14 -fexceptions")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wformat=0 -fexceptions")
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-implicit-function-declaration -fexceptions")
     endif()
 else()

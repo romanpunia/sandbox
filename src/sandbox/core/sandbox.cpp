@@ -119,7 +119,6 @@ void Sandbox::Initialize(Application::Desc* Conf)
 	{
 		SetViewModel();
 	});
-	State.GUI->Inject("system/conf.xml");
 	State.Draggable = nullptr;
 	State.GizmoScale = 1.25f;
 	State.Status = "Ready";
@@ -142,6 +141,12 @@ void Sandbox::Initialize(Application::Desc* Conf)
 		Processors::MeshOpt_OptimizeMeshes |
 		Processors::MeshOpt_TransformUVCoords | 0;
 	Selection.Directory = nullptr;
+
+	if (!State.GUI->Inject("system/conf.xml"))
+	{
+		TH_ERROR("could not load GUI");
+		return Stop();
+	}
 
 	Demo::SetSource("");
 	UpdateScene();
