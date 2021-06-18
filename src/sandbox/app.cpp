@@ -4,12 +4,12 @@
 
 int main()
 {
-	Tomahawk::Initialize(Tomahawk::TPreset_Game);
+	Tomahawk::Initialize((uint64_t)Tomahawk::Preset::Game);
 Entry:
 	{
 		Application::Desc Init;
-		Init.GraphicsDevice.VSyncMode = VSync_Disabled;
-		Init.GraphicsDevice.Backend = RenderBackend_D3D11;
+		Init.GraphicsDevice.VSyncMode = VSync::None;
+		Init.GraphicsDevice.Backend = RenderBackend::D3D11;
 		Init.GraphicsDevice.Debug = true;
 		Init.Activity.FreePosition = true;
 		Init.Activity.Title = "Sandbox";

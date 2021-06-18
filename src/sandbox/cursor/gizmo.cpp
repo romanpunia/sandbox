@@ -10,7 +10,7 @@ void CGizmoTransformRender::DrawCircle(const tvector3 &orig, float r, float g, f
 	Matrix4x4 ViewProjection = App->Scene->GetCamera()->As<Components::Camera>()->GetViewProjection();
 
 	App->Renderer->Begin();
-	App->Renderer->Topology(PrimitiveTopology_Line_Strip);
+	App->Renderer->Topology(PrimitiveTopology::Line_Strip);
 	App->Renderer->Transform(Matrix4x4::Create(App->State.Gizmo.Position(), App->State.Gizmo.Rotation()) * ViewProjection);
 
 	for (uint32_t i = 0; i <= 50; i++)
@@ -35,7 +35,7 @@ void CGizmoTransformRender::DrawCircleHalf(const tvector3 &orig, float r, float 
 	Matrix4x4 ViewProjection = App->Scene->GetCamera()->As<Components::Camera>()->GetViewProjection();
 
 	App->Renderer->Begin();
-	App->Renderer->Topology(PrimitiveTopology_Line_Strip);
+	App->Renderer->Topology(PrimitiveTopology::Line_Strip);
 	App->Renderer->Transform(Matrix4x4::Create(App->State.Gizmo.Position(), App->State.Gizmo.Rotation()) * ViewProjection);
 
 	for (uint32_t i = 0; i < 30; i++)
@@ -54,7 +54,7 @@ void CGizmoTransformRender::DrawCircleHalf(const tvector3 &orig, float r, float 
 
 	App->Renderer->End();
 	App->Renderer->Begin();
-	App->Renderer->Topology(PrimitiveTopology_Line_Strip);
+	App->Renderer->Topology(PrimitiveTopology::Line_Strip);
 	App->Renderer->Transform(Matrix4x4::Create(App->State.Gizmo.Position(), -1, App->State.Gizmo.Rotation()) * ViewProjection);
 
 	for (uint32_t i = 0; i < 30; i++)
@@ -82,7 +82,7 @@ void CGizmoTransformRender::DrawAxis(const tvector3 &orig, const tvector3 &axis,
 	Matrix4x4 ViewProjection = App->Scene->GetCamera()->As<Components::Camera>()->GetViewProjection();
 
 	App->Renderer->Begin();
-	App->Renderer->Topology(PrimitiveTopology_Line_List);
+	App->Renderer->Topology(PrimitiveTopology::Line_List);
 	App->Renderer->Transform(ViewProjection);
 	App->Renderer->Emit();
 	App->Renderer->Position(orig.x, orig.y, orig.z);
@@ -92,7 +92,7 @@ void CGizmoTransformRender::DrawAxis(const tvector3 &orig, const tvector3 &axis,
 	App->Renderer->Color(col.x, col.y, col.z, 1);
 	App->Renderer->End();
 	App->Renderer->Begin();
-	App->Renderer->Topology(PrimitiveTopology_Triangle_Strip);
+	App->Renderer->Topology(PrimitiveTopology::Triangle_Strip);
 	App->Renderer->Transform(ViewProjection);
 
 	for (uint32_t i = 0; i <= 30; i++)
@@ -131,7 +131,7 @@ void CGizmoTransformRender::DrawCamem(const tvector3 &orig, const tvector3 &vtx,
 	Matrix4x4 ViewProjection = App->Scene->GetCamera()->As<Components::Camera>()->GetViewProjection();
 
 	App->Renderer->Begin();
-	App->Renderer->Topology(PrimitiveTopology_Triangle_Strip);
+	App->Renderer->Topology(PrimitiveTopology::Triangle_Strip);
 	App->Renderer->Transform(ViewProjection);
 	App->Renderer->Emit();
 	App->Renderer->Color(1, 1, 0, 0.5f);
@@ -154,7 +154,7 @@ void CGizmoTransformRender::DrawCamem(const tvector3 &orig, const tvector3 &vtx,
 	App->Renderer->Position(orig.x, orig.y, orig.z);
 	App->Renderer->End();
 	App->Renderer->Begin();
-	App->Renderer->Topology(PrimitiveTopology_Line_Strip);
+	App->Renderer->Topology(PrimitiveTopology::Line_Strip);
 	App->Renderer->Transform(ViewProjection);
 	App->Renderer->Emit();
 	App->Renderer->Color(1, 1, 0.2F, 1);
@@ -186,7 +186,7 @@ void CGizmoTransformRender::DrawQuadAxis(const tvector3 &orig, const tvector3 &a
 	Matrix4x4 ViewProjection = App->Scene->GetCamera()->As<Components::Camera>()->GetViewProjection();
 
 	App->Renderer->Begin();
-	App->Renderer->Topology(PrimitiveTopology_Line_List);
+	App->Renderer->Topology(PrimitiveTopology::Line_List);
 	App->Renderer->Transform(ViewProjection);
 	App->Renderer->Emit();
 	App->Renderer->Position(orig.x, orig.y, orig.z);
@@ -211,7 +211,7 @@ void CGizmoTransformRender::DrawQuad(const tvector3& orig, float size, bool bSel
 	pts[3] = orig + (axisV * size);
 
 	App->Renderer->Begin();
-	App->Renderer->Topology(PrimitiveTopology_Triangle_Strip);
+	App->Renderer->Topology(PrimitiveTopology::Triangle_Strip);
 	App->Renderer->Transform(ViewProjection);
 	App->Renderer->Emit();
 	App->Renderer->Position(pts[0].x, pts[0].y, pts[0].z);
@@ -271,7 +271,7 @@ void CGizmoTransformRender::DrawQuad(const tvector3& orig, float size, bool bSel
 
 	App->Renderer->End();
 	App->Renderer->Begin();
-	App->Renderer->Topology(PrimitiveTopology_Line_Strip);
+	App->Renderer->Topology(PrimitiveTopology::Line_Strip);
 	App->Renderer->Transform(ViewProjection);
 	App->Renderer->Emit();
 	App->Renderer->Position(pts[0].x, pts[0].y, pts[0].z);
@@ -316,7 +316,7 @@ void CGizmoTransformRender::DrawTri(const tvector3& orig, float size, bool bSele
 	Matrix4x4 ViewProjection = App->Scene->GetCamera()->As<Components::Camera>()->GetViewProjection();
 
 	App->Renderer->Begin();
-	App->Renderer->Topology(PrimitiveTopology_Triangle_Strip);
+	App->Renderer->Topology(PrimitiveTopology::Triangle_Strip);
 	App->Renderer->Transform(ViewProjection);
 
 	tvector3 pts[3];
@@ -358,7 +358,7 @@ void CGizmoTransformRender::DrawTri(const tvector3& orig, float size, bool bSele
 
 	App->Renderer->End();
 	App->Renderer->Begin();
-	App->Renderer->Topology(PrimitiveTopology_Line_Strip);
+	App->Renderer->Topology(PrimitiveTopology::Line_Strip);
 	App->Renderer->Transform(ViewProjection);
 	App->Renderer->Emit();
 	App->Renderer->Position(pts[0].x, pts[0].y, pts[0].z);

@@ -31,7 +31,7 @@ Sandbox::~Sandbox()
 }
 void Sandbox::KeyEvent(KeyCode Key, KeyMod, int, int, bool Pressed)
 {
-	if (Key == KeyCode_CURSORLEFT && Selection.Gizmo)
+	if (Key == KeyCode::CURSORLEFT && Selection.Gizmo)
 	{
 		if (!Pressed)
 		{
@@ -46,17 +46,17 @@ void Sandbox::WindowEvent(WindowState NewState, int X, int Y)
 {
 	switch (NewState)
 	{
-		case WindowState_Resize:
+		case WindowState::Resize:
 			Renderer->ResizeBuffers((unsigned int)X, (unsigned int)Y);
 			if (Scene != nullptr)
 				Scene->ResizeBuffers();
 
 			SetStatus("Buffer resize was submitted");
 			break;
-		case WindowState_Close:
-			Activity->Message.Setup(AlertType_Warning, "Sandbox", "Do you really want to exit?");
-			Activity->Message.Button(AlertConfirm_Escape, "No", 1);
-			Activity->Message.Button(AlertConfirm_Return, "Yes", 2);
+		case WindowState::Close:
+			Activity->Message.Setup(AlertType::Warning, "Sandbox", "Do you really want to exit?");
+			Activity->Message.Button(AlertConfirm::Escape, "No", 1);
+			Activity->Message.Button(AlertConfirm::Return, "Yes", 2);
 			Activity->Message.Result([this](int Button)
 			{
 				if (Button == 2)
@@ -171,7 +171,7 @@ void Sandbox::Render(Timer* Time)
 	Scene->Render(Time);
 	if (State.IsInteractive && State.Camera == Scene->GetCamera()->GetEntity())
 	{
-		Scene->SetMRT(TargetType_Main, false);
+		Scene->SetMRT(TargetType::Main, false);
 		UpdateGrid(Time);
 	}
 
@@ -184,7 +184,7 @@ void Sandbox::Render(Timer* Time)
 void Sandbox::Update(Timer* Time)
 {
 #ifdef _DEBUG
-	if (Activity->IsKeyDownHit(KeyCode::KeyCode_F5))
+	if (Activity->IsKeyDownHit(KeyCode::F5))
 	{
 #ifndef HTML_DEBUG
 		if (State.GUI != nullptr)
@@ -196,7 +196,7 @@ void Sandbox::Update(Timer* Time)
 #endif
 	}
 
-	if (Activity->IsKeyDownHit(KeyCode::KeyCode_F6))
+	if (Activity->IsKeyDownHit(KeyCode::F6))
 		State.IsInteractive = !State.IsInteractive;
 #endif
 	if (!State.IsCameraActive && Scene->GetCamera()->GetEntity() == State.Camera)
@@ -240,7 +240,7 @@ void Sandbox::Update(Timer* Time)
 	if (!State.IsInteractive)
 		return;
 
-	if (Activity->IsKeyDownHit(KeyCode_F1))
+	if (Activity->IsKeyDownHit(KeyCode::F1))
 	{
 		State.IsTraceMode = !State.IsTraceMode;
 		if (!State.IsTraceMode)
@@ -254,7 +254,7 @@ void Sandbox::Update(Timer* Time)
 
 	if (Selection.Entity != nullptr)
 	{
-		if (Activity->IsKeyDownHit(KeyCode::KeyCode_DELETE))
+		if (Activity->IsKeyDownHit(KeyCode::DELETEKEY))
 		{
 			SetStatus("Entity was removed");
 			Scene->RemoveEntity(Selection.Entity, true);
@@ -266,7 +266,7 @@ void Sandbox::Update(Timer* Time)
 	{
 		if (GetSceneFocus())
 		{
-			if (Activity->IsKeyDownHit(KeyCode_1))
+			if (Activity->IsKeyDownHit(KeyCode::D1))
 			{
 				Selection.Gizmo = Resource.Gizmo[Selection.Move = 0];
 				Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
@@ -274,7 +274,7 @@ void Sandbox::Update(Timer* Time)
 				Selection.Gizmo->SetLocation(IGizmo::LOCATE_WORLD);
 				SetStatus("Movement gizmo selected");
 			}
-			else if (Activity->IsKeyDownHit(KeyCode_2))
+			else if (Activity->IsKeyDownHit(KeyCode::D2))
 			{
 				Selection.Gizmo = Resource.Gizmo[Selection.Move = 1];
 				Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
@@ -282,7 +282,7 @@ void Sandbox::Update(Timer* Time)
 				Selection.Gizmo->SetLocation(IGizmo::LOCATE_WORLD);
 				SetStatus("Rotation gizmo selected");
 			}
-			else if (Activity->IsKeyDownHit(KeyCode_3))
+			else if (Activity->IsKeyDownHit(KeyCode::D3))
 			{
 				Selection.Gizmo = Resource.Gizmo[Selection.Move = 2];
 				Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
@@ -333,23 +333,23 @@ void Sandbox::Update(Timer* Time)
 	GetEntityCell();
 	if (Selection.Entity != nullptr && Selection.Entity != State.Camera)
 	{
-		if (Activity->IsKeyDownHit(KeyCode::KeyCode_DELETE))
+		if (Activity->IsKeyDownHit(KeyCode::DELETEKEY))
 		{
 			SetStatus("Entity was removed");
 			Scene->RemoveEntity(Selection.Entity, true);
 			SetSelection(Inspector_None);
 		}
 
-		if (Activity->IsKeyDown(KeyMod_LCTRL) && GetSceneFocus())
+		if (Activity->IsKeyDown(KeyMod::LCTRL) && GetSceneFocus())
 		{
-			if (Activity->IsKeyDownHit(KeyCode_V) || Activity->IsKeyDown(KeyCode_B))
+			if (Activity->IsKeyDownHit(KeyCode::V) || Activity->IsKeyDown(KeyCode::B))
 			{
 				SetStatus("Entity was cloned");
 				Entity* Entity = Scene->CloneEntities(Selection.Entity);
 				SetSelection(Entity ? Inspector_Entity : Inspector_None, Entity);
 			}
 
-			if (Activity->IsKeyDownHit(KeyCode_X))
+			if (Activity->IsKeyDownHit(KeyCode::X))
 			{
 				SetStatus("Entity was removed");
 				Scene->RemoveEntity(Selection.Entity, true);
@@ -358,9 +358,9 @@ void Sandbox::Update(Timer* Time)
 		}
 	}
 
-	if (Activity->IsKeyDown(KeyMod_LCTRL))
+	if (Activity->IsKeyDown(KeyMod::LCTRL))
 	{
-		if (Activity->IsKeyDown(KeyCode_N))
+		if (Activity->IsKeyDown(KeyCode::N))
 		{
 			Entity* Last = Scene->GetLastEntity();
 			if (Last != nullptr && Last != State.Camera)
@@ -373,7 +373,7 @@ void Sandbox::Update(Timer* Time)
 			}
 		}
 
-		if (Activity->IsKeyDown(KeyCode_X))
+		if (Activity->IsKeyDown(KeyCode::X))
 		{
 			if (Selection.Entity != nullptr)
 			{
@@ -490,7 +490,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 		Renderer->Render.TexCoord = (Value == Selection.Entity ? 0.5f : 0.05f);
 		Renderer->Render.WorldViewProj = Matrix4x4::Create(Value->Transform->Position, 0.5f, Vector3(0, Direction)) * State.Camera->GetComponent<Components::Camera>()->GetViewProjection();
 		Renderer->SetTexture2D(GetIcon(Value), 1, TH_PS);
-		Renderer->UpdateBuffer(RenderBufferType_Render);
+		Renderer->UpdateBuffer(RenderBufferType::Render);
 		Renderer->Draw(6, 0);
 	}
 
@@ -529,7 +529,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 					{
 						auto& Pos = Keys->at(j).Position;
 						Renderer->Begin();
-						Renderer->Topology(PrimitiveTopology_Line_Strip);
+						Renderer->Topology(PrimitiveTopology::Line_Strip);
 						Renderer->Transform(Offset * Scene->GetCamera()->As<Components::Camera>()->GetViewProjection());
 						Renderer->Emit();
 						Renderer->Position(Pos.X, Pos.Y, -Pos.Z);
@@ -580,7 +580,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 		for (int j = 0; j < 4; j++)
 		{
 			Renderer->Begin();
-			Renderer->Topology(PrimitiveTopology_Line_Strip);
+			Renderer->Topology(PrimitiveTopology::Line_Strip);
 			Renderer->Transform(Origin[j] * Transform * Scene->GetCamera()->As<Components::Camera>()->GetViewProjection());
 			Renderer->Emit();
 			if (Value == Selection.Might)
@@ -675,7 +675,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 			for (const auto& j : Origin)
 			{
 				Renderer->Begin();
-				Renderer->Topology(PrimitiveTopology_Line_Strip);
+				Renderer->Topology(PrimitiveTopology::Line_Strip);
 				Renderer->Transform(j * Scene->GetEntity(i)->Transform->GetWorld() * ViewProjection);
 				Renderer->Emit();
 				Renderer->Color(0.5f, 0.5f, 1.0f, 0.75f);
@@ -708,7 +708,7 @@ void Sandbox::UpdateJoint(PoseBuffer* Map, Joint* Base, Matrix4x4* World)
 	Vector3 Position2 = Node->Position.Transform(*World);
 
 	Renderer->Begin();
-	Renderer->Topology(PrimitiveTopology_Line_Strip);
+	Renderer->Topology(PrimitiveTopology::Line_Strip);
 	Renderer->Transform(Scene->GetCamera()->As<Components::Camera>()->GetViewProjection());
 	Renderer->Emit();
 	Renderer->Position(Position1.X, Position1.Y, -Position1.Z);
@@ -1320,15 +1320,15 @@ void Sandbox::SetViewModel()
 				TH_RELEASE(Doc);
 
 				State.IsOutdated = true;
-				this->Activity->Message.Setup(AlertType_Info, "Sandbox", "Mesh was imported");
+				this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Mesh was imported");
 			}
 			else
-				this->Activity->Message.Setup(AlertType_Error, "Sandbox", "Mesh is unsupported");
+				this->Activity->Message.Setup(AlertType::Error, "Sandbox", "Mesh is unsupported");
 		}
 		else
-			this->Activity->Message.Setup(AlertType_Info, "Sandbox", "Mesh cannot be imported");
+			this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Mesh cannot be imported");
 
-		this->Activity->Message.Button(AlertConfirm_Return, "OK", 1);
+		this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
 		this->Activity->Message.Result(nullptr);
 	});
 	Models.System->SetCallback("import_skin_animation_action", [this](GUI::IEvent& Event, const VariantList& Args)
@@ -1362,15 +1362,15 @@ void Sandbox::SetViewModel()
 				TH_RELEASE(Doc);
 
 				State.IsOutdated = true;
-				this->Activity->Message.Setup(AlertType_Info, "Sandbox", "Animation was imported");
+				this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Animation was imported");
 			}
 			else
-				this->Activity->Message.Setup(AlertType_Error, "Sandbox", "Animation is unsupported");
+				this->Activity->Message.Setup(AlertType::Error, "Sandbox", "Animation is unsupported");
 		}
 		else
-			this->Activity->Message.Setup(AlertType_Info, "Sandbox", "Animation cannot be imported");
+			this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Animation cannot be imported");
 
-		this->Activity->Message.Button(AlertConfirm_Return, "OK", 1);
+		this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
 		this->Activity->Message.Result(nullptr);
 	});
 	Models.System->SetCallback("update_hierarchy", [this](GUI::IEvent& Event, const VariantList& Args)
@@ -1434,8 +1434,8 @@ void Sandbox::SetViewModel()
 	{
 		if (!Selection.Entity || !Selection.Entity->GetComponent<Components::SkinAnimator>())
 		{
-			this->Activity->Message.Setup(AlertType_Info, "Sandbox", "Select entity with skin animator to export");
-			this->Activity->Message.Button(AlertConfirm_Return, "OK", 1);
+			this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Select entity with skin animator to export");
+			this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
 			this->Activity->Message.Result(nullptr);
 			return;
 		}
@@ -1459,20 +1459,20 @@ void Sandbox::SetViewModel()
 			Map["type"] = Var::String("XML");
 
 		if (!Content->Save<Document>(Path, Result, Map))
-			this->Activity->Message.Setup(AlertType_Error, "Sandbox", "Skin animation cannot be saved");
+			this->Activity->Message.Setup(AlertType::Error, "Sandbox", "Skin animation cannot be saved");
 		else
-			this->Activity->Message.Setup(AlertType_Info, "Sandbox", "Skin animation was saved");
+			this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Skin animation was saved");
 
 		TH_RELEASE(Result);
-		this->Activity->Message.Button(AlertConfirm_Return, "OK", 1);
+		this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
 		this->Activity->Message.Result(nullptr);
 	});
 	Models.System->SetCallback("export_key_animation", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (!Selection.Entity || !Selection.Entity->GetComponent<Components::KeyAnimator>())
 		{
-			this->Activity->Message.Setup(AlertType_Info, "Sandbox", "Select entity with key animator to export");
-			this->Activity->Message.Button(AlertConfirm_Return, "OK", 1);
+			this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Select entity with key animator to export");
+			this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
 			this->Activity->Message.Result(nullptr);
 			return;
 		}
@@ -1496,12 +1496,12 @@ void Sandbox::SetViewModel()
 			Map["type"] = Var::String("XML");
 
 		if (!Content->Save<Document>(Path, Result, Map))
-			this->Activity->Message.Setup(AlertType_Error, "Sandbox", "Key animation cannot be saved");
+			this->Activity->Message.Setup(AlertType::Error, "Sandbox", "Key animation cannot be saved");
 		else
-			this->Activity->Message.Setup(AlertType_Info, "Sandbox", "Key animation was saved");
+			this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Key animation was saved");
 
 		TH_RELEASE(Result);
-		this->Activity->Message.Button(AlertConfirm_Return, "OK", 1);
+		this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
 		this->Activity->Message.Result(nullptr);
 	});
 	Models.System->SetCallback("import_material", [this](GUI::IEvent& Event, const VariantList& Args)
@@ -1527,8 +1527,8 @@ void Sandbox::SetViewModel()
 	{
 		if (!Selection.Material)
 		{
-			this->Activity->Message.Setup(AlertType_Info, "Sandbox", "Select material to export");
-			this->Activity->Message.Button(AlertConfirm_Return, "OK", 1);
+			this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Select material to export");
+			this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
 			this->Activity->Message.Result(nullptr);
 			return;
 		}
@@ -1551,21 +1551,21 @@ void Sandbox::SetViewModel()
 			Map["type"] = Var::String("XML");
 
 		if (!Content->Save<Document>(Path, Result, Map))
-			this->Activity->Message.Setup(AlertType_Error, "Sandbox", "Material cannot be saved");
+			this->Activity->Message.Setup(AlertType::Error, "Sandbox", "Material cannot be saved");
 		else
-			this->Activity->Message.Setup(AlertType_Info, "Sandbox", "Material was saved");
+			this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Material was saved");
 
 		delete Result;
-		this->Activity->Message.Button(AlertConfirm_Return, "OK", 1);
+		this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
 		this->Activity->Message.Result(nullptr);
 	});
 	Models.System->SetCallback("deploy_scene", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (!Resource.ScenePath.empty())
 		{
-			this->Activity->Message.Setup(AlertType_Warning, "Sandbox", "Editor's state will be flushed before start");
-			this->Activity->Message.Button(AlertConfirm_Escape, "No", 1);
-			this->Activity->Message.Button(AlertConfirm_Return, "Yes", 2);
+			this->Activity->Message.Setup(AlertType::Warning, "Sandbox", "Editor's state will be flushed before start");
+			this->Activity->Message.Button(AlertConfirm::Escape, "No", 1);
+			this->Activity->Message.Button(AlertConfirm::Return, "Yes", 2);
 			this->Activity->Message.Result([this](int Button)
 			{
 				if (Button == 2)
@@ -1577,8 +1577,8 @@ void Sandbox::SetViewModel()
 		}
 		else
 		{
-			this->Activity->Message.Setup(AlertType_Error, "Sandbox", "Save the scene to deploy it later");
-			this->Activity->Message.Button(AlertConfirm_Return, "OK", 1);
+			this->Activity->Message.Setup(AlertType::Error, "Sandbox", "Save the scene to deploy it later");
+			this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
 			this->Activity->Message.Result(nullptr);
 		}
 	});
@@ -1611,8 +1611,8 @@ void Sandbox::SetViewModel()
 			Scene->SetCamera(State.Camera);
 
 		UpdateHierarchy();
-		this->Activity->Message.Setup(AlertType_Info, "Sandbox", "Scene was saved");
-		this->Activity->Message.Button(AlertConfirm_Return, "OK", 1);
+		this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Scene was saved");
+		this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
 		this->Activity->Message.Result(nullptr);
 	});
 	Models.System->SetCallback("cancel_file", [this](GUI::IEvent& Event, const VariantList& Args)
@@ -2566,7 +2566,7 @@ void Sandbox::GetEntityCell()
 		return;
 
 	auto* Camera = State.Camera->GetComponent<Components::Camera>();
-	bool WantChange = Activity->IsKeyDownHit(KeyCode_CURSORLEFT);
+	bool WantChange = Activity->IsKeyDownHit(KeyCode::CURSORLEFT);
 	Ray Cursor = Camera->GetScreenRay(Activity->GetCursorPosition());
 	float Distance = -1.0f;
 	Entity* Current = nullptr;

@@ -10,15 +10,15 @@ void Demo::WindowEvent(WindowState NewState, int X, int Y)
 {
 	switch (NewState)
 	{
-		case WindowState_Resize:
+		case WindowState::Resize:
 			Renderer->ResizeBuffers((unsigned int)X, (unsigned int)Y);
 			if (Scene != nullptr)
 				Scene->ResizeBuffers();
 			break;
-		case WindowState_Close:
-			Activity->Message.Setup(AlertType_Warning, "Demo", "Do you want to go back to sandbox?");
-			Activity->Message.Button(AlertConfirm_Escape, "No", 1);
-			Activity->Message.Button(AlertConfirm_Return, "Yes", 2);
+		case WindowState::Close:
+			Activity->Message.Setup(AlertType::Warning, "Demo", "Do you want to go back to sandbox?");
+			Activity->Message.Button(AlertConfirm::Escape, "No", 1);
+			Activity->Message.Button(AlertConfirm::Return, "Yes", 2);
 			Activity->Message.Result([this](int Button)
 			{
 				if (Button == 2)

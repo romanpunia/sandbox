@@ -264,13 +264,13 @@ void ComponentSoftBody(GUI::Context* UI, Components::SoftBody* Base, bool Change
 		if (UI->GetElementById(0, "cmp_soft_body_active").CastFormBoolean(&Option))
 			Body->SetActivity(Option);
 
-		Option = (Body->GetActivationState() != MotionState_Disable_Deactivation);
+		Option = (Body->GetActivationState() != MotionState::Disable_Deactivation);
 		if (UI->GetElementById(0, "cmp_soft_body_deact").CastFormBoolean(&Option))
 		{
 			if (Option)
-				Body->SetActivationState(MotionState_Active);
+				Body->SetActivationState(MotionState::Active);
 			else
-				Body->SetActivationState(MotionState_Disable_Deactivation);
+				Body->SetActivationState(MotionState::Disable_Deactivation);
 		}
 
 		Option = Body->IsGhost();
@@ -622,18 +622,18 @@ void ComponentRigidBody(GUI::Context* UI, Components::RigidBody* Base, bool Chan
 	static Components::RigidBody* LastBase = nullptr;
 	if (LastBase != Base)
 	{
-		int Type = (Base->GetBody() ? Base->GetBody()->GetCollisionShapeType() : Shape_Invalid);
-		if (Type == Shape_Box)
+		Shape Type = (Base->GetBody() ? Base->GetBody()->GetCollisionShapeType() : Shape::Invalid);
+		if (Type == Shape::Box)
 			UI->GetElementById(0, "cmp_rigid_body_shape").SetFormValue("box");
-		else if (Type == Shape_Sphere)
+		else if (Type == Shape::Sphere)
 			UI->GetElementById(0, "cmp_rigid_body_shape").SetFormValue("sphere");
-		else if (Type == Shape_Capsule)
+		else if (Type == Shape::Capsule)
 			UI->GetElementById(0, "cmp_rigid_body_shape").SetFormValue("capsule");
-		else if (Type == Shape_Cone)
+		else if (Type == Shape::Cone)
 			UI->GetElementById(0, "cmp_rigid_body_shape").SetFormValue("cone");
-		else if (Type == Shape_Cylinder)
+		else if (Type == Shape::Cylinder)
 			UI->GetElementById(0, "cmp_rigid_body_shape").SetFormValue("cylinder");
-		else if (Type == Shape_Convex_Hull)
+		else if (Type == Shape::Convex_Hull)
 			UI->GetElementById(0, "cmp_rigid_body_shape").SetFormValue("other");
 		else
 			UI->GetElementById(0, "cmp_rigid_body_shape").SetFormValue("none");
@@ -647,43 +647,43 @@ void ComponentRigidBody(GUI::Context* UI, Components::RigidBody* Base, bool Chan
 		App->Models.System->SetBoolean("sl_cmp_rigid_body_from_source", true);
 		ResolveRigidBody(UI, "cmp_rigid_body_source", Base);
 
-		if (Base->GetBody() && Base->GetBody()->GetCollisionShapeType() != Shape_Convex_Hull)
+		if (Base->GetBody() && Base->GetBody()->GetCollisionShapeType() != Shape::Convex_Hull)
 			Base->Clear();
 	}
 	else if (Shape == "none")
 	{
 		App->Models.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
-		if (Base->GetBody() && Base->GetBody()->GetCollisionShapeType() != Shape_Invalid)
+		if (Base->GetBody() && Base->GetBody()->GetCollisionShapeType() != Shape::Invalid)
 			Base->Clear();
 	}
 	else if (Shape == "box")
 	{
 		App->Models.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
-		if (!Base->GetBody() || Base->GetBody()->GetCollisionShapeType() != Shape_Box)
+		if (!Base->GetBody() || Base->GetBody()->GetCollisionShapeType() != Shape::Box)
 			Base->Create(App->Scene->GetSimulator()->CreateCube(), 0, 0);
 	}
 	else if (Shape == "sphere")
 	{
 		App->Models.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
-		if (!Base->GetBody() || Base->GetBody()->GetCollisionShapeType() != Shape_Sphere)
+		if (!Base->GetBody() || Base->GetBody()->GetCollisionShapeType() != Shape::Sphere)
 			Base->Create(App->Scene->GetSimulator()->CreateSphere(), 0, 0);
 	}
 	else if (Shape == "capsule")
 	{
 		App->Models.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
-		if (!Base->GetBody() || Base->GetBody()->GetCollisionShapeType() != Shape_Capsule)
+		if (!Base->GetBody() || Base->GetBody()->GetCollisionShapeType() != Shape::Capsule)
 			Base->Create(App->Scene->GetSimulator()->CreateCapsule(), 0, 0);
 	}
 	else if (Shape == "cone")
 	{
 		App->Models.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
-		if (!Base->GetBody() || Base->GetBody()->GetCollisionShapeType() != Shape_Cone)
+		if (!Base->GetBody() || Base->GetBody()->GetCollisionShapeType() != Shape::Cone)
 			Base->Create(App->Scene->GetSimulator()->CreateCone(), 0, 0);
 	}
 	else if (Shape == "cylinder")
 	{
 		App->Models.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
-		if (!Base->GetBody() || Base->GetBody()->GetCollisionShapeType() != Shape_Cylinder)
+		if (!Base->GetBody() || Base->GetBody()->GetCollisionShapeType() != Shape::Cylinder)
 			Base->Create(App->Scene->GetSimulator()->CreateCylinder(), 0, 0);
 	}
 
@@ -793,13 +793,13 @@ void ComponentRigidBody(GUI::Context* UI, Components::RigidBody* Base, bool Chan
 		if (UI->GetElementById(0, "cmp_rigid_body_active").CastFormBoolean(&Option))
 			Body->SetActivity(Option);
 
-		Option = (Body->GetActivationState() != MotionState_Disable_Deactivation);
+		Option = (Body->GetActivationState() != MotionState::Disable_Deactivation);
 		if (UI->GetElementById(0, "cmp_rigid_body_deact").CastFormBoolean(&Option))
 		{
 			if (Option)
-				Body->SetActivationState(MotionState_Active);
+				Body->SetActivationState(MotionState::Active);
 			else
-				Body->SetActivationState(MotionState_Disable_Deactivation);
+				Body->SetActivationState(MotionState::Disable_Deactivation);
 		}
 
 		Option = Body->IsGhost();
