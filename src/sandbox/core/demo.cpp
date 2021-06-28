@@ -43,7 +43,7 @@ void Demo::Initialize(Application::Desc* Conf)
 	Enqueue<Demo, &Demo::Synchronize>();
 	Enqueue<Demo, &Demo::Simulation>();
 }
-void Demo::Render(Timer* Time)
+void Demo::Publish(Timer* Time)
 {
 	Renderer->Clear(0, 0, 0);
 	Renderer->ClearDepth();

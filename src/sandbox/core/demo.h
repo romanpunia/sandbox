@@ -13,7 +13,7 @@ public:
 	void WindowEvent(WindowState State, int X, int Y) override;
 	void ScriptHook(VMGlobal* Global) override;
 	void Initialize(Application::Desc* Conf) override;
-	void Render(Timer* Time) override;
+	void Publish(Timer* Time) override;
 	void Update(Timer* Time);
 	void Simulation(Timer* Time);
 	void Synchronize(Timer* Time);

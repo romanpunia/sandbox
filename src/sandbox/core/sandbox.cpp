@@ -162,7 +162,7 @@ void Sandbox::Initialize(Application::Desc* Conf)
 	Activity->Maximize();
 	SetStatus("Setting up done");
 }
-void Sandbox::Render(Timer* Time)
+void Sandbox::Publish(Timer* Time)
 {
 	Renderer->Clear(0, 0, 0);
 	Renderer->ClearDepth();
