@@ -1190,7 +1190,7 @@ void Sandbox::SetViewModel()
 		if (Args.size() == 1)
 			State.IsSceneFocused = Args[0].GetBoolean();
 	});
-	Models.System->SetCallback("set_menu", [this](GUI::IEvent& Event, const VariantList& Args)
+	Models.System->SetCallback("set_menu", [](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Args.size() != 1)
 			return;
@@ -2203,7 +2203,7 @@ void Sandbox::SetViewModel()
 
 		Result = "<p class=\"file\" data-event-click=\"set_file('" + Data[1] + "')\">" + Data[0] + "</p>";
 	});
-	Models.Files->SetColumnCallback([this](GUI::DataRow* Node, const std::string& Column, std::string& Result)
+	Models.Files->SetColumnCallback([](GUI::DataRow* Node, const std::string& Column, std::string& Result)
 	{
 		IFile* Target = Node->GetTarget<IFile>();
 		if (Column == "name")
@@ -2319,7 +2319,7 @@ void Sandbox::SetViewModel()
 		
 		Result = "<button class=\"selection\" data-event-click=\"set_material('" + Data[0] + "')\">" + GUI::Subsystem::EscapeHTML(Data[1]) + "</button>";
 	});
-	Models.Materials->SetColumnCallback([this](GUI::DataRow* Node, const std::string& Column, std::string& Result)
+	Models.Materials->SetColumnCallback([](GUI::DataRow* Node, const std::string& Column, std::string& Result)
 	{
 		Material* Target = Node->GetTarget<Material>();
 		if (Column == "name")
@@ -2351,7 +2351,7 @@ void Sandbox::SetViewModel()
 
 		Result = GUI::Subsystem::EscapeHTML(Data[1]);
 	});
-	Models.Surfaces->SetColumnCallback([this](GUI::DataRow* Node, const std::string& Column, std::string& Result)
+	Models.Surfaces->SetColumnCallback([](GUI::DataRow* Node, const std::string& Column, std::string& Result)
 	{
 		Material* Target = Node->GetTarget<Material>();
 		if (Target != nullptr)

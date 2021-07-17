@@ -160,7 +160,7 @@ void CGizmoTransformRender::DrawCamem(const tvector3 &orig, const tvector3 &vtx,
 	App->Renderer->Color(1, 1, 0.2F, 1);
 	App->Renderer->Position(orig.x, orig.y, orig.z);
 
-	for (INT i = 0; i <= 50; i++)
+	for (uint32_t i = 0; i <= 50; i++)
 	{
 		tvector3 vt;
 		vt = vtx * cos(((ng) / 50)*i);

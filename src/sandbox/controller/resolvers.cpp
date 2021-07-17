@@ -10,7 +10,7 @@ void ResolveResource(GUI::IElement& Target, const std::string& Name, const std::
 	if (!App->GetResourceState(Name))
 	{
 		Target.SetInnerHTML("Awaiting source...");
-		App->GetResource(Name, [App, Target, Callback](const std::string& File)
+		App->GetResource(Name, [Target, Callback](const std::string& File)
 		{
 			GUI::IElement Copy = Target;
 			Copy.SetInnerHTML(File.empty() ? "Assign source" : "Unassign source");
@@ -33,7 +33,7 @@ void ResolveEntity(GUI::IElement& Target, const std::string& Name, const std::fu
 	if (!App->GetEntityState(Name))
 	{
 		Target.SetInnerHTML("Awaiting entity...");
-		App->GetEntity(Name, [App, Target, Callback](Entity* Source)
+		App->GetEntity(Name, [Target, Callback](Entity* Source)
 		{
 			GUI::IElement Copy = Target;
 			Copy.SetInnerHTML(!Source ? "Assign entity" : "Unassign entity");
