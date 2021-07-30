@@ -324,7 +324,7 @@ void ComponentSkinAnimator(GUI::Context* UI, Components::SkinAnimator* Base, boo
 
 	if (Clip >= 0 && Clip < (int64_t)Base->Clips.size())
 	{
-		auto& IClip = Base->Clips[Clip];
+		auto& IClip = Base->Clips[(size_t)Clip];
 		App->Models.System->SetInteger("sl_cmp_skin_animator_frames", (int64_t)IClip.Keys.size() - 1);
 		UI->GetElementById(0, "cmp_skin_animator_cname").CastFormString(&IClip.Name);
 		UI->GetElementById(0, "cmp_skin_animator_cd").CastFormFloat(&IClip.Duration);
@@ -333,14 +333,14 @@ void ComponentSkinAnimator(GUI::Context* UI, Components::SkinAnimator* Base, boo
 
 		if (Frame >= 0 && Frame < (int64_t)IClip.Keys.size())
 		{
-			auto& Array = IClip.Keys[Frame].Pose;
+			auto& Array = IClip.Keys[(size_t)Frame].Pose;
 			App->Models.System->SetInteger("sl_cmp_skin_animator_joints", (int64_t)Array.size() - 1);
 			UI->GetElementById(0, "cmp_skin_animator_joint").CastFormInt64(&Joint);
 			UI->GetElementById(0, "cmp_skin_animator_fname").CastFormInt64(&Frame);
 
 			if (Joint >= 0 && Joint < (int64_t)Array.size())
 			{
-				auto& Current = Array[Joint];
+				auto& Current = Array[(size_t)Joint];
 				auto* Skin = Base->GetSkin();
 				auto* Sub = (Skin && Skin->GetDrawable() ? Skin->GetDrawable()->FindJoint(Joint) : nullptr);
 				std::string Name = (Sub ? Sub->Name : "Unnamed") + (" (" + std::to_string(Joint) + ")");
@@ -360,7 +360,7 @@ void ComponentSkinAnimator(GUI::Context* UI, Components::SkinAnimator* Base, boo
 
 			if (UI->GetElementById(0, "cmp_skin_animator_frem").IsActive())
 			{
-				IClip.Keys.erase(IClip.Keys.begin() + Frame);
+				IClip.Keys.erase(IClip.Keys.begin() + (size_t)Frame);
 				Frame = Joint = -1;
 			}
 		}
@@ -396,7 +396,7 @@ void ComponentSkinAnimator(GUI::Context* UI, Components::SkinAnimator* Base, boo
 
 		if (UI->GetElementById(0, "cmp_skin_animator_crem").IsActive())
 		{
-			Base->Clips.erase(Base->Clips.begin() + Clip);
+			Base->Clips.erase(Base->Clips.begin() + (size_t)Clip);
 			Clip = Frame = Joint = -1;
 		}
 	}
@@ -446,7 +446,7 @@ void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base, bool 
 
 	if (Clip >= 0 && Clip < (int64_t)Base->Clips.size())
 	{
-		auto& IClip = Base->Clips[Clip];
+		auto& IClip = Base->Clips[(size_t)Clip];
 		App->Models.System->SetInteger("sl_cmp_key_animator_frames", (int64_t)IClip.Keys.size() - 1);
 		UI->GetElementById(0, "cmp_key_animator_cname").CastFormString(&IClip.Name);
 		UI->GetElementById(0, "cmp_key_animator_cd").CastFormFloat(&IClip.Duration);
@@ -455,7 +455,7 @@ void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base, bool 
 
 		if (Frame >= 0 && Frame < (int64_t)IClip.Keys.size())
 		{
-			auto& Current = IClip.Keys[Frame];
+			auto& Current = IClip.Keys[(size_t)Frame];
 			UI->GetElementById(0, "cmp_key_animator_fname").CastFormInt64(&Frame);
 			UI->GetElementById(0, "cmp_key_animator_fp_x").CastFormFloat(&Current.Position.X);
 			UI->GetElementById(0, "cmp_key_animator_fp_y").CastFormFloat(&Current.Position.Y);
@@ -470,7 +470,7 @@ void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base, bool 
 
 			if (UI->GetElementById(0, "cmp_key_animator_frem").IsActive())
 			{
-				IClip.Keys.erase(IClip.Keys.begin() + Frame);
+				IClip.Keys.erase(IClip.Keys.begin() + (size_t)Frame);
 				Frame = -1;
 			}
 		}
@@ -1183,9 +1183,9 @@ void ComponentCamera(GUI::Context* UI, Components::Camera* Base, bool Changed)
 	else if (UI->GetElementById(0, "cmp_camera_ortho").IsActive())
 		Base->Mode = Components::Camera::ProjectionMode_Orthographic;
 
-	fRenderer->StallFrames = Stalls;
-	if (Size != fRenderer->GetDepthSize())
-		fRenderer->SetDepthSize(Size);
+	fRenderer->StallFrames = (size_t)Stalls;
+	if ((size_t)Size != fRenderer->GetDepthSize())
+		fRenderer->SetDepthSize((size_t)Size);
 
 	if (UI->GetElementById(0, "cmp_camera_preview").CastFormBoolean(&Preview))
 	{

@@ -36,9 +36,9 @@ void Sandbox::KeyEvent(KeyCode Key, KeyMod, int, int, bool Pressed)
 		if (!Pressed)
 		{
 			Activity->SetGrabbing(false);
-			Selection.Gizmo->OnMouseUp(State.Cursor.X, State.Cursor.Y);
+			Selection.Gizmo->OnMouseUp((unsigned int)State.Cursor.X, (unsigned int)State.Cursor.Y);
 		}
-		else if (Selection.Gizmo->OnMouseDown(State.Cursor.X, State.Cursor.Y))
+		else if (Selection.Gizmo->OnMouseDown((unsigned int)State.Cursor.X, (unsigned int)State.Cursor.Y))
 			Activity->SetGrabbing(true);
 	}
 }
@@ -498,7 +498,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 	{
 		Renderer->SetRasterizerState(States.NoneRasterizer);
 		Vector2 Size = Activity->GetSize();
-		Selection.Gizmo->SetScreenDimension(Size.X, Size.Y);
+		Selection.Gizmo->SetScreenDimension((int)Size.X, (int)Size.Y);
 		Selection.Gizmo->SetCameraMatrix(Scene->GetCamera()->As<Components::Camera>()->GetView().Row, Scene->GetCamera()->As<Components::Camera>()->GetProjection().Row);
 		Selection.Gizmo->Draw();
 		Renderer->SetRasterizerState(States.BackRasterizer);
@@ -1444,7 +1444,7 @@ void Sandbox::SetViewModel()
 		if (!OS::Input::Save("Save skin animation", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized skin animation (*.xml, *.json, *.jsonb)", &Path))
 			return;
 
-		Document* Result = Document::Object();
+		Document* Result = Var::Set::Object();
 		Result->Key = "skin-animation";
 
 		auto* Animator = Selection.Entity->GetComponent<Components::SkinAnimator>();
@@ -1481,7 +1481,7 @@ void Sandbox::SetViewModel()
 		if (!OS::Input::Save("Save key animation", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized key animation (*.xml, *.json, *.jsonb)", &Path))
 			return;
 
-		Document* Result = Document::Object();
+		Document* Result = Var::Set::Object();
 		Result->Key = "key-animation";
 
 		auto* Animator = Selection.Entity->GetComponent<Components::KeyAnimator>();
@@ -1537,7 +1537,7 @@ void Sandbox::SetViewModel()
 		if (!OS::Input::Save("Save material", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized material (*.xml, *.json, *.jsonb)", &Path))
 			return;
 
-		Document* Result = Document::Object();
+		Document* Result = Var::Set::Object();
 		Result->Key = "material";
 
 		NMake::Pack(Result, Selection.Material, Content);
@@ -2548,17 +2548,17 @@ void Sandbox::GetPathName(std::string& Path)
 	if (Path.back() == '/' || Path.back() == '\\')
 		Path.erase(Path.size() - 1);
 
-	for (int64_t i = Path.size(); i > 0; i--)
+	for (size_t i = Path.size(); i > 0; i--)
 	{
 		if (Path[i] == '\\' || Path[i] == '/')
 		{
-			Distance = i + 1;
+			Distance = (int64_t)i + 1;
 			break;
 		}
 	}
 
 	if (Distance > 0)
-		Path.erase(0, Distance);
+		Path.erase(0, (size_t)Distance);
 }
 void Sandbox::GetEntityCell()
 {
