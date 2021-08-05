@@ -74,14 +74,6 @@ void Sandbox::Initialize(Application::Desc* Conf)
 {
 	Enqueue<Sandbox, &Sandbox::Update>();
 
-	State.Camera = new ::Entity(nullptr);
-	State.Camera->AddComponent<Components::Camera>();
-	State.Camera->AddComponent<Components::FreeLook>();
-
-	auto* Fly = State.Camera->AddComponent<Components::Fly>();
-	Fly->SpeedDown *= 0.25f;
-	Fly->SpeedNormal *= 0.35f;
-
 	States.DepthStencil = Renderer->GetDepthStencilState("none");
 	States.NoneRasterizer = Renderer->GetRasterizerState("cull-none");
 	States.BackRasterizer = Renderer->GetRasterizerState("cull-back");
@@ -144,7 +136,7 @@ void Sandbox::Initialize(Application::Desc* Conf)
 
 	if (!State.GUI->Inject("system/conf.xml"))
 	{
-		TH_ERROR("could not load GUI");
+		TH_ERR("could not load GUI");
 		return Stop();
 	}
 
@@ -417,10 +409,7 @@ void Sandbox::UpdateScene()
 	State.IsCameraActive = true;
 
 	if (Scene != nullptr)
-	{
-		Scene->RemoveEntity(State.Camera, false);
 		TH_CLEAR(Scene);
-	}
 
 	VM->ClearCache();
 	if (!Resource.NextPath.empty())
@@ -448,6 +437,14 @@ void Sandbox::UpdateScene()
 	{
 		State.IsOutdated = true;
 	});
+
+	State.Camera = new ::Entity(Scene);
+	State.Camera->AddComponent<Components::Camera>();
+	State.Camera->AddComponent<Components::FreeLook>();
+
+	auto* Fly = State.Camera->AddComponent<Components::Fly>();
+	Fly->SpeedDown *= 0.25f;
+	Fly->SpeedNormal *= 0.35f;
 
 	Scene->AddEntity(State.Camera);
 	Scene->SetCamera(State.Camera);
