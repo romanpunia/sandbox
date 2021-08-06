@@ -56,10 +56,11 @@ public:
 		bool IsDraggable = false;
 		bool IsDragHovered = false;
 		bool IsInteractive = false;
-		bool IsOutdated = false;
 		bool IsCaptured = false;
 		uint32_t MeshImportOpts = 0;
+		int Outdated = 0;
 		int ElementsLimit = 0;
+		EventId Listener;
     } State;
 
 	struct
@@ -115,8 +116,8 @@ public:
 	void WindowEvent(WindowState State, int X, int Y) override;
 	void ScriptHook(VMGlobal* Global) override;
 	void Initialize(Application::Desc* Conf) override;
+	void Dispatch(Timer* Time) override;
 	void Publish(Timer* Time) override;
-	void Update(Timer* Time);
 	void UpdateHierarchy();
     void UpdateProject();
     void UpdateScene();

@@ -72,8 +72,6 @@ void Sandbox::ScriptHook(VMGlobal* Global)
 }
 void Sandbox::Initialize(Application::Desc* Conf)
 {
-	Enqueue<Sandbox, &Sandbox::Update>();
-
 	States.DepthStencil = Renderer->GetDepthStencilState("none");
 	States.NoneRasterizer = Renderer->GetRasterizerState("cull-none");
 	States.BackRasterizer = Renderer->GetRasterizerState("cull-back");
@@ -102,10 +100,10 @@ void Sandbox::Initialize(Application::Desc* Conf)
 	State.IsCameraActive = true;
 	State.IsTraceMode = false;
 	State.IsDraggable = false;
-	State.IsOutdated = false;
 	State.IsDragHovered = false;
 	State.IsCaptured = false;
 	State.Directory = nullptr;
+	State.Outdated = 0;
 	State.GUI = new GUI::Context(Renderer);
 	State.GUI->SetMountCallback([this](GUI::Context*)
 	{
@@ -154,26 +152,7 @@ void Sandbox::Initialize(Application::Desc* Conf)
 	Activity->Maximize();
 	SetStatus("Setting up done");
 }
-void Sandbox::Publish(Timer* Time)
-{
-	Renderer->Clear(0, 0, 0);
-	Renderer->ClearDepth();
-	Renderer->SetSamplerState(States.Sampler, 0, TH_PS);
-
-	Scene->Render(Time);
-	if (State.IsInteractive && State.Camera == Scene->GetCamera()->GetEntity())
-	{
-		Scene->SetMRT(TargetType::Main, false);
-		UpdateGrid(Time);
-	}
-
-	Scene->Submit();
-	if (State.IsInteractive && State.GUI != nullptr)
-		State.GUI->RenderLists(Renderer->GetRenderTarget()->GetTarget(0));
-
-	Renderer->Submit();
-}
-void Sandbox::Update(Timer* Time)
+void Sandbox::Dispatch(Timer* Time)
 {
 #ifdef _DEBUG
 	if (Activity->IsKeyDownHit(KeyCode::F5))
@@ -198,31 +177,32 @@ void Sandbox::Update(Timer* Time)
 	State.Camera->GetComponent<Components::FreeLook>()->SetActive(GetSceneFocus());
 	if (!Scene->IsActive() && GetSceneFocus())
 	{
-		for (auto It = State.Camera->First(); It != State.Camera->Last(); It++)
-			It->second->Update(Time);
+		for (auto& Item : *State.Camera)
+			Item.second->Update(Time);
 	}
 
 	if (State.IsInteractive)
 	{
 		State.Frames = (float)Time->GetFrameCount();
 		if (!Resource.NextPath.empty())
-			return UpdateScene();
+		{
+			UpdateScene();
+			Scene->Dispatch();
+			return;
+		}
 
 		UpdateSystem();
-		if (State.IsOutdated)
+		if (State.Outdated > 0)
 		{
-			UpdateHierarchy();
-			State.IsOutdated = false;
+			if (--State.Outdated <= 0)
+				UpdateHierarchy();
 		}
 
 		if (State.GUI != nullptr)
 			State.GUI->UpdateEvents(Activity);
 	}
 
-	Scene->Update(Time);
-	Scene->Simulation(Time);
-	Scene->Synchronize(Time);
-
+	Scene->Dispatch();
 	if (State.IsCaptured)
 	{
 		State.IsCaptured = false;
@@ -288,33 +268,33 @@ void Sandbox::Update(Timer* Time)
 		{
 			Vector3 Position = State.Gizmo.Position();
 			Vector3 Rotation = State.Gizmo.Rotation();
-			Selection.Entity->Transform->Localize(&Position, nullptr, &Rotation);
+			Selection.Entity->GetTransform()->Localize(&Position, nullptr, &Rotation);
 
 			if (Selection.Gizmo->IsActive())
 			{
 				switch (Selection.Move)
 				{
 					case 1:
-						Selection.Entity->Transform->GetLocalRotation()->Set(Rotation);
+						Selection.Entity->GetTransform()->GetLocalRotation()->Set(Rotation);
 						break;
 					case 2:
-						Selection.Entity->Transform->GetLocalScale()->Set(State.Gizmo.Scale());
+						Selection.Entity->GetTransform()->GetLocalScale()->Set(State.Gizmo.Scale());
 						break;
 					default:
-						Selection.Entity->Transform->GetLocalPosition()->Set(Position);
+						Selection.Entity->GetTransform()->GetLocalPosition()->Set(Position);
 						break;
 				}
 				GetEntitySync();
 			}
 			else
 			{
-				State.Gizmo = Selection.Entity->Transform->GetWorld();
+				State.Gizmo = Selection.Entity->GetTransform()->GetWorld();
 				Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
 			}
 		}
 		else
 		{
-			State.Gizmo = Selection.Entity->Transform->GetWorld();
+			State.Gizmo = Selection.Entity->GetTransform()->GetWorld();
 			Selection.Gizmo = Resource.Gizmo[Selection.Move];
 			Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
 			Selection.Gizmo->SetDisplayScale(State.GizmoScale);
@@ -376,6 +356,25 @@ void Sandbox::Update(Timer* Time)
 		}
 	}
 }
+void Sandbox::Publish(Timer* Time)
+{
+	Renderer->Clear(0, 0, 0);
+	Renderer->ClearDepth();
+	Renderer->SetSamplerState(States.Sampler, 0, TH_PS);
+
+	Scene->Publish(Time);
+	if (State.IsInteractive && State.Camera == Scene->GetCamera()->GetEntity())
+	{
+		Scene->SetMRT(TargetType::Main, false);
+		UpdateGrid(Time);
+	}
+
+	Scene->Submit();
+	if (State.IsInteractive && State.GUI != nullptr)
+		State.GUI->RenderLists(Renderer->GetRenderTarget()->GetTarget(0));
+
+	Renderer->Submit();
+}
 void Sandbox::UpdateHierarchy()
 {
 	SetStatus("Scene's hierarchy was updated");
@@ -433,11 +432,11 @@ void Sandbox::UpdateScene()
 	else
 		SetStatus("Scene was loaded");
 
-	Scene->AddEventListener("hierarachy", "mutation", [this](Event* Message)
+	Scene->ClearListener(State.Listener);
+	State.Listener = Scene->SetListener("mutation", [this](const std::string& Name, VariantArgs& Args)
 	{
-		State.IsOutdated = true;
+		State.Outdated++;
 	});
-
 	State.Camera = new ::Entity(Scene);
 	State.Camera->AddComponent<Components::Camera>();
 	State.Camera->AddComponent<Components::FreeLook>();
@@ -483,9 +482,9 @@ void Sandbox::UpdateGrid(Timer* Time)
 		if (State.Camera == Value)
 			continue;
 
-		float Direction = -Value->Transform->Position.LookAtXZ(State.Camera->Transform->Position);
+		float Direction = -Value->GetTransform()->Position.LookAtXZ(State.Camera->GetTransform()->Position);
 		Renderer->Render.TexCoord = (Value == Selection.Entity ? 0.5f : 0.05f);
-		Renderer->Render.WorldViewProj = Matrix4x4::Create(Value->Transform->Position, 0.5f, Vector3(0, Direction)) * State.Camera->GetComponent<Components::Camera>()->GetViewProjection();
+		Renderer->Render.WorldViewProj = Matrix4x4::Create(Value->GetTransform()->Position, 0.5f, Vector3(0, Direction)) * State.Camera->GetComponent<Components::Camera>()->GetViewProjection();
 		Renderer->SetTexture2D(GetIcon(Value), 1, TH_PS);
 		Renderer->UpdateBuffer(RenderBufferType::Render);
 		Renderer->Draw(6, 0);
@@ -521,7 +520,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 				std::vector<AnimatorKey>* Keys = KeyAnimator->GetClip(KeyAnimator->State.Clip);
 				if (Keys != nullptr)
 				{
-					Matrix4x4 Offset = (Value->Transform->GetRoot() ? Value->Transform->GetRoot()->GetWorld() : Matrix4x4::Identity());
+					Matrix4x4 Offset = (Value->GetTransform()->GetRoot() ? Value->GetTransform()->GetRoot()->GetWorld() : Matrix4x4::Identity());
 					for (size_t j = 0; j < Keys->size(); j++)
 					{
 						auto& Pos = Keys->at(j).Position;
@@ -557,7 +556,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 		{
 			for (auto& Joint : Skin->GetDrawable()->Joints)
 			{
-				Matrix4x4 Offset = Value->Transform->GetWorldUnscaled();
+				Matrix4x4 Offset = Value->GetTransform()->GetWorldUnscaled();
 				UpdateJoint(&Skin->Skeleton, &Joint, &Offset);
 			}
 		}
@@ -570,9 +569,9 @@ void Sandbox::UpdateGrid(Timer* Time)
 		else if (Value->GetComponent<Components::SoftBody>())
 			Transform = Value->GetComponent<Components::SoftBody>()->GetBoundingBox();
 		else if (Value->GetComponent<Components::PointLight>() || Value->GetComponent<Components::SpotLight>() || Value->GetComponent<Components::LineLight>())
-			Transform = Value->Transform->GetWorldUnscaled();
+			Transform = Value->GetTransform()->GetWorldUnscaled();
 		else
-			Transform = Value->Transform->GetWorld();
+			Transform = Value->GetTransform()->GetWorld();
 
 		for (int j = 0; j < 4; j++)
 		{
@@ -673,7 +672,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 			{
 				Renderer->Begin();
 				Renderer->Topology(PrimitiveTopology::Line_Strip);
-				Renderer->Transform(j * Scene->GetEntity(i)->Transform->GetWorld() * ViewProjection);
+				Renderer->Transform(j * Scene->GetEntity(i)->GetTransform()->GetWorld() * ViewProjection);
 				Renderer->Emit();
 				Renderer->Color(0.5f, 0.5f, 1.0f, 0.75f);
 				Renderer->Position(1.0f, 1.0f, 1.0f);
@@ -768,12 +767,16 @@ void Sandbox::InspectEntity()
 	if (Changed)
 		LastBase = Base;
 
-	if (State.GUI->GetElementById(0, "ent_name").CastFormString(&Base->Name))
+	std::string Name = Base->GetName();
+	if (State.GUI->GetElementById(0, "ent_name").CastFormString(&Name))
+	{
+		Base->SetName(Name, true);
 		Models.Hierarchy->Update(Base);
+	}
 
-	auto* lPosition = Base->Transform->GetLocalPosition();
-	auto* lRotation = Base->Transform->GetLocalRotation();
-	auto* lScale = Base->Transform->GetLocalScale();
+	auto* lPosition = Base->GetTransform()->GetLocalPosition();
+	auto* lRotation = Base->GetTransform()->GetLocalRotation();
+	auto* lScale = Base->GetTransform()->GetLocalScale();
 	if (State.GUI->GetElementById(0, "ent_pos_x").CastFormFloat(&lPosition->X) ||
 		State.GUI->GetElementById(0, "ent_pos_y").CastFormFloat(&lPosition->Y) ||
 		State.GUI->GetElementById(0, "ent_pos_z").CastFormFloat(&lPosition->Z) ||
@@ -786,7 +789,7 @@ void Sandbox::InspectEntity()
 		GetEntitySync();
 
 	State.GUI->GetElementById(0, "ent_tag").CastFormInt64(&Base->Tag);
-	State.GUI->GetElementById(0, "ent_const_scale").CastFormBoolean(&Base->Transform->ConstantScale);
+	State.GUI->GetElementById(0, "ent_const_scale").CastFormBoolean(&Base->GetTransform()->ConstantScale);
 
 	if (Models.System->SetBoolean("sl_cmp_model", Base->GetComponent<Components::Model>() != nullptr)->GetBoolean())
 		ComponentModel(State.GUI, Base->GetComponent<Components::Model>(), Changed);
@@ -1153,16 +1156,16 @@ void Sandbox::SetViewModel()
 		{
 			Entity* Base = Scene->GetEntity(Args[0].GetInteger());
 			if (Base != nullptr)
-				Child->Transform->SetRoot(Base->Transform);
+				Child->GetTransform()->SetRoot(Base->GetTransform());
 			else
-				Child->Transform->SetRoot(nullptr);
+				Child->GetTransform()->SetRoot(nullptr);
 
 			Event.StopImmediatePropagation();
 		}
 		else if (Args.empty())
-			Child->Transform->SetRoot(nullptr);
+			Child->GetTransform()->SetRoot(nullptr);
 
-		State.IsOutdated = true;
+		State.Outdated++;
 	});
 	Models.System->SetCallback("set_entity", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
@@ -1281,10 +1284,7 @@ void Sandbox::SetViewModel()
 			}
 		}
 		else
-		{
 			this->Resource.NextPath = "./system/cache.xml";
-			UpdateScene();
-		}
 	});
 	Models.System->SetCallback("import_model_action", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
@@ -1316,7 +1316,7 @@ void Sandbox::SetViewModel()
 				Content->Save<Document>(To, Doc, Args);
 				TH_RELEASE(Doc);
 
-				State.IsOutdated = true;
+				State.Outdated++;
 				this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Mesh was imported");
 			}
 			else
@@ -1358,7 +1358,7 @@ void Sandbox::SetViewModel()
 				Content->Save<Document>(To, Doc, Args);
 				TH_RELEASE(Doc);
 
-				State.IsOutdated = true;
+				State.Outdated++;
 				this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Animation was imported");
 			}
 			else
@@ -1372,7 +1372,7 @@ void Sandbox::SetViewModel()
 	});
 	Models.System->SetCallback("update_hierarchy", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
-		State.IsOutdated = true;
+		State.Outdated++;
 	});
 	Models.System->SetCallback("update_project", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
@@ -1655,8 +1655,8 @@ void Sandbox::SetViewModel()
 	{
 		if (Selection.Entity != nullptr)
 		{
-			Selection.Entity->Transform->GetLocalPosition()->Set(*Scene->GetCamera()->GetEntity()->Transform->GetLocalPosition());
-			State.Gizmo = Selection.Entity->Transform->GetWorld();
+			Selection.Entity->GetTransform()->GetLocalPosition()->Set(*Scene->GetCamera()->GetEntity()->GetTransform()->GetLocalPosition());
+			State.Gizmo = Selection.Entity->GetTransform()->GetWorld();
 			GetEntitySync();
 		}
 	});
@@ -1664,12 +1664,12 @@ void Sandbox::SetViewModel()
 	{
 		if (Selection.Entity != nullptr)
 		{
-			Selection.Entity->Transform->GetLocalRotation()->Set(*Scene->GetCamera()->GetEntity()->Transform->GetLocalRotation());
-			State.Gizmo = Selection.Entity->Transform->GetWorld();
+			Selection.Entity->GetTransform()->GetLocalRotation()->Set(*Scene->GetCamera()->GetEntity()->GetTransform()->GetLocalRotation());
+			State.Gizmo = Selection.Entity->GetTransform()->GetWorld();
 
 			auto* Source = Selection.Entity->GetComponent<Components::AudioSource>();
 			if (Source != nullptr)
-				Source->GetSync().Direction = -Scene->GetCamera()->GetEntity()->Transform->Rotation.dDirection();
+				Source->GetSync().Direction = -Scene->GetCamera()->GetEntity()->GetTransform()->Rotation.dDirection();
 
 			GetEntitySync();
 		}
@@ -1678,13 +1678,13 @@ void Sandbox::SetViewModel()
 	{
 		if (Selection.Entity != nullptr)
 		{
-			Selection.Entity->Transform->GetLocalPosition()->Set(*Scene->GetCamera()->GetEntity()->Transform->GetLocalPosition());
-			Selection.Entity->Transform->GetLocalRotation()->Set(*Scene->GetCamera()->GetEntity()->Transform->GetLocalRotation());
-			State.Gizmo = Selection.Entity->Transform->GetWorld();
+			Selection.Entity->GetTransform()->GetLocalPosition()->Set(*Scene->GetCamera()->GetEntity()->GetTransform()->GetLocalPosition());
+			Selection.Entity->GetTransform()->GetLocalRotation()->Set(*Scene->GetCamera()->GetEntity()->GetTransform()->GetLocalRotation());
+			State.Gizmo = Selection.Entity->GetTransform()->GetWorld();
 
 			auto* Source = Selection.Entity->GetComponent<Components::AudioSource>();
 			if (Source != nullptr)
-				Source->GetSync().Direction = -Scene->GetCamera()->GetEntity()->Transform->Rotation.dDirection();
+				Source->GetSync().Direction = -Scene->GetCamera()->GetEntity()->GetTransform()->Rotation.dDirection();
 
 			GetEntitySync();
 		}
@@ -1693,7 +1693,7 @@ void Sandbox::SetViewModel()
 	{
 		if (Selection.Entity != nullptr)
 		{
-			Selection.Entity->Transform->GetLocalPosition()->Set(0);
+			Selection.Entity->GetTransform()->GetLocalPosition()->Set(0);
 			GetEntitySync();
 		}
 	});
@@ -1701,7 +1701,7 @@ void Sandbox::SetViewModel()
 	{
 		if (Selection.Entity != nullptr)
 		{
-			Selection.Entity->Transform->GetLocalRotation()->Set(0);
+			Selection.Entity->GetTransform()->GetLocalRotation()->Set(0);
 			GetEntitySync();
 		}
 	});
@@ -1709,7 +1709,7 @@ void Sandbox::SetViewModel()
 	{
 		if (Selection.Entity != nullptr)
 		{
-			Selection.Entity->Transform->GetLocalScale()->Set(1);
+			Selection.Entity->GetTransform()->GetLocalScale()->Set(1);
 			GetEntitySync();
 		}
 	});
@@ -2290,7 +2290,7 @@ void Sandbox::SetViewModel()
 		Entity* Target = Node->GetTarget<Entity>();
 		if (Target != nullptr)
 		{
-			auto* Childs = Target->Transform->GetChilds();
+			auto* Childs = Target->GetTransform()->GetChilds();
 			if (Childs != nullptr)
 			{
 				for (auto& Child : *Childs)
@@ -2302,7 +2302,7 @@ void Sandbox::SetViewModel()
 			for (uint64_t i = 0; i < Scene->GetEntityCount(); i++)
 			{
 				Entity* Next = Scene->GetEntity(i);
-				if (Next != State.Camera && !Next->Transform->GetRoot())
+				if (Next != State.Camera && !Next->GetTransform()->GetRoot())
 					Node->AddChild(Next);
 			}
 		}
@@ -2582,7 +2582,7 @@ void Sandbox::GetEntityCell()
 		if (Value->GetComponent<Components::PointLight>() ||
 			Value->GetComponent<Components::SpotLight>() ||
 			Value->GetComponent<Components::SurfaceLight>())
-			Transform = Value->Transform->GetWorldUnscaled();
+			Transform = Value->GetTransform()->GetWorldUnscaled();
 		else if (Value->GetComponent<Components::Model>())
 			Transform = Value->GetComponent<Components::Model>()->GetBoundingBox();
 		else if (Value->GetComponent<Components::Skin>())
@@ -2590,7 +2590,7 @@ void Sandbox::GetEntityCell()
 		else if (Value->GetComponent<Components::SoftBody>())
 			Transform = Value->GetComponent<Components::SoftBody>()->GetBoundingBox();
 		else
-			Transform = Value->Transform->GetWorld();
+			Transform = Value->GetTransform()->GetWorld();
 
 		if (Camera->RayTest(Cursor, Transform))
 		{
@@ -2618,7 +2618,7 @@ void Sandbox::GetEntityCell()
 }
 void Sandbox::GetEntitySync()
 {
-	Selection.Entity->Transform->Synchronize();
+	Selection.Entity->GetTransform()->Synchronize();
 
 	Components::RigidBody* RigidBody = Selection.Entity->GetComponent<Components::RigidBody>();
 	if (RigidBody != nullptr)
@@ -2641,19 +2641,19 @@ void Sandbox::GetEntitySync()
 
 	Components::PointLight* PointLight = Selection.Entity->GetComponent<Components::PointLight>();
 	if (PointLight != nullptr)
-		PointLight->GetEntity()->Transform->GetLocalScale()->Set(PointLight->GetRange());
+		PointLight->GetEntity()->GetTransform()->GetLocalScale()->Set(PointLight->GetRange());
 
 	Components::SpotLight* SpotLight = Selection.Entity->GetComponent<Components::SpotLight>();
 	if (SpotLight != nullptr)
-		SpotLight->GetEntity()->Transform->GetLocalScale()->Set(SpotLight->GetRange());
+		SpotLight->GetEntity()->GetTransform()->GetLocalScale()->Set(SpotLight->GetRange());
 
 	Components::SurfaceLight* SurfaceLight = Selection.Entity->GetComponent<Components::SurfaceLight>();
 	if (SurfaceLight != nullptr)
-		SurfaceLight->GetEntity()->Transform->GetLocalScale()->Set(SurfaceLight->GetRange());
+		SurfaceLight->GetEntity()->GetTransform()->GetLocalScale()->Set(SurfaceLight->GetRange());
 
 	Components::Decal* Decal = Selection.Entity->GetComponent<Components::Decal>();
 	if (Decal != nullptr)
-		Decal->GetEntity()->Transform->GetLocalScale()->Set(Decal->GetRange());
+		Decal->GetEntity()->GetTransform()->GetLocalScale()->Set(Decal->GetRange());
 }
 void Sandbox::GetResource(const std::string& Name, const std::function<void(const std::string&)>& Callback)
 {
@@ -2848,10 +2848,10 @@ std::string Sandbox::GetName(Entity* Value)
 	if (Value == nullptr)
 		return "[Empty] unknown";
 
-	if (Value->Name.empty())
+	if (Value->GetName().empty())
 		Result = GetLabel(Value);
 	else
-		Result = GetLabel(Value) + " " + Value->Name;
+		Result = GetLabel(Value) + " " + Value->GetName();
 
 	auto* Scriptable = Value->GetComponent<Components::Scriptable>();
 	if (Scriptable != nullptr && !Scriptable->GetSource().empty())
@@ -2859,7 +2859,7 @@ std::string Sandbox::GetName(Entity* Value)
 		const std::string& Module = Scriptable->GetName();
 		Result += " " + (Module.empty() ? "anonymous" : Module);
 	}
-	else if (Value->Name.empty())
+	else if (Value->GetName().empty())
 		Result += " unnamed " + std::to_string(Value->Id);
 
 	return Result;

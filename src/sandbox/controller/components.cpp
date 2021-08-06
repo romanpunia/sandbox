@@ -493,7 +493,7 @@ void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base, bool 
 
 		if (UI->GetElementById(0, "cmp_key_animator_caddm").IsActive())
 		{
-			auto* fTransform = Base->GetEntity()->Transform;
+			auto* fTransform = Base->GetEntity()->GetTransform();
 			AnimatorKey Key;
 			Key.Scale = fTransform->Scale;
 			Key.Position = fTransform->Position;
@@ -504,7 +504,7 @@ void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base, bool 
 
 		if (UI->GetElementById(0, "cmp_key_animator_caddm").IsActive())
 		{
-			auto* fTransform = App->Scene->GetCamera()->GetEntity()->Transform;
+			auto* fTransform = App->Scene->GetCamera()->GetEntity()->GetTransform();
 			AnimatorKey Key;
 			Key.Scale = fTransform->Scale;
 			Key.Position = fTransform->Position;
@@ -515,7 +515,7 @@ void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base, bool 
 
 		if (UI->GetElementById(0, "cmp_key_animator_caddm").IsActive())
 		{
-			auto* fTransform = App->Scene->GetCamera()->GetEntity()->Transform;
+			auto* fTransform = App->Scene->GetCamera()->GetEntity()->GetTransform();
 			AnimatorKey Key;
 			Key.Scale = fTransform->Scale;
 			Key.Position = fTransform->Position;

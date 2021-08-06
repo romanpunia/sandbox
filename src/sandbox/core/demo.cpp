@@ -39,31 +39,20 @@ void Demo::Initialize(Application::Desc* Conf)
 		return Stop();
 
 	Scene->ScriptHook();
-	Enqueue<Demo, &Demo::Update>();
-	Enqueue<Demo, &Demo::Synchronize>();
-	Enqueue<Demo, &Demo::Simulation>();
+}
+void Demo::Dispatch(Timer* Time)
+{
+	Scene->Dispatch();
 }
 void Demo::Publish(Timer* Time)
 {
 	Renderer->Clear(0, 0, 0);
 	Renderer->ClearDepth();
 
-	Scene->Render(Time);
+	Scene->Publish(Time);
 	Scene->Submit();
 
 	Renderer->Submit();
-}
-void Demo::Update(Timer* Time)
-{
-	Scene->Update(Time);
-}
-void Demo::Simulation(Timer* Time)
-{
-	Scene->Simulation(Time);
-}
-void Demo::Synchronize(Timer* Time)
-{
-	Scene->Synchronize(Time);
 }
 void Demo::SetSource(const std::string& Resource)
 {
