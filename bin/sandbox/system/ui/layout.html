@@ -21,10 +21,18 @@
 				<button data-event-click="switch_scene">{{ scene_active ? 'Deactivate' : 'Activate' }}</button>
 			</div>
 			<div class="entities" data-event-dragdrop="set_parent">
-				<datagrid source="hierarchy.root" style="height: 100%;">
-					<col fields="id, name, depth, #num_children" formatter="hierarchy" />
-				</datagrid>
-				<div class="menu" data-if="entities_count <= 0">
+				<div class="hierarchy-array" style="height: 100%;">
+					<div data-for="entity : entities.all">
+						<div class="hierarchy-item" data-style-margin-left="entity.at[0].int * 12 + 'px'">
+							<div class="draggable" data-attr-entity="entity.at[1].str" data-event-dragdrop="set_parent(entity.at[1].str)">
+								<button class="hierarchy-button" data-class-selected="sl_entity == entity.at[1].str" data-event-click="set_entity(entity.at[1].str)">
+									<p>{{ entity.at[2].str }}</p>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="menu" data-if="entities.size <= 1">
 					<p class="message">No entities here</p>
 				</div>
 			</div>
@@ -55,9 +63,14 @@
 		<div class="content" data-model="system">
 			<div class="assets">
 				<p class="header">Resources</p>
-				<datagrid source="project.root" style="height: 100%;">
-					<col fields="path, name, depth, #num_children" formatter="project" />
-				</datagrid>
+				<span class="offset"></span>
+				<div class="directory-array">
+					<div class="directory-wrapper" data-for="directory : directories.all">
+						<div class="directory-item" data-style-margin-left="directory.at[2].int * 12 + 'px'">
+							<button data-event-click="set_directory(directory.at[1].str)">{{ directory.at[0].str }}</button>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="directory">
 				<div class="header">
@@ -65,11 +78,13 @@
 					<button data-if="sl_resource" data-event-click="cancel_file">Cancel</button>
 				</div>
 				<div class="menu">
-					<datagrid source="files.root" style="height: 100%;">
-						<col fields="name, path" formatter="files" />
-					</datagrid>
+					<div style="height: 100%;">
+						<div class="file-wrapper" data-for="file : files.all">
+							<p class="file" data-event-click="set_file(file.at[1].str)">{{ file.at[0].str }}</p>
+						</div>
+					</div>
 				</div>
-				<div class="menu" data-if="files_count <= 0">
+				<div class="menu" data-if="files.size <= 0">
 					<p class="message">Empty directory</p>
 				</div>
 			</div>

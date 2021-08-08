@@ -2,16 +2,32 @@
 	<p class="title">Skin component</p>
 	<button data-event-click="remove_cmp('skin')">Remove</button>
 </div>
-<table class="option inner" data-if="sl_cmp_skin_source">
-	<tr>
-		<td class="label">Material</td>
-		<td><dataselect source="surfaces.root" fields="id, name" valuefield="id" id="cmp_skin_material" formatter="surfaces" /></td>
-	</tr>
-</table>
 <table class="option">
 	<tr>
 		<td class="label">Source</td>
 		<td><button class="source" id="cmp_skin_source" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_skin_assigned">
+	<tr>
+		<td class="label">Mesh</td>
+		<td>
+			<select id="cmp_skin_mesh">
+				<option class="selection" value="0" selected>None</option>
+				<option class="selection" data-for="skin : skins.all" data-attr-value="skin.at[0].str">{{ skin.at[1].str }}</option>
+			</select>
+		</td>
+	</tr>
+</table>
+<table class="option inner" data-if="sl_cmp_skin_source">
+	<tr>
+		<td class="label">Material</td>
+		<td>
+			<select id="cmp_skin_material">
+				<option class="selection" value="0" selected>None</option>
+				<option class="selection" data-for="material : materials.all" data-attr-value="material.at[2].str">{{ material.at[1].str }}</option>
+			</select>
+		</td>
 	</tr>
 </table>
 <table class="option">

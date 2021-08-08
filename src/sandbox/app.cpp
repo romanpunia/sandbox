@@ -17,7 +17,7 @@ Entry:
 		Init.Directory = "sandbox";
 
 		Application* App = new Sandbox(&Init);
-		App->Start(&Init);
+		App->Start();
 		TH_CLEAR(App);
 
 		if (Demo::GetSource().empty())
@@ -29,13 +29,14 @@ Entry:
 		Init.Activity.Title = "Demo";
 		Init.Activity.Hidden = false;
 		Init.Activity.Maximized = true;
+		Init.Threads = 3;
 		Init.Async = true;
 
 		App = new Demo(&Init);
-		App->Start(&Init);
+		App->Start();
 		TH_CLEAR(App);
 
-		goto Entry;
+		//goto Entry;
 	}
 Exit:
 	Tomahawk::Uninitialize();

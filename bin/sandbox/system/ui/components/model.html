@@ -2,22 +2,32 @@
 	<p class="title">Model component</p>
 	<button data-event-click="remove_cmp('model')">Remove</button>
 </div>
+<table class="option">
+	<tr>
+		<td class="label">Source</td>
+		<td><button class="source" id="cmp_model_source" /></td>
+	</tr>
+</table>
 <table class="option" data-if="sl_cmp_model_assigned">
 	<tr>
 		<td class="label">Mesh</td>
-		<td><dataselect source="model.root" fields="id, name" valuefield="id" id="cmp_model_mesh" formatter="model" /></td>
+		<td>
+			<select id="cmp_model_mesh">
+				<option class="selection" value="0" selected>None</option>
+				<option class="selection" data-for="model : models.all" data-attr-value="model.at[0].str">{{ model.at[1].str }}</option>
+			</select>
+		</td>
 	</tr>
 </table>
 <table class="option inner" data-if="sl_cmp_model_source">
 	<tr>
 		<td class="label">Material</td>
-		<td><dataselect source="surfaces.root" fields="id, name" valuefield="id" id="cmp_model_material" formatter="surfaces" /></td>
-	</tr>
-</table>
-<table class="option">
-	<tr>
-		<td class="label">Source</td>
-		<td><button class="source" id="cmp_model_source" /></td>
+		<td>
+			<select id="cmp_model_material">
+				<option class="selection" value="0" selected>None</option>
+				<option class="selection" data-for="material : materials.all" data-attr-value="material.at[2].str">{{ material.at[1].str }}</option>
+			</select>
+		</td>
 	</tr>
 </table>
 <table class="option">

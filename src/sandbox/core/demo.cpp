@@ -32,7 +32,7 @@ void Demo::WindowEvent(WindowState NewState, int X, int Y)
 void Demo::ScriptHook(VMGlobal* Global)
 {
 }
-void Demo::Initialize(Application::Desc* Conf)
+void Demo::Initialize()
 {
 	Scene = Content->Load<SceneGraph>(Source);
 	if (!Scene)
@@ -42,7 +42,7 @@ void Demo::Initialize(Application::Desc* Conf)
 }
 void Demo::Dispatch(Timer* Time)
 {
-	Scene->Dispatch();
+	Scene->Dispatch(Time);
 }
 void Demo::Publish(Timer* Time)
 {

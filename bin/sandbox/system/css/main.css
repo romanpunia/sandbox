@@ -39,6 +39,40 @@ scrollbarvertical sliderbar
 	margin: 0 2px;
 }
 
+table
+{
+	box-sizing: border-box;
+	display: table;
+}
+
+tr
+{
+	box-sizing: border-box;
+	display: table-row;
+}
+
+td
+{
+	box-sizing: border-box;
+	display: table-cell;
+}
+
+col
+{
+	box-sizing: border-box;
+	display: table-column;
+}
+
+colgroup
+{
+	display: table-column-group;
+}
+
+thead, tbody, tfoot
+{
+	display: table-row-group;
+}
+
 datagridheader
 {
 	margin-bottom: 6px;
@@ -89,48 +123,12 @@ datagridexpand button span
 	decorator: image("../img/arrow.png");
 }
 
+expand:hidden *
+{
+	display: none;
+}
+
 .expanded button span
 {
 	transform: rotateZ(90deg);
-}
-
-spacer
-{
-	display: inline-block;
-	width: 26px;
-	height: 6px;
-}
-
-table
-{
-	box-sizing: border-box;
-	display: table;
-}
-
-tr
-{
-	box-sizing: border-box;
-	display: table-row;
-}
-
-td
-{
-	box-sizing: border-box;
-	display: table-cell;
-}
-
-col
-{
-	box-sizing: border-box;
-	display: table-column;
-}
-
-colgroup
-{
-	display: table-column-group;
-}
-
-thead, tbody, tfoot
-{
-	display: table-row-group;
 }

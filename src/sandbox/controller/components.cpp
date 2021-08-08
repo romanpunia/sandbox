@@ -4,22 +4,20 @@
 
 void ComponentModel(GUI::Context* UI, Components::Model* Base, bool Changed)
 {
-	Sandbox* App = Sandbox::Get()->As<Sandbox>();
+	Sandbox* App = ((Sandbox*)Sandbox::Get());
 	static Material* LastMaterial = nullptr;
 	static MeshBuffer* LastMesh = nullptr;
 
 	if (Changed)
 	{
-		App->Models.Model->Update(nullptr);
-		App->Models.Surfaces->Update(nullptr);
 		LastMaterial = nullptr;
 		LastMesh = nullptr;
 	}
 
-	App->Models.System->SetBoolean("sl_cmp_model_source", Base->GetDrawable() && LastMesh != nullptr);
-	App->Models.System->SetBoolean("sl_cmp_model_assigned", Base->GetDrawable());
+	App->State.System->SetBoolean("sl_cmp_model_source", Base->GetDrawable() && LastMesh != nullptr);
+	App->State.System->SetBoolean("sl_cmp_model_assigned", Base->GetDrawable());
 
-	ResolveModel(UI, "cmp_model_source", Base);
+	ResolveModel(UI, "cmp_model_source", Base, Changed);
 	UI->GetElementById(0, "cmp_model_uv_x").CastFormFloat(&Base->TexCoord.X);
 	UI->GetElementById(0, "cmp_model_uv_y").CastFormFloat(&Base->TexCoord.Y);
 	UI->GetElementById(0, "cmp_model_static").CastFormBoolean(&Base->Static);
@@ -36,27 +34,25 @@ void ComponentModel(GUI::Context* UI, Components::Model* Base, bool Changed)
 }
 void ComponentSkin(GUI::Context* UI, Components::Skin* Base, bool Changed)
 {
-	Sandbox* App = Sandbox::Get()->As<Sandbox>();
+	Sandbox* App = ((Sandbox*)Sandbox::Get());
 	static Material* LastMaterial = nullptr;
 	static SkinMeshBuffer* LastMesh = nullptr;
 	static int64_t LastJoint = -1;
 
 	if (Changed)
 	{
-		App->Models.Skin->Update(nullptr);
-		App->Models.Surfaces->Update(nullptr);
 		LastMaterial = nullptr;
 		LastMesh = nullptr;
 		LastJoint = -1;
 	}
 
-	App->Models.System->SetBoolean("sl_cmp_skin_source", Base->GetDrawable() && LastMesh != nullptr);
-	App->Models.System->SetBoolean("sl_cmp_skin_assigned", Base->GetDrawable());
-	App->Models.System->SetInteger("sl_cmp_skin_joint", LastJoint);
+	App->State.System->SetBoolean("sl_cmp_skin_source", Base->GetDrawable() && LastMesh != nullptr);
+	App->State.System->SetBoolean("sl_cmp_skin_assigned", Base->GetDrawable());
+	App->State.System->SetInteger("sl_cmp_skin_joint", LastJoint);
 
 	if (Base->GetDrawable() != nullptr)
 	{
-		App->Models.System->SetInteger("sl_cmp_skin_joints", (int64_t)Base->Skeleton.Pose.size() - 1);
+		App->State.System->SetInteger("sl_cmp_skin_joints", (int64_t)Base->Skeleton.Pose.size() - 1);
 		UI->GetElementById(0, "cmp_skin_joint").CastFormInt64(&LastJoint);
 
 		if (LastJoint != -1)
@@ -78,9 +74,9 @@ void ComponentSkin(GUI::Context* UI, Components::Skin* Base, bool Changed)
 		}
 	}
 	else
-		App->Models.System->SetInteger("sl_cmp_skin_joints", 0);
+		App->State.System->SetInteger("sl_cmp_skin_joints", 0);
 
-	ResolveSkin(UI, "cmp_skin_source", Base);
+	ResolveSkin(UI, "cmp_skin_source", Base, Changed);
 	UI->GetElementById(0, "cmp_skin_uv_x").CastFormFloat(&Base->TexCoord.X);
 	UI->GetElementById(0, "cmp_skin_uv_y").CastFormFloat(&Base->TexCoord.Y);
 	UI->GetElementById(0, "cmp_skin_static").CastFormBoolean(&Base->Static);
@@ -97,14 +93,11 @@ void ComponentSkin(GUI::Context* UI, Components::Skin* Base, bool Changed)
 }
 void ComponentEmitter(GUI::Context* UI, Components::Emitter* Base, bool Changed)
 {
-	Sandbox* App = Sandbox::Get()->As<Sandbox>();
+	Sandbox* App = ((Sandbox*)Sandbox::Get());
 	static Material* LastMaterial = nullptr;
 
 	if (Changed)
-	{
-		App->Models.Surfaces->Update(nullptr);
 		LastMaterial = nullptr;
-	}
 
 	int Count = (int)Base->GetBuffer()->GetArray()->Size();
 	UI->GetElementById(0, "cmp_emitter_vol_x").CastFormFloat(&Base->Volume.X);
@@ -138,14 +131,11 @@ void ComponentEmitter(GUI::Context* UI, Components::Emitter* Base, bool Changed)
 }
 void ComponentDecal(GUI::Context* UI, Components::Decal* Base, bool Changed)
 {
-	Sandbox* App = Sandbox::Get()->As<Sandbox>();
+	Sandbox* App = ((Sandbox*)Sandbox::Get());
 	static Material* LastMaterial = nullptr;
 
 	if (Changed)
-	{
-		App->Models.Surfaces->Update(nullptr);
 		LastMaterial = nullptr;
-	}
 
 	UI->GetElementById(0, "cmp_decal_fov").CastFormFloat(&Base->FieldOfView);
 	UI->GetElementById(0, "cmp_decal_dist").CastFormFloat(&Base->Distance);
@@ -161,14 +151,11 @@ void ComponentDecal(GUI::Context* UI, Components::Decal* Base, bool Changed)
 }
 void ComponentSoftBody(GUI::Context* UI, Components::SoftBody* Base, bool Changed)
 {
-	Sandbox* App = Sandbox::Get()->As<Sandbox>();
+	Sandbox* App = ((Sandbox*)Sandbox::Get());
 	static Material* LastMaterial = nullptr;
 
 	if (Changed)
-	{
-		App->Models.Surfaces->Update(nullptr);
 		LastMaterial = nullptr;
-	}
 
 	SoftBody* Body = Base->GetBody();
 	if (Body != nullptr)
@@ -282,12 +269,12 @@ void ComponentSoftBody(GUI::Context* UI, Components::SoftBody* Base, bool Change
 				Body->SetAsNormal();
 		}
 
-		App->Models.System->SetBoolean("sl_cmp_soft_body_source", true);
+		App->State.System->SetBoolean("sl_cmp_soft_body_source", true);
 	}
 	else
-		App->Models.System->SetBoolean("sl_cmp_soft_body_source", false);
+		App->State.System->SetBoolean("sl_cmp_soft_body_source", false);
 
-	ResolveSoftBody(UI, "cmp_soft_body_source", Base);
+	ResolveSoftBody(UI, "cmp_soft_body_source", Base, Changed);
 	UI->GetElementById(0, "cmp_soft_body_uv_x").CastFormFloat(&Base->TexCoord.X);
 	UI->GetElementById(0, "cmp_soft_body_uv_y").CastFormFloat(&Base->TexCoord.Y);
 
@@ -303,7 +290,7 @@ void ComponentSoftBody(GUI::Context* UI, Components::SoftBody* Base, bool Change
 }
 void ComponentSkinAnimator(GUI::Context* UI, Components::SkinAnimator* Base, bool Changed)
 {
-	Sandbox* App = Sandbox::Get()->As<Sandbox>();
+	Sandbox* App = ((Sandbox*)Sandbox::Get());
 	if (!App)
 		return;
 
@@ -316,16 +303,16 @@ void ComponentSkinAnimator(GUI::Context* UI, Components::SkinAnimator* Base, boo
 		LastBase = Base;
 	}
 
-	App->Models.System->SetInteger("sl_cmp_skin_animator_clips", (int64_t)Base->Clips.size() - 1);
-	App->Models.System->SetInteger("sl_cmp_skin_animator_clip", Clip);
-	App->Models.System->SetInteger("sl_cmp_skin_animator_frame", Frame);
-	App->Models.System->SetInteger("sl_cmp_skin_animator_joint", Joint);
+	App->State.System->SetInteger("sl_cmp_skin_animator_clips", (int64_t)Base->Clips.size() - 1);
+	App->State.System->SetInteger("sl_cmp_skin_animator_clip", Clip);
+	App->State.System->SetInteger("sl_cmp_skin_animator_frame", Frame);
+	App->State.System->SetInteger("sl_cmp_skin_animator_joint", Joint);
 	UI->GetElementById(0, "cmp_skin_animator_clip").CastFormInt64(&Clip);
 
 	if (Clip >= 0 && Clip < (int64_t)Base->Clips.size())
 	{
 		auto& IClip = Base->Clips[(size_t)Clip];
-		App->Models.System->SetInteger("sl_cmp_skin_animator_frames", (int64_t)IClip.Keys.size() - 1);
+		App->State.System->SetInteger("sl_cmp_skin_animator_frames", (int64_t)IClip.Keys.size() - 1);
 		UI->GetElementById(0, "cmp_skin_animator_cname").CastFormString(&IClip.Name);
 		UI->GetElementById(0, "cmp_skin_animator_cd").CastFormFloat(&IClip.Duration);
 		UI->GetElementById(0, "cmp_skin_animator_cr").CastFormFloat(&IClip.Rate);
@@ -334,7 +321,7 @@ void ComponentSkinAnimator(GUI::Context* UI, Components::SkinAnimator* Base, boo
 		if (Frame >= 0 && Frame < (int64_t)IClip.Keys.size())
 		{
 			auto& Array = IClip.Keys[(size_t)Frame].Pose;
-			App->Models.System->SetInteger("sl_cmp_skin_animator_joints", (int64_t)Array.size() - 1);
+			App->State.System->SetInteger("sl_cmp_skin_animator_joints", (int64_t)Array.size() - 1);
 			UI->GetElementById(0, "cmp_skin_animator_joint").CastFormInt64(&Joint);
 			UI->GetElementById(0, "cmp_skin_animator_fname").CastFormInt64(&Frame);
 
@@ -365,7 +352,7 @@ void ComponentSkinAnimator(GUI::Context* UI, Components::SkinAnimator* Base, boo
 			}
 		}
 		else
-			App->Models.System->SetInteger("sl_cmp_skin_animator_joints", -1);
+			App->State.System->SetInteger("sl_cmp_skin_animator_joints", -1);
 
 		if (UI->GetElementById(0, "cmp_skin_animator_cnorm").IsActive())
 		{
@@ -402,15 +389,15 @@ void ComponentSkinAnimator(GUI::Context* UI, Components::SkinAnimator* Base, boo
 	}
 	else
 	{
-		App->Models.System->SetInteger("sl_cmp_skin_animator_frames", -1);
-		App->Models.System->SetInteger("sl_cmp_skin_animator_joints", -1);
+		App->State.System->SetInteger("sl_cmp_skin_animator_frames", -1);
+		App->State.System->SetInteger("sl_cmp_skin_animator_joints", -1);
 	}
 
 	if (UI->GetElementById(0, "cmp_skin_animator_cap").IsActive())
 		Base->Clips.emplace_back();
 
 	std::string Path = Base->GetPath();
-	ResolveSkinAnimator(UI, "cmp_skin_animator_source", Base);
+	ResolveSkinAnimator(UI, "cmp_skin_animator_source", Base, Changed);
 	if (Path != Base->GetPath())
 		LastBase = nullptr;
 
@@ -426,7 +413,7 @@ void ComponentSkinAnimator(GUI::Context* UI, Components::SkinAnimator* Base, boo
 }
 void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base, bool Changed)
 {
-	Sandbox* App = Sandbox::Get()->As<Sandbox>();
+	Sandbox* App = ((Sandbox*)Sandbox::Get());
 	if (!App)
 		return;
 
@@ -439,15 +426,15 @@ void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base, bool 
 		LastBase = Base;
 	}
 
-	App->Models.System->SetInteger("sl_cmp_key_animator_clips", (int64_t)Base->Clips.size() - 1);
-	App->Models.System->SetInteger("sl_cmp_key_animator_clip", Clip);
-	App->Models.System->SetInteger("sl_cmp_key_animator_frame", Frame);
+	App->State.System->SetInteger("sl_cmp_key_animator_clips", (int64_t)Base->Clips.size() - 1);
+	App->State.System->SetInteger("sl_cmp_key_animator_clip", Clip);
+	App->State.System->SetInteger("sl_cmp_key_animator_frame", Frame);
 	UI->GetElementById(0, "cmp_key_animator_clip").CastFormInt64(&Clip);
 
 	if (Clip >= 0 && Clip < (int64_t)Base->Clips.size())
 	{
 		auto& IClip = Base->Clips[(size_t)Clip];
-		App->Models.System->SetInteger("sl_cmp_key_animator_frames", (int64_t)IClip.Keys.size() - 1);
+		App->State.System->SetInteger("sl_cmp_key_animator_frames", (int64_t)IClip.Keys.size() - 1);
 		UI->GetElementById(0, "cmp_key_animator_cname").CastFormString(&IClip.Name);
 		UI->GetElementById(0, "cmp_key_animator_cd").CastFormFloat(&IClip.Duration);
 		UI->GetElementById(0, "cmp_key_animator_cr").CastFormFloat(&IClip.Rate);
@@ -531,13 +518,13 @@ void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base, bool 
 		}
 	}
 	else
-		App->Models.System->SetInteger("sl_cmp_key_animator_frames", -1);
+		App->State.System->SetInteger("sl_cmp_key_animator_frames", -1);
 
 	if (UI->GetElementById(0, "cmp_key_animator_cap").IsActive())
 		Base->Clips.emplace_back();
 
 	std::string Path = Base->GetPath();
-	ResolveKeyAnimator(UI, "cmp_key_animator_source", Base);
+	ResolveKeyAnimator(UI, "cmp_key_animator_source", Base, Changed);
 	if (Path != Base->GetPath())
 		LastBase = nullptr;
 
@@ -615,7 +602,7 @@ void ComponentEmitterAnimator(GUI::Context* UI, Components::EmitterAnimator* Bas
 }
 void ComponentRigidBody(GUI::Context* UI, Components::RigidBody* Base, bool Changed)
 {
-	Sandbox* App = Sandbox::Get()->As<Sandbox>();
+	Sandbox* App = ((Sandbox*)Sandbox::Get());
 	if (!App)
 		return;
 
@@ -644,45 +631,45 @@ void ComponentRigidBody(GUI::Context* UI, Components::RigidBody* Base, bool Chan
 	std::string Shape = UI->GetElementById(0, "cmp_rigid_body_shape").GetFormValue();
 	if (Shape == "other")
 	{
-		App->Models.System->SetBoolean("sl_cmp_rigid_body_from_source", true);
-		ResolveRigidBody(UI, "cmp_rigid_body_source", Base);
+		App->State.System->SetBoolean("sl_cmp_rigid_body_from_source", true);
+		ResolveRigidBody(UI, "cmp_rigid_body_source", Base, Changed);
 
 		if (Base->GetBody() && Base->GetBody()->GetCollisionShapeType() != Shape::Convex_Hull)
 			Base->Clear();
 	}
 	else if (Shape == "none")
 	{
-		App->Models.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
+		App->State.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
 		if (Base->GetBody() && Base->GetBody()->GetCollisionShapeType() != Shape::Invalid)
 			Base->Clear();
 	}
 	else if (Shape == "box")
 	{
-		App->Models.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
+		App->State.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
 		if (!Base->GetBody() || Base->GetBody()->GetCollisionShapeType() != Shape::Box)
 			Base->Create(App->Scene->GetSimulator()->CreateCube(), 0, 0);
 	}
 	else if (Shape == "sphere")
 	{
-		App->Models.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
+		App->State.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
 		if (!Base->GetBody() || Base->GetBody()->GetCollisionShapeType() != Shape::Sphere)
 			Base->Create(App->Scene->GetSimulator()->CreateSphere(), 0, 0);
 	}
 	else if (Shape == "capsule")
 	{
-		App->Models.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
+		App->State.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
 		if (!Base->GetBody() || Base->GetBody()->GetCollisionShapeType() != Shape::Capsule)
 			Base->Create(App->Scene->GetSimulator()->CreateCapsule(), 0, 0);
 	}
 	else if (Shape == "cone")
 	{
-		App->Models.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
+		App->State.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
 		if (!Base->GetBody() || Base->GetBody()->GetCollisionShapeType() != Shape::Cone)
 			Base->Create(App->Scene->GetSimulator()->CreateCone(), 0, 0);
 	}
 	else if (Shape == "cylinder")
 	{
-		App->Models.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
+		App->State.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
 		if (!Base->GetBody() || Base->GetBody()->GetCollisionShapeType() != Shape::Cylinder)
 			Base->Create(App->Scene->GetSimulator()->CreateCylinder(), 0, 0);
 	}
@@ -690,7 +677,7 @@ void ComponentRigidBody(GUI::Context* UI, Components::RigidBody* Base, bool Chan
 	RigidBody* Body = Base->GetBody();
 	if (Body != nullptr)
 	{
-		App->Models.System->SetBoolean("sl_cmp_rigid_body_source", true);
+		App->State.System->SetBoolean("sl_cmp_rigid_body_source", true);
 		UI->GetElementById(0, "cmp_soft_body_kinemat").CastFormBoolean(&Base->Kinematic);
 
 		Vector3 Offset = Body->GetLinearVelocity();
@@ -812,7 +799,7 @@ void ComponentRigidBody(GUI::Context* UI, Components::RigidBody* Base, bool Chan
 		}
 	}
 	else
-		App->Models.System->SetBoolean("sl_cmp_rigid_body_source", false);
+		App->State.System->SetBoolean("sl_cmp_rigid_body_source", false);
 }
 void ComponentAcceleration(GUI::Context* UI, Components::Acceleration* Base, bool Changed)
 {
@@ -835,17 +822,17 @@ void ComponentAcceleration(GUI::Context* UI, Components::Acceleration* Base, boo
 }
 void ComponentSliderConstraint(GUI::Context* UI, Components::SliderConstraint* Base, bool Changed)
 {
-	Sandbox* App = Sandbox::Get()->As<Sandbox>();
+	Sandbox* App = ((Sandbox*)Sandbox::Get());
 	if (!App)
 		return;
 
 	static bool Ghost = true, Linear = true;
-	ResolveSliderConstraint(UI, "cmp_slider_constraint_entity", Base, Ghost, Linear);
+	ResolveSliderConstraint(UI, "cmp_slider_constraint_entity", Base, Ghost, Linear, Changed);
 
 	SliderConstraint* Body = Base->GetConstraint();
 	if (Body != nullptr)
 	{
-		App->Models.System->SetBoolean("sl_cmp_slider_constraint_entity", true);
+		App->State.System->SetBoolean("sl_cmp_slider_constraint_entity", true);
 
 		float Value = Body->GetAngularMotorVelocity();
 		if (UI->GetElementById(0, "cmp_slider_constraint_amv").CastFormFloat(&Value))
@@ -949,26 +936,26 @@ void ComponentSliderConstraint(GUI::Context* UI, Components::SliderConstraint* B
 	}
 	else
 	{
-		App->Models.System->SetBoolean("sl_cmp_slider_constraint_entity", false);
+		App->State.System->SetBoolean("sl_cmp_slider_constraint_entity", false);
 		UI->GetElementById(0, "cmp_slider_constraint_ghost").CastFormBoolean(&Ghost);
 		UI->GetElementById(0, "cmp_slider_constraint_linear").CastFormBoolean(&Linear);
 	}
 }
 void ComponentFreeLook(GUI::Context* UI, Components::FreeLook* Base, bool Changed)
 {
-	ResolveKeyCode(UI, "cmp_free_look_key_rot", &Base->Rotate);
+	ResolveKeyCode(UI, "cmp_free_look_key_rot", &Base->Rotate, Changed);
 	UI->GetElementById(0, "cmp_free_look_sens").CastFormFloat(&Base->Sensivity);
 }
 void ComponentFly(GUI::Context* UI, Components::Fly* Base, bool Changed)
 {
-	ResolveKeyCode(UI, "cmp_fly_key_forward", &Base->Forward);
-	ResolveKeyCode(UI, "cmp_fly_key_backward", &Base->Backward);
-	ResolveKeyCode(UI, "cmp_fly_key_right", &Base->Right);
-	ResolveKeyCode(UI, "cmp_fly_key_left", &Base->Left);
-	ResolveKeyCode(UI, "cmp_fly_key_up", &Base->Up);
-	ResolveKeyCode(UI, "cmp_fly_key_down", &Base->Down);
-	ResolveKeyCode(UI, "cmp_fly_key_slow", &Base->Slow);
-	ResolveKeyCode(UI, "cmp_fly_key_fast", &Base->Fast);
+	ResolveKeyCode(UI, "cmp_fly_key_forward", &Base->Forward, Changed);
+	ResolveKeyCode(UI, "cmp_fly_key_backward", &Base->Backward, Changed);
+	ResolveKeyCode(UI, "cmp_fly_key_right", &Base->Right, Changed);
+	ResolveKeyCode(UI, "cmp_fly_key_left", &Base->Left, Changed);
+	ResolveKeyCode(UI, "cmp_fly_key_up", &Base->Up, Changed);
+	ResolveKeyCode(UI, "cmp_fly_key_down", &Base->Down, Changed);
+	ResolveKeyCode(UI, "cmp_fly_key_slow", &Base->Slow, Changed);
+	ResolveKeyCode(UI, "cmp_fly_key_fast", &Base->Fast, Changed);
 	UI->GetElementById(0, "cmp_fly_ax").CastFormFloat(&Base->Axis.X);
 	UI->GetElementById(0, "cmp_fly_ay").CastFormFloat(&Base->Axis.Y);
 	UI->GetElementById(0, "cmp_fly_az").CastFormFloat(&Base->Axis.Z);
@@ -978,17 +965,17 @@ void ComponentFly(GUI::Context* UI, Components::Fly* Base, bool Changed)
 }
 void ComponentAudioSource(GUI::Context* UI, Components::AudioSource* Base, bool Changed)
 {
-	Sandbox* App = Sandbox::Get()->As<Sandbox>();
+	Sandbox* App = ((Sandbox*)Sandbox::Get());
 	if (!App)
 		return;
 
-	ResolveAudioSource(UI, "cmp_audio_source_clip", Base);
+	ResolveAudioSource(UI, "cmp_audio_source_clip", Base, Changed);
 
 	AudioClip* Source = Base->GetSource()->GetClip();
 	if (Source != nullptr)
 	{
 		auto& Sync = Base->GetSync();
-		App->Models.System->SetBoolean("sl_cmp_audio_source_clip", true);
+		App->State.System->SetBoolean("sl_cmp_audio_source_clip", true);
 		UI->GetElementById(0, "cmp_audio_source_gain").CastFormFloat(&Sync.Gain);
 		UI->GetElementById(0, "cmp_audio_source_pitch").CastFormFloat(&Sync.Pitch);
 		UI->GetElementById(0, "cmp_audio_source_dx").CastFormFloat(&Sync.Direction.X);
@@ -1010,7 +997,7 @@ void ComponentAudioSource(GUI::Context* UI, Components::AudioSource* Base, bool 
 
 		float Length = Source->Length();
 		UI->GetElementById(0, "cmp_audio_source_length").CastFormFloat(&Length);
-		App->Models.System->SetFloat("sl_cmp_audio_source_length", Length);
+		App->State.System->SetFloat("sl_cmp_audio_source_length", Length);
 
 		unsigned int Buffer = Source->GetBuffer();
 		UI->GetElementById(0, "cmp_audio_source_buffer").CastFormUInt32(&Buffer);
@@ -1032,8 +1019,8 @@ void ComponentAudioSource(GUI::Context* UI, Components::AudioSource* Base, bool 
 	}
 	else
 	{
-		App->Models.System->SetBoolean("sl_cmp_audio_source_clip", false);
-		App->Models.System->SetFloat("sl_cmp_audio_source_length", 0.0f);
+		App->State.System->SetBoolean("sl_cmp_audio_source_clip", false);
+		App->State.System->SetFloat("sl_cmp_audio_source_length", 0.0f);
 	}
 }
 void ComponentAudioListener(GUI::Context* UI, Components::AudioListener* Base, bool Changed)
@@ -1071,11 +1058,11 @@ void ComponentSpotLight(GUI::Context* UI, Components::SpotLight* Base, bool Chan
 }
 void ComponentLineLight(GUI::Context* UI, Components::LineLight* Base, bool Changed)
 {
-	Sandbox* App = Sandbox::Get()->As<Sandbox>();
+	Sandbox* App = ((Sandbox*)Sandbox::Get());
 	if (!App)
 		return;
 
-	App->Models.System->SetInteger("sl_cmp_line_light_cascades", Base->Shadow.Cascades);
+	App->State.System->SetInteger("sl_cmp_line_light_cascades", Base->Shadow.Cascades);
 	if (UI->GetElementById(0, "cmp_line_light_sd_casc").CastFormUInt32(&Base->Shadow.Cascades))
 		Base->Shadow.Cascades = Math<uint32_t>::Clamp(Base->Shadow.Cascades, 0, 6);
 
@@ -1120,7 +1107,7 @@ void ComponentSurfaceLight(GUI::Context* UI, Components::SurfaceLight* Base, boo
 	ResolveTexture2D(UI, "cmp_surface_light_source", Base->GetDiffuseMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetDiffuseMap(New);
-	});
+	}, Changed);
 
 	UI->GetElementById(0, "cmp_surface_light_vo_x").CastFormFloat(&Base->Offset.X);
 	UI->GetElementById(0, "cmp_surface_light_vo_y").CastFormFloat(&Base->Offset.Y);
@@ -1151,7 +1138,7 @@ void ComponentIlluminator(GUI::Context* UI, Components::Illuminator* Base, bool 
 }
 void ComponentCamera(GUI::Context* UI, Components::Camera* Base, bool Changed)
 {
-	Sandbox* App = Sandbox::Get()->As<Sandbox>();
+	Sandbox* App = ((Sandbox*)Sandbox::Get());
 	if (!App)
 		return;
 
@@ -1217,12 +1204,12 @@ void ComponentCamera(GUI::Context* UI, Components::Camera* Base, bool Changed)
 }
 void ComponentScriptable(GUI::Context* UI, Components::Scriptable* Base, bool Changed)
 {
-	Sandbox* App = Sandbox::Get()->As<Sandbox>();
+	Sandbox* App = ((Sandbox*)Sandbox::Get());
 	if (!App)
 		return;
 
-	App->Models.System->SetBoolean("sl_cmp_scriptable_source", !Base->GetSource().empty());
-	ResolveScriptable(UI, "cmp_scriptable_source", Base);
+	App->State.System->SetBoolean("sl_cmp_scriptable_source", !Base->GetSource().empty());
+	ResolveScriptable(UI, "cmp_scriptable_source", Base, Changed);
 
 	bool Typeless = (Base->GetInvokeType() == Components::Scriptable::InvokeType_Typeless);
 	if (UI->GetElementById(0, "cmp_scriptable_ti").CastFormBoolean(&Typeless))

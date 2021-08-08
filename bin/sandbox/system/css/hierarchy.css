@@ -84,20 +84,37 @@
 	drag: clone;
 }
 
+.hierarchy-array
+{
+	padding: 12px;
+}
+
+.hierarchy-item
+{
+	display: block;
+	padding: 6px;
+}
+
+.hierarchy-button
+{
+	display: block;
+	padding: 4px;
+}
+
 div:drag .hierarchy-button
 {
 	border-radius: 4px;
-	padding: 4px;
 	animation: 0.5s cubic-in-out infinite alternate drag-animation;
 }
 
 .hierarchy-button:hover
 {
+	background-color: rgb(73, 120, 225);
 	cursor: pointer;
 }
 
 .hierarchy .selected
 {
-	background-color: rgb(73, 120, 225);
+	background-color: #333;
 	color: #fff;
 }

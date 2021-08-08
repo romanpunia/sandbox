@@ -1,13 +1,13 @@
 #include "resolvers.h"
 #include "../core/sandbox.h"
 
-void ResolveResource(GUI::IElement& Target, const std::string& Name, const std::function<void(const std::string&)>& Callback)
+void ResolveResource(GUI::IElement& Target, const std::string& Name, const std::function<void(const std::string&)>& Callback, bool Changed)
 {
-	Sandbox* App = Sandbox::Get()->As<Sandbox>();
+	Sandbox* App = ((Sandbox*)Sandbox::Get());
 	if (!App || !Callback)
 		return;
 
-	if (!App->GetResourceState(Name))
+	if (!App->GetResourceState(Name) && !Changed)
 	{
 		Target.SetInnerHTML("Awaiting source...");
 		App->GetResource(Name, [Target, Callback](const std::string& File)
@@ -24,13 +24,13 @@ void ResolveResource(GUI::IElement& Target, const std::string& Name, const std::
 		App->GetResource("", nullptr);
 	}
 }
-void ResolveEntity(GUI::IElement& Target, const std::string& Name, const std::function<void(Entity*)>& Callback)
+void ResolveEntity(GUI::IElement& Target, const std::string& Name, const std::function<void(Entity*)>& Callback, bool Changed)
 {
-	Sandbox* App = Sandbox::Get()->As<Sandbox>();
+	Sandbox* App = ((Sandbox*)Sandbox::Get());
 	if (!App || !Callback)
 		return;
 
-	if (!App->GetEntityState(Name))
+	if (!App->GetEntityState(Name) && !Changed)
 	{
 		Target.SetInnerHTML("Awaiting entity...");
 		App->GetEntity(Name, [Target, Callback](Entity* Source)
@@ -47,17 +47,17 @@ void ResolveEntity(GUI::IElement& Target, const std::string& Name, const std::fu
 		App->GetEntity("", nullptr);
 	}
 }
-void ResolveTexture2D(GUI::Context* UI, const std::string& Id, bool Assigned, const std::function<void(Texture2D*)>& Callback)
+void ResolveTexture2D(GUI::Context* UI, const std::string& Id, bool Assigned, const std::function<void(Texture2D*)>& Callback, bool Changed)
 {
 	GUI::IElement Source = UI->GetElementById(0, Id);
-	if (Source.IsActive())
+	if (Source.IsActive() && !Changed)
 	{
 		if (!Assigned)
 		{
 			ResolveResource(Source, "texture", [Callback](const std::string& File)
 			{
 				Callback(Sandbox::Get()->Content->Load<Tomahawk::Graphics::Texture2D>(File));
-			});
+			}, Changed);
 		}
 		else
 		{
@@ -65,17 +65,20 @@ void ResolveTexture2D(GUI::Context* UI, const std::string& Id, bool Assigned, co
 			Callback(nullptr);
 		}
 	}
-	else if (Source.GetInnerHTML().empty())
+	else if (Source.GetInnerHTML().empty() || Changed)
+	{
+		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
 		Source.SetInnerHTML(Assigned ? "Unassign source" : "Assign source");
+	}
 }
-void ResolveKeyCode(GUI::Context* UI, const std::string& Id, KeyMap* Output)
+void ResolveKeyCode(GUI::Context* UI, const std::string& Id, KeyMap* Output, bool Changed)
 {
-	Sandbox* App = Sandbox::Get()->As<Sandbox>();
+	Sandbox* App = ((Sandbox*)Sandbox::Get());
 	if (!App)
 		return;
 
 	GUI::IElement Source = UI->GetElementById(0, Id);
-	if (Output->Normal)
+	if (Output->Normal && !Changed)
 	{
 		if (Source.GetInnerHTML().empty())
 			Source.SetInnerHTML("Waiting for input...");
@@ -134,17 +137,25 @@ bool ResolveColor3(GUI::Context* UI, const std::string& Id, Vector3* Output)
 	UI->GetElementById(0, Id + "_color").SetProperty("background-color", Form("rgb(%u, %u, %u)", (unsigned int)(Output->X * 255.0f), (unsigned int)(Output->Y * 255.0f), (unsigned int)(Output->Z * 255.0f)).R());
 	return true;
 }
-void ResolveModel(GUI::Context* UI, const std::string& Id, Components::Model* Output)
+void ResolveModel(GUI::Context* UI, const std::string& Id, Components::Model* Output, bool Changed)
 {
+	static Components::Model* Last = nullptr;
+	if (Last != Output)
+	{
+		Last = Output;
+		Changed = true;
+	}
+
 	GUI::IElement Source = UI->GetElementById(0, Id);
-	if (Source.IsActive())
+	if (Source.IsActive() && !Changed)
 	{
 		if (!Output->GetDrawable())
 		{
 			ResolveResource(Source, "model", [Output](const std::string& File)
 			{
 				Output->SetDrawable(Sandbox::Get()->Content->Load<Tomahawk::Graphics::Model>(File));
-			});
+				((Sandbox*)Sandbox::Get())->SetMetadata(Output->GetEntity());
+			}, Changed);
 		}
 		else
 		{
@@ -152,20 +163,31 @@ void ResolveModel(GUI::Context* UI, const std::string& Id, Components::Model* Ou
 			Output->SetDrawable(nullptr);
 		}
 	}
-	else if (Source.GetInnerHTML().empty())
+	else if (Source.GetInnerHTML().empty() || Changed)
+	{
+		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
 		Source.SetInnerHTML(Output->GetDrawable() ? "Unassign source" : "Assign source");
+	}
 }
-void ResolveSkin(GUI::Context* UI, const std::string& Id, Components::Skin* Output)
+void ResolveSkin(GUI::Context* UI, const std::string& Id, Components::Skin* Output, bool Changed)
 {
+	static Components::Skin* Last = nullptr;
+	if (Last != Output)
+	{
+		Last = Output;
+		Changed = true;
+	}
+
 	GUI::IElement Source = UI->GetElementById(0, Id);
-	if (Source.IsActive())
+	if (Source.IsActive() && !Changed)
 	{
 		if (!Output->GetDrawable())
 		{
 			ResolveResource(Source, "model", [Output](const std::string& File)
 			{
 				Output->SetDrawable(Sandbox::Get()->Content->Load<Tomahawk::Graphics::SkinModel>(File));
-			});
+				((Sandbox*)Sandbox::Get())->SetMetadata(Output->GetEntity());
+			}, Changed);
 		}
 		else
 		{
@@ -173,20 +195,30 @@ void ResolveSkin(GUI::Context* UI, const std::string& Id, Components::Skin* Outp
 			Output->SetDrawable(nullptr);
 		}
 	}
-	else if (Source.GetInnerHTML().empty())
+	else if (Source.GetInnerHTML().empty() || Changed)
+	{
+		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
 		Source.SetInnerHTML(Output->GetDrawable() ? "Unassign source" : "Assign source");
+	}
 }
-void ResolveSoftBody(GUI::Context* UI, const std::string& Id, Components::SoftBody* Output)
+void ResolveSoftBody(GUI::Context* UI, const std::string& Id, Components::SoftBody* Output, bool Changed)
 {
+	static Components::SoftBody* Last = nullptr;
+	if (Last != Output)
+	{
+		Last = Output;
+		Changed = true;
+	}
+
 	GUI::IElement Source = UI->GetElementById(0, Id);
-	if (Source.IsActive())
+	if (Source.IsActive() && !Changed)
 	{
 		if (!Output->GetBody())
 		{
 			ResolveResource(Source, "soft body", [Output](const std::string& File)
 			{
 				Output->Create(Sandbox::Get()->Content, File, 0);
-			});
+			}, Changed);
 		}
 		else
 		{
@@ -194,20 +226,30 @@ void ResolveSoftBody(GUI::Context* UI, const std::string& Id, Components::SoftBo
 			Output->Clear();
 		}
 	}
-	else if (Source.GetInnerHTML().empty())
+	else if (Source.GetInnerHTML().empty() || Changed)
+	{
+		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
 		Source.SetInnerHTML(Output->GetBody() ? "Unassign source" : "Assign source");
+	}
 }
-void ResolveRigidBody(GUI::Context* UI, const std::string& Id, Components::RigidBody* Output)
+void ResolveRigidBody(GUI::Context* UI, const std::string& Id, Components::RigidBody* Output, bool Changed)
 {
+	static Components::RigidBody* Last = nullptr;
+	if (Last != Output)
+	{
+		Last = Output;
+		Changed = true;
+	}
+
 	GUI::IElement Source = UI->GetElementById(0, Id);
-	if (Source.IsActive())
+	if (Source.IsActive() && !Changed)
 	{
 		if (!Output->GetBody())
 		{
 			ResolveResource(Source, "rigid body", [Output](const std::string& File)
 			{
 				Output->Create(Sandbox::Get()->Content, File, 0, 0);
-			});
+			}, Changed);
 		}
 		else
 		{
@@ -215,20 +257,30 @@ void ResolveRigidBody(GUI::Context* UI, const std::string& Id, Components::Rigid
 			Output->Clear();
 		}
 	}
-	else if (Source.GetInnerHTML().empty())
+	else if (Source.GetInnerHTML().empty() || Changed)
+	{
+		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
 		Source.SetInnerHTML(Output->GetBody() ? "Unassign source" : "Assign source");
+	}
 }
-void ResolveSliderConstraint(GUI::Context* UI, const std::string& Id, Components::SliderConstraint* Output, bool Ghost, bool Linear)
+void ResolveSliderConstraint(GUI::Context* UI, const std::string& Id, Components::SliderConstraint* Output, bool Ghost, bool Linear, bool Changed)
 {
+	static Components::SliderConstraint* Last = nullptr;
+	if (Last != Output)
+	{
+		Last = Output;
+		Changed = true;
+	}
+
 	GUI::IElement Source = UI->GetElementById(0, Id);
-	if (Source.IsActive())
+	if (Source.IsActive() && !Changed)
 	{
 		if (!Output->GetConstraint())
 		{
 			ResolveEntity(Source, "slider constraint", [Output, Ghost, Linear](Entity* Source)
 			{
 				Output->Create(Source, Ghost, Linear);
-			});
+			}, Changed);
 		}
 		else
 		{
@@ -236,20 +288,30 @@ void ResolveSliderConstraint(GUI::Context* UI, const std::string& Id, Components
 			Output->Clear();
 		}
 	}
-	else if (Source.GetInnerHTML().empty())
+	else if (Source.GetInnerHTML().empty() || Changed)
+	{
+		((Sandbox*)Sandbox::Get())->GetEntity("", nullptr);
 		Source.SetInnerHTML(Output->GetConstraint() ? "Unassign entity" : "Assign entity");
+	}
 }
-void ResolveSkinAnimator(GUI::Context* UI, const std::string& Id, Components::SkinAnimator* Output)
+void ResolveSkinAnimator(GUI::Context* UI, const std::string& Id, Components::SkinAnimator* Output, bool Changed)
 {
+	static Components::SkinAnimator* Last = nullptr;
+	if (Last != Output)
+	{
+		Last = Output;
+		Changed = true;
+	}
+
 	GUI::IElement Source = UI->GetElementById(0, Id);
-	if (Source.IsActive())
+	if (Source.IsActive() && !Changed)
 	{
 		if (Output->GetPath().empty())
 		{
 			ResolveResource(Source, "skin animation", [Output](const std::string& File)
 			{
 				Output->GetAnimation(Sandbox::Get()->Content, File);
-			});
+			}, Changed);
 		}
 		else
 		{
@@ -257,20 +319,30 @@ void ResolveSkinAnimator(GUI::Context* UI, const std::string& Id, Components::Sk
 			Output->ClearAnimation();
 		}
 	}
-	else if (Source.GetInnerHTML().empty())
+	else if (Source.GetInnerHTML().empty() || Changed)
+	{
+		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
 		Source.SetInnerHTML(!Output->GetPath().empty() ? "Unassign source" : "Assign source");
+	}
 }
-void ResolveKeyAnimator(GUI::Context* UI, const std::string& Id, Components::KeyAnimator* Output)
+void ResolveKeyAnimator(GUI::Context* UI, const std::string& Id, Components::KeyAnimator* Output, bool Changed)
 {
+	static Components::KeyAnimator* Last = nullptr;
+	if (Last != Output)
+	{
+		Last = Output;
+		Changed = true;
+	}
+
 	GUI::IElement Source = UI->GetElementById(0, Id);
-	if (Source.IsActive())
+	if (Source.IsActive() && !Changed)
 	{
 		if (Output->GetPath().empty())
 		{
 			ResolveResource(Source, "key animation", [Output](const std::string& File)
 			{
 				Output->GetAnimation(Sandbox::Get()->Content, File);
-			});
+			}, Changed);
 		}
 		else
 		{
@@ -278,20 +350,30 @@ void ResolveKeyAnimator(GUI::Context* UI, const std::string& Id, Components::Key
 			Output->ClearAnimation();
 		}
 	}
-	else if (Source.GetInnerHTML().empty())
+	else if (Source.GetInnerHTML().empty() || Changed)
+	{
+		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
 		Source.SetInnerHTML(!Output->GetPath().empty() ? "Unassign source" : "Assign source");
+	}
 }
-void ResolveAudioSource(GUI::Context* UI, const std::string& Id, Components::AudioSource* Output)
+void ResolveAudioSource(GUI::Context* UI, const std::string& Id, Components::AudioSource* Output, bool Changed)
 {
+	static Components::AudioSource* Last = nullptr;
+	if (Last != Output)
+	{
+		Last = Output;
+		Changed = true;
+	}
+
 	GUI::IElement Source = UI->GetElementById(0, Id);
-	if (Source.IsActive())
+	if (Source.IsActive() && !Changed)
 	{
 		if (!Output->GetSource()->GetClip())
 		{
 			ResolveResource(Source, "audio clip", [Output](const std::string& File)
 			{
 				Output->GetSource()->SetClip(Sandbox::Get()->Content->Load<AudioClip>(File));
-			});
+			}, Changed);
 		}
 		else
 		{
@@ -299,20 +381,30 @@ void ResolveAudioSource(GUI::Context* UI, const std::string& Id, Components::Aud
 			Output->GetSource()->SetClip(nullptr);
 		}
 	}
-	else if (Source.GetInnerHTML().empty())
+	else if (Source.GetInnerHTML().empty() || Changed)
+	{
+		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
 		Source.SetInnerHTML(Output->GetSource()->GetClip() ? "Unassign source" : "Assign source");
+	}
 }
-void ResolveScriptable(GUI::Context* UI, const std::string& Id, Components::Scriptable* Output)
+void ResolveScriptable(GUI::Context* UI, const std::string& Id, Components::Scriptable* Output, bool Changed)
 {
+	static Components::Scriptable* Last = nullptr;
+	if (Last != Output)
+	{
+		Last = Output;
+		Changed = true;
+	}
+
 	GUI::IElement Source = UI->GetElementById(0, Id);
-	if (Source.IsActive())
+	if (Source.IsActive() && !Changed)
 	{
 		if (Output->GetSource().empty())
 		{
 			ResolveResource(Source, "script", [Output](const std::string& File)
 			{
 				Output->SetSource(Components::Scriptable::SourceType_Resource, File);
-			});
+			}, Changed);
 		}
 		else
 		{
@@ -320,6 +412,9 @@ void ResolveScriptable(GUI::Context* UI, const std::string& Id, Components::Scri
 			Output->UnsetSource();
 		}
 	}
-	else if (Source.GetInnerHTML().empty())
+	else if (Source.GetInnerHTML().empty() || Changed)
+	{
+		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
 		Source.SetInnerHTML(!Output->GetSource().empty() ? "Unassign source" : "Assign source");
+	}
 }

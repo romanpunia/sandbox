@@ -14,12 +14,6 @@ enum Inspector
 	Inspector_ImportAnimation
 };
 
-struct IFile
-{
-	std::string Path;
-	std::string Name;
-};
-
 class Sandbox : public Application
 {
 public:
@@ -38,6 +32,13 @@ public:
     {
 		std::function<void(const std::string&)> OnResource;
 		std::function<void(Entity*)> OnEntity;
+		GUI::DataModel* System = nullptr;
+		GUI::DataNode* Entities = nullptr;
+		GUI::DataNode* Materials = nullptr;
+		GUI::DataNode* Models = nullptr;
+		GUI::DataNode* Skins = nullptr;
+		GUI::DataNode* Directories = nullptr;
+		GUI::DataNode* Files = nullptr;
 		GUI::Context* GUI = nullptr;
 		FileTree* Directory = nullptr;
 		Entity* Camera = nullptr;
@@ -57,23 +58,10 @@ public:
 		bool IsDragHovered = false;
 		bool IsInteractive = false;
 		bool IsCaptured = false;
+		bool IsMounted = false;
 		uint32_t MeshImportOpts = 0;
-		int Outdated = 0;
 		int ElementsLimit = 0;
-		EventId Listener;
     } State;
-
-	struct
-	{
-		GUI::DataSource* Hierarchy = nullptr;
-		GUI::DataSource* Project = nullptr;
-		GUI::DataSource* Files = nullptr;
-		GUI::DataSource* Materials = nullptr;
-		GUI::DataSource* Surfaces = nullptr;
-		GUI::DataSource* Model = nullptr;
-		GUI::DataSource* Skin = nullptr;
-		GUI::DataModel* System = nullptr;
-	} Models;
 
     struct
     {
@@ -115,14 +103,14 @@ public:
 	void KeyEvent(KeyCode Key, KeyMod Mod, int Virtual, int Repeat, bool Pressed) override;
 	void WindowEvent(WindowState State, int X, int Y) override;
 	void ScriptHook(VMGlobal* Global) override;
-	void Initialize(Application::Desc* Conf) override;
+	void Initialize() override;
 	void Dispatch(Timer* Time) override;
 	void Publish(Timer* Time) override;
-	void UpdateHierarchy();
     void UpdateProject();
     void UpdateScene();
 	void UpdateGrid(Timer* Time);
 	void UpdateJoint(PoseBuffer* Map, Joint* Base, Matrix4x4* World);
+	void UpdateMutation(const std::string& Name, VariantArgs& Args);
 	void UpdateSystem();
 	void InspectEntity();
 	void InspectSettings();
@@ -130,8 +118,11 @@ public:
 	void InspectMaterial();
 	void SetViewModel();
 	void SetDirectory(FileTree* Base);
+	void SetContents(FileTree* Base, int64_t Depth = 0);
 	void SetSelection(Inspector Window, void* Object = nullptr);
 	void SetStatus(const std::string& Status);
+	void SetMutation(Entity* Parent, const char* Type);
+	void SetMetadata(Entity* Source);
     void GetPathName(std::string& Path);
     void GetEntityCell();
     void GetEntitySync();
@@ -143,6 +134,8 @@ public:
 	bool GetEntityState(const std::string& Name);
 	bool GetSelectionState();
 	Texture2D* GetIcon(Entity* Value);
+	void* GetEntityIndex(Entity* Value);
+	uint64_t GetEntityNesting(Entity* Value);
     std::string GetLabel(Entity* Value);
     std::string GetName(Entity* Value);
 	std::string GetPascal(const std::string& Value);

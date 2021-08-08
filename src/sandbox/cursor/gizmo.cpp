@@ -3,11 +3,11 @@
 
 void CGizmoTransformRender::DrawCircle(const tvector3 &orig, float r, float g, float b, const tvector3 &vtx, const tvector3 &vty)
 {
-	auto* App = Sandbox::Get()->As<Sandbox>();
+	auto* App = ((Sandbox*)Sandbox::Get());
 	if (!App->Scene)
 		return;
 
-	Matrix4x4 ViewProjection = App->Scene->GetCamera()->As<Components::Camera>()->GetViewProjection();
+	Matrix4x4 ViewProjection = ((Components::Camera*)App->Scene->GetCamera())->GetViewProjection();
 
 	App->Renderer->Begin();
 	App->Renderer->Topology(PrimitiveTopology::Line_Strip);
@@ -28,11 +28,11 @@ void CGizmoTransformRender::DrawCircle(const tvector3 &orig, float r, float g, f
 }
 void CGizmoTransformRender::DrawCircleHalf(const tvector3 &orig, float r, float g, float b, const tvector3 &vtx, const tvector3 &vty, tplane &camPlan)
 {
-	auto* App = Sandbox::Get()->As<Sandbox>();
+	auto* App = ((Sandbox*)Sandbox::Get());
 	if (!App->Scene)
 		return;
 
-	Matrix4x4 ViewProjection = App->Scene->GetCamera()->As<Components::Camera>()->GetViewProjection();
+	Matrix4x4 ViewProjection = ((Components::Camera*)App->Scene->GetCamera())->GetViewProjection();
 
 	App->Renderer->Begin();
 	App->Renderer->Topology(PrimitiveTopology::Line_Strip);
@@ -75,11 +75,11 @@ void CGizmoTransformRender::DrawCircleHalf(const tvector3 &orig, float r, float 
 }
 void CGizmoTransformRender::DrawAxis(const tvector3 &orig, const tvector3 &axis, const tvector3 &vtx, const tvector3 &vty, float fct, float fct2, const tvector4 &col)
 {
-	auto* App = Sandbox::Get()->As<Sandbox>();
+	auto* App = ((Sandbox*)Sandbox::Get());
 	if (!App->Scene)
 		return;
 
-	Matrix4x4 ViewProjection = App->Scene->GetCamera()->As<Components::Camera>()->GetViewProjection();
+	Matrix4x4 ViewProjection = ((Components::Camera*)App->Scene->GetCamera())->GetViewProjection();
 
 	App->Renderer->Begin();
 	App->Renderer->Topology(PrimitiveTopology::Line_List);
@@ -124,11 +124,11 @@ void CGizmoTransformRender::DrawAxis(const tvector3 &orig, const tvector3 &axis,
 }
 void CGizmoTransformRender::DrawCamem(const tvector3 &orig, const tvector3 &vtx, const tvector3 &vty, float ng)
 {
-	auto* App = Sandbox::Get()->As<Sandbox>();
+	auto* App = ((Sandbox*)Sandbox::Get());
 	if (!App->Scene)
 		return;
 
-	Matrix4x4 ViewProjection = App->Scene->GetCamera()->As<Components::Camera>()->GetViewProjection();
+	Matrix4x4 ViewProjection = ((Components::Camera*)App->Scene->GetCamera())->GetViewProjection();
 
 	App->Renderer->Begin();
 	App->Renderer->Topology(PrimitiveTopology::Triangle_Strip);
@@ -179,11 +179,11 @@ void CGizmoTransformRender::DrawCamem(const tvector3 &orig, const tvector3 &vtx,
 }
 void CGizmoTransformRender::DrawQuadAxis(const tvector3 &orig, const tvector3 &axis, const tvector3 &vtx, const tvector3 &vty, float fct, float fct2, const tvector4 &col)
 {
-	auto* App = Sandbox::Get()->As<Sandbox>();
+	auto* App = ((Sandbox*)Sandbox::Get());
 	if (!App->Scene)
 		return;
 
-	Matrix4x4 ViewProjection = App->Scene->GetCamera()->As<Components::Camera>()->GetViewProjection();
+	Matrix4x4 ViewProjection = ((Components::Camera*)App->Scene->GetCamera())->GetViewProjection();
 
 	App->Renderer->Begin();
 	App->Renderer->Topology(PrimitiveTopology::Line_List);
@@ -198,11 +198,11 @@ void CGizmoTransformRender::DrawQuadAxis(const tvector3 &orig, const tvector3 &a
 }
 void CGizmoTransformRender::DrawQuad(const tvector3& orig, float size, bool bSelected, const tvector3& axisU, const tvector3 &axisV)
 {
-	auto* App = Sandbox::Get()->As<Sandbox>();
+	auto* App = ((Sandbox*)Sandbox::Get());
 	if (!App->Scene)
 		return;
 
-	Matrix4x4 ViewProjection = App->Scene->GetCamera()->As<Components::Camera>()->GetViewProjection();
+	Matrix4x4 ViewProjection = ((Components::Camera*)App->Scene->GetCamera())->GetViewProjection();
 
 	tvector3 pts[4];
 	pts[0] = orig;
@@ -309,11 +309,11 @@ void CGizmoTransformRender::DrawQuad(const tvector3& orig, float size, bool bSel
 }
 void CGizmoTransformRender::DrawTri(const tvector3& orig, float size, bool bSelected, const tvector3& axisU, const tvector3& axisV)
 {
-	auto* App = Sandbox::Get()->As<Sandbox>();
+	auto* App = ((Sandbox*)Sandbox::Get());
 	if (!App->Scene)
 		return;
 
-	Matrix4x4 ViewProjection = App->Scene->GetCamera()->As<Components::Camera>()->GetViewProjection();
+	Matrix4x4 ViewProjection = ((Components::Camera*)App->Scene->GetCamera())->GetViewProjection();
 
 	App->Renderer->Begin();
 	App->Renderer->Topology(PrimitiveTopology::Triangle_Strip);

@@ -301,15 +301,12 @@
 .inspector .selection
 {
 	display: block;
-	padding: 4px;
+	padding: 2px;
 	width: 90%;
 	text-align: center;
 	float: right;
 	margin: 0 auto;
-	margin-top: 8px;
-	border: 1px rgb(44, 44, 44);
-	border-radius: 6px;
-	background-color: rgb(20, 20, 20);
+	margin-top: 4px;
 }
 
 .inspector .selection:hover
@@ -324,7 +321,6 @@
 	background-color: rgb(20, 20, 20);
 }
 
-.inspector dataselect,
 .inspector select
 {
 	display: block;
@@ -336,7 +332,6 @@
 	padding: 2px 4px;
 }
 
-.inspector dataselect:hover,
 .inspector select:hover
 {
 	cursor: pointer;

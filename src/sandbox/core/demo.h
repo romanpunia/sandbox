@@ -12,7 +12,7 @@ public:
 	virtual ~Demo() override;
 	void WindowEvent(WindowState State, int X, int Y) override;
 	void ScriptHook(VMGlobal* Global) override;
-	void Initialize(Application::Desc* Conf) override;
+	void Initialize() override;
 	void Dispatch(Timer* Time) override;
 	void Publish(Timer* Time) override;
 

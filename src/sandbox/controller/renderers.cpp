@@ -3,7 +3,7 @@
 
 void RendererLighting(GUI::Context* UI, Renderers::Lighting* Base)
 {
-	ResolveTexture2D(UI, "cmp_camera_lighting_sm", Base->GetSkyMap() != nullptr, [Base](Texture2D* New) { Base->SetSkyMap(New); });
+	ResolveTexture2D(UI, "cmp_camera_lighting_sm", Base->GetSkyMap() != nullptr, [Base](Texture2D* New) { Base->SetSkyMap(New); }, false);
 	ResolveColor3(UI, "cmp_camera_lighting_hc", &Base->AmbientLight.HighEmission);
 	ResolveColor3(UI, "cmp_camera_lighting_lc", &Base->AmbientLight.LowEmission);
 	ResolveColor3(UI, "cmp_camera_lighting_sc", &Base->AmbientLight.SkyColor);

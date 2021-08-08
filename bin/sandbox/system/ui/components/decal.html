@@ -5,7 +5,12 @@
 <table class="option">
 	<tr>
 		<td class="label">Material</td>
-		<td><dataselect source="surfaces.root" fields="id, name" valuefield="id" id="cmp_decal_material" formatter="surfaces" /></td>
+		<td>
+			<select id="cmp_decal_material">
+				<option class="selection" value="0" selected>None</option>
+				<option class="selection" data-for="material : materials.all" data-attr-value="material.at[2].str">{{ material.at[1].str }}</option>
+			</select>
+		</td>
 	</tr>
 </table>
 <table class="option">
