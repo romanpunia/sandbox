@@ -31,14 +31,13 @@ void Demo::WindowEvent(WindowState NewState, int X, int Y)
 }
 void Demo::ScriptHook(VMGlobal* Global)
 {
+	Scene->ScriptHook();
 }
 void Demo::Initialize()
 {
 	Scene = Content->Load<SceneGraph>(Source);
 	if (!Scene)
 		return Stop();
-
-	Scene->ScriptHook();
 }
 void Demo::Dispatch(Timer* Time)
 {

@@ -36,7 +36,7 @@ Entry:
 		App->Start();
 		TH_CLEAR(App);
 
-		//goto Entry;
+		goto Entry;
 	}
 Exit:
 	Tomahawk::Uninitialize();

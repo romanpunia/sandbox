@@ -198,13 +198,13 @@
 									<sky-emission n="0.000000" />
 									<light-emission n="1.200000" />
 									<sky-color x="1.000000" y="1.000000" z="1.000000" />
-									<fog-color x="0.500000" y="0.600000" z="0.700000" />
-									<fog-amount n="0.000000" />
-									<fog-far-off n="0.100000" />
-									<fog-far x="0.125000" y="0.125000" z="0.125000" />
+									<fog-color x="0.498039" y="0.600000" z="0.698039" />
+									<fog-amount n="0.035000" />
+									<fog-far-off n="0.500000" />
+									<fog-far x="0.500000" y="0.500000" z="0.500000" />
 									<fog-near-off n="0.100000" />
-									<fog-near x="0.125000" y="0.125000" z="0.125000" />
-									<recursive n="1.000000" />
+									<fog-near x="0.025000" y="0.025000" z="0.025000" />
+									<recursive n="0.000000" />
 									<point-light-resolution i="512" />
 									<point-light-limits i="4" />
 									<spot-light-resolution i="512" />
@@ -217,42 +217,42 @@
 								</metadata>
 							</renderer>
 							<renderer>
-								<id i="-40449310" />
-								<active b="false" />
+								<id i="-2370349920" />
+								<active b="true" />
 								<metadata>
-									<grayscale n="-0.050000" />
-									<aces n="0.675000" />
-									<filmic n="-0.140000" />
-									<lottes n="-0.600000" />
-									<reinhard n="0.990000" />
-									<reinhard2 n="-2.400000" />
-									<unreal n="-0.060000" />
-									<uchimura n="0.400000" />
+									<intensity n="21.000000" />
+									<threshold n="0.700000" />
+									<power n="0.960000" />
+									<samples n="16.000000" />
+									<blur n="102.000000" />
+								</metadata>
+							</renderer>
+							<renderer>
+								<id i="-40449310" />
+								<active b="true" />
+								<metadata>
+									<grayscale n="-0.120000" />
+									<aces n="0.600000" />
+									<filmic n="-0.120000" />
+									<lottes n="0.109000" />
+									<reinhard n="-0.090000" />
+									<reinhard2 n="-0.030000" />
+									<unreal n="-0.130000" />
+									<uchimura n="1.000000" />
 									<ubrightness n="2.000000" />
-									<usontrast n="0.450000" />
-									<ustart n="0.782000" />
-									<ulength n="-0.400000" />
-									<ublack n="1.000000" />
-									<upedestal n="0.050000" />
-									<exposure n="0.000000" />
-									<eintensity n="0.400000" />
-									<egamma n="1.000000" />
+									<usontrast n="0.940000" />
+									<ustart n="0.820000" />
+									<ulength n="0.400000" />
+									<ublack n="0.923000" />
+									<upedestal n="0.045000" />
+									<exposure n="-0.120000" />
+									<eintensity n="0.190000" />
+									<egamma n="2.200000" />
 									<adaptation n="0.000000" />
 									<agray n="1.000000" />
 									<awhite n="1.000000" />
 									<ablack n="0.050000" />
 									<aspeed n="2.000000" />
-								</metadata>
-							</renderer>
-							<renderer>
-								<id i="-2370349920" />
-								<active b="true" />
-								<metadata>
-									<intensity n="8.000000" />
-									<threshold n="0.977000" />
-									<power n="0.970000" />
-									<samples n="16.000000" />
-									<blur n="64.000000" />
 								</metadata>
 							</renderer>
 						</renderers>
