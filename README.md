@@ -9,9 +9,6 @@ Sandbox is a simple (or even primitive) scene editor for Tomahawk.
 ## Core built-in dependencies
 
 * [LibGizmo](https://github.com/CedricGuillemet/LibGizmo)
-
-## Core built-in dependencies
-
 * [Tomahawk](https://github.com/romanpunia/tomahawk)
 
 ## Building
