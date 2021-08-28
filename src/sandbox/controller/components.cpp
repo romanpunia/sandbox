@@ -482,9 +482,9 @@ void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base, bool 
 		{
 			auto* fTransform = Base->GetEntity()->GetTransform();
 			AnimatorKey Key;
-			Key.Scale = fTransform->Scale;
-			Key.Position = fTransform->Position;
-			Key.Rotation = fTransform->Rotation.rLerp();
+			Key.Scale = fTransform->GetScale();
+			Key.Position = fTransform->GetPosition();
+			Key.Rotation = fTransform->GetRotation().rLerp();
 
 			IClip.Keys.push_back(Key);
 		}
@@ -493,9 +493,9 @@ void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base, bool 
 		{
 			auto* fTransform = App->Scene->GetCamera()->GetEntity()->GetTransform();
 			AnimatorKey Key;
-			Key.Scale = fTransform->Scale;
-			Key.Position = fTransform->Position;
-			Key.Rotation = fTransform->Rotation.rLerp();
+			Key.Scale = fTransform->GetScale();
+			Key.Position = fTransform->GetPosition();
+			Key.Rotation = fTransform->GetRotation().rLerp();
 
 			IClip.Keys.push_back(Key);
 		}
@@ -504,8 +504,8 @@ void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base, bool 
 		{
 			auto* fTransform = App->Scene->GetCamera()->GetEntity()->GetTransform();
 			AnimatorKey Key;
-			Key.Scale = fTransform->Scale;
-			Key.Position = fTransform->Position;
+			Key.Scale = fTransform->GetScale();
+			Key.Position = fTransform->GetPosition();
 			Key.Rotation = 0;
 
 			IClip.Keys.push_back(Key);
@@ -829,7 +829,7 @@ void ComponentSliderConstraint(GUI::Context* UI, Components::SliderConstraint* B
 	static bool Ghost = true, Linear = true;
 	ResolveSliderConstraint(UI, "cmp_slider_constraint_entity", Base, Ghost, Linear, Changed);
 
-	SliderConstraint* Body = Base->GetConstraint();
+	SConstraint* Body = Base->GetConstraint();
 	if (Body != nullptr)
 	{
 		App->State.System->SetBoolean("sl_cmp_slider_constraint_entity", true);

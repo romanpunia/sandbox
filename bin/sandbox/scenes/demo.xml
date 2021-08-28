@@ -134,7 +134,7 @@
 				<position x="0.000000" y="-5.000000" z="-0.000000" />
 				<rotation x="0.000000" y="0.000000" z="0.000000" />
 				<scale x="10.000000" y="1.000000" z="10.000000" />
-				<constant-scale b="false" />
+				<scaling b="false" />
 			</transform>
 			<components>
 				<component>
@@ -163,7 +163,7 @@
 				<position x="-28.000000" y="6.000000" z="0.000000" />
 				<rotation x="0.052360" y="1.570796" z="0.000000" />
 				<scale x="1.000000" y="1.000000" z="1.000000" />
-				<constant-scale b="false" />
+				<scaling b="false" />
 			</transform>
 			<components>
 				<component>
@@ -278,7 +278,7 @@
 				<position x="2.394359" y="2.000000" z="-3.586951" />
 				<rotation x="0.000000" y="1.047198" z="0.000000" />
 				<scale x="3.000000" y="6.000000" z="3.000000" />
-				<constant-scale b="false" />
+				<scaling b="false" />
 			</transform>
 			<components>
 				<component>
@@ -307,7 +307,7 @@
 				<position x="11.000000" y="6.000000" z="0.000000" />
 				<rotation x="0.000000" y="-0.000000" z="-1.570796" />
 				<scale x="10.000000" y="1.000000" z="10.000000" />
-				<constant-scale b="false" />
+				<scaling b="false" />
 			</transform>
 			<components>
 				<component>
@@ -336,7 +336,7 @@
 				<position x="0.000000" y="5.500000" z="-0.000000" />
 				<rotation x="0.000000" y="0.000000" z="0.000000" />
 				<scale x="12.000000" y="12.000000" z="12.000000" />
-				<constant-scale b="false" />
+				<scaling b="false" />
 			</transform>
 			<components>
 				<component>
@@ -363,7 +363,7 @@
 				<position x="0.000000" y="6.000000" z="-11.000000" />
 				<rotation x="-1.570796" y="-0.000000" z="-0.000000" />
 				<scale x="10.000000" y="1.000000" z="10.000000" />
-				<constant-scale b="false" />
+				<scaling b="false" />
 			</transform>
 			<components>
 				<component>
@@ -392,7 +392,7 @@
 				<position x="0.000000" y="6.000000" z="11.000000" />
 				<rotation x="-1.570796" y="-0.000000" z="-0.000000" />
 				<scale x="10.000000" y="1.000000" z="10.000000" />
-				<constant-scale b="false" />
+				<scaling b="false" />
 			</transform>
 			<components>
 				<component>
@@ -421,7 +421,7 @@
 				<position x="-5.273355" y="-0.500000" z="4.403202" />
 				<rotation x="0.000000" y="0.610865" z="0.000000" />
 				<scale x="3.500000" y="3.500000" z="3.500000" />
-				<constant-scale b="false" />
+				<scaling b="false" />
 			</transform>
 			<components>
 				<component>
@@ -450,7 +450,7 @@
 				<position x="0.000000" y="17.000000" z="-0.000000" />
 				<rotation x="0.000000" y="0.000000" z="0.000000" />
 				<scale x="10.000000" y="1.000000" z="10.000000" />
-				<constant-scale b="false" />
+				<scaling b="false" />
 			</transform>
 			<components>
 				<component>
@@ -479,7 +479,7 @@
 				<position x="-3.075371" y="11.226677" z="-0.000000" />
 				<rotation x="0.000000" y="0.000000" z="0.000000" />
 				<scale x="1.000000" y="1.000000" z="1.000000" />
-				<constant-scale b="false" />
+				<scaling b="false" />
 			</transform>
 			<components>
 				<component>
@@ -513,7 +513,7 @@
 				<position x="-3.075371" y="16.075512" z="-0.000000" />
 				<rotation x="0.000000" y="0.000000" z="0.000000" />
 				<scale x="3.000000" y="0.100000" z="3.000000" />
-				<constant-scale b="false" />
+				<scaling b="false" />
 			</transform>
 			<components>
 				<component>
