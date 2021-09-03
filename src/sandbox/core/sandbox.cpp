@@ -793,7 +793,7 @@ void Sandbox::UpdateMutation(const std::string& Name, VariantArgs& Args)
 		for (size_t i = 0; i < State.Materials->GetSize(); i++)
 		{
 			GUI::DataNode& Node = State.Materials->At(i);
-			if (Node.At(0).GetInteger() == Base->GetSlot())
+			if (Node.At(0).GetInteger() == Base->Slot)
 			{
 				State.Materials->Remove(i);
 				break;
@@ -804,8 +804,8 @@ void Sandbox::UpdateMutation(const std::string& Name, VariantArgs& Args)
 			return;
 
 		VariantList Item;
-		Item.emplace_back(std::move(Var::Integer(Base->GetSlot())));
-		Item.emplace_back(std::move(Var::String(Base->GetName().empty() ? "Material #" + Base->GetSlot() : Base->GetName())));
+		Item.emplace_back(std::move(Var::Integer(Base->Slot)));
+		Item.emplace_back(std::move(Var::String(Base->GetName().empty() ? "Material #" + Base->Slot : Base->GetName())));
 		Item.emplace_back(std::move(Var::String(GUI::IElement::FromPointer((void*)Base))));
 		State.Materials->Add(Item);
 	}
@@ -814,7 +814,7 @@ void Sandbox::UpdateSystem()
 {
 	State.System->SetBoolean("scene_active", Scene->IsActive());
 	State.System->SetBoolean("sl_resource", !State.Filename.empty());
-	State.System->SetInteger("sl_material", Selection.Material ? Selection.Material->GetSlot() : -1);
+	State.System->SetInteger("sl_material", Selection.Material ? Selection.Material->Slot : -1);
 	State.System->SetString("sl_entity", GUI::IElement::FromPointer((void*)Selection.Entity));
 
 	switch (Selection.Window)
@@ -1497,7 +1497,7 @@ void Sandbox::SetViewModel()
 	});
 	State.System->SetCallback("add_material", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
-		SetSelection(Inspector_Material, Scene->AddMaterial("Material " + std::to_string(Scene->GetMaterialsCount() + 1)));
+		SetSelection(Inspector_Material, Scene->AddMaterial(new Material(nullptr), "Material " + std::to_string(Scene->GetMaterialsCount() + 1)));
 	});
 	State.System->SetCallback("import_model", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
@@ -1585,57 +1585,12 @@ void Sandbox::SetViewModel()
 	{
 		GetResource("material", [this](const std::string& File)
 		{
-			Document* Result = Content->Load<Document>(File);
-			if (!Result)
+			Material* Result = Content->Load<Material>(File);
+			if (!Result || !Scene->AddMaterial(Result))
 				return;
 
-			Material* Surface = Scene->AddMaterial("");
-			if (!Surface)
-				return;
-
-			NMake::Unpack(Result, Surface, Content);
-			SetSelection(Inspector_Material, Surface);
-
-			std::string Name = File;
-			GetPathName(Name);
-			Surface->SetName(Name);
+			SetSelection(Inspector_Material, Result);
 		});
-	});
-	State.System->SetCallback("export_material", [this](GUI::IEvent& Event, const VariantList& Args)
-	{
-		if (!Selection.Material)
-		{
-			this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Select material to export");
-			this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
-			this->Activity->Message.Result(nullptr);
-			return;
-		}
-
-		std::string Path;
-		if (!OS::Input::Save("Save material", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized material (*.xml, *.json, *.jsonb)", &Path))
-			return;
-
-		Document* Result = Var::Set::Object();
-		Result->Key = "material";
-
-		NMake::Pack(Result, Selection.Material, Content);
-
-		VariantArgs Map;
-		if (Parser(&Path).EndsWith(".jsonb"))
-			Map["type"] = Var::String("JSONB");
-		else if (Parser(&Path).EndsWith(".json"))
-			Map["type"] = Var::String("JSON");
-		else
-			Map["type"] = Var::String("XML");
-
-		if (!Content->Save<Document>(Path, Result, Map))
-			this->Activity->Message.Setup(AlertType::Error, "Sandbox", "Material cannot be saved");
-		else
-			this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Material was saved");
-
-		delete Result;
-		this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
-		this->Activity->Message.Result(nullptr);
 	});
 	State.System->SetCallback("deploy_scene", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
@@ -2297,7 +2252,7 @@ void Sandbox::SetContents(FileTree* Base, int64_t Depth)
 
 	for (auto* Next : Base->Directories)
 	{
-		if (IsRoot && Parser(&Next->Path).EndsWith("system"))
+		if (IsRoot && (Parser(&Next->Path).EndsWith("system") || Parser(&Next->Path).EndsWith("assembly")))
 			continue;
 
 		auto Top = std::make_pair((void*)(uintptr_t)Index++, (size_t)Depth);

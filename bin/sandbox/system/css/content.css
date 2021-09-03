@@ -155,3 +155,9 @@
 {
 	background-color: #333;
 }
+
+.directory-item button
+{
+	display: block;
+	width: 100%;
+}
