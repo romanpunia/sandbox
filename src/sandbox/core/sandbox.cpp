@@ -458,11 +458,12 @@ void Sandbox::UpdateGrid(Timer* Time)
 		Matrix4x4::Create({ -2, 0, 0 }, 1,{ 0, Math<float>::Deg2Rad() * (90), 0 })
 	};
 
-	Renderer->SetInputLayout(States.Layout);
-	Renderer->SetShader(Renderer->GetBasicEffect(), TH_VS | TH_PS);
 	Renderer->SetDepthStencilState(States.DepthStencil);
 	Renderer->SetBlendState(States.Blend);
 	Renderer->SetRasterizerState(States.BackRasterizer);
+	Renderer->SetInputLayout(States.Layout);
+	Renderer->SetShader(Renderer->GetBasicEffect(), TH_VS | TH_PS);
+	Renderer->SetVertexBuffer(Cache.Primitives->GetQuad(), 0);
 
 	for (uint32_t i = 0; i < Scene->GetEntitiesCount(); i++)
 	{
