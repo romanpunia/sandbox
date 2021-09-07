@@ -239,11 +239,11 @@ void CGizmoTransformMove::Draw()
 		else DrawAxis(orig, axeX, axeY, axeZ, 0.05f, 0.83f, vector4(1, 1, 1, 1));
 
 		//plan2
-		if (m_MoveTypePredict != MOVE_Y) DrawAxis(orig, axeY, axeX, axeZ, 0.05f, 0.83f, vector4(0, 1, 0, 1));
+		if (m_MoveTypePredict != MOVE_Y) DrawAxis(orig, axeY, axeX, axeZ, 0.05f, 0.83f, vector4(0, 0, 1, 1));
 		else DrawAxis(orig, axeY, axeX, axeZ, 0.05f, 0.83f, vector4(1, 1, 1, 1));
 
 		//plan3
-		if (m_MoveTypePredict != MOVE_Z) DrawAxis(orig, axeZ, axeX, axeY, 0.05f, 0.83f, vector4(0, 0, 1, 1));
+		if (m_MoveTypePredict != MOVE_Z) DrawAxis(orig, axeZ, axeX, axeY, 0.05f, 0.83f, vector4(0, 1, 0, 1));
 		else DrawAxis(orig, axeZ, axeX, axeY, 0.05f, 0.83f, vector4(1, 1, 1, 1));
 #if 0
 #ifdef WIN32

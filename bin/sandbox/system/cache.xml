@@ -50,7 +50,7 @@
 							</material>
 						</materials>
 						<texcoord x="2.000000" y="2.000000" />
-						<transparency b="false" />
+						<category i="0" />
 						<static b="true" />
 					</metadata>
 				</component>
@@ -176,7 +176,7 @@
 			<tag i="-1" />
 			<refer i="2" />
 			<transform>
-				<position x="2.394359" y="2.000000" z="-3.586951" />
+				<position x="2.394359" y="2.000000" z="3.586951" />
 				<rotation x="0.000000" y="1.047198" z="0.000000" />
 				<scale x="3.000000" y="6.000000" z="3.000000" />
 				<scaling b="false" />
@@ -194,7 +194,7 @@
 							</material>
 						</materials>
 						<texcoord x="1.000000" y="1.000000" />
-						<transparency b="false" />
+						<category i="0" />
 						<static b="true" />
 					</metadata>
 				</component>
@@ -223,7 +223,7 @@
 							</material>
 						</materials>
 						<texcoord x="2.000000" y="2.000000" />
-						<transparency b="false" />
+						<category i="0" />
 						<static b="true" />
 					</metadata>
 				</component>
@@ -234,7 +234,7 @@
 			<tag i="-1" />
 			<refer i="4" />
 			<transform>
-				<position x="0.000000" y="5.500000" z="-0.000000" />
+				<position x="0.000000" y="5.816159" z="0.000000" />
 				<rotation x="0.000000" y="0.000000" z="0.000000" />
 				<scale x="12.000000" y="12.000000" z="12.000000" />
 				<scaling b="false" />
@@ -261,7 +261,7 @@
 			<tag i="-1" />
 			<refer i="5" />
 			<transform>
-				<position x="0.000000" y="6.000000" z="-11.000000" />
+				<position x="0.000000" y="6.000000" z="11.000000" />
 				<rotation x="-1.570796" y="-0.000000" z="-0.000000" />
 				<scale x="10.000000" y="1.000000" z="10.000000" />
 				<scaling b="false" />
@@ -279,7 +279,7 @@
 							</material>
 						</materials>
 						<texcoord x="1.000000" y="1.000000" />
-						<transparency b="false" />
+						<category i="0" />
 						<static b="true" />
 					</metadata>
 				</component>
@@ -290,7 +290,7 @@
 			<tag i="-1" />
 			<refer i="6" />
 			<transform>
-				<position x="0.000000" y="6.000000" z="11.000000" />
+				<position x="0.000000" y="6.000000" z="-11.000000" />
 				<rotation x="-1.570796" y="-0.000000" z="-0.000000" />
 				<scale x="10.000000" y="1.000000" z="10.000000" />
 				<scaling b="false" />
@@ -308,7 +308,7 @@
 							</material>
 						</materials>
 						<texcoord x="1.000000" y="1.000000" />
-						<transparency b="false" />
+						<category i="0" />
 						<static b="true" />
 					</metadata>
 				</component>
@@ -319,7 +319,7 @@
 			<tag i="-1" />
 			<refer i="7" />
 			<transform>
-				<position x="-5.273355" y="-0.500000" z="4.403202" />
+				<position x="-5.273355" y="-0.500000" z="-4.403202" />
 				<rotation x="0.000000" y="0.610865" z="0.000000" />
 				<scale x="3.500000" y="3.500000" z="3.500000" />
 				<scaling b="false" />
@@ -337,7 +337,7 @@
 							</material>
 						</materials>
 						<texcoord x="3.000000" y="3.000000" />
-						<transparency b="false" />
+						<category i="0" />
 						<static b="true" />
 					</metadata>
 				</component>
@@ -366,7 +366,7 @@
 							</material>
 						</materials>
 						<texcoord x="2.000000" y="2.000000" />
-						<transparency b="false" />
+						<category i="0" />
 						<static b="true" />
 					</metadata>
 				</component>
@@ -399,7 +399,7 @@
 						<disperse n="0.400000" />
 						<shadow-softness n="6.000000" />
 						<shadow-distance n="100.000000" />
-						<shadow-bias n="-0.000490" />
+						<shadow-bias n="-0.000100" />
 						<shadow-iterations i="128" />
 						<shadow-enabled b="true" />
 					</metadata>
@@ -411,7 +411,7 @@
 			<tag i="-1" />
 			<refer i="10" />
 			<transform>
-				<position x="-3.075371" y="16.075512" z="-0.000000" />
+				<position x="-3.075371" y="15.939838" z="0.000000" />
 				<rotation x="0.000000" y="0.000000" z="0.000000" />
 				<scale x="3.000000" y="0.100000" z="3.000000" />
 				<scaling b="false" />
@@ -429,7 +429,7 @@
 							</material>
 						</materials>
 						<texcoord x="1.000000" y="1.000000" />
-						<transparency b="false" />
+						<category i="0" />
 						<static b="true" />
 					</metadata>
 				</component>

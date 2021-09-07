@@ -28,9 +28,9 @@ void ComponentModel(GUI::Context* UI, Components::Model* Base, bool Changed)
 	if (LastMesh != nullptr && UI->GetElementById(0, "cmp_model_material").CastFormPointer((void**)&LastMaterial))
 		Base->SetMaterial(LastMesh, LastMaterial);
 
-	bool Alpha = Base->HasTransparency();
+	bool Alpha = (Base->GetCategory() == GeoCategory::Transparent);
 	if (UI->GetElementById(0, "cmp_model_alpha").CastFormBoolean(&Alpha))
-		Base->SetTransparency(Alpha);
+		Base->SetCategory(Alpha ? GeoCategory::Transparent : GeoCategory::Opaque);
 }
 void ComponentSkin(GUI::Context* UI, Components::Skin* Base, bool Changed)
 {
@@ -87,9 +87,9 @@ void ComponentSkin(GUI::Context* UI, Components::Skin* Base, bool Changed)
 	if (LastMesh != nullptr && UI->GetElementById(0, "cmp_skin_material").CastFormPointer((void**)&LastMaterial))
 		Base->SetMaterial(LastMesh, LastMaterial);
 
-	bool Alpha = Base->HasTransparency();
+	bool Alpha = (Base->GetCategory() == GeoCategory::Transparent);
 	if (UI->GetElementById(0, "cmp_skin_alpha").CastFormBoolean(&Alpha))
-		Base->SetTransparency(Alpha);
+		Base->SetCategory(Alpha ? GeoCategory::Transparent : GeoCategory::Opaque);
 }
 void ComponentEmitter(GUI::Context* UI, Components::Emitter* Base, bool Changed)
 {
@@ -103,8 +103,6 @@ void ComponentEmitter(GUI::Context* UI, Components::Emitter* Base, bool Changed)
 	UI->GetElementById(0, "cmp_emitter_vol_x").CastFormFloat(&Base->Volume.X);
 	UI->GetElementById(0, "cmp_emitter_vol_y").CastFormFloat(&Base->Volume.Y);
 	UI->GetElementById(0, "cmp_emitter_vol_z").CastFormFloat(&Base->Volume.Z);
-	UI->GetElementById(0, "cmp_emitter_uv_x").CastFormFloat(&Base->TexCoord.X);
-	UI->GetElementById(0, "cmp_emitter_uv_y").CastFormFloat(&Base->TexCoord.Y);
 	UI->GetElementById(0, "cmp_emitter_elem_limit").CastFormInt32(&App->State.ElementsLimit);
 	UI->GetElementById(0, "cmp_emitter_elem_count").CastFormInt32(&Count);
 	UI->GetElementById(0, "cmp_emitter_quad_based").CastFormBoolean(&Base->QuadBased);
@@ -125,9 +123,13 @@ void ComponentEmitter(GUI::Context* UI, Components::Emitter* Base, bool Changed)
 	if (UI->GetElementById(0, "cmp_emitter_material").CastFormPointer((void**)&LastMaterial))
 		Base->SetMaterial(nullptr, LastMaterial);
 
-	bool Alpha = Base->HasTransparency();
+	bool Alpha = (Base->GetCategory() == GeoCategory::Transparent);
 	if (UI->GetElementById(0, "cmp_emitter_alpha").CastFormBoolean(&Alpha))
-		Base->SetTransparency(Alpha);
+		Base->SetCategory(Alpha ? GeoCategory::Transparent : GeoCategory::Opaque);
+
+	bool Additive = (Base->GetCategory() == GeoCategory::Additive);
+	if (UI->GetElementById(0, "cmp_emitter_additive").CastFormBoolean(&Additive))
+		Base->SetCategory(Additive ? GeoCategory::Additive : GeoCategory::Opaque);
 }
 void ComponentDecal(GUI::Context* UI, Components::Decal* Base, bool Changed)
 {
@@ -145,9 +147,9 @@ void ComponentDecal(GUI::Context* UI, Components::Decal* Base, bool Changed)
 	if (UI->GetElementById(0, "cmp_decal_material").CastFormPointer((void**)&LastMaterial))
 		Base->SetMaterial(nullptr, LastMaterial);
 
-	bool Alpha = Base->HasTransparency();
+	bool Alpha = (Base->GetCategory() == GeoCategory::Transparent);
 	if (UI->GetElementById(0, "cmp_decal_alpha").CastFormBoolean(&Alpha))
-		Base->SetTransparency(Alpha);
+		Base->SetCategory(Alpha ? GeoCategory::Transparent : GeoCategory::Opaque);
 }
 void ComponentSoftBody(GUI::Context* UI, Components::SoftBody* Base, bool Changed)
 {
@@ -284,9 +286,9 @@ void ComponentSoftBody(GUI::Context* UI, Components::SoftBody* Base, bool Change
 	if (UI->GetElementById(0, "cmp_soft_body_material").CastFormPointer((void**)&LastMaterial))
 		Base->SetMaterial(nullptr, LastMaterial);
 
-	bool Alpha = Base->HasTransparency();
+	bool Alpha = (Base->GetCategory() == GeoCategory::Transparent);
 	if (UI->GetElementById(0, "cmp_soft_body_alpha").CastFormBoolean(&Alpha))
-		Base->SetTransparency(Alpha);
+		Base->SetCategory(Alpha ? GeoCategory::Transparent : GeoCategory::Opaque);
 }
 void ComponentSkinAnimator(GUI::Context* UI, Components::SkinAnimator* Base, bool Changed)
 {
@@ -1096,9 +1098,10 @@ void ComponentLineLight(GUI::Context* UI, Components::LineLight* Base, bool Chan
 	UI->GetElementById(0, "cmp_line_light_inner").CastFormFloat(&Base->Sky.InnerRadius);
 	UI->GetElementById(0, "cmp_line_light_outer").CastFormFloat(&Base->Sky.OuterRadius);
 	UI->GetElementById(0, "cmp_line_light_pcf").CastFormUInt32(&Base->Shadow.Iterations);
+	UI->GetElementById(0, "cmp_line_light_sd_far").CastFormFloat(&Base->Shadow.Far);
+	UI->GetElementById(0, "cmp_line_light_sd_near").CastFormFloat(&Base->Shadow.Near);
 	UI->GetElementById(0, "cmp_line_light_sd_bias").CastFormFloat(&Base->Shadow.Bias);
 	UI->GetElementById(0, "cmp_line_light_sd_soft").CastFormFloat(&Base->Shadow.Softness);
-	UI->GetElementById(0, "cmp_line_light_sd_off").CastFormFloat(&Base->Shadow.Offset);
 	UI->GetElementById(0, "cmp_line_light_sd_active").CastFormBoolean(&Base->Shadow.Enabled);
 }
 void ComponentSurfaceLight(GUI::Context* UI, Components::SurfaceLight* Base, bool Changed)

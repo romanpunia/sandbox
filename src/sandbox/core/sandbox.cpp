@@ -227,10 +227,7 @@ void Sandbox::Dispatch(Timer* Time)
 			Scene->RemoveEntity(Selection.Entity, true);
 			SetSelection(Inspector_None);
 		}
-	}
 
-	if (Selection.Entity != nullptr)
-	{
 		if (GetSceneFocus())
 		{
 			if (Activity->IsKeyDownHit(KeyCode::D1))
@@ -258,7 +255,10 @@ void Sandbox::Dispatch(Timer* Time)
 				SetStatus("Scale gizmo selected");
 			}
 		}
+	}
 
+	if (Selection.Entity != nullptr)
+	{
 		if (Selection.Gizmo != nullptr)
 		{
 			Transform::Spacing Space;
@@ -453,7 +453,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 	Matrix4x4 Origin[4] =
 	{
 		Matrix4x4::Identity(),
-		Matrix4x4::CreateTranslation({ 0, 0, 2 }),
+		Matrix4x4::CreateTranslation({ 0, 0, -2 }),
 		Matrix4x4::Create({ 0, 0, 0 }, 1,{ 0, Math<float>::Deg2Rad() * (90), 0 }),
 		Matrix4x4::Create({ -2, 0, 0 }, 1,{ 0, Math<float>::Deg2Rad() * (90), 0 })
 	};
@@ -473,7 +473,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 
 		float Direction = -Value->GetTransform()->GetPosition().LookAtXZ(State.Camera->GetTransform()->GetPosition());
 		Renderer->Render.TexCoord = (Value == Selection.Entity ? 0.5f : 0.05f);
-		Renderer->Render.WorldViewProj = Matrix4x4::Create(Value->GetTransform()->GetPosition(), 0.5f, Vector3(0, Direction)) * State.Camera->GetComponent<Components::Camera>()->GetViewProjection();
+		Renderer->Render.WorldViewProj = Matrix4x4::Create(Value->GetTransform()->GetPosition(), 0.5f, Vector3(0, Direction))* State.Camera->GetComponent<Components::Camera>()->GetViewProjection();
 		Renderer->SetTexture2D(GetIcon(Value), 1, TH_PS);
 		Renderer->UpdateBuffer(RenderBufferType::Render);
 		Renderer->Draw(6, 0);
