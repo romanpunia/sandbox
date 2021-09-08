@@ -122,31 +122,31 @@
 								<active b="true" />
 								<metadata>
 									<intensity n="21.000000" />
-									<threshold n="0.700000" />
-									<power n="0.960000" />
+									<threshold n="0.960000" />
+									<power n="1.100000" />
 									<samples n="16.000000" />
-									<blur n="102.000000" />
+									<blur n="70.000000" />
 								</metadata>
 							</renderer>
 							<renderer>
 								<id i="-40449310" />
 								<active b="true" />
 								<metadata>
-									<grayscale n="-0.120000" />
-									<aces n="0.600000" />
-									<filmic n="-0.120000" />
+									<grayscale n="-0.070000" />
+									<aces n="0.760000" />
+									<filmic n="0.460000" />
 									<lottes n="0.109000" />
-									<reinhard n="-0.090000" />
-									<reinhard2 n="-0.030000" />
-									<unreal n="-0.130000" />
+									<reinhard n="-0.700000" />
+									<reinhard2 n="0.230000" />
+									<unreal n="0.180000" />
 									<uchimura n="1.000000" />
 									<ubrightness n="2.000000" />
-									<usontrast n="0.940000" />
+									<usontrast n="0.914000" />
 									<ustart n="0.820000" />
 									<ulength n="0.400000" />
-									<ublack n="0.923000" />
-									<upedestal n="0.045000" />
-									<exposure n="-0.120000" />
+									<ublack n="0.913000" />
+									<upedestal n="0.010000" />
+									<exposure n="-0.400000" />
 									<eintensity n="0.190000" />
 									<egamma n="2.200000" />
 									<adaptation n="0.000000" />

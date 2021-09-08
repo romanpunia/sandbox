@@ -2,8 +2,8 @@
 	<diffuse-map s="./surfaces/fabric/diffuse.jpg" />
 	<metallic-map s="./surfaces/fabric/metallic.jpg" />
 	<emission x="0.000000" y="0.000000" z="0.000000" w="0.000000" />
-	<metallic x="0.121569" y="0.121569" z="0.121569" w="0.150000" />
-	<diffuse x="1.000000" y="1.000000" z="1.000000" />
+	<metallic x="0.000000" y="0.000000" z="0.000000" w="0.550000" />
+	<diffuse x="0.400000" y="0.400000" z="0.400000" />
 	<scatter x="0.100000" y="16.000000" z="0.000000" />
 	<roughness x="0.950000" y="0.000000" />
 	<occlusion x="1.000000" y="0.000000" />

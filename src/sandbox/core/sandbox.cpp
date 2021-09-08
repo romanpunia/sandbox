@@ -76,7 +76,6 @@ void Sandbox::Initialize()
 	States.NoneRasterizer = Renderer->GetRasterizerState("cull-none");
 	States.BackRasterizer = Renderer->GetRasterizerState("cull-back");
 	States.Blend = Renderer->GetBlendState("additive");
-	States.Sampler = Renderer->GetSamplerState("trilinear-x16");
 	States.Layout = Renderer->GetInputLayout("shape-vertex");
 	Icons.Empty = Content->Load<Texture2D>("system/img/empty.png");
 	Icons.Animation = Content->Load<Texture2D>("system/img/animation.png");
@@ -358,7 +357,6 @@ void Sandbox::Publish(Timer* Time)
 {
 	Renderer->Clear(0, 0, 0);
 	Renderer->ClearDepth();
-	Renderer->SetSamplerState(States.Sampler, 0, TH_PS);
 
 	Scene->Publish(Time);
 	if (State.IsInteractive && State.Camera == Scene->GetCamera()->GetEntity())
@@ -369,7 +367,7 @@ void Sandbox::Publish(Timer* Time)
 
 	Scene->Submit();
 	if (State.IsInteractive && State.GUI != nullptr)
-		State.GUI->RenderLists(Renderer->GetRenderTarget()->GetTarget(0));
+		State.GUI->RenderLists(Renderer->GetRenderTarget()->GetTarget());
 
 	Renderer->Submit();
 }

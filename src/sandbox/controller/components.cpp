@@ -1090,7 +1090,6 @@ void ComponentLineLight(GUI::Context* UI, Components::LineLight* Base, bool Chan
 	ResolveColor3(UI, "cmp_line_light_rlh", &Base->Sky.RlhEmission);
 	ResolveColor3(UI, "cmp_line_light_mie", &Base->Sky.MieEmission);
 	UI->GetElementById(0, "cmp_line_light_emission").CastFormFloat(&Base->Emission);
-	UI->GetElementById(0, "cmp_line_light_disp").CastFormFloat(&Base->Disperse);
 	UI->GetElementById(0, "cmp_line_light_rlhh").CastFormFloat(&Base->Sky.RlhHeight);
 	UI->GetElementById(0, "cmp_line_light_mieh").CastFormFloat(&Base->Sky.MieHeight);
 	UI->GetElementById(0, "cmp_line_light_mied").CastFormFloat(&Base->Sky.MieDirection);
