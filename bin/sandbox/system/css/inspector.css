@@ -4,10 +4,11 @@
 	top: 24px;
 	left: 80%;
 	right: 0px;
-	bottom: 0;
+	bottom: 20px;
 	background-color: rgba(30, 30, 30, 255);
 	border-left: 1px rgb(22, 22, 22);
 	z-index: 120;
+	display: block;
 }
 
 .inspector .header

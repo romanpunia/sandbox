@@ -441,7 +441,7 @@ void Sandbox::UpdateScene()
 	fRenderer->AddRenderer<Renderers::Emitter>();
 	fRenderer->AddRenderer<Renderers::Decal>();
 	fRenderer->AddRenderer<Renderers::Lighting>();
-	fRenderer->AddRenderer<Renderers::Transparency>();
+	//fRenderer->AddRenderer<Renderers::Transparency>();
 
 	Resource.ScenePath = Resource.NextPath;
 	Resource.NextPath.clear();
@@ -815,6 +815,7 @@ void Sandbox::UpdateSystem()
 	State.System->SetBoolean("sl_resource", !State.Filename.empty());
 	State.System->SetInteger("sl_material", Selection.Material ? Selection.Material->Slot : -1);
 	State.System->SetString("sl_entity", GUI::IElement::FromPointer((void*)Selection.Entity));
+	State.System->SetString("sl_status", State.Status);
 
 	switch (Selection.Window)
 	{
@@ -1160,6 +1161,7 @@ void Sandbox::SetViewModel()
 	State.Directories = State.System->SetArray("directories");
 	State.Files = State.System->SetArray("files");
 	State.System->SetBoolean("scene_active", false);
+	State.System->SetString("sl_status", "");
 	State.System->SetString("sl_window", "none");
 	State.System->SetString("sl_entity", GUI::IElement::FromPointer(nullptr));
 	State.System->SetInteger("sl_material", -1);

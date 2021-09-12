@@ -1129,9 +1129,10 @@ void ComponentIlluminator(GUI::Context* UI, Components::Illuminator* Base, bool 
 	UI->GetElementById(0, "cmp_illuminator_rs").CastFormFloat(&Base->RayStep);
 	UI->GetElementById(0, "cmp_illuminator_ms").CastFormFloat(&Base->MaxSteps);
 	UI->GetElementById(0, "cmp_illuminator_d").CastFormFloat(&Base->Distance);
-	UI->GetElementById(0, "cmp_illuminator_i").CastFormFloat(&Base->Intensity);
+	UI->GetElementById(0, "cmp_illuminator_i").CastFormFloat(&Base->Radiance);
+	UI->GetElementById(0, "cmp_illuminator_l").CastFormFloat(&Base->Length);
 	UI->GetElementById(0, "cmp_illuminator_o").CastFormFloat(&Base->Occlusion);
-	UI->GetElementById(0, "cmp_illuminator_s").CastFormFloat(&Base->Shadows);
+	UI->GetElementById(0, "cmp_illuminator_s").CastFormFloat(&Base->Specular);
 	UI->GetElementById(0, "cmp_illuminator_b").CastFormFloat(&Base->Bleeding);
 
 	uint32 Size = (uint32)Base->GetBufferSize();
