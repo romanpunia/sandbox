@@ -8,7 +8,7 @@ int main()
 Entry:
 	{
 		Application::Desc Init;
-		Init.GraphicsDevice.VSyncMode = VSync::Frequency_X1;
+		Init.GraphicsDevice.VSyncMode = VSync::None;
 		Init.GraphicsDevice.Backend = RenderBackend::D3D11;
 		Init.Activity.FreePosition = true;
 		Init.Activity.Title = "Sandbox";
