@@ -8,14 +8,17 @@ int main()
 Entry:
 	{
 		Application::Desc Init;
-		Init.GraphicsDevice.VSyncMode = VSync::None;
+		Init.GraphicsDevice.VSyncMode = VSync::Frequency_X1;
 		Init.GraphicsDevice.Backend = RenderBackend::D3D11;
-		Init.GraphicsDevice.Debug = true;
 		Init.Activity.FreePosition = true;
 		Init.Activity.Title = "Sandbox";
 		Init.Activity.Hidden = true;
 		Init.Directory = "sandbox";
-
+#ifdef _DEBUG
+		Init.GraphicsDevice.Debug = true;
+#else
+		Init.GraphicsDevice.Debug = false;
+#endif
 		Application* App = new Sandbox(&Init);
 		App->Start();
 		TH_CLEAR(App);

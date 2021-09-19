@@ -173,9 +173,10 @@ void Sandbox::Dispatch(Timer* Time)
 	if (!State.IsCameraActive && Scene->GetCamera()->GetEntity() == State.Camera)
 		State.IsCameraActive = true;
 
-	State.Camera->GetComponent<Components::Fly>()->SetActive(GetSceneFocus());
-	State.Camera->GetComponent<Components::FreeLook>()->SetActive(GetSceneFocus());
-	if (!Scene->IsActive() && GetSceneFocus())
+	bool Active = (!Scene->IsActive() && GetSceneFocus());
+	State.Camera->GetComponent<Components::Fly>()->SetActive(Active);
+	State.Camera->GetComponent<Components::FreeLook>()->SetActive(Active);
+	if (Active)
 	{
 		for (auto& Item : *State.Camera)
 			Item.second->Update(Time);
@@ -397,6 +398,7 @@ void Sandbox::UpdateScene()
 	State.Entities->Clear();
 	State.Materials->Clear();
 
+	Transform::Spacing Space = (State.Camera ? State.Camera->GetTransform()->GetSpacing(Positioning::Global) : Transform::Spacing());
 	if (Scene != nullptr)
 		TH_CLEAR(Scene);
 
@@ -426,6 +428,7 @@ void Sandbox::UpdateScene()
 	State.Camera = new ::Entity(Scene);
 	State.Camera->AddComponent<Components::Camera>();
 	State.Camera->AddComponent<Components::FreeLook>();
+	State.Camera->GetTransform()->SetSpacing(Positioning::Global, Space);
 
 	auto* Fly = State.Camera->AddComponent<Components::Fly>();
 	Fly->SpeedDown *= 0.25f;
@@ -441,7 +444,7 @@ void Sandbox::UpdateScene()
 	fRenderer->AddRenderer<Renderers::Emitter>();
 	fRenderer->AddRenderer<Renderers::Decal>();
 	fRenderer->AddRenderer<Renderers::Lighting>();
-	//fRenderer->AddRenderer<Renderers::Transparency>();
+	fRenderer->AddRenderer<Renderers::Transparency>();
 
 	Resource.ScenePath = Resource.NextPath;
 	Resource.NextPath.clear();
@@ -2349,7 +2352,7 @@ void Sandbox::SetMetadata(Entity* Source)
 	if (State.Skins != nullptr && Skin != nullptr)
 	{
 		State.Skins->Clear();
-		if (Model->GetDrawable())
+		if (Skin->GetDrawable())
 		{
 			for (auto* Buffer : Skin->GetDrawable()->Meshes)
 			{
@@ -2458,22 +2461,6 @@ void Sandbox::GetEntitySync()
 		if (SoftBody->GetBody())
 			SoftBody->GetBody()->SetVelocity(0);
 	}
-
-	Components::PointLight* PointLight = Selection.Entity->GetComponent<Components::PointLight>();
-	if (PointLight != nullptr)
-		PointLight->GetEntity()->GetTransform()->SetScale(PointLight->GetRange());
-
-	Components::SpotLight* SpotLight = Selection.Entity->GetComponent<Components::SpotLight>();
-	if (SpotLight != nullptr)
-		SpotLight->GetEntity()->GetTransform()->SetScale(SpotLight->GetRange());
-
-	Components::SurfaceLight* SurfaceLight = Selection.Entity->GetComponent<Components::SurfaceLight>();
-	if (SurfaceLight != nullptr)
-		SurfaceLight->GetEntity()->GetTransform()->SetScale(SurfaceLight->GetRange());
-
-	Components::Decal* Decal = Selection.Entity->GetComponent<Components::Decal>();
-	if (Decal != nullptr)
-		Decal->GetEntity()->GetTransform()->SetScale(Decal->GetRange());
 }
 void Sandbox::GetResource(const std::string& Name, const std::function<void(const std::string&)>& Callback)
 {

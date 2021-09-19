@@ -139,8 +139,6 @@ void ComponentDecal(GUI::Context* UI, Components::Decal* Base, bool Changed)
 	if (Changed)
 		LastMaterial = nullptr;
 
-	UI->GetElementById(0, "cmp_decal_fov").CastFormFloat(&Base->FieldOfView);
-	UI->GetElementById(0, "cmp_decal_dist").CastFormFloat(&Base->Distance);
 	UI->GetElementById(0, "cmp_decal_uv_x").CastFormFloat(&Base->TexCoord.X);
 	UI->GetElementById(0, "cmp_decal_uv_y").CastFormFloat(&Base->TexCoord.Y);
 
@@ -1131,6 +1129,9 @@ void ComponentIlluminator(GUI::Context* UI, Components::Illuminator* Base, bool 
 	UI->GetElementById(0, "cmp_illuminator_d").CastFormFloat(&Base->Distance);
 	UI->GetElementById(0, "cmp_illuminator_i").CastFormFloat(&Base->Radiance);
 	UI->GetElementById(0, "cmp_illuminator_l").CastFormFloat(&Base->Length);
+	UI->GetElementById(0, "cmp_illuminator_m").CastFormFloat(&Base->Margin);
+	UI->GetElementById(0, "cmp_illuminator_off").CastFormFloat(&Base->Offset);
+	UI->GetElementById(0, "cmp_illuminator_a").CastFormFloat(&Base->Angle);
 	UI->GetElementById(0, "cmp_illuminator_o").CastFormFloat(&Base->Occlusion);
 	UI->GetElementById(0, "cmp_illuminator_s").CastFormFloat(&Base->Specular);
 	UI->GetElementById(0, "cmp_illuminator_b").CastFormFloat(&Base->Bleeding);
