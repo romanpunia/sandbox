@@ -1157,7 +1157,7 @@ void ComponentCamera(GUI::Context* UI, Components::Camera* Base, bool Changed)
 		fRenderer->SetFrustumCulling(FC);
 
 	if (UI->GetElementById(0, "cmp_camera_oc").CastFormBoolean(&OC))
-		fRenderer->SetOcclusionCulling(FC);
+		fRenderer->SetOcclusionCulling(OC);
 
 	UI->GetElementById(0, "cmp_camera_fov").CastFormFloat(&Base->FieldOfView);
 	UI->GetElementById(0, "cmp_camera_w").CastFormFloat(&Base->Width);
