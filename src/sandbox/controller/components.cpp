@@ -100,9 +100,12 @@ void ComponentEmitter(GUI::Context* UI, Components::Emitter* Base, bool Changed)
 		LastMaterial = nullptr;
 
 	int Count = (int)Base->GetBuffer()->GetArray()->Size();
-	UI->GetElementById(0, "cmp_emitter_vol_x").CastFormFloat(&Base->Volume.X);
-	UI->GetElementById(0, "cmp_emitter_vol_y").CastFormFloat(&Base->Volume.Y);
-	UI->GetElementById(0, "cmp_emitter_vol_z").CastFormFloat(&Base->Volume.Z);
+	UI->GetElementById(0, "cmp_emitter_min_x").CastFormFloat(&Base->Min.X);
+	UI->GetElementById(0, "cmp_emitter_min_y").CastFormFloat(&Base->Min.Y);
+	UI->GetElementById(0, "cmp_emitter_min_z").CastFormFloat(&Base->Min.Z);
+	UI->GetElementById(0, "cmp_emitter_max_x").CastFormFloat(&Base->Max.X);
+	UI->GetElementById(0, "cmp_emitter_max_y").CastFormFloat(&Base->Max.Y);
+	UI->GetElementById(0, "cmp_emitter_max_z").CastFormFloat(&Base->Max.Z);
 	UI->GetElementById(0, "cmp_emitter_elem_limit").CastFormInt32(&App->State.ElementsLimit);
 	UI->GetElementById(0, "cmp_emitter_elem_count").CastFormInt32(&Count);
 	UI->GetElementById(0, "cmp_emitter_quad_based").CastFormBoolean(&Base->QuadBased);
@@ -1033,13 +1036,16 @@ void ComponentPointLight(GUI::Context* UI, Components::PointLight* Base, bool Ch
 	UI->GetElementById(0, "cmp_point_light_pcf").CastFormUInt32(&Base->Shadow.Iterations);
 	UI->GetElementById(0, "cmp_point_light_emission").CastFormFloat(&Base->Emission);
 	UI->GetElementById(0, "cmp_point_light_disp").CastFormFloat(&Base->Disperse);
-	UI->GetElementById(0, "cmp_point_light_srange").CastFormFloat(&Base->Size.Range);
-	UI->GetElementById(0, "cmp_point_light_sc1").CastFormFloat(&Base->Size.C1);
-	UI->GetElementById(0, "cmp_point_light_sc2").CastFormFloat(&Base->Size.C2);
 	UI->GetElementById(0, "cmp_point_light_sd_bias").CastFormFloat(&Base->Shadow.Bias);
 	UI->GetElementById(0, "cmp_point_light_sd_dist").CastFormFloat(&Base->Shadow.Distance);
 	UI->GetElementById(0, "cmp_point_light_sd_soft").CastFormFloat(&Base->Shadow.Softness);
 	UI->GetElementById(0, "cmp_point_light_sd_active").CastFormBoolean(&Base->Shadow.Enabled);
+
+	Attenuation Size = Base->GetSize();
+	if (UI->GetElementById(0, "cmp_point_light_srange").CastFormFloat(&Size.Radius) ||
+		UI->GetElementById(0, "cmp_point_light_sc1").CastFormFloat(&Size.C1) ||
+		UI->GetElementById(0, "cmp_point_light_sc2").CastFormFloat(&Size.C2))
+		Base->SetSize(Size);
 }
 void ComponentSpotLight(GUI::Context* UI, Components::SpotLight* Base, bool Changed)
 {
@@ -1048,13 +1054,16 @@ void ComponentSpotLight(GUI::Context* UI, Components::SpotLight* Base, bool Chan
 	UI->GetElementById(0, "cmp_spot_light_emission").CastFormFloat(&Base->Emission);
 	UI->GetElementById(0, "cmp_spot_light_disp").CastFormFloat(&Base->Disperse);
 	UI->GetElementById(0, "cmp_spot_light_cutoff").CastFormFloat(&Base->Cutoff);
-	UI->GetElementById(0, "cmp_spot_light_srange").CastFormFloat(&Base->Size.Range);
-	UI->GetElementById(0, "cmp_spot_light_sc1").CastFormFloat(&Base->Size.C1);
-	UI->GetElementById(0, "cmp_spot_light_sc2").CastFormFloat(&Base->Size.C2);
 	UI->GetElementById(0, "cmp_spot_light_sd_bias").CastFormFloat(&Base->Shadow.Bias);
 	UI->GetElementById(0, "cmp_spot_light_sd_dist").CastFormFloat(&Base->Shadow.Distance);
 	UI->GetElementById(0, "cmp_spot_light_sd_soft").CastFormFloat(&Base->Shadow.Softness);
 	UI->GetElementById(0, "cmp_spot_light_sd_active").CastFormBoolean(&Base->Shadow.Enabled);
+
+	Attenuation Size = Base->GetSize();
+	if (UI->GetElementById(0, "cmp_spot_light_srange").CastFormFloat(&Size.Radius) ||
+		UI->GetElementById(0, "cmp_spot_light_sc1").CastFormFloat(&Size.C1) ||
+		UI->GetElementById(0, "cmp_spot_light_sc2").CastFormFloat(&Size.C2))
+		Base->SetSize(Size);
 }
 void ComponentLineLight(GUI::Context* UI, Components::LineLight* Base, bool Changed)
 {
@@ -1113,13 +1122,16 @@ void ComponentSurfaceLight(GUI::Context* UI, Components::SurfaceLight* Base, boo
 	UI->GetElementById(0, "cmp_surface_light_vo_y").CastFormFloat(&Base->Offset.Y);
 	UI->GetElementById(0, "cmp_surface_light_vo_z").CastFormFloat(&Base->Offset.Z);
 	UI->GetElementById(0, "cmp_surface_light_rd").CastFormDouble(&Base->Tick.Delay);
-	UI->GetElementById(0, "cmp_surface_light_srange").CastFormFloat(&Base->Size.Range);
-	UI->GetElementById(0, "cmp_surface_light_sc1").CastFormFloat(&Base->Size.C1);
-	UI->GetElementById(0, "cmp_surface_light_sc2").CastFormFloat(&Base->Size.C2);
 	UI->GetElementById(0, "cmp_surface_light_emission").CastFormFloat(&Base->Emission);
 	UI->GetElementById(0, "cmp_surface_light_inf").CastFormFloat(&Base->Infinity);
 	UI->GetElementById(0, "cmp_surface_light_px").CastFormBoolean(&Base->Parallax);
 	UI->GetElementById(0, "cmp_surface_light_static").CastFormBoolean(&Base->StaticMask);
+
+	Attenuation Size = Base->GetSize();
+	if (UI->GetElementById(0, "cmp_surface_light_srange").CastFormFloat(&Size.Radius) ||
+		UI->GetElementById(0, "cmp_surface_light_sc1").CastFormFloat(&Size.C1) ||
+		UI->GetElementById(0, "cmp_surface_light_sc2").CastFormFloat(&Size.C2))
+		Base->SetSize(Size);
 }
 void ComponentIlluminator(GUI::Context* UI, Components::Illuminator* Base, bool Changed)
 {
@@ -1150,22 +1162,16 @@ void ComponentCamera(GUI::Context* UI, Components::Camera* Base, bool Changed)
 	uint64_t Size = fRenderer->GetDepthSize();
 	uint64_t Stalls = fRenderer->StallFrames;
 	bool Preview = !App->State.IsCameraActive;
-	bool FC = fRenderer->HasFrustumCulling();
-	bool OC = fRenderer->HasOcclusionCulling();
 
-	if (UI->GetElementById(0, "cmp_camera_fc").CastFormBoolean(&FC))
-		fRenderer->SetFrustumCulling(FC);
-
-	if (UI->GetElementById(0, "cmp_camera_oc").CastFormBoolean(&OC))
-		fRenderer->SetOcclusionCulling(OC);
-
+	UI->GetElementById(0, "cmp_camera_fc").CastFormBoolean(&fRenderer->FrustumCulling);
+	UI->GetElementById(0, "cmp_camera_oc").CastFormBoolean(&fRenderer->OcclusionCulling);
 	UI->GetElementById(0, "cmp_camera_fov").CastFormFloat(&Base->FieldOfView);
 	UI->GetElementById(0, "cmp_camera_w").CastFormFloat(&Base->Width);
 	UI->GetElementById(0, "cmp_camera_h").CastFormFloat(&Base->Height);
 	UI->GetElementById(0, "cmp_camera_np").CastFormFloat(&Base->NearPlane);
 	UI->GetElementById(0, "cmp_camera_fp").CastFormFloat(&Base->FarPlane);
+	UI->GetElementById(0, "cmp_camera_thd").CastFormFloat(&fRenderer->Threshold);
 	UI->GetElementById(0, "cmp_camera_oc_rd").CastFormDouble(&fRenderer->Occlusion.Delay);
-	UI->GetElementById(0, "cmp_camera_oc_sd").CastFormDouble(&fRenderer->Sorting.Delay);
 	UI->GetElementById(0, "cmp_camera_oc_sf").CastFormUInt64(&Stalls);
 	UI->GetElementById(0, "cmp_camera_oc_db").CastFormUInt64(&Size);
 
@@ -1185,13 +1191,14 @@ void ComponentCamera(GUI::Context* UI, Components::Camera* Base, bool Changed)
 			auto* Main = App->State.Camera->GetComponent<Components::Camera>();
 			App->Scene->SetCamera(App->State.Camera);
 
+			auto* fRenderer = Main->GetRenderer();
 			if (App->Scene->IsActive())
 			{
-				Main->GetRenderer()->SetOcclusionCulling(false, true);
-				Main->GetRenderer()->SetFrustumCulling(true, true);
+				fRenderer->OcclusionCulling = false;
+				fRenderer->FrustumCulling = true;
 			}
 			else
-				Main->GetRenderer()->ClearCull();
+				App->Scene->ClearCulling();
 		}
 		else
 			App->Scene->SetCamera(Base->GetEntity());

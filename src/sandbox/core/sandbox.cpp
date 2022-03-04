@@ -439,12 +439,12 @@ void Sandbox::UpdateScene()
 
 	auto* fRenderer = Scene->GetRenderer();
 	fRenderer->AddRenderer<Renderers::Model>();
-	fRenderer->AddRenderer<Renderers::Skin>();
+	/*fRenderer->AddRenderer<Renderers::Skin>();
 	fRenderer->AddRenderer<Renderers::SoftBody>();
 	fRenderer->AddRenderer<Renderers::Emitter>();
 	fRenderer->AddRenderer<Renderers::Decal>();
 	fRenderer->AddRenderer<Renderers::Lighting>();
-	fRenderer->AddRenderer<Renderers::Transparency>();
+	fRenderer->AddRenderer<Renderers::Transparency>();*/
 
 	Resource.ScenePath = Resource.NextPath;
 	Resource.NextPath.clear();
@@ -551,18 +551,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 			}
 		}
 
-		Matrix4x4 Transform;
-		if (Skin != nullptr)
-			Transform = Value->GetComponent<Components::Skin>()->GetBoundingBox();
-		else if (Value->GetComponent<Components::Model>())
-			Transform = Value->GetComponent<Components::Model>()->GetBoundingBox();
-		else if (Value->GetComponent<Components::SoftBody>())
-			Transform = Value->GetComponent<Components::SoftBody>()->GetBoundingBox();
-		else if (Value->GetComponent<Components::PointLight>() || Value->GetComponent<Components::SpotLight>() || Value->GetComponent<Components::LineLight>())
-			Transform = Value->GetTransform()->GetBiasUnscaled();
-		else
-			Transform = Value->GetTransform()->GetBias();
-
+		Matrix4x4 Transform = Value->GetBox();
 		for (int j = 0; j < 4; j++)
 		{
 			Renderer->Begin();
@@ -882,7 +871,7 @@ void Sandbox::InspectEntity()
 	}
 
 	bool Scaling = Base->GetTransform()->HasScaling();
-	State.GUI->GetElementById(0, "ent_tag").CastFormInt64(&Base->Tag);
+	State.GUI->GetElementById(0, "ent_tag").CastFormUInt64(&Base->Tag);
 	if (State.GUI->GetElementById(0, "ent_const_scale").CastFormBoolean(&Scaling))
 		Base->GetTransform()->SetScaling(Scaling);
 
@@ -1042,8 +1031,11 @@ void Sandbox::InspectSettings()
 	State.GUI->GetElementById(0, "sc_softs").CastFormBoolean(&Conf.Simulator.EnableSoftBody);
 	State.GUI->GetElementById(0, "sc_gp_qual").CastFormFloat(&Conf.RenderQuality, 100.0f);
 	State.GUI->GetElementById(0, "sc_gp_hdr").CastFormBoolean(&Conf.EnableHDR);
-	State.GUI->GetElementById(0, "sc_max_ents").CastFormUInt64(&Conf.EntityCount);
-	State.GUI->GetElementById(0, "sc_max_comps").CastFormUInt64(&Conf.ComponentCount);
+	State.GUI->GetElementById(0, "sc_start_mats").CastFormUInt64(&Conf.StartEntities);
+	State.GUI->GetElementById(0, "sc_start_ents").CastFormUInt64(&Conf.StartComponents);
+	State.GUI->GetElementById(0, "sc_start_comps").CastFormUInt64(&Conf.StartMaterials);
+	State.GUI->GetElementById(0, "sc_grow_marg").CastFormUInt64(&Conf.GrowMargin);
+	State.GUI->GetElementById(0, "sc_grow_rate").CastFormDouble(&Conf.GrowRate);
 
 	Vector3 Gravity = Scene->GetSimulator()->GetGravity();
 	if (State.GUI->GetElementById(0, "sc_sim_grav_x").CastFormFloat(&Gravity.X) ||
@@ -1370,8 +1362,8 @@ void Sandbox::SetViewModel()
 			Scene->SetActive(true);
 			Scene->ScriptHook();
 
-			auto* Cameras = Scene->GetComponents<Components::Camera>();
-			for (auto It = Cameras->Begin(); It != Cameras->End(); It++)
+			auto& Cameras = Scene->GetComponents<Components::Camera>();
+			for (auto It = Cameras.Begin(); It != Cameras.End(); It++)
 			{
 				Components::Camera* Base = (Components::Camera*)*It;
 				if (Base->GetEntity() == State.Camera)
@@ -2403,20 +2395,7 @@ void Sandbox::GetEntityCell()
 		if (Distance > 0.0f && Distance < Far)
 			continue;
 
-		Matrix4x4 Transform;
-		if (Value->GetComponent<Components::PointLight>() ||
-			Value->GetComponent<Components::SpotLight>() ||
-			Value->GetComponent<Components::SurfaceLight>())
-			Transform = Value->GetTransform()->GetBiasUnscaled();
-		else if (Value->GetComponent<Components::Model>())
-			Transform = Value->GetComponent<Components::Model>()->GetBoundingBox();
-		else if (Value->GetComponent<Components::Skin>())
-			Transform = Value->GetComponent<Components::Skin>()->GetBoundingBox();
-		else if (Value->GetComponent<Components::SoftBody>())
-			Transform = Value->GetComponent<Components::SoftBody>()->GetBoundingBox();
-		else
-			Transform = Value->GetTransform()->GetBias();
-
+		Matrix4x4 Transform = Value->GetBox();
 		if (Camera->RayTest(Cursor, Transform))
 		{
 			Current = Value;

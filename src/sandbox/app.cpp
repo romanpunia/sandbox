@@ -9,7 +9,6 @@ Entry:
 	{
 		Application::Desc Init;
 		Init.GraphicsDevice.VSyncMode = VSync::None;
-		Init.GraphicsDevice.Backend = RenderBackend::OGL;
 		Init.Activity.FreePosition = true;
 		Init.Activity.Title = "Sandbox";
 		Init.Activity.Hidden = true;
