@@ -1392,7 +1392,7 @@ void Sandbox::SetViewModel()
 		Processors::Model* Processor = (Processors::Model*)Content->GetProcessor<Model>();
 		if (Processor != nullptr)
 		{
-			Document* Doc = Processor->Import(From, State.MeshImportOpts);
+			Schema* Doc = Processor->Import(From, State.MeshImportOpts);
 			if (Doc != nullptr)
 			{
 				std::string To;
@@ -1407,7 +1407,7 @@ void Sandbox::SetViewModel()
 				else
 					Args["type"] = Var::String("XML");
 
-				Content->Save<Document>(To, Doc, Args);
+				Content->Save<Schema>(To, Doc, Args);
 				TH_RELEASE(Doc);
 				this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Mesh was imported");
 			}
@@ -1432,7 +1432,7 @@ void Sandbox::SetViewModel()
 		Processors::SkinModel* Processor = (Processors::SkinModel*)Content->GetProcessor<Model>();
 		if (Processor != nullptr)
 		{
-			Document* Doc = Processor->ImportAnimation(From, State.MeshImportOpts);
+			Schema* Doc = Processor->ImportAnimation(From, State.MeshImportOpts);
 			if (Doc != nullptr)
 			{
 				std::string To;
@@ -1447,7 +1447,7 @@ void Sandbox::SetViewModel()
 				else
 					Args["type"] = Var::String("XML");
 
-				Content->Save<Document>(To, Doc, Args);
+				Content->Save<Schema>(To, Doc, Args);
 				TH_RELEASE(Doc);
 				this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Animation was imported");
 			}
@@ -1517,7 +1517,7 @@ void Sandbox::SetViewModel()
 		if (!OS::Input::Save("Save skin animation", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized skin animation (*.xml, *.json, *.jsonb)", &Path))
 			return;
 
-		Document* Result = Var::Set::Object();
+		Schema* Result = Var::Set::Object();
 		Result->Key = "skin-animation";
 
 		auto* Animator = Selection.Entity->GetComponent<Components::SkinAnimator>();
@@ -1531,7 +1531,7 @@ void Sandbox::SetViewModel()
 		else
 			Map["type"] = Var::String("XML");
 
-		if (!Content->Save<Document>(Path, Result, Map))
+		if (!Content->Save<Schema>(Path, Result, Map))
 			this->Activity->Message.Setup(AlertType::Error, "Sandbox", "Skin animation cannot be saved");
 		else
 			this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Skin animation was saved");
@@ -1554,7 +1554,7 @@ void Sandbox::SetViewModel()
 		if (!OS::Input::Save("Save key animation", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized key animation (*.xml, *.json, *.jsonb)", &Path))
 			return;
 
-		Document* Result = Var::Set::Object();
+		Schema* Result = Var::Set::Object();
 		Result->Key = "key-animation";
 
 		auto* Animator = Selection.Entity->GetComponent<Components::KeyAnimator>();
@@ -1568,7 +1568,7 @@ void Sandbox::SetViewModel()
 		else
 			Map["type"] = Var::String("XML");
 
-		if (!Content->Save<Document>(Path, Result, Map))
+		if (!Content->Save<Schema>(Path, Result, Map))
 			this->Activity->Message.Setup(AlertType::Error, "Sandbox", "Key animation cannot be saved");
 		else
 			this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Key animation was saved");
