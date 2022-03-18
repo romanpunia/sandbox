@@ -1159,7 +1159,6 @@ void ComponentCamera(GUI::Context* UI, Components::Camera* Base, bool Changed)
 		return;
 
 	auto* fRenderer = Base->GetRenderer();
-	uint64_t Size = fRenderer->GetDepthSize();
 	bool Preview = !App->State.IsCameraActive;
 
 	UI->GetElementById(0, "cmp_camera_fc").CastFormBoolean(&fRenderer->FrustumCulling);
@@ -1173,15 +1172,14 @@ void ComponentCamera(GUI::Context* UI, Components::Camera* Base, bool Changed)
 	UI->GetElementById(0, "cmp_camera_oc_sp1").CastFormUInt64(&fRenderer->OcclusionSkips);
 	UI->GetElementById(0, "cmp_camera_oc_sp2").CastFormUInt64(&fRenderer->OccluderSkips);
 	UI->GetElementById(0, "cmp_camera_oc_sp3").CastFormUInt64(&fRenderer->OccludeeSkips);
-	UI->GetElementById(0, "cmp_camera_oc_db").CastFormUInt64(&Size);
+	UI->GetElementById(0, "cmp_camera_oc_mq").CastFormUInt64(&fRenderer->MaxQueries);
+	UI->GetElementById(0, "cmp_camera_oc_thrs").CastFormFloat(&fRenderer->Threshold);
+	UI->GetElementById(0, "cmp_camera_oc_ov").CastFormFloat(&fRenderer->OverflowVisibility);
 
 	if (UI->GetElementById(0, "cmp_camera_perspective").IsActive())
 		Base->Mode = Components::Camera::ProjectionMode_Perspective;
 	else if (UI->GetElementById(0, "cmp_camera_ortho").IsActive())
 		Base->Mode = Components::Camera::ProjectionMode_Orthographic;
-
-	if ((size_t)Size != fRenderer->GetDepthSize())
-		fRenderer->SetDepthSize((size_t)Size);
 
 	if (UI->GetElementById(0, "cmp_camera_preview").CastFormBoolean(&Preview))
 	{
