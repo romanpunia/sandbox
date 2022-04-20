@@ -140,6 +140,8 @@ void Sandbox::Initialize()
 		return Stop();
 	}
 
+	Resource.NextPath = "scenes/demo-test.xml";
+
 	Demo::SetSource("");
 	UpdateScene();
 	UpdateProject();
@@ -439,12 +441,12 @@ void Sandbox::UpdateScene()
 
 	auto* fRenderer = Scene->GetRenderer();
 	fRenderer->AddRenderer<Renderers::Model>();
-	/*fRenderer->AddRenderer<Renderers::Skin>();
+	fRenderer->AddRenderer<Renderers::Skin>();
 	fRenderer->AddRenderer<Renderers::SoftBody>();
 	fRenderer->AddRenderer<Renderers::Emitter>();
 	fRenderer->AddRenderer<Renderers::Decal>();
 	fRenderer->AddRenderer<Renderers::Lighting>();
-	fRenderer->AddRenderer<Renderers::Transparency>();*/
+	fRenderer->AddRenderer<Renderers::Transparency>();
 
 	Resource.ScenePath = Resource.NextPath;
 	Resource.NextPath.clear();
@@ -474,7 +476,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 
 		float Direction = -Value->GetTransform()->GetPosition().LookAtXZ(State.Camera->GetTransform()->GetPosition());
 		Renderer->Render.TexCoord = (Value == Selection.Entity ? 0.5f : 0.05f);
-		Renderer->Render.WorldViewProj = Matrix4x4::Create(Value->GetTransform()->GetPosition(), 0.5f, Vector3(0, Direction))* State.Camera->GetComponent<Components::Camera>()->GetViewProjection();
+		Renderer->Render.Transform = Matrix4x4::Create(Value->GetTransform()->GetPosition(), 0.5f, Vector3(0, Direction))* State.Camera->GetComponent<Components::Camera>()->GetViewProjection();
 		Renderer->SetTexture2D(GetIcon(Value), 1, TH_PS);
 		Renderer->UpdateBuffer(RenderBufferType::Render);
 		Renderer->Draw(6, 0);
@@ -1036,6 +1038,14 @@ void Sandbox::InspectSettings()
 	State.GUI->GetElementById(0, "sc_start_comps").CastFormUInt64(&Conf.StartMaterials);
 	State.GUI->GetElementById(0, "sc_grow_marg").CastFormUInt64(&Conf.GrowMargin);
 	State.GUI->GetElementById(0, "sc_grow_rate").CastFormDouble(&Conf.GrowRate);
+	State.GUI->GetElementById(0, "sc_vp_br").CastFormUInt64(&Conf.VoxelsSize);
+	State.GUI->GetElementById(0, "sc_vp_bl").CastFormUInt64(&Conf.VoxelsMax);
+	State.GUI->GetElementById(0, "sc_sp_plr").CastFormUInt64(&Conf.PointsSize);
+	State.GUI->GetElementById(0, "sc_sp_pll").CastFormUInt64(&Conf.PointsMax);
+	State.GUI->GetElementById(0, "sc_sp_slr").CastFormUInt64(&Conf.SpotsSize);
+	State.GUI->GetElementById(0, "sc_sp_sll").CastFormUInt64(&Conf.SpotsMax);
+	State.GUI->GetElementById(0, "sc_sp_llr").CastFormUInt64(&Conf.LinesSize);
+	State.GUI->GetElementById(0, "sc_sp_lll").CastFormUInt64(&Conf.LinesMax);
 
 	Vector3 Gravity = Scene->GetSimulator()->GetGravity();
 	if (State.GUI->GetElementById(0, "sc_sim_grav_x").CastFormFloat(&Gravity.X) ||

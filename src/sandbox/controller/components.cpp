@@ -1135,7 +1135,8 @@ void ComponentSurfaceLight(GUI::Context* UI, Components::SurfaceLight* Base, boo
 }
 void ComponentIlluminator(GUI::Context* UI, Components::Illuminator* Base, bool Changed)
 {
-	UI->GetElementById(0, "cmp_illuminator_rd").CastFormDouble(&Base->Tick.Delay);
+	UI->GetElementById(0, "cmp_illuminator_id").CastFormDouble(&Base->Inside.Delay);
+	UI->GetElementById(0, "cmp_illuminator_od").CastFormDouble(&Base->Outside.Delay);
 	UI->GetElementById(0, "cmp_illuminator_rs").CastFormFloat(&Base->RayStep);
 	UI->GetElementById(0, "cmp_illuminator_ms").CastFormFloat(&Base->MaxSteps);
 	UI->GetElementById(0, "cmp_illuminator_d").CastFormFloat(&Base->Distance);
@@ -1147,10 +1148,6 @@ void ComponentIlluminator(GUI::Context* UI, Components::Illuminator* Base, bool 
 	UI->GetElementById(0, "cmp_illuminator_o").CastFormFloat(&Base->Occlusion);
 	UI->GetElementById(0, "cmp_illuminator_s").CastFormFloat(&Base->Specular);
 	UI->GetElementById(0, "cmp_illuminator_b").CastFormFloat(&Base->Bleeding);
-
-	uint32 Size = (uint32)Base->GetBufferSize();
-	if (UI->GetElementById(0, "cmp_illuminator_sz").CastFormUInt32(&Size) && Size != Base->GetBufferSize())
-		Base->SetBufferSize(Size);
 }
 void ComponentCamera(GUI::Context* UI, Components::Camera* Base, bool Changed)
 {

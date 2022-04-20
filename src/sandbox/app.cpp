@@ -13,6 +13,7 @@ Entry:
 		Init.Activity.Title = "Sandbox";
 		Init.Activity.Hidden = true;
 		Init.Directory = "sandbox";
+		Init.Async = false;
 #ifdef _DEBUG
 		Init.GraphicsDevice.Debug = true;
 #else

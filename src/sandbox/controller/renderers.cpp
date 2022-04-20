@@ -8,12 +8,6 @@ void RendererLighting(GUI::Context* UI, Renderers::Lighting* Base)
 	ResolveColor3(UI, "cmp_camera_lighting_lc", &Base->AmbientLight.LowEmission);
 	ResolveColor3(UI, "cmp_camera_lighting_sc", &Base->AmbientLight.SkyColor);
 	ResolveColor3(UI, "cmp_camera_lighting_fc", &Base->AmbientLight.FogColor);
-	UI->GetElementById(0, "cmp_camera_lighting_plr").CastFormUInt64(&Base->Shadows.PointLightResolution);
-	UI->GetElementById(0, "cmp_camera_lighting_pll").CastFormUInt64(&Base->Shadows.PointLightLimits);
-	UI->GetElementById(0, "cmp_camera_lighting_slr").CastFormUInt64(&Base->Shadows.SpotLightResolution);
-	UI->GetElementById(0, "cmp_camera_lighting_sll").CastFormUInt64(&Base->Shadows.SpotLightLimits);
-	UI->GetElementById(0, "cmp_camera_lighting_llr").CastFormUInt64(&Base->Shadows.LineLightResolution);
-	UI->GetElementById(0, "cmp_camera_lighting_lll").CastFormUInt64(&Base->Shadows.LineLightLimits);
 	UI->GetElementById(0, "cmp_camera_lighting_rd").CastFormDouble(&Base->Shadows.Tick.Delay);
 	UI->GetElementById(0, "cmp_camera_lighting_sd").CastFormFloat(&Base->Shadows.Distance);
 	UI->GetElementById(0, "cmp_camera_lighting_ff_x").CastFormFloat(&Base->AmbientLight.FogFar.X);
