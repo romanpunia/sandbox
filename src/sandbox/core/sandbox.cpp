@@ -8,6 +8,9 @@
 Sandbox::Sandbox(Application::Desc* Conf, const std::string& Path) : Application(Conf)
 {
 	Resource.NextPath = Path;
+#ifdef _DEBUG
+	Console::Get()->Show();
+#endif
 }
 Sandbox::~Sandbox()
 {
