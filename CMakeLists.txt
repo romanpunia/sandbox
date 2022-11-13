@@ -15,7 +15,7 @@ include(${TH_DIRECTORY}/lib/toolchain.cmake)
 #Project's metadata
 project(sandbox)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
-set(CMAKE_CONFIGURATION_TYPES "Debug;Release")
+set(CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo")
 
 #Build directory if not defined
 if (NOT DEFINED CMAKE_RUNTIME_OUTPUT_DIRECTORY)
