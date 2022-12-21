@@ -801,7 +801,7 @@ void Sandbox::UpdateMutation(const std::string& Name, VariantArgs& Args)
 
 		VariantList Item;
 		Item.emplace_back(std::move(Var::Integer(Base->Slot)));
-		Item.emplace_back(std::move(Var::String(Base->GetName().empty() ? "Material #" + Base->Slot : Base->GetName())));
+		Item.emplace_back(std::move(Var::String(Base->GetName().empty() ? "Material #" + std::to_string(Base->Slot) : Base->GetName())));
 		Item.emplace_back(std::move(Var::String(GUI::IElement::FromPointer((void*)Base))));
 		State.Materials->Add(Item);
 	}
