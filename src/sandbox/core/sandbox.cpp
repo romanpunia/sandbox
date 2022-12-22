@@ -145,6 +145,7 @@ void Sandbox::Initialize()
 
 	Resource.NextPath = "scenes/demo-test.xml";
 
+	OS::SetLogDeferred(false);
 	Demo::SetSource("");
 	UpdateScene();
 	UpdateProject();
@@ -469,7 +470,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 	Renderer->SetRasterizerState(States.BackRasterizer);
 	Renderer->SetInputLayout(States.Layout);
 	Renderer->SetShader(Renderer->GetBasicEffect(), TH_VS | TH_PS);
-	Renderer->SetVertexBuffer(Cache.Primitives->GetQuad(), 0);
+	Renderer->SetVertexBuffer(Cache.Primitives->GetQuad());
 
 	for (uint32_t i = 0; i < Scene->GetEntitiesCount(); i++)
 	{
