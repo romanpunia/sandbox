@@ -143,7 +143,7 @@ void Sandbox::Initialize()
 		return Stop();
 	}
 
-	Resource.NextPath = "scenes/demo-test.xml";
+	Resource.NextPath = "scenes/demo.xml";
 
 	OS::SetLogDeferred(false);
 	Demo::SetSource("");

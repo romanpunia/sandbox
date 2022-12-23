@@ -1,6 +1,4 @@
 <material>
-	<metallic-map s="./surfaces/metal-panel/metallic.jpg" />
-	<roughness-map s="./surfaces/paving-stones/roughness.jpg" />
 	<emission x="1.000000" y="1.000000" z="1.000000" w="0.000000" />
 	<metallic x="1.000000" y="1.000000" z="1.000000" w="0.330000" />
 	<diffuse x="0.200000" y="0.200000" z="0.200000" />
