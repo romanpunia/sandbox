@@ -32,10 +32,9 @@
 	<materials>
 		<material i="0" s="./materials/red-wall.xml" />
 		<material i="1" s="./materials/lamp.xml" />
-		<material i="2" s="./materials/ball.xml" />
+		<material i="2" s="./materials/wall.xml" />
 		<material i="3" s="./materials/box.xml" />
 		<material i="4" s="./materials/green-wall.xml" />
-		<material i="5" s="./materials/wall.xml" />
 	</materials>
 	<entities>
 		<entity>
@@ -45,7 +44,7 @@
 			<transform>
 				<position x="0.000000" y="-5.000000" z="-0.000000" />
 				<rotation x="0.000000" y="0.000000" z="0.000000" />
-				<scale x="10.000000" y="1.000000" z="10.000000" />
+				<scale x="10.000000" y="1.000000" z="12.000000" />
 				<scaling b="false" />
 			</transform>
 			<components>
@@ -57,7 +56,7 @@
 						<materials>
 							<material>
 								<name s="Cube" />
-								<slot i="5" />
+								<slot i="1" />
 							</material>
 						</materials>
 						<texcoord x="2.000000" y="2.000000" />
@@ -83,7 +82,7 @@
 					<active b="true" />
 					<metadata>
 						<mode i="0" />
-						<projection m11="0.504041" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.303225" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000100" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100010" m44="0.000000" />
+						<projection m11="0.684872" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.303225" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000100" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100010" m44="0.000000" />
 						<field-of-view n="75.000000" />
 						<far-plane n="1000.000000" />
 						<near-plane n="0.100000" />
@@ -210,9 +209,9 @@
 			<tag i="-1" />
 			<refer i="3" />
 			<transform>
-				<position x="11.000000" y="6.000000" z="0.000000" />
+				<position x="11.000000" y="5.000000" z="0.000000" />
 				<rotation x="0.000000" y="1.570796" z="1.570796" />
-				<scale x="10.000000" y="1.000000" z="10.000000" />
+				<scale x="12.000000" y="1.000000" z="12.000000" />
 				<scaling b="false" />
 			</transform>
 			<components>
@@ -224,7 +223,7 @@
 						<materials>
 							<material>
 								<name s="Cube" />
-								<slot i="5" />
+								<slot i="2" />
 							</material>
 						</materials>
 						<texcoord x="-2.000000" y="2.000000" />
@@ -236,32 +235,34 @@
 		</entity>
 		<entity>
 			<name s="" />
-			<tag i="-1" />
+			<tag i="0" />
 			<refer i="4" />
 			<transform>
-				<position x="0.230162" y="5.816159" z="0.103680" />
+				<position x="-11.261538" y="0.000000" z="0.182603" />
 				<rotation x="0.000000" y="0.000000" z="0.000000" />
-				<scale x="12.000000" y="12.000000" z="12.000000" />
+				<scale x="1.000000" y="1.000000" z="1.000000" />
 				<scaling b="false" />
 			</transform>
 			<components>
 				<component>
-					<id i="-1162437150" />
+					<id i="-1899663186" />
 					<active b="true" />
 					<metadata>
-						<inside-delay n="30.000000" />
-						<outside-delay n="1002200.000000" />
-						<ray-step n="0.350000" />
-						<max-steps n="256.000000" />
-						<distance n="12.000000" />
-						<radiance n="0.250000" />
-						<length n="3.000000" />
-						<margin n="3.828424" />
-						<offset n="-0.010000" />
-						<angle n="0.500000" />
-						<occlusion n="0.500000" />
-						<specular n="3.000000" />
-						<bleeding n="0.330000" />
+						<projection m11="1.000000" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000000" m34="0.000000" m41="0.000000" m42="0.000000" m43="0.000000" m44="1.000000" />
+						<view m11="1.000000" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000000" m34="0.000000" m41="0.000000" m42="0.000000" m43="0.000000" m44="1.000000" />
+						<size>
+							<radius n="50.000000" />
+							<c1 n="0.600000" />
+							<c2 n="0.600000" />
+						</size>
+						<diffuse x="1.000000" y="1.000000" z="1.000000" />
+						<emission n="0.500000" />
+						<disperse n="0.000000" />
+						<shadow-softness n="1.000000" />
+						<shadow-distance n="100.000000" />
+						<shadow-bias n="0.000000" />
+						<shadow-iterations i="2" />
+						<shadow-enabled b="false" />
 					</metadata>
 				</component>
 			</components>
@@ -326,29 +327,34 @@
 		</entity>
 		<entity>
 			<name s="" />
-			<tag i="-1" />
+			<tag i="0" />
 			<refer i="7" />
 			<transform>
-				<position x="-4.367679" y="-0.500000" z="-3.852161" />
-				<rotation x="0.000000" y="0.610865" z="0.000000" />
-				<scale x="3.500000" y="3.500000" z="3.500000" />
+				<position x="0.000000" y="12.000000" z="0.000000" />
+				<rotation x="0.000000" y="0.000000" z="0.000000" />
+				<scale x="1.000000" y="1.000000" z="1.000000" />
 				<scaling b="false" />
 			</transform>
 			<components>
 				<component>
-					<id i="-678071591" />
+					<id i="-1899663186" />
 					<active b="true" />
 					<metadata>
-						<model s="./models/sphere/mesh.xml" />
-						<materials>
-							<material>
-								<name s="Sphere.001" />
-								<slot i="2" />
-							</material>
-						</materials>
-						<texcoord x="1.000000" y="1.000000" />
-						<category i="0" />
-						<static b="true" />
+						<projection m11="1.000000" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.001001" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100100" m44="0.000000" />
+						<view m11="1.000000" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000000" m34="0.000000" m41="0.000000" m42="12.000000" m43="0.000000" m44="1.000000" />
+						<size>
+							<radius n="50.000000" />
+							<c1 n="0.600000" />
+							<c2 n="0.600000" />
+						</size>
+						<diffuse x="1.000000" y="1.000000" z="1.000000" />
+						<emission n="5.000000" />
+						<disperse n="0.000000" />
+						<shadow-softness n="30.000000" />
+						<shadow-distance n="100.000000" />
+						<shadow-bias n="-0.000300" />
+						<shadow-iterations i="32" />
+						<shadow-enabled b="true" />
 					</metadata>
 				</component>
 			</components>
@@ -360,7 +366,7 @@
 			<transform>
 				<position x="0.000000" y="17.000000" z="-0.000000" />
 				<rotation x="0.000000" y="0.000000" z="0.000000" />
-				<scale x="10.000000" y="1.000000" z="10.000000" />
+				<scale x="10.000000" y="1.000000" z="12.000000" />
 				<scaling b="false" />
 			</transform>
 			<components>
@@ -372,7 +378,7 @@
 						<materials>
 							<material>
 								<name s="Cube" />
-								<slot i="5" />
+								<slot i="2" />
 							</material>
 						</materials>
 						<texcoord x="2.000000" y="2.000000" />
@@ -387,43 +393,9 @@
 			<tag i="-1" />
 			<refer i="9" />
 			<transform>
-				<position x="-3.065546" y="13.646016" z="0.181443" />
-				<rotation x="0.000000" y="0.000000" z="0.000000" />
-				<scale x="1.000000" y="1.000000" z="1.000000" />
-				<scaling b="false" />
-			</transform>
-			<components>
-				<component>
-					<id i="-1899663186" />
-					<active b="true" />
-					<metadata>
-						<projection m11="1.000000" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.001001" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100100" m44="0.000000" />
-						<view m11="1.000000" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000000" m34="0.000000" m41="-3.065546" m42="13.646016" m43="0.181443" m44="1.000000" />
-						<size>
-							<radius n="18.500000" />
-							<c1 n="0.600000" />
-							<c2 n="0.360000" />
-						</size>
-						<diffuse x="1.000000" y="1.000000" z="1.000000" />
-						<emission n="8.000000" />
-						<disperse n="0.400000" />
-						<shadow-softness n="6.000000" />
-						<shadow-distance n="100.000000" />
-						<shadow-bias n="-0.000100" />
-						<shadow-iterations i="128" />
-						<shadow-enabled b="true" />
-					</metadata>
-				</component>
-			</components>
-		</entity>
-		<entity>
-			<name s="" />
-			<tag i="-1" />
-			<refer i="10" />
-			<transform>
-				<position x="-3.075371" y="15.939838" z="0.000000" />
-				<rotation x="0.000000" y="0.000000" z="0.000000" />
-				<scale x="3.000000" y="0.100000" z="3.000000" />
+				<position x="-3.004456" y="-1.000000" z="-4.718419" />
+				<rotation x="0.000000" y="0.523599" z="0.000000" />
+				<scale x="3.000000" y="3.000000" z="3.000000" />
 				<scaling b="false" />
 			</transform>
 			<components>
@@ -435,194 +407,7 @@
 						<materials>
 							<material>
 								<name s="Cube" />
-								<slot i="1" />
-							</material>
-						</materials>
-						<texcoord x="1.000000" y="1.000000" />
-						<category i="0" />
-						<static b="true" />
-					</metadata>
-				</component>
-			</components>
-		</entity>
-		<entity>
-			<name s="" />
-			<tag i="-1" />
-			<refer i="11" />
-			<transform>
-				<position x="0.230162" y="5.816159" z="-35.498928" />
-				<rotation x="0.000000" y="0.000000" z="0.000000" />
-				<scale x="12.000000" y="12.000000" z="12.000000" />
-				<scaling b="false" />
-			</transform>
-			<components>
-				<component>
-					<id i="-1162437150" />
-					<active b="true" />
-					<metadata>
-						<inside-delay n="30.000000" />
-						<outside-delay n="1002200.000000" />
-						<ray-step n="0.350000" />
-						<max-steps n="256.000000" />
-						<distance n="12.000000" />
-						<radiance n="0.250000" />
-						<length n="3.000000" />
-						<margin n="3.828424" />
-						<offset n="-0.010000" />
-						<angle n="0.500000" />
-						<occlusion n="0.500000" />
-						<specular n="3.000000" />
-						<bleeding n="0.330000" />
-					</metadata>
-				</component>
-			</components>
-		</entity>
-		<entity>
-			<name s="" />
-			<tag i="-1" />
-			<refer i="12" />
-			<transform>
-				<position x="-1.178453" y="-0.500000" z="-37.331524" />
-				<rotation x="0.000000" y="0.610865" z="0.000000" />
-				<scale x="3.500000" y="3.500000" z="3.500000" />
-				<scaling b="false" />
-			</transform>
-			<components>
-				<component>
-					<id i="-678071591" />
-					<active b="true" />
-					<metadata>
-						<model s="./models/sphere/mesh.xml" />
-						<materials>
-							<material>
-								<name s="Sphere.001" />
-								<slot i="2" />
-							</material>
-						</materials>
-						<texcoord x="1.000000" y="1.000000" />
-						<category i="0" />
-						<static b="true" />
-					</metadata>
-				</component>
-			</components>
-		</entity>
-		<entity>
-			<name s="" />
-			<tag i="-1" />
-			<refer i="13" />
-			<transform>
-				<position x="-51.522991" y="7.890178" z="-3.688747" />
-				<rotation x="0.000000" y="0.000000" z="0.000000" />
-				<scale x="1.000000" y="1.000000" z="1.000000" />
-				<scaling b="false" />
-			</transform>
-			<components>
-				<component>
-					<id i="-1899663186" />
-					<active b="true" />
-					<metadata>
-						<projection m11="1.000000" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.001001" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100100" m44="0.000000" />
-						<view m11="1.000000" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000000" m34="0.000000" m41="-51.522991" m42="7.890178" m43="-3.688747" m44="1.000000" />
-						<size>
-							<radius n="28.500000" />
-							<c1 n="0.600000" />
-							<c2 n="0.360000" />
-						</size>
-						<diffuse x="1.000000" y="1.000000" z="1.000000" />
-						<emission n="12.000000" />
-						<disperse n="0.000000" />
-						<shadow-softness n="6.000000" />
-						<shadow-distance n="100.000000" />
-						<shadow-bias n="-0.000100" />
-						<shadow-iterations i="128" />
-						<shadow-enabled b="true" />
-					</metadata>
-				</component>
-			</components>
-		</entity>
-		<entity>
-			<name s="" />
-			<tag i="-1" />
-			<refer i="14" />
-			<transform>
-				<position x="0.417942" y="-5.000000" z="-33.402493" />
-				<rotation x="0.000000" y="0.000000" z="0.000000" />
-				<scale x="10.000000" y="1.000000" z="10.000000" />
-				<scaling b="false" />
-			</transform>
-			<components>
-				<component>
-					<id i="-678071591" />
-					<active b="true" />
-					<metadata>
-						<model s="./models/cube/mesh.xml" />
-						<materials>
-							<material>
-								<name s="Cube" />
-								<slot i="5" />
-							</material>
-						</materials>
-						<texcoord x="1.000000" y="1.000000" />
-						<category i="0" />
-						<static b="true" />
-					</metadata>
-				</component>
-			</components>
-		</entity>
-		<entity>
-			<name s="" />
-			<tag i="-1" />
-			<refer i="15" />
-			<transform>
-				<position x="-1.618114" y="8.223509" z="-34.614185" />
-				<rotation x="0.000000" y="0.000000" z="0.000000" />
-				<scale x="1.000000" y="1.000000" z="1.000000" />
-				<scaling b="false" />
-			</transform>
-			<components>
-				<component>
-					<id i="-1899663186" />
-					<active b="true" />
-					<metadata>
-						<projection m11="1.000000" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.001001" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100100" m44="0.000000" />
-						<view m11="1.000000" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000000" m34="0.000000" m41="-1.618114" m42="8.223509" m43="-34.614185" m44="1.000000" />
-						<size>
-							<radius n="18.500000" />
-							<c1 n="0.600000" />
-							<c2 n="0.360000" />
-						</size>
-						<diffuse x="1.000000" y="1.000000" z="1.000000" />
-						<emission n="8.000000" />
-						<disperse n="0.000000" />
-						<shadow-softness n="6.000000" />
-						<shadow-distance n="100.000000" />
-						<shadow-bias n="-0.000100" />
-						<shadow-iterations i="128" />
-						<shadow-enabled b="true" />
-					</metadata>
-				</component>
-			</components>
-		</entity>
-		<entity>
-			<name s="" />
-			<tag i="-1" />
-			<refer i="16" />
-			<transform>
-				<position x="0.000000" y="6.000000" z="-25.619564" />
-				<rotation x="-1.570796" y="-0.000000" z="-0.000000" />
-				<scale x="10.000000" y="1.000000" z="10.000000" />
-				<scaling b="false" />
-			</transform>
-			<components>
-				<component>
-					<id i="-678071591" />
-					<active b="true" />
-					<metadata>
-						<model s="./models/cube/mesh.xml" />
-						<materials>
-							<material>
-								<name s="Cube" />
-								<slot i="0" />
+								<slot i="3" />
 							</material>
 						</materials>
 						<texcoord x="1.000000" y="1.000000" />

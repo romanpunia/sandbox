@@ -32,10 +32,9 @@
 	<materials>
 		<material i="0" s="./materials/red-wall.xml" />
 		<material i="1" s="./materials/lamp.xml" />
-		<material i="2" s="./materials/ball.xml" />
+		<material i="2" s="./materials/wall.xml" />
 		<material i="3" s="./materials/box.xml" />
 		<material i="4" s="./materials/green-wall.xml" />
-		<material i="5" s="./materials/wall.xml" />
 	</materials>
 	<entities>
 		<entity>
@@ -83,7 +82,7 @@
 					<active b="true" />
 					<metadata>
 						<mode i="0" />
-						<projection m11="0.684872" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.303225" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000100" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100010" m44="0.000000" />
+						<projection m11="0.672151" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.303225" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000100" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100010" m44="0.000000" />
 						<field-of-view n="75.000000" />
 						<far-plane n="1000.000000" />
 						<near-plane n="0.100000" />
@@ -224,7 +223,7 @@
 						<materials>
 							<material>
 								<name s="Cube" />
-								<slot i="5" />
+								<slot i="2" />
 							</material>
 						</materials>
 						<texcoord x="-2.000000" y="2.000000" />
@@ -379,7 +378,7 @@
 						<materials>
 							<material>
 								<name s="Cube" />
-								<slot i="5" />
+								<slot i="2" />
 							</material>
 						</materials>
 						<texcoord x="2.000000" y="2.000000" />

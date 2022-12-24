@@ -511,7 +511,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 		if (State.IsPathTracked)
 		{
 			auto* KeyAnimator = Value->GetComponent<Components::KeyAnimator>();
-			if (KeyAnimator != nullptr)
+			if (KeyAnimator != nullptr && KeyAnimator->IsExists(KeyAnimator->State.Clip))
 			{
 				std::vector<AnimatorKey>* Keys = KeyAnimator->GetClip(KeyAnimator->State.Clip);
 				if (Keys != nullptr)
@@ -997,6 +997,9 @@ void Sandbox::InspectEntity()
 		if (State.System->SetInteger("sl_cmp_camera_ssr", fRenderer->GetOffset<Renderers::SSR>())->GetInteger() >= 0)
 			RendererSSR(State.GUI, fRenderer->GetRenderer<Renderers::SSR>());
 
+		if (State.System->SetInteger("sl_cmp_camera_ssgi", fRenderer->GetOffset<Renderers::SSGI>())->GetInteger() >= 0)
+			RendererSSGI(State.GUI, fRenderer->GetRenderer<Renderers::SSGI>());
+
 		if (State.System->SetInteger("sl_cmp_camera_ssao", fRenderer->GetOffset<Renderers::SSAO>())->GetInteger() >= 0)
 			RendererSSAO(State.GUI, fRenderer->GetRenderer<Renderers::SSAO>());
 
@@ -1243,6 +1246,7 @@ void Sandbox::SetViewModel()
 	State.System->SetInteger("sl_cmp_camera_environment", -1);
 	State.System->SetInteger("sl_cmp_camera_transparency", -1);
 	State.System->SetInteger("sl_cmp_camera_ssr", -1);
+	State.System->SetInteger("sl_cmp_camera_ssgi", -1);
 	State.System->SetInteger("sl_cmp_camera_ssao", -1);
 	State.System->SetInteger("sl_cmp_camera_motionblur", -1);
 	State.System->SetInteger("sl_cmp_camera_bloom", -1);
@@ -2090,6 +2094,17 @@ void Sandbox::SetViewModel()
 				Source = Selection.Entity->AddComponent<Components::Camera>();
 
 			Source->GetRenderer()->AddRenderer<Renderers::Transparency>();
+		}
+	});
+	State.System->SetCallback("add_rndr_ssgi", [this](GUI::IEvent& Event, const VariantList& Args)
+	{
+		if (Selection.Entity != nullptr)
+		{
+			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
+			if (!Source)
+				Source = Selection.Entity->AddComponent<Components::Camera>();
+
+			Source->GetRenderer()->AddRenderer<Renderers::SSGI>();
 		}
 	});
 	State.System->SetCallback("add_rndr_ssr", [this](GUI::IEvent& Event, const VariantList& Args)

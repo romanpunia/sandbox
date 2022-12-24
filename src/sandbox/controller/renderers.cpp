@@ -42,6 +42,19 @@ void RendererSSR(GUI::Context* UI, Renderers::SSR* Base)
 	UI->GetElementById(0, "cmp_camera_ssr_d").CastFormFloat(&Base->Reflectance.Distance);
 	UI->GetElementById(0, "cmp_camera_ssr_bc").CastFormFloat(&Base->Gloss.Samples);
 	UI->GetElementById(0, "cmp_camera_ssr_b").CastFormFloat(&Base->Gloss.Blur);
+	UI->GetElementById(0, "cmp_camera_ssr_c").CastFormFloat(&Base->Gloss.Cutoff);
+	UI->GetElementById(0, "cmp_camera_ssr_dz").CastFormFloat(&Base->Gloss.Deadzone);
+}
+void RendererSSGI(GUI::Context* UI, Renderers::SSGI* Base)
+{
+	UI->GetElementById(0, "cmp_camera_ssgi_is").CastFormFloat(&Base->Indirection.Samples);
+	UI->GetElementById(0, "cmp_camera_ssgi_id").CastFormFloat(&Base->Indirection.Distance);
+	UI->GetElementById(0, "cmp_camera_ssgi_ic").CastFormFloat(&Base->Indirection.Cutoff);
+	UI->GetElementById(0, "cmp_camera_ssgi_ia").CastFormFloat(&Base->Indirection.Attenuation);
+	UI->GetElementById(0, "cmp_camera_ssgi_isw").CastFormFloat(&Base->Indirection.Swing);
+	UI->GetElementById(0, "cmp_camera_ssgi_dc").CastFormFloat(&Base->Denoise.Cutoff);
+	UI->GetElementById(0, "cmp_camera_ssgi_ds").CastFormFloat(&Base->Denoise.Samples);
+	UI->GetElementById(0, "cmp_camera_ssgi_db").CastFormFloat(&Base->Denoise.Blur);
 }
 void RendererSSAO(GUI::Context* UI, Renderers::SSAO* Base)
 {
