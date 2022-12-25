@@ -71,8 +71,8 @@
 			<tag i="-1" />
 			<refer i="1" />
 			<transform>
-				<position x="-28.000000" y="6.000000" z="0.000000" />
-				<rotation x="0.052360" y="1.570796" z="0.000000" />
+				<position x="-28.000000" y="8.000000" z="0.000000" />
+				<rotation x="0.226893" y="1.570796" z="0.000000" />
 				<scale x="1.000000" y="1.000000" z="1.000000" />
 				<scaling b="false" />
 			</transform>
@@ -110,7 +110,7 @@
 									<light-emission n="1.000000" />
 									<sky-color x="1.000000" y="1.000000" z="1.000000" />
 									<fog-color x="0.498039" y="0.600000" z="0.698039" />
-									<fog-amount n="0.035000" />
+									<fog-amount n="0.000000" />
 									<fog-far-off n="0.500000" />
 									<fog-far x="0.500000" y="0.500000" z="0.500000" />
 									<fog-near-off n="0.100000" />
@@ -118,18 +118,50 @@
 									<recursive n="0.000000" />
 									<shadow-distance n="0.500000" />
 									<sf-size i="128" />
-									<gi b="true" />
+									<gi b="false" />
 								</metadata>
 							</renderer>
 							<renderer>
-								<id i="-2370349920" />
+								<id i="-393825588" />
 								<active b="true" />
 								<metadata>
-									<intensity n="16.000000" />
-									<threshold n="0.960000" />
-									<power n="1.250000" />
-									<samples n="32.000000" />
-									<blur n="128.000000" />
+									<samples-1 n="6.000000" />
+									<samples-2 n="32.000000" />
+									<cutoff-1 n="-0.200000" />
+									<cutoff-2 n="0.950000" />
+									<attenuation n="0.800000" />
+									<swing n="2.100000" />
+									<blur n="24.000000" />
+								</metadata>
+							</renderer>
+							<renderer>
+								<id i="-2777092291" />
+								<active b="true" />
+								<metadata>
+									<samples-1 n="32.000000" />
+									<samples-2 n="48.000000" />
+									<intensity n="1.000000" />
+									<distance n="16.000000" />
+									<cutoff n="0.950000" />
+									<blur n="64.000000" />
+									<deadzone n="0.050000" />
+									<mips n="10.000000" />
+								</metadata>
+							</renderer>
+							<renderer>
+								<id i="-4073912120" />
+								<active b="true" />
+								<metadata>
+									<samples-1 n="4.000000" />
+									<scale n="0.100000" />
+									<intensity n="2.000000" />
+									<bias n="0.500000" />
+									<radius n="0.100000" />
+									<distance n="4.000000" />
+									<fade n="2.000000" />
+									<power n="1.000000" />
+									<samples-2 n="14.000000" />
+									<blur n="12.000000" />
 								</metadata>
 							</renderer>
 							<renderer>
@@ -137,27 +169,38 @@
 								<active b="true" />
 								<metadata>
 									<grayscale n="0.000000" />
-									<aces n="1.000000" />
-									<filmic n="0.500000" />
-									<lottes n="-0.250000" />
-									<reinhard n="-3.000000" />
-									<reinhard2 n="0.500000" />
-									<unreal n="0.100000" />
-									<uchimura n="0.500000" />
-									<ubrightness n="1.000000" />
+									<aces n="0.100000" />
+									<filmic n="0.350000" />
+									<lottes n="0.000000" />
+									<reinhard n="0.000000" />
+									<reinhard2 n="0.000000" />
+									<unreal n="0.000000" />
+									<uchimura n="0.000000" />
+									<ubrightness n="2.000000" />
 									<usontrast n="1.000000" />
 									<ustart n="0.820000" />
 									<ulength n="0.400000" />
-									<ublack n="1.300000" />
+									<ublack n="1.130000" />
 									<upedestal n="0.050000" />
-									<exposure n="0.128000" />
-									<eintensity n="1.000000" />
-									<egamma n="2.200000" />
+									<exposure n="1.000000" />
+									<eintensity n="3.500000" />
+									<egamma n="0.500000" />
 									<adaptation n="0.000000" />
 									<agray n="1.000000" />
 									<awhite n="1.000000" />
-									<ablack n="0.050000" />
-									<aspeed n="2.000000" />
+									<ablack n="0.500000" />
+									<aspeed n="0.500000" />
+								</metadata>
+							</renderer>
+							<renderer>
+								<id i="-2370349920" />
+								<active b="true" />
+								<metadata>
+									<intensity n="8.000000" />
+									<threshold n="0.930000" />
+									<power n="1.000000" />
+									<samples n="14.000000" />
+									<blur n="64.000000" />
 								</metadata>
 							</renderer>
 						</renderers>
@@ -243,29 +286,6 @@
 				<scale x="1.000000" y="1.000000" z="1.000000" />
 				<scaling b="false" />
 			</transform>
-			<components>
-				<component>
-					<id i="-1899663186" />
-					<active b="true" />
-					<metadata>
-						<projection m11="1.000000" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000000" m34="0.000000" m41="0.000000" m42="0.000000" m43="0.000000" m44="1.000000" />
-						<view m11="1.000000" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000000" m34="0.000000" m41="0.000000" m42="0.000000" m43="0.000000" m44="1.000000" />
-						<size>
-							<radius n="50.000000" />
-							<c1 n="0.600000" />
-							<c2 n="0.600000" />
-						</size>
-						<diffuse x="1.000000" y="1.000000" z="1.000000" />
-						<emission n="0.500000" />
-						<disperse n="0.000000" />
-						<shadow-softness n="1.000000" />
-						<shadow-distance n="100.000000" />
-						<shadow-bias n="0.000000" />
-						<shadow-iterations i="2" />
-						<shadow-enabled b="false" />
-					</metadata>
-				</component>
-			</components>
 		</entity>
 		<entity>
 			<name s="" />
