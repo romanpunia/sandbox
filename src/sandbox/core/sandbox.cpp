@@ -230,7 +230,7 @@ void Sandbox::Dispatch(Timer* Time)
 		if (Activity->IsKeyDownHit(KeyCode::DELETEKEY))
 		{
 			SetStatus("Entity was removed");
-			Scene->RemoveEntity(Selection.Entity, true);
+			Scene->DeleteEntity(Selection.Entity);
 			SetSelection(Inspector_None);
 		}
 
@@ -310,7 +310,7 @@ void Sandbox::Dispatch(Timer* Time)
 		if (Activity->IsKeyDownHit(KeyCode::DELETEKEY))
 		{
 			SetStatus("Entity was removed");
-			Scene->RemoveEntity(Selection.Entity, true);
+			Scene->DeleteEntity(Selection.Entity);
 			SetSelection(Inspector_None);
 		}
 
@@ -319,7 +319,7 @@ void Sandbox::Dispatch(Timer* Time)
 			if (Activity->IsKeyDownHit(KeyCode::V) || Activity->IsKeyDown(KeyCode::B))
 			{
 				SetStatus("Entity was cloned");
-				Scene->CloneEntity(Selection.Entity, [this](SceneGraph* Scene, Entity* Result)
+				Scene->CloneEntity(Selection.Entity, [this](Entity* Result)
 				{
 					SetSelection(Result ? Inspector_Entity : Inspector_None, Result);
 				});
@@ -328,7 +328,7 @@ void Sandbox::Dispatch(Timer* Time)
 			if (Activity->IsKeyDownHit(KeyCode::X))
 			{
 				SetStatus("Entity was removed");
-				Scene->RemoveEntity(Selection.Entity, true);
+				Scene->DeleteEntity(Selection.Entity);
 				SetSelection(Inspector_None);
 			}
 		}
@@ -345,7 +345,7 @@ void Sandbox::Dispatch(Timer* Time)
 					SetSelection(Inspector_None);
 
 				SetStatus("Last entity was removed");
-				Scene->RemoveEntity(Last, true);
+				Scene->DeleteEntity(Last);
 			}
 		}
 
@@ -354,7 +354,7 @@ void Sandbox::Dispatch(Timer* Time)
 			if (Selection.Entity != nullptr)
 			{
 				SetStatus("Entity was removed");
-				Scene->RemoveEntity(Selection.Entity, true);
+				Scene->DeleteEntity(Selection.Entity);
 				SetSelection(Inspector_None);
 			}
 		}
@@ -431,7 +431,7 @@ void Sandbox::UpdateScene()
 		SetStatus("Scene was loaded");
 
 	Scene->SetListener("mutation", std::bind(&Sandbox::UpdateMutation, this, std::placeholders::_1, std::placeholders::_2));
-	State.Camera = new ::Entity(Scene);
+	State.Camera = Scene->AddEntity();
 	State.Camera->AddComponent<Components::Camera>();
 	State.Camera->AddComponent<Components::FreeLook>();
 	State.Camera->GetTransform()->SetSpacing(Positioning::Global, Space);
@@ -520,28 +520,28 @@ void Sandbox::UpdateGrid(Timer* Time)
 					for (size_t j = 0; j < Keys->size(); j++)
 					{
 						auto& Pos = Keys->at(j).Position;
-						Renderer->Begin();
-						Renderer->Topology(PrimitiveTopology::Line_Strip);
-						Renderer->Transform(Offset * ((Components::Camera*)Scene->GetCamera())->GetViewProjection());
-						Renderer->Emit();
-						Renderer->Position(Pos.X, Pos.Y, -Pos.Z);
-						Renderer->Emit();
+						Renderer->ImBegin();
+						Renderer->ImTopology(PrimitiveTopology::Line_Strip);
+						Renderer->ImTransform(Offset * ((Components::Camera*)Scene->GetCamera())->GetViewProjection());
+						Renderer->ImEmit();
+						Renderer->ImPosition(Pos.X, Pos.Y, -Pos.Z);
+						Renderer->ImEmit();
 
 						if (KeyAnimator->State.Frame == j)
-							Renderer->Color(1, 0, 1, 1);
+							Renderer->ImColor(1, 0, 1, 1);
 
 						if (j + 1 >= Keys->size())
 						{
 							auto& xPos = Keys->at(0).Position;
-							Renderer->Position(xPos.X, xPos.Y, -xPos.Z);
+							Renderer->ImPosition(xPos.X, xPos.Y, -xPos.Z);
 						}
 						else
 						{
 							auto& xPos = Keys->at(j + 1).Position;
-							Renderer->Position(xPos.X, xPos.Y, -xPos.Z);
+							Renderer->ImPosition(xPos.X, xPos.Y, -xPos.Z);
 						}
 
-						Renderer->End();
+						Renderer->ImEnd();
 					}
 				}
 			}
@@ -560,54 +560,54 @@ void Sandbox::UpdateGrid(Timer* Time)
 		Matrix4x4 Transform = Value->GetBox();
 		for (int j = 0; j < 4; j++)
 		{
-			Renderer->Begin();
-			Renderer->Topology(PrimitiveTopology::Line_Strip);
-			Renderer->Transform(Origin[j] * Transform * ((Components::Camera*)Scene->GetCamera())->GetViewProjection());
-			Renderer->Emit();
+			Renderer->ImBegin();
+			Renderer->ImTopology(PrimitiveTopology::Line_Strip);
+			Renderer->ImTransform(Origin[j] * Transform * ((Components::Camera*)Scene->GetCamera())->GetViewProjection());
+			Renderer->ImEmit();
 			if (Value == Selection.Might)
-				Renderer->Color(1, 1, 0.75f, 0.15f);
+				Renderer->ImColor(1, 1, 0.75f, 0.15f);
 			else if (Value != Selection.Entity)
-				Renderer->Color(1, 1, 1, 0.1f);
+				Renderer->ImColor(1, 1, 1, 0.1f);
 			else
-				Renderer->Color(1, 1, 1, 0.5f);
-			Renderer->Position(1, 1, 1);
+				Renderer->ImColor(1, 1, 1, 0.5f);
+			Renderer->ImPosition(1, 1, 1);
 
-			Renderer->Emit();
+			Renderer->ImEmit();
 			if (Value == Selection.Might)
-				Renderer->Color(1, 1, 0.75f, 0.15f);
+				Renderer->ImColor(1, 1, 0.75f, 0.15f);
 			else if (Value != Selection.Entity)
-				Renderer->Color(1, 1, 1, 0.1f);
+				Renderer->ImColor(1, 1, 1, 0.1f);
 			else
-				Renderer->Color(1, 1, 1, 0.5f);
-			Renderer->Position(-1, 1, 1);
+				Renderer->ImColor(1, 1, 1, 0.5f);
+			Renderer->ImPosition(-1, 1, 1);
 
-			Renderer->Emit();
+			Renderer->ImEmit();
 			if (Value == Selection.Might)
-				Renderer->Color(1, 1, 0.75f, 0.15f);
+				Renderer->ImColor(1, 1, 0.75f, 0.15f);
 			else if (Value != Selection.Entity)
-				Renderer->Color(1, 1, 1, 0.1f);
+				Renderer->ImColor(1, 1, 1, 0.1f);
 			else
-				Renderer->Color(1, 1, 1, 0.5f);
-			Renderer->Position(-1, -1, 1);
+				Renderer->ImColor(1, 1, 1, 0.5f);
+			Renderer->ImPosition(-1, -1, 1);
 
-			Renderer->Emit();
+			Renderer->ImEmit();
 			if (Value == Selection.Might)
-				Renderer->Color(1, 1, 0.75f, 0.15f);
+				Renderer->ImColor(1, 1, 0.75f, 0.15f);
 			else if (Value != Selection.Entity)
-				Renderer->Color(1, 1, 1, 0.1f);
+				Renderer->ImColor(1, 1, 1, 0.1f);
 			else
-				Renderer->Color(1, 1, 1, 0.5f);
-			Renderer->Position(1, -1, 1);
+				Renderer->ImColor(1, 1, 1, 0.5f);
+			Renderer->ImPosition(1, -1, 1);
 
-			Renderer->Emit();
+			Renderer->ImEmit();
 			if (Value == Selection.Might)
-				Renderer->Color(1, 1, 0.75f, 0.15f);
+				Renderer->ImColor(1, 1, 0.75f, 0.15f);
 			else if (Value != Selection.Entity)
-				Renderer->Color(1, 1, 1, 0.1f);
+				Renderer->ImColor(1, 1, 1, 0.1f);
 			else
-				Renderer->Color(1, 1, 1, 0.5f);
-			Renderer->Position(1, 1, 1);
-			Renderer->End();
+				Renderer->ImColor(1, 1, 1, 0.5f);
+			Renderer->ImPosition(1, 1, 1);
+			Renderer->ImEnd();
 		}
 	}
 
@@ -655,25 +655,25 @@ void Sandbox::UpdateGrid(Timer* Time)
 
 			for (const auto& j : Origin)
 			{
-				Renderer->Begin();
-				Renderer->Topology(PrimitiveTopology::Line_Strip);
-				Renderer->Transform(j * Scene->GetEntity(i)->GetTransform()->GetBias() * ViewProjection);
-				Renderer->Emit();
-				Renderer->Color(0.5f, 0.5f, 1.0f, 0.75f);
-				Renderer->Position(1.0f, 1.0f, 1.0f);
-				Renderer->Emit();
-				Renderer->Color(0.5f, 0.5f, 1.0f, 0.75f);
-				Renderer->Position(-1.0f, 1.0f, 1.0f);
-				Renderer->Emit();
-				Renderer->Color(0.5f, 0.5f, 1.0f, 0.75f);
-				Renderer->Position(-1.0f, -1.0f, 1.0f);
-				Renderer->Emit();
-				Renderer->Color(0.5f, 0.5f, 1.0f, 0.75f);
-				Renderer->Position(1.0f, -1.0f, 1.0f);
-				Renderer->Emit();
-				Renderer->Color(0.5f, 0.5f, 1.0f, 0.75f);
-				Renderer->Position(1.0f, 1.0f, 1.0f);
-				Renderer->End();
+				Renderer->ImBegin();
+				Renderer->ImTopology(PrimitiveTopology::Line_Strip);
+				Renderer->ImTransform(j * Scene->GetEntity(i)->GetTransform()->GetBias() * ViewProjection);
+				Renderer->ImEmit();
+				Renderer->ImColor(0.5f, 0.5f, 1.0f, 0.75f);
+				Renderer->ImPosition(1.0f, 1.0f, 1.0f);
+				Renderer->ImEmit();
+				Renderer->ImColor(0.5f, 0.5f, 1.0f, 0.75f);
+				Renderer->ImPosition(-1.0f, 1.0f, 1.0f);
+				Renderer->ImEmit();
+				Renderer->ImColor(0.5f, 0.5f, 1.0f, 0.75f);
+				Renderer->ImPosition(-1.0f, -1.0f, 1.0f);
+				Renderer->ImEmit();
+				Renderer->ImColor(0.5f, 0.5f, 1.0f, 0.75f);
+				Renderer->ImPosition(1.0f, -1.0f, 1.0f);
+				Renderer->ImEmit();
+				Renderer->ImColor(0.5f, 0.5f, 1.0f, 0.75f);
+				Renderer->ImPosition(1.0f, 1.0f, 1.0f);
+				Renderer->ImEnd();
 			}
 		}
 	}
@@ -688,14 +688,14 @@ void Sandbox::UpdateJoint(PoseBuffer* Map, Joint* Base, Matrix4x4* World)
 	*World = *World * Map->GetOffset(Node);
 	Vector3 Position2 = Node->Position.Transform(*World);
 
-	Renderer->Begin();
-	Renderer->Topology(PrimitiveTopology::Line_Strip);
-	Renderer->Transform(((Components::Camera*)Scene->GetCamera())->GetViewProjection());
-	Renderer->Emit();
-	Renderer->Position(Position1.X, Position1.Y, -Position1.Z);
-	Renderer->Emit();
-	Renderer->Position(Position2.X, Position2.Y, -Position2.Z);
-	Renderer->End();
+	Renderer->ImBegin();
+	Renderer->ImTopology(PrimitiveTopology::Line_Strip);
+	Renderer->ImTransform(((Components::Camera*)Scene->GetCamera())->GetViewProjection());
+	Renderer->ImEmit();
+	Renderer->ImPosition(Position1.X, Position1.Y, -Position1.Z);
+	Renderer->ImEmit();
+	Renderer->ImPosition(Position2.X, Position2.Y, -Position2.Z);
+	Renderer->ImEnd();
 
 	for (auto& Child : Base->Childs)
 		UpdateJoint(Map, &Child, World);
@@ -877,7 +877,6 @@ void Sandbox::InspectEntity()
 	}
 
 	bool Scaling = Base->GetTransform()->HasScaling();
-	State.GUI->GetElementById(0, "ent_tag").CastFormUInt64(&Base->Tag);
 	if (State.GUI->GetElementById(0, "ent_const_scale").CastFormBoolean(&Scaling))
 		Base->GetTransform()->SetScaling(Scaling);
 
@@ -1374,7 +1373,7 @@ void Sandbox::SetViewModel()
 			VariantArgs Args;
 			Args["type"] = Var::String("XML");
 
-			Scene->RemoveEntity(State.Camera, false);
+			Scene->RemoveEntity(State.Camera);
 			Content->Save<SceneGraph>("./system/cache.xml", Scene, Args);
 			Scene->AddEntity(State.Camera);
 			Scene->SetActive(true);
@@ -1503,7 +1502,10 @@ void Sandbox::SetViewModel()
 	State.System->SetCallback("copy_material", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Material != nullptr)
-			Selection.Material = Scene->CloneMaterial(Selection.Material, Selection.Material->GetName() + "*");
+		{
+			Selection.Material = Scene->CloneMaterial(Selection.Material);
+			Selection.Material->SetName(Selection.Material->GetName() + "*");
+		}
 	});
 	State.System->SetCallback("open_settings", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
@@ -1511,7 +1513,9 @@ void Sandbox::SetViewModel()
 	});
 	State.System->SetCallback("add_material", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
-		SetSelection(Inspector_Material, Scene->AddMaterial(new Material(nullptr), "Material " + std::to_string(Scene->GetMaterialsCount() + 1)));
+		Material* New = Scene->AddMaterial();
+	    New->SetName("Material " + std::to_string(Scene->GetMaterialsCount() + 1));
+		SetSelection(Inspector_Material, New);
 	});
 	State.System->SetCallback("import_model", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
@@ -1539,7 +1543,7 @@ void Sandbox::SetViewModel()
 		Result->Key = "skin-animation";
 
 		auto* Animator = Selection.Entity->GetComponent<Components::SkinAnimator>();
-		NMake::Pack(Result, Animator->Clips);
+		Series::Pack(Result, Animator->Clips);
 
 		VariantArgs Map;
 		if (Parser(&Path).EndsWith(".jsonb"))
@@ -1576,7 +1580,7 @@ void Sandbox::SetViewModel()
 		Result->Key = "key-animation";
 
 		auto* Animator = Selection.Entity->GetComponent<Components::KeyAnimator>();
-		NMake::Pack(Result, Animator->Clips);
+		Series::Pack(Result, Animator->Clips);
 
 		VariantArgs Map;
 		if (Parser(&Path).EndsWith(".jsonb"))
@@ -1650,7 +1654,7 @@ void Sandbox::SetViewModel()
 		else
 			Map["type"] = Var::String("XML");
 
-		Scene->RemoveEntity(State.Camera, false);
+		Scene->RemoveEntity(State.Camera);
 		Content->Save<SceneGraph>(Path, Scene, Map);
 		Scene->AddEntity(State.Camera);
 
@@ -1667,15 +1671,13 @@ void Sandbox::SetViewModel()
 	});
 	State.System->SetCallback("add_entity", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
-		Entity* Value = new Entity(Scene);
-		if (Scene->AddEntity(Value))
-			SetSelection(Inspector_Entity, Value);
+	    SetSelection(Inspector_Entity, Scene->AddEntity());
 	});
 	State.System->SetCallback("remove_entity", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Entity != nullptr)
 		{
-			Scene->RemoveEntity(Selection.Entity, true);
+			Scene->DeleteEntity(Selection.Entity);
 			SetSelection(Inspector_None);
 		}
 	});
@@ -2334,7 +2336,7 @@ void Sandbox::SetSelection(Inspector Window, void* Object)
 void Sandbox::SetStatus(const std::string& Status)
 {
 	State.Status = Status + '.';
-	TH_LOG("%s", State.Status.c_str());
+	TH_INFO("[sandbox] %s", State.Status.c_str());
 }
 void Sandbox::SetMutation(Entity* Parent, const char* Type)
 {
@@ -2522,7 +2524,7 @@ void Sandbox::GetEntity(const std::string& Name, const std::function<void(Entity
 	State.OnEntity = Callback;
 	State.Target = Name;
 }
-void* Sandbox::GetGUI()
+void* Sandbox::GetGUI() const
 {
 	return State.GUI;
 }

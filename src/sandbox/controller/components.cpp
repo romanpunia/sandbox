@@ -650,31 +650,31 @@ void ComponentRigidBody(GUI::Context* UI, Components::RigidBody* Base, bool Chan
 	{
 		App->State.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
 		if (!Base->GetBody() || Base->GetBody()->GetCollisionShapeType() != Shape::Box)
-			Base->Create(App->Scene->GetSimulator()->CreateCube(), 0, 0);
+			Base->Load(App->Scene->GetSimulator()->CreateCube(), 0, 0);
 	}
 	else if (Shape == "sphere")
 	{
 		App->State.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
 		if (!Base->GetBody() || Base->GetBody()->GetCollisionShapeType() != Shape::Sphere)
-			Base->Create(App->Scene->GetSimulator()->CreateSphere(), 0, 0);
+			Base->Load(App->Scene->GetSimulator()->CreateSphere(), 0, 0);
 	}
 	else if (Shape == "capsule")
 	{
 		App->State.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
 		if (!Base->GetBody() || Base->GetBody()->GetCollisionShapeType() != Shape::Capsule)
-			Base->Create(App->Scene->GetSimulator()->CreateCapsule(), 0, 0);
+			Base->Load(App->Scene->GetSimulator()->CreateCapsule(), 0, 0);
 	}
 	else if (Shape == "cone")
 	{
 		App->State.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
 		if (!Base->GetBody() || Base->GetBody()->GetCollisionShapeType() != Shape::Cone)
-			Base->Create(App->Scene->GetSimulator()->CreateCone(), 0, 0);
+			Base->Load(App->Scene->GetSimulator()->CreateCone(), 0, 0);
 	}
 	else if (Shape == "cylinder")
 	{
 		App->State.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
 		if (!Base->GetBody() || Base->GetBody()->GetCollisionShapeType() != Shape::Cylinder)
-			Base->Create(App->Scene->GetSimulator()->CreateCylinder(), 0, 0);
+			Base->Load(App->Scene->GetSimulator()->CreateCylinder(), 0, 0);
 	}
 
 	RigidBody* Body = Base->GetBody();

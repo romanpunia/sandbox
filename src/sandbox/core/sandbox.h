@@ -127,7 +127,7 @@ public:
     void GetEntitySync();
 	void GetResource(const std::string& Name, const std::function<void(const std::string&)>& Callback);
 	void GetEntity(const std::string& Name, const std::function<void(Entity*)>& Callback);
-	void* GetGUI() override;
+	void* GetGUI() const override;
 	bool GetSceneFocus();
 	bool GetResourceState(const std::string& Name);
 	bool GetEntityState(const std::string& Name);
