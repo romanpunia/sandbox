@@ -8,12 +8,10 @@ int main()
 Entry:
 	{
 		Application::Desc Init;
-		Init.GraphicsDevice.VSyncMode = VSync::Frequency_X1;
-		Init.Activity.FreePosition = true;
+		Init.GraphicsDevice.VSyncMode = VSync::On;
+		Init.Activity.Maximized = true;
 		Init.Activity.Title = "Sandbox";
-		Init.Activity.Hidden = true;
 		Init.Directory = "sandbox";
-		Init.Async = false;
 #ifdef _DEBUG
 		Init.GraphicsDevice.Debug = true;
 #else
@@ -28,12 +26,6 @@ Entry:
 			Demo::GetSource().~basic_string();
 			goto Exit;
 		}
-
-		Init.Activity.Title = "Demo";
-		Init.Activity.Hidden = false;
-		Init.Activity.Maximized = true;
-		Init.Threads = 3;
-		Init.Async = true;
 
 		App = new Demo(&Init);
 		App->Start();

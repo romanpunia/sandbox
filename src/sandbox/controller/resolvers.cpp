@@ -217,7 +217,7 @@ void ResolveSoftBody(GUI::Context* UI, const std::string& Id, Components::SoftBo
 		{
 			ResolveResource(Source, "soft body", [Output](const std::string& File)
 			{
-				Output->Load(Sandbox::Get()->Content, File, 0);
+				Output->Load(File, 0.0f);
 			}, Changed);
 		}
 		else
@@ -248,7 +248,7 @@ void ResolveRigidBody(GUI::Context* UI, const std::string& Id, Components::Rigid
 		{
 			ResolveResource(Source, "rigid body", [Output](const std::string& File)
 			{
-				Output->Load(Sandbox::Get()->Content, File, 0, 0);
+				Output->Load(File, 0.0f, 0.0f);
 			}, Changed);
 		}
 		else
@@ -310,7 +310,7 @@ void ResolveSkinAnimator(GUI::Context* UI, const std::string& Id, Components::Sk
 		{
 			ResolveResource(Source, "skin animation", [Output](const std::string& File)
 			{
-				Output->GetAnimation(Sandbox::Get()->Content, File);
+				Output->LoadAnimation(File);
 			}, Changed);
 		}
 		else
@@ -341,7 +341,7 @@ void ResolveKeyAnimator(GUI::Context* UI, const std::string& Id, Components::Key
 		{
 			ResolveResource(Source, "key animation", [Output](const std::string& File)
 			{
-				Output->GetAnimation(Sandbox::Get()->Content, File);
+				Output->LoadAnimation(File);
 			}, Changed);
 		}
 		else
@@ -403,13 +403,13 @@ void ResolveScriptable(GUI::Context* UI, const std::string& Id, Components::Scri
 		{
 			ResolveResource(Source, "script", [Output](const std::string& File)
 			{
-				Output->SetSource(Components::Scriptable::SourceType_Resource, File);
+				Output->LoadSource(Components::Scriptable::SourceType::Resource, File);
 			}, Changed);
 		}
 		else
 		{
 			Source.SetInnerHTML("Assign source");
-			Output->UnsetSource();
+			Output->UnloadSource();
 		}
 	}
 	else if (Source.GetInnerHTML().empty() || Changed)

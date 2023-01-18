@@ -959,12 +959,13 @@ void ComponentFly(GUI::Context* UI, Components::Fly* Base, bool Changed)
 	ResolveKeyCode(UI, "cmp_fly_key_down", &Base->Down, Changed);
 	ResolveKeyCode(UI, "cmp_fly_key_slow", &Base->Slow, Changed);
 	ResolveKeyCode(UI, "cmp_fly_key_fast", &Base->Fast, Changed);
-	UI->GetElementById(0, "cmp_fly_ax").CastFormFloat(&Base->Axis.X);
-	UI->GetElementById(0, "cmp_fly_ay").CastFormFloat(&Base->Axis.Y);
-	UI->GetElementById(0, "cmp_fly_az").CastFormFloat(&Base->Axis.Z);
-	UI->GetElementById(0, "cmp_fly_sp_down").CastFormFloat(&Base->SpeedDown);
-	UI->GetElementById(0, "cmp_fly_sp_normal").CastFormFloat(&Base->SpeedNormal);
-	UI->GetElementById(0, "cmp_fly_sp_up").CastFormFloat(&Base->SpeedUp);
+	UI->GetElementById(0, "cmp_fly_ax").CastFormFloat(&Base->Moving.Axis.X);
+	UI->GetElementById(0, "cmp_fly_ay").CastFormFloat(&Base->Moving.Axis.Y);
+	UI->GetElementById(0, "cmp_fly_az").CastFormFloat(&Base->Moving.Axis.Z);
+	UI->GetElementById(0, "cmp_fly_fad").CastFormFloat(&Base->Moving.Fading);
+	UI->GetElementById(0, "cmp_fly_sp_down").CastFormFloat(&Base->Moving.Slower);
+	UI->GetElementById(0, "cmp_fly_sp_normal").CastFormFloat(&Base->Moving.Normal);
+	UI->GetElementById(0, "cmp_fly_sp_up").CastFormFloat(&Base->Moving.Faster);
 }
 void ComponentAudioSource(GUI::Context* UI, Components::AudioSource* Base, bool Changed)
 {
@@ -1216,13 +1217,13 @@ void ComponentScriptable(GUI::Context* UI, Components::Scriptable* Base, bool Ch
 	App->State.System->SetBoolean("sl_cmp_scriptable_source", !Base->GetSource().empty());
 	ResolveScriptable(UI, "cmp_scriptable_source", Base, Changed);
 
-	bool Typeless = (Base->GetInvokeType() == Components::Scriptable::InvokeType_Typeless);
+	bool Typeless = (Base->GetInvokeType() == Components::Scriptable::InvokeType::Typeless);
 	if (UI->GetElementById(0, "cmp_scriptable_ti").CastFormBoolean(&Typeless))
-		Base->SetInvocation(Typeless ? Components::Scriptable::InvokeType_Typeless : Components::Scriptable::InvokeType_Normal);
+		Base->SetInvocation(Typeless ? Components::Scriptable::InvokeType::Typeless : Components::Scriptable::InvokeType::Normal);
 
 	if (UI->GetElementById(0, "cmp_scriptable_recompile").IsActive())
 	{
 		App->VM->ClearCache();
-		Base->SetSource();
+		Base->LoadSource();
 	}
 }

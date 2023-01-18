@@ -5,9 +5,6 @@
 		<components i="8192" />
 		<render-quality n="1.000000" />
 		<enable-hdr b="false" />
-		<frequency-hz n="480.000000" />
-		<min-frames n="10.000000" />
-		<max-frames n="60.000000" />
 		<grow-margin i="128" />
 		<grow-rate n="0.000000" />
 		<max-updates i="256" />
@@ -39,7 +36,6 @@
 	<entities>
 		<entity>
 			<name s="" />
-			<tag i="-1" />
 			<refer i="0" />
 			<transform>
 				<position x="0.000000" y="-5.000000" z="-0.000000" />
@@ -53,22 +49,21 @@
 					<active b="true" />
 					<metadata>
 						<model s="./models/cube/mesh.xml" />
+						<texcoord x="2.000000" y="2.000000" />
+						<category i="0" />
+						<static b="true" />
 						<materials>
 							<material>
 								<name s="Cube" />
 								<slot i="1" />
 							</material>
 						</materials>
-						<texcoord x="2.000000" y="2.000000" />
-						<category i="0" />
-						<static b="true" />
 					</metadata>
 				</component>
 			</components>
 		</entity>
 		<entity>
 			<name s="" />
-			<tag i="-1" />
 			<refer i="1" />
 			<transform>
 				<position x="-28.000000" y="8.000000" z="0.000000" />
@@ -82,7 +77,7 @@
 					<active b="true" />
 					<metadata>
 						<mode i="0" />
-						<projection m11="0.684872" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.303225" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000100" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100010" m44="0.000000" />
+						<projection m11="0.672151" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.303225" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000100" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100010" m44="0.000000" />
 						<field-of-view n="75.000000" />
 						<far-plane n="1000.000000" />
 						<near-plane n="0.100000" />
@@ -104,6 +99,7 @@
 								<id i="-1262915616" />
 								<active b="true" />
 								<metadata>
+									<sky-map s="" />
 									<high-emission x="0.000000" y="0.000000" z="0.000000" />
 									<low-emission x="0.000000" y="0.000000" z="0.000000" />
 									<sky-emission n="0.000000" />
@@ -220,7 +216,6 @@
 		</entity>
 		<entity>
 			<name s="" />
-			<tag i="-1" />
 			<refer i="2" />
 			<transform>
 				<position x="2.394359" y="2.000000" z="3.586951" />
@@ -234,22 +229,21 @@
 					<active b="true" />
 					<metadata>
 						<model s="./models/cube/mesh.xml" />
+						<texcoord x="1.000000" y="1.000000" />
+						<category i="0" />
+						<static b="true" />
 						<materials>
 							<material>
 								<name s="Cube" />
 								<slot i="3" />
 							</material>
 						</materials>
-						<texcoord x="1.000000" y="1.000000" />
-						<category i="0" />
-						<static b="true" />
 					</metadata>
 				</component>
 			</components>
 		</entity>
 		<entity>
 			<name s="" />
-			<tag i="-1" />
 			<refer i="3" />
 			<transform>
 				<position x="11.000000" y="5.000000" z="0.000000" />
@@ -263,33 +257,49 @@
 					<active b="true" />
 					<metadata>
 						<model s="./models/cube/mesh.xml" />
+						<texcoord x="-2.000000" y="2.000000" />
+						<category i="0" />
+						<static b="true" />
 						<materials>
 							<material>
 								<name s="Cube" />
 								<slot i="2" />
 							</material>
 						</materials>
-						<texcoord x="-2.000000" y="2.000000" />
-						<category i="0" />
-						<static b="true" />
 					</metadata>
 				</component>
 			</components>
 		</entity>
 		<entity>
 			<name s="" />
-			<tag i="0" />
 			<refer i="4" />
 			<transform>
-				<position x="-11.261538" y="0.000000" z="0.182603" />
-				<rotation x="0.000000" y="0.000000" z="0.000000" />
-				<scale x="1.000000" y="1.000000" z="1.000000" />
+				<position x="-3.004456" y="-1.000000" z="-4.718419" />
+				<rotation x="0.000000" y="0.523599" z="0.000000" />
+				<scale x="3.000000" y="3.000000" z="3.000000" />
 				<scaling b="false" />
 			</transform>
+			<components>
+				<component>
+					<id i="-678071591" />
+					<active b="true" />
+					<metadata>
+						<model s="./models/cube/mesh.xml" />
+						<texcoord x="1.000000" y="1.000000" />
+						<category i="0" />
+						<static b="true" />
+						<materials>
+							<material>
+								<name s="Cube" />
+								<slot i="3" />
+							</material>
+						</materials>
+					</metadata>
+				</component>
+			</components>
 		</entity>
 		<entity>
 			<name s="" />
-			<tag i="-1" />
 			<refer i="5" />
 			<transform>
 				<position x="0.000000" y="6.000000" z="11.000000" />
@@ -303,22 +313,21 @@
 					<active b="true" />
 					<metadata>
 						<model s="./models/cube/mesh.xml" />
+						<texcoord x="1.000000" y="1.000000" />
+						<category i="0" />
+						<static b="true" />
 						<materials>
 							<material>
 								<name s="Cube" />
 								<slot i="0" />
 							</material>
 						</materials>
-						<texcoord x="1.000000" y="1.000000" />
-						<category i="0" />
-						<static b="true" />
 					</metadata>
 				</component>
 			</components>
 		</entity>
 		<entity>
 			<name s="" />
-			<tag i="-1" />
 			<refer i="6" />
 			<transform>
 				<position x="0.000000" y="6.000000" z="-11.000000" />
@@ -332,22 +341,21 @@
 					<active b="true" />
 					<metadata>
 						<model s="./models/cube/mesh.xml" />
+						<texcoord x="1.000000" y="1.000000" />
+						<category i="0" />
+						<static b="true" />
 						<materials>
 							<material>
 								<name s="Cube" />
 								<slot i="4" />
 							</material>
 						</materials>
-						<texcoord x="1.000000" y="1.000000" />
-						<category i="0" />
-						<static b="true" />
 					</metadata>
 				</component>
 			</components>
 		</entity>
 		<entity>
 			<name s="" />
-			<tag i="0" />
 			<refer i="7" />
 			<transform>
 				<position x="0.000000" y="12.000000" z="0.000000" />
@@ -381,7 +389,6 @@
 		</entity>
 		<entity>
 			<name s="" />
-			<tag i="-1" />
 			<refer i="8" />
 			<transform>
 				<position x="0.000000" y="17.000000" z="-0.000000" />
@@ -395,44 +402,15 @@
 					<active b="true" />
 					<metadata>
 						<model s="./models/cube/mesh.xml" />
+						<texcoord x="2.000000" y="2.000000" />
+						<category i="0" />
+						<static b="true" />
 						<materials>
 							<material>
 								<name s="Cube" />
 								<slot i="2" />
 							</material>
 						</materials>
-						<texcoord x="2.000000" y="2.000000" />
-						<category i="0" />
-						<static b="true" />
-					</metadata>
-				</component>
-			</components>
-		</entity>
-		<entity>
-			<name s="" />
-			<tag i="-1" />
-			<refer i="9" />
-			<transform>
-				<position x="-3.004456" y="-1.000000" z="-4.718419" />
-				<rotation x="0.000000" y="0.523599" z="0.000000" />
-				<scale x="3.000000" y="3.000000" z="3.000000" />
-				<scaling b="false" />
-			</transform>
-			<components>
-				<component>
-					<id i="-678071591" />
-					<active b="true" />
-					<metadata>
-						<model s="./models/cube/mesh.xml" />
-						<materials>
-							<material>
-								<name s="Cube" />
-								<slot i="3" />
-							</material>
-						</materials>
-						<texcoord x="1.000000" y="1.000000" />
-						<category i="0" />
-						<static b="true" />
 					</metadata>
 				</component>
 			</components>

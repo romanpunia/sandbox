@@ -149,6 +149,7 @@ void Sandbox::Initialize()
 	Demo::SetSource("");
 	UpdateScene();
 	UpdateProject();
+	SetStatus("Setting up done");
 
 	Activity->Callbacks.CursorMove = [this](int X, int Y, int RX, int RY)
 	{
@@ -156,9 +157,6 @@ void Sandbox::Initialize()
 		if (Selection.Gizmo)
 			Selection.Gizmo->OnMouseMove(X, Y);
 	};
-	Activity->Show();
-	Activity->Maximize();
-	SetStatus("Setting up done");
 }
 void Sandbox::Dispatch(Timer* Time)
 {
@@ -192,173 +190,167 @@ void Sandbox::Dispatch(Timer* Time)
 	{
 		State.Frames = (float)Time->GetFrameCount();
 		if (!Resource.NextPath.empty())
-		{
-			UpdateScene();
-			Scene->Dispatch(Time);
-			return;
-		}
+			return UpdateScene();
 
 		UpdateSystem();
 		if (State.GUI != nullptr)
 			State.GUI->UpdateEvents(Activity);
 	}
 
-	Scene->Dispatch(Time);
-	if (State.IsCaptured)
+	if (!State.IsCaptured)
 	{
-		State.IsCaptured = false;
-		return;
-	}
-
-	if (!State.IsInteractive)
-		return;
-
-	if (Activity->IsKeyDownHit(KeyCode::F1))
-	{
-		State.IsTraceMode = !State.IsTraceMode;
-		if (!State.IsTraceMode)
-			SetStatus("Tracing mode: off");
-		else
-			SetStatus("Tracing mode: on");
-	}
-
-	if (!State.Camera || Scene->GetCamera()->GetEntity() != State.Camera || !State.IsCameraActive)
-		return;
-
-	if (Selection.Entity != nullptr)
-	{
-		if (Activity->IsKeyDownHit(KeyCode::DELETEKEY))
+		if (State.IsInteractive)
 		{
-			SetStatus("Entity was removed");
-			Scene->DeleteEntity(Selection.Entity);
-			SetSelection(Inspector_None);
-		}
-
-		if (GetSceneFocus())
-		{
-			if (Activity->IsKeyDownHit(KeyCode::D1))
+			if (Activity->IsKeyDownHit(KeyCode::F1))
 			{
-				Selection.Gizmo = Resource.Gizmo[Selection.Move = 0];
-				Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
-				Selection.Gizmo->SetDisplayScale(State.GizmoScale);
-				Selection.Gizmo->SetLocation(IGizmo::LOCATE_WORLD);
-				SetStatus("Movement gizmo selected");
+				State.IsTraceMode = !State.IsTraceMode;
+				if (!State.IsTraceMode)
+					SetStatus("Tracing mode: off");
+				else
+					SetStatus("Tracing mode: on");
 			}
-			else if (Activity->IsKeyDownHit(KeyCode::D2))
-			{
-				Selection.Gizmo = Resource.Gizmo[Selection.Move = 1];
-				Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
-				Selection.Gizmo->SetDisplayScale(State.GizmoScale);
-				Selection.Gizmo->SetLocation(IGizmo::LOCATE_WORLD);
-				SetStatus("Rotation gizmo selected");
-			}
-			else if (Activity->IsKeyDownHit(KeyCode::D3))
-			{
-				Selection.Gizmo = Resource.Gizmo[Selection.Move = 2];
-				Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
-				Selection.Gizmo->SetDisplayScale(State.GizmoScale);
-				Selection.Gizmo->SetLocation(IGizmo::LOCATE_WORLD);
-				SetStatus("Scale gizmo selected");
-			}
-		}
-	}
 
-	if (Selection.Entity != nullptr)
-	{
-		if (Selection.Gizmo != nullptr)
-		{
-			Transform::Spacing Space;
-			Space.Position = State.Gizmo.Position();
-			Space.Rotation = State.Gizmo.Rotation();
-			Selection.Entity->GetTransform()->Localize(Space);
-
-			if (Selection.Gizmo->IsActive())
+			if (State.Camera != nullptr && Scene->GetCamera()->GetEntity() == State.Camera && State.IsCameraActive)
 			{
-				switch (Selection.Move)
+				if (Selection.Entity != nullptr)
 				{
-					case 1:
-						Selection.Entity->GetTransform()->SetRotation(Space.Rotation);
-						break;
-					case 2:
-						Selection.Entity->GetTransform()->SetScale(State.Gizmo.Scale());
-						break;
-					default:
-						Selection.Entity->GetTransform()->SetPosition(Space.Position);
-						break;
+					if (Activity->IsKeyDownHit(KeyCode::DELETEKEY))
+					{
+						SetStatus("Entity was removed");
+						Scene->DeleteEntity(Selection.Entity);
+						SetSelection(Inspector_None);
+					}
+
+					if (GetSceneFocus())
+					{
+						if (Activity->IsKeyDownHit(KeyCode::D1))
+						{
+							Selection.Gizmo = Resource.Gizmo[Selection.Move = 0];
+							Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
+							Selection.Gizmo->SetDisplayScale(State.GizmoScale);
+							Selection.Gizmo->SetLocation(IGizmo::LOCATE_WORLD);
+							SetStatus("Movement gizmo selected");
+						}
+						else if (Activity->IsKeyDownHit(KeyCode::D2))
+						{
+							Selection.Gizmo = Resource.Gizmo[Selection.Move = 1];
+							Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
+							Selection.Gizmo->SetDisplayScale(State.GizmoScale);
+							Selection.Gizmo->SetLocation(IGizmo::LOCATE_WORLD);
+							SetStatus("Rotation gizmo selected");
+						}
+						else if (Activity->IsKeyDownHit(KeyCode::D3))
+						{
+							Selection.Gizmo = Resource.Gizmo[Selection.Move = 2];
+							Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
+							Selection.Gizmo->SetDisplayScale(State.GizmoScale);
+							Selection.Gizmo->SetLocation(IGizmo::LOCATE_WORLD);
+							SetStatus("Scale gizmo selected");
+						}
+					}
 				}
-				GetEntitySync();
-			}
-			else
-			{
-				State.Gizmo = Selection.Entity->GetTransform()->GetBias();
-				Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
-			}
-		}
-		else
-		{
-			State.Gizmo = Selection.Entity->GetTransform()->GetBias();
-			Selection.Gizmo = Resource.Gizmo[Selection.Move];
-			Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
-			Selection.Gizmo->SetDisplayScale(State.GizmoScale);
-			Selection.Gizmo->SetLocation(IGizmo::LOCATE_WORLD);
-		}
-	}
 
-	GetEntityCell();
-	if (Selection.Entity != nullptr && Selection.Entity != State.Camera)
-	{
-		if (Activity->IsKeyDownHit(KeyCode::DELETEKEY))
-		{
-			SetStatus("Entity was removed");
-			Scene->DeleteEntity(Selection.Entity);
-			SetSelection(Inspector_None);
-		}
-
-		if (Activity->IsKeyDown(KeyMod::LCTRL) && GetSceneFocus())
-		{
-			if (Activity->IsKeyDownHit(KeyCode::V) || Activity->IsKeyDown(KeyCode::B))
-			{
-				SetStatus("Entity was cloned");
-				Scene->CloneEntity(Selection.Entity, [this](Entity* Result)
+				if (Selection.Entity != nullptr)
 				{
-					SetSelection(Result ? Inspector_Entity : Inspector_None, Result);
-				});
-			}
+					if (Selection.Gizmo != nullptr)
+					{
+						Transform::Spacing Space;
+						Space.Position = State.Gizmo.Position();
+						Space.Rotation = State.Gizmo.Rotation();
+						Selection.Entity->GetTransform()->Localize(Space);
 
-			if (Activity->IsKeyDownHit(KeyCode::X))
-			{
-				SetStatus("Entity was removed");
-				Scene->DeleteEntity(Selection.Entity);
-				SetSelection(Inspector_None);
+						if (Selection.Gizmo->IsActive())
+						{
+							switch (Selection.Move)
+							{
+								case 1:
+									Selection.Entity->GetTransform()->SetRotation(Space.Rotation);
+									break;
+								case 2:
+									Selection.Entity->GetTransform()->SetScale(State.Gizmo.Scale());
+									break;
+								default:
+									Selection.Entity->GetTransform()->SetPosition(Space.Position);
+									break;
+							}
+							GetEntitySync();
+						}
+						else
+						{
+							State.Gizmo = Selection.Entity->GetTransform()->GetBias();
+							Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
+						}
+					}
+					else
+					{
+						State.Gizmo = Selection.Entity->GetTransform()->GetBias();
+						Selection.Gizmo = Resource.Gizmo[Selection.Move];
+						Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
+						Selection.Gizmo->SetDisplayScale(State.GizmoScale);
+						Selection.Gizmo->SetLocation(IGizmo::LOCATE_WORLD);
+					}
+				}
+
+				GetEntityCell();
+				if (Selection.Entity != nullptr && Selection.Entity != State.Camera)
+				{
+					if (Activity->IsKeyDownHit(KeyCode::DELETEKEY))
+					{
+						SetStatus("Entity was removed");
+						Scene->DeleteEntity(Selection.Entity);
+						SetSelection(Inspector_None);
+					}
+
+					if (Activity->IsKeyDown(KeyMod::LCTRL) && GetSceneFocus())
+					{
+						if (Activity->IsKeyDownHit(KeyCode::V) || Activity->IsKeyDown(KeyCode::B))
+						{
+							SetStatus("Entity was cloned");
+							Entity* Result = Scene->CloneEntity(Selection.Entity);
+							SetSelection(Result ? Inspector_Entity : Inspector_None, Result);
+						}
+
+						if (Activity->IsKeyDownHit(KeyCode::X))
+						{
+							SetStatus("Entity was removed");
+							Scene->DeleteEntity(Selection.Entity);
+							SetSelection(Inspector_None);
+						}
+					}
+				}
+
+				if (Activity->IsKeyDown(KeyMod::LCTRL))
+				{
+					if (Activity->IsKeyDown(KeyCode::N))
+					{
+						Entity* Last = Scene->GetLastEntity();
+						if (Last != nullptr && Last != State.Camera)
+						{
+							if (Selection.Entity == Last)
+								SetSelection(Inspector_None);
+
+							SetStatus("Last entity was removed");
+							Scene->DeleteEntity(Last);
+						}
+					}
+
+					if (Activity->IsKeyDown(KeyCode::X))
+					{
+						if (Selection.Entity != nullptr)
+						{
+							SetStatus("Entity was removed");
+							Scene->DeleteEntity(Selection.Entity);
+							SetSelection(Inspector_None);
+						}
+					}
+				}
 			}
 		}
 	}
+	else
+		State.IsCaptured = false;
 
-	if (Activity->IsKeyDown(KeyMod::LCTRL))
-	{
-		if (Activity->IsKeyDown(KeyCode::N))
-		{
-			Entity* Last = Scene->GetLastEntity();
-			if (Last != nullptr && Last != State.Camera)
-			{
-				if (Selection.Entity == Last)
-					SetSelection(Inspector_None);
-
-				SetStatus("Last entity was removed");
-				Scene->DeleteEntity(Last);
-			}
-		}
-
-		if (Activity->IsKeyDown(KeyCode::X))
-		{
-			if (Selection.Entity != nullptr)
-			{
-				SetStatus("Entity was removed");
-				Scene->DeleteEntity(Selection.Entity);
-				SetSelection(Inspector_None);
-			}
-		}
-	}
+	Scene->Dispatch(Time);
 }
 void Sandbox::Publish(Timer* Time)
 {
@@ -437,8 +429,8 @@ void Sandbox::UpdateScene()
 	State.Camera->GetTransform()->SetSpacing(Positioning::Global, Space);
 
 	auto* Fly = State.Camera->AddComponent<Components::Fly>();
-	Fly->SpeedDown *= 0.25f;
-	Fly->SpeedNormal *= 0.35f;
+	Fly->Moving.Slower *= 0.25f;
+	Fly->Moving.Normal *= 0.35f;
 
 	Scene->AddEntity(State.Camera);
 	Scene->SetCamera(State.Camera);
@@ -1377,8 +1369,7 @@ void Sandbox::SetViewModel()
 			Content->Save<SceneGraph>("./system/cache.xml", Scene, Args);
 			Scene->AddEntity(State.Camera);
 			Scene->SetActive(true);
-			Scene->ScriptHook();
-
+			
 			auto& Cameras = Scene->GetComponents<Components::Camera>();
 			for (auto It = Cameras.Begin(); It != Cameras.End(); It++)
 			{
@@ -1496,7 +1487,7 @@ void Sandbox::SetViewModel()
 	State.System->SetCallback("remove_material", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (Selection.Material != nullptr)
-			Scene->RemoveMaterial(Selection.Material);
+			Scene->DeleteMaterial(Selection.Material);
 		SetSelection(Inspector_Materials);
 	});
 	State.System->SetCallback("copy_material", [this](GUI::IEvent& Event, const VariantList& Args)

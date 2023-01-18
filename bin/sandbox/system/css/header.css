@@ -7,8 +7,7 @@
 	top: 0;
 	left: 0;
 	right: 0;
-	background-color: rgba(40, 40, 40, 220);
-	decorator: box-shadow(0 10 20 rgba(0, 0, 0, 255)), box-blur(16 rgba(255, 255, 255, 230));
+	background-color: rgb(40, 40, 40);
 	padding: 0px 12px;
 	z-index: 999;
 	color: rgb(220, 220, 220);
