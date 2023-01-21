@@ -99,7 +99,7 @@ void ComponentEmitter(GUI::Context* UI, Components::Emitter* Base, bool Changed)
 	if (Changed)
 		LastMaterial = nullptr;
 
-	int Count = (int)Base->GetBuffer()->GetArray()->Size();
+	int Count = (int)Base->GetBuffer()->GetArray().size();
 	UI->GetElementById(0, "cmp_emitter_min_x").CastFormFloat(&Base->Min.X);
 	UI->GetElementById(0, "cmp_emitter_min_y").CastFormFloat(&Base->Min.Y);
 	UI->GetElementById(0, "cmp_emitter_min_z").CastFormFloat(&Base->Min.Z);
@@ -1159,7 +1159,6 @@ void ComponentCamera(GUI::Context* UI, Components::Camera* Base, bool Changed)
 	auto* fRenderer = Base->GetRenderer();
 	bool Preview = !App->State.IsCameraActive;
 
-	UI->GetElementById(0, "cmp_camera_fc").CastFormBoolean(&fRenderer->FrustumCulling);
 	UI->GetElementById(0, "cmp_camera_oc").CastFormBoolean(&fRenderer->OcclusionCulling);
 	UI->GetElementById(0, "cmp_camera_fov").CastFormFloat(&Base->FieldOfView);
 	UI->GetElementById(0, "cmp_camera_w").CastFormFloat(&Base->Width);
@@ -1175,9 +1174,9 @@ void ComponentCamera(GUI::Context* UI, Components::Camera* Base, bool Changed)
 	UI->GetElementById(0, "cmp_camera_oc_ov").CastFormFloat(&fRenderer->OverflowVisibility);
 
 	if (UI->GetElementById(0, "cmp_camera_perspective").IsActive())
-		Base->Mode = Components::Camera::ProjectionMode_Perspective;
+		Base->Mode = Components::Camera::ProjectionMode::Perspective;
 	else if (UI->GetElementById(0, "cmp_camera_ortho").IsActive())
-		Base->Mode = Components::Camera::ProjectionMode_Orthographic;
+		Base->Mode = Components::Camera::ProjectionMode::Orthographic;
 
 	if (UI->GetElementById(0, "cmp_camera_preview").CastFormBoolean(&Preview))
 	{
@@ -1188,10 +1187,7 @@ void ComponentCamera(GUI::Context* UI, Components::Camera* Base, bool Changed)
 
 			auto* fRenderer = Main->GetRenderer();
 			if (App->Scene->IsActive())
-			{
 				fRenderer->OcclusionCulling = false;
-				fRenderer->FrustumCulling = true;
-			}
 			else
 				App->Scene->ClearCulling();
 		}
