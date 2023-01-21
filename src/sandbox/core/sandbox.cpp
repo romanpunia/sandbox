@@ -137,7 +137,7 @@ void Sandbox::Initialize()
 		Processors::MeshOpt_TransformUVCoords | 0;
 	Selection.Directory = nullptr;
 
-	if (!State.GUI->Inject("system/conf.xml"))
+	if (!State.GUI->Initialize("system/conf.xml"))
 	{
 		TH_ERR("could not load GUI");
 		return Stop();
@@ -165,9 +165,9 @@ void Sandbox::Dispatch(Timer* Time)
 	{
 		if (State.GUI != nullptr)
 		{
-			State.GUI->Deconstruct();
-			State.GUI->ClearCache();
-			State.GUI->Inject("system/conf.xml");
+			State.GUI->ClearDocuments();
+			State.GUI->ClearStyles();
+			State.GUI->Initialize("system/conf.xml");
 		}
 	}
 #endif
@@ -405,6 +405,7 @@ void Sandbox::UpdateScene()
 	{
 		VariantArgs Args;
 		Args["active"] = Var::Boolean(false);
+		Args["mutations"] = Var::Boolean(true);
 
 		Scene = Content->Load<SceneGraph>(Resource.NextPath, Args);
 	}
@@ -413,6 +414,7 @@ void Sandbox::UpdateScene()
 	{
 		SceneGraph::Desc I = SceneGraph::Desc::Get(this);
 		I.Simulator.EnableSoftBody = true;
+		I.Mutations = true;
 
 		Scene = new SceneGraph(I);
 		Scene->SetActive(false);
@@ -470,7 +472,9 @@ void Sandbox::UpdateGrid(Timer* Time)
 		if (State.Camera == Value)
 			continue;
 
-		float Direction = -Value->GetTransform()->GetPosition().LookAtXZ(State.Camera->GetTransform()->GetPosition());
+		auto& From = Value->GetTransform()->GetPosition();
+		auto& To = State.Camera->GetTransform()->GetPosition();
+		float Direction = -Vector2(From.X, From.Z).LookAt(Vector2(To.X, To.Z));
 		Renderer->Render.TexCoord = (Value == Selection.Entity ? 0.5f : 0.05f);
 		Renderer->Render.Transform = Matrix4x4::Create(Value->GetTransform()->GetPosition(), 0.5f, Vector3(0, Direction))* State.Camera->GetComponent<Components::Camera>()->GetViewProjection();
 		Renderer->SetTexture2D(GetIcon(Value), 1, TH_PS);
@@ -2515,7 +2519,7 @@ void Sandbox::GetEntity(const std::string& Name, const std::function<void(Entity
 	State.OnEntity = Callback;
 	State.Target = Name;
 }
-void* Sandbox::GetGUI() const
+GUI::Context* Sandbox::GetGUI() const
 {
 	return State.GUI;
 }
