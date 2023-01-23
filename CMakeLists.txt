@@ -76,8 +76,11 @@ else()
     set(CMAKE_C_FLAGS_RELEASE "/MD /O2 /Ob2 /DNDEBUG /MP")
 endif()
 
-#Project's external resolvers
-include(lib/tomahawk/CMakeLists.txt)
+#Add Tomahawk as dependency
+add_subdirectory(${TH_DIRECTORY} tomahawk)
+link_directories(${TH_DIRECTORY})
+target_include_directories(sandbox PRIVATE ${TH_DIRECTORY})
+target_link_libraries(sandbox PRIVATE tomahawk)
 
 #Project's source resolvers
 include(src/utils/CMakeLists.txt)
