@@ -86,7 +86,6 @@
 						<occluder-skips i="8" />
 						<occludee-skips i="3" />
 						<occlusion-skips i="2" />
-						<frustum-cull b="true" />
 						<occlusion-cull b="false" />
 						<max-queries i="16384" />
 						<renderers>
@@ -158,34 +157,6 @@
 									<power n="1.000000" />
 									<samples-2 n="14.000000" />
 									<blur n="12.000000" />
-								</metadata>
-							</renderer>
-							<renderer>
-								<id i="-40449310" />
-								<active b="true" />
-								<metadata>
-									<grayscale n="0.000000" />
-									<aces n="0.100000" />
-									<filmic n="0.350000" />
-									<lottes n="0.000000" />
-									<reinhard n="0.000000" />
-									<reinhard2 n="0.000000" />
-									<unreal n="0.000000" />
-									<uchimura n="0.000000" />
-									<ubrightness n="2.000000" />
-									<usontrast n="1.000000" />
-									<ustart n="0.820000" />
-									<ulength n="0.400000" />
-									<ublack n="1.130000" />
-									<upedestal n="0.050000" />
-									<exposure n="1.000000" />
-									<eintensity n="3.500000" />
-									<egamma n="0.500000" />
-									<adaptation n="0.000000" />
-									<agray n="1.000000" />
-									<awhite n="1.000000" />
-									<ablack n="0.500000" />
-									<aspeed n="0.500000" />
 								</metadata>
 							</renderer>
 							<renderer>
@@ -412,6 +383,100 @@
 							</material>
 						</materials>
 					</metadata>
+				</component>
+			</components>
+		</entity>
+		<entity>
+			<name s="" />
+			<refer i="9" />
+			<transform>
+				<position x="-32.696602" y="19.874607" z="1.580616" />
+				<rotation x="0.680000" y="1.554999" z="0.000000" />
+				<scale x="1.000000" y="1.000000" z="1.000000" />
+				<scaling b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="-3303215611" />
+					<active b="true" />
+					<metadata>
+						<mode i="0" />
+						<projection m11="0.684872" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.303225" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000400" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100040" m44="0.000000" />
+						<field-of-view n="75.000000" />
+						<far-plane n="250.000000" />
+						<near-plane n="0.100000" />
+						<width n="-1.000000" />
+						<height n="-1.000000" />
+						<occluder-skips i="8" />
+						<occludee-skips i="3" />
+						<occlusion-skips i="2" />
+						<occlusion-cull b="false" />
+						<max-queries i="16384" />
+						<renderers>
+							<renderer>
+								<id i="-451536084" />
+								<active b="true" />
+								<metadata />
+							</renderer>
+							<renderer>
+								<id i="-2915558991" />
+								<active b="true" />
+								<metadata />
+							</renderer>
+							<renderer>
+								<id i="-2873000682" />
+								<active b="true" />
+								<metadata />
+							</renderer>
+							<renderer>
+								<id i="-2782690299" />
+								<active b="true" />
+								<metadata />
+							</renderer>
+							<renderer>
+								<id i="-1252124601" />
+								<active b="true" />
+								<metadata />
+							</renderer>
+							<renderer>
+								<id i="-1262915616" />
+								<active b="true" />
+								<metadata>
+									<sky-map s="" />
+									<high-emission x="0.028000" y="0.028000" z="0.028000" />
+									<low-emission x="0.016000" y="0.016000" z="0.016000" />
+									<sky-emission n="0.000000" />
+									<light-emission n="1.000000" />
+									<sky-color x="1.000000" y="1.000000" z="1.000000" />
+									<fog-color x="0.500000" y="0.600000" z="0.700000" />
+									<fog-amount n="0.000000" />
+									<fog-far-off n="0.100000" />
+									<fog-far x="0.125000" y="0.125000" z="0.125000" />
+									<fog-near-off n="0.100000" />
+									<fog-near x="0.125000" y="0.125000" z="0.125000" />
+									<recursive n="1.000000" />
+									<shadow-distance n="0.500000" />
+									<sf-size i="128" />
+									<gi b="true" />
+								</metadata>
+							</renderer>
+							<renderer>
+								<id i="-756544832" />
+								<active b="true" />
+								<metadata />
+							</renderer>
+						</renderers>
+					</metadata>
+				</component>
+				<component>
+					<id i="-1784846483" />
+					<active b="false" />
+					<metadata />
+				</component>
+				<component>
+					<id i="-2893380685" />
+					<active b="false" />
+					<metadata />
 				</component>
 			</components>
 		</entity>

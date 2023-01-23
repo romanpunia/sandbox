@@ -1,9 +1,4 @@
 cmake_minimum_required(VERSION 3.6)
-if (POLICY CMP0077)
-	cmake_policy(SET CMP0077 NEW)
-else()
-	cmake_policy(SET CMP0054 NEW)
-endif()
 
 #Setup toolchain file if needed
 set(TH_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../tomahawk CACHE STRING "Tomahawk directory")
@@ -22,6 +17,7 @@ if (NOT DEFINED CMAKE_RUNTIME_OUTPUT_DIRECTORY)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_SOURCE_DIR}/bin)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_SOURCE_DIR}/bin)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${CMAKE_SOURCE_DIR}/bin)
 endif()
 
 #Query all sources
@@ -46,10 +42,8 @@ endforeach()
 #Project's compile options
 add_executable(sandbox ${SOURCE})
 set_target_properties(sandbox PROPERTIES
-		OUTPUT_NAME "sandboxd"
-		CXX_STANDARD 14
-		CXX_STANDARD_REQUIRED ON
-		CXX_EXTENSIONS OFF
+		OUTPUT_NAME "sandbox"
+		CXX_STANDARD 17
 		VERSION ${PROJECT_VERSION}
 		SOVERSION ${PROJECT_VERSION})
 target_compile_definitions(sandbox PRIVATE -DTH_EXPORT)
@@ -80,14 +74,11 @@ else()
     set(CMAKE_CXX_FLAGS_RELEASE "/MD /O2 /Ob2 /DNDEBUG /MP")
     set(CMAKE_C_FLAGS_DEBUG "/MDd /Zi /Ob0 /Od /MP")
     set(CMAKE_C_FLAGS_RELEASE "/MD /O2 /Ob2 /DNDEBUG /MP")
-    target_compile_definitions(sandbox PRIVATE
-            -D_CRT_SECURE_NO_WARNINGS
-            -D_SCL_SECURE_NO_WARNINGS)
 endif()
 
 #Project's external resolvers
 include(lib/tomahawk/CMakeLists.txt)
 
 #Project's source resolvers
-include(src/supplies/gizmo/CMakeLists.txt)
-include(src/sandbox/CMakeLists.txt)
+include(src/utils/CMakeLists.txt)
+include(src/CMakeLists.txt)
