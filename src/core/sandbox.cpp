@@ -188,7 +188,7 @@ void Sandbox::Dispatch(Timer* Time)
 
 	if (State.IsInteractive)
 	{
-		State.Frames = (float)Time->GetFrameCount();
+		State.Frames = (float)Time->GetFrames();
 		if (!Resource.NextPath.empty())
 			return UpdateScene();
 

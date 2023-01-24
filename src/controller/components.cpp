@@ -1122,7 +1122,7 @@ void ComponentSurfaceLight(GUI::Context* UI, Components::SurfaceLight* Base, boo
 	UI->GetElementById(0, "cmp_surface_light_vo_x").CastFormFloat(&Base->Offset.X);
 	UI->GetElementById(0, "cmp_surface_light_vo_y").CastFormFloat(&Base->Offset.Y);
 	UI->GetElementById(0, "cmp_surface_light_vo_z").CastFormFloat(&Base->Offset.Z);
-	UI->GetElementById(0, "cmp_surface_light_rd").CastFormDouble(&Base->Tick.Delay);
+	UI->GetElementById(0, "cmp_surface_light_rd").CastFormFloat(&Base->Tick.Delay);
 	UI->GetElementById(0, "cmp_surface_light_emission").CastFormFloat(&Base->Emission);
 	UI->GetElementById(0, "cmp_surface_light_inf").CastFormFloat(&Base->Infinity);
 	UI->GetElementById(0, "cmp_surface_light_px").CastFormBoolean(&Base->Parallax);
@@ -1136,8 +1136,8 @@ void ComponentSurfaceLight(GUI::Context* UI, Components::SurfaceLight* Base, boo
 }
 void ComponentIlluminator(GUI::Context* UI, Components::Illuminator* Base, bool Changed)
 {
-	UI->GetElementById(0, "cmp_illuminator_id").CastFormDouble(&Base->Inside.Delay);
-	UI->GetElementById(0, "cmp_illuminator_od").CastFormDouble(&Base->Outside.Delay);
+	UI->GetElementById(0, "cmp_illuminator_id").CastFormFloat(&Base->Inside.Delay);
+	UI->GetElementById(0, "cmp_illuminator_od").CastFormFloat(&Base->Outside.Delay);
 	UI->GetElementById(0, "cmp_illuminator_rs").CastFormFloat(&Base->RayStep);
 	UI->GetElementById(0, "cmp_illuminator_ms").CastFormFloat(&Base->MaxSteps);
 	UI->GetElementById(0, "cmp_illuminator_d").CastFormFloat(&Base->Distance);
