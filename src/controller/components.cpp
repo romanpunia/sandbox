@@ -1166,10 +1166,10 @@ void ComponentCamera(GUI::Context* UI, Components::Camera* Base, bool Changed)
 	UI->GetElementById(0, "cmp_camera_np").CastFormFloat(&Base->NearPlane);
 	UI->GetElementById(0, "cmp_camera_fp").CastFormFloat(&Base->FarPlane);
 	UI->GetElementById(0, "cmp_camera_thd").CastFormFloat(&fRenderer->Threshold);
-	UI->GetElementById(0, "cmp_camera_oc_sp1").CastFormUInt64(&fRenderer->OcclusionSkips);
-	UI->GetElementById(0, "cmp_camera_oc_sp2").CastFormUInt64(&fRenderer->OccluderSkips);
-	UI->GetElementById(0, "cmp_camera_oc_sp3").CastFormUInt64(&fRenderer->OccludeeSkips);
-	UI->GetElementById(0, "cmp_camera_oc_mq").CastFormUInt64(&fRenderer->MaxQueries);
+	UI->GetElementById(0, "cmp_camera_oc_sp1").CastFormSize(&fRenderer->OcclusionSkips);
+	UI->GetElementById(0, "cmp_camera_oc_sp2").CastFormSize(&fRenderer->OccluderSkips);
+	UI->GetElementById(0, "cmp_camera_oc_sp3").CastFormSize(&fRenderer->OccludeeSkips);
+	UI->GetElementById(0, "cmp_camera_oc_mq").CastFormSize(&fRenderer->MaxQueries);
 	UI->GetElementById(0, "cmp_camera_oc_thrs").CastFormFloat(&fRenderer->Threshold);
 	UI->GetElementById(0, "cmp_camera_oc_ov").CastFormFloat(&fRenderer->OverflowVisibility);
 

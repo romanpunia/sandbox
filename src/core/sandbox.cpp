@@ -1035,19 +1035,19 @@ void Sandbox::InspectSettings()
 	State.GUI->GetElementById(0, "sc_softs").CastFormBoolean(&Conf.Simulator.EnableSoftBody);
 	State.GUI->GetElementById(0, "sc_gp_qual").CastFormFloat(&Conf.RenderQuality, 100.0f);
 	State.GUI->GetElementById(0, "sc_gp_hdr").CastFormBoolean(&Conf.EnableHDR);
-	State.GUI->GetElementById(0, "sc_start_mats").CastFormUInt64(&Conf.StartEntities);
-	State.GUI->GetElementById(0, "sc_start_ents").CastFormUInt64(&Conf.StartComponents);
-	State.GUI->GetElementById(0, "sc_start_comps").CastFormUInt64(&Conf.StartMaterials);
-	State.GUI->GetElementById(0, "sc_grow_marg").CastFormUInt64(&Conf.GrowMargin);
+	State.GUI->GetElementById(0, "sc_start_mats").CastFormSize(&Conf.StartEntities);
+	State.GUI->GetElementById(0, "sc_start_ents").CastFormSize(&Conf.StartComponents);
+	State.GUI->GetElementById(0, "sc_start_comps").CastFormSize(&Conf.StartMaterials);
+	State.GUI->GetElementById(0, "sc_grow_marg").CastFormSize(&Conf.GrowMargin);
 	State.GUI->GetElementById(0, "sc_grow_rate").CastFormDouble(&Conf.GrowRate);
-	State.GUI->GetElementById(0, "sc_vp_br").CastFormUInt64(&Conf.VoxelsSize);
-	State.GUI->GetElementById(0, "sc_vp_bl").CastFormUInt64(&Conf.VoxelsMax);
-	State.GUI->GetElementById(0, "sc_sp_plr").CastFormUInt64(&Conf.PointsSize);
-	State.GUI->GetElementById(0, "sc_sp_pll").CastFormUInt64(&Conf.PointsMax);
-	State.GUI->GetElementById(0, "sc_sp_slr").CastFormUInt64(&Conf.SpotsSize);
-	State.GUI->GetElementById(0, "sc_sp_sll").CastFormUInt64(&Conf.SpotsMax);
-	State.GUI->GetElementById(0, "sc_sp_llr").CastFormUInt64(&Conf.LinesSize);
-	State.GUI->GetElementById(0, "sc_sp_lll").CastFormUInt64(&Conf.LinesMax);
+	State.GUI->GetElementById(0, "sc_vp_br").CastFormSize(&Conf.VoxelsSize);
+	State.GUI->GetElementById(0, "sc_vp_bl").CastFormSize(&Conf.VoxelsMax);
+	State.GUI->GetElementById(0, "sc_sp_plr").CastFormSize(&Conf.PointsSize);
+	State.GUI->GetElementById(0, "sc_sp_pll").CastFormSize(&Conf.PointsMax);
+	State.GUI->GetElementById(0, "sc_sp_slr").CastFormSize(&Conf.SpotsSize);
+	State.GUI->GetElementById(0, "sc_sp_sll").CastFormSize(&Conf.SpotsMax);
+	State.GUI->GetElementById(0, "sc_sp_llr").CastFormSize(&Conf.LinesSize);
+	State.GUI->GetElementById(0, "sc_sp_lll").CastFormSize(&Conf.LinesMax);
 
 	Vector3 Gravity = Scene->GetSimulator()->GetGravity();
 	if (State.GUI->GetElementById(0, "sc_sim_grav_x").CastFormFloat(&Gravity.X) ||
