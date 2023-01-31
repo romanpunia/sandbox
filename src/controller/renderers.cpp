@@ -52,6 +52,8 @@ void RendererSSGI(GUI::Context* UI, Renderers::SSGI* Base)
 	UI->GetElementById(0, "cmp_camera_ssgi_ic").CastFormFloat(&Base->Indirection.Cutoff);
 	UI->GetElementById(0, "cmp_camera_ssgi_ia").CastFormFloat(&Base->Indirection.Attenuation);
 	UI->GetElementById(0, "cmp_camera_ssgi_isw").CastFormFloat(&Base->Indirection.Swing);
+	UI->GetElementById(0, "cmp_camera_ssgi_ilbs").CastFormFloat(&Base->Indirection.Bias);
+	UI->GetElementById(0, "cmp_camera_ssgi_ilb").CastFormUInt32(&Base->Bounces);
 	UI->GetElementById(0, "cmp_camera_ssgi_dc").CastFormFloat(&Base->Denoise.Cutoff);
 	UI->GetElementById(0, "cmp_camera_ssgi_ds").CastFormFloat(&Base->Denoise.Samples);
 	UI->GetElementById(0, "cmp_camera_ssgi_db").CastFormFloat(&Base->Denoise.Blur);

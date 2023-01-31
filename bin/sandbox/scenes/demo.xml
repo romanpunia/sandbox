@@ -66,8 +66,8 @@
 			<name s="" />
 			<refer i="1" />
 			<transform>
-				<position x="-28.000000" y="8.000000" z="0.000000" />
-				<rotation x="0.226893" y="1.570796" z="0.000000" />
+				<position x="-28.000000" y="12.000000" z="4.000000" />
+				<rotation x="0.349066" y="1.832596" z="0.000000" />
 				<scale x="1.000000" y="1.000000" z="1.000000" />
 				<scaling b="false" />
 			</transform>
@@ -86,7 +86,6 @@
 						<occluder-skips i="8" />
 						<occludee-skips i="3" />
 						<occlusion-skips i="2" />
-						<frustum-cull b="true" />
 						<occlusion-cull b="false" />
 						<max-queries i="16384" />
 						<renderers>
@@ -101,7 +100,7 @@
 								<metadata>
 									<sky-map s="" />
 									<high-emission x="0.000000" y="0.000000" z="0.000000" />
-									<low-emission x="0.000000" y="0.000000" z="0.000000" />
+									<low-emission x="0.062745" y="0.062745" z="0.062745" />
 									<sky-emission n="0.000000" />
 									<light-emission n="1.000000" />
 									<sky-color x="1.000000" y="1.000000" z="1.000000" />
@@ -121,27 +120,15 @@
 								<id i="-393825588" />
 								<active b="true" />
 								<metadata>
-									<samples-1 n="6.000000" />
+									<samples-1 n="16.000000" />
 									<samples-2 n="32.000000" />
-									<cutoff-1 n="-0.200000" />
+									<cutoff-1 n="-0.100000" />
 									<cutoff-2 n="0.950000" />
-									<attenuation n="0.800000" />
-									<swing n="2.100000" />
-									<blur n="24.000000" />
-								</metadata>
-							</renderer>
-							<renderer>
-								<id i="-2777092291" />
-								<active b="true" />
-								<metadata>
-									<samples-1 n="32.000000" />
-									<samples-2 n="48.000000" />
-									<intensity n="1.000000" />
-									<distance n="16.000000" />
-									<cutoff n="0.950000" />
-									<blur n="64.000000" />
-									<deadzone n="0.050000" />
-									<mips n="10.000000" />
+									<attenuation n="1.000000" />
+									<swing n="1.000000" />
+									<bias n="3.000000" />
+									<distance n="10.000000" />
+									<blur n="16.000000" />
 								</metadata>
 							</renderer>
 							<renderer>
@@ -151,7 +138,7 @@
 									<samples-1 n="4.000000" />
 									<scale n="0.100000" />
 									<intensity n="2.000000" />
-									<bias n="0.500000" />
+									<bias n="0.550000" />
 									<radius n="0.100000" />
 									<distance n="4.000000" />
 									<fade n="2.000000" />
@@ -169,6 +156,34 @@
 									<power n="1.000000" />
 									<samples n="14.000000" />
 									<blur n="64.000000" />
+								</metadata>
+							</renderer>
+							<renderer>
+								<id i="-40449310" />
+								<active b="true" />
+								<metadata>
+									<grayscale n="-0.120000" />
+									<aces n="0.600000" />
+									<filmic n="-0.120000" />
+									<lottes n="0.109000" />
+									<reinhard n="-0.090000" />
+									<reinhard2 n="-0.030000" />
+									<unreal n="-0.130000" />
+									<uchimura n="1.000000" />
+									<ubrightness n="2.000000" />
+									<usontrast n="1.000000" />
+									<ustart n="0.820000" />
+									<ulength n="0.400000" />
+									<ublack n="1.130000" />
+									<upedestal n="0.050000" />
+									<exposure n="0.000000" />
+									<eintensity n="0.900000" />
+									<egamma n="2.200000" />
+									<adaptation n="0.000000" />
+									<agray n="1.000000" />
+									<awhite n="1.000000" />
+									<ablack n="0.050000" />
+									<aspeed n="2.000000" />
 								</metadata>
 							</renderer>
 						</renderers>
@@ -190,8 +205,8 @@
 			<name s="" />
 			<refer i="2" />
 			<transform>
-				<position x="2.394359" y="2.000000" z="3.586951" />
-				<rotation x="0.000000" y="1.047198" z="0.000000" />
+				<position x="2.005981" y="2.000000" z="3.351882" />
+				<rotation x="0.000000" y="1.047198" z="-0.000000" />
 				<scale x="3.000000" y="6.000000" z="3.000000" />
 				<scaling b="false" />
 			</transform>
@@ -330,7 +345,7 @@
 			<name s="" />
 			<refer i="7" />
 			<transform>
-				<position x="0.000000" y="12.000000" z="0.000000" />
+				<position x="-2.000000" y="10.000000" z="0.000000" />
 				<rotation x="0.000000" y="0.000000" z="0.000000" />
 				<scale x="1.000000" y="1.000000" z="1.000000" />
 				<scaling b="false" />
@@ -340,20 +355,20 @@
 					<id i="-1899663186" />
 					<active b="true" />
 					<metadata>
-						<projection m11="1.000000" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.001001" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100100" m44="0.000000" />
+						<projection m11="1.000000" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.003345" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100334" m44="0.000000" />
 						<view m11="1.000000" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000000" m34="0.000000" m41="0.000000" m42="12.000000" m43="0.000000" m44="1.000000" />
 						<size>
 							<radius n="50.000000" />
-							<c1 n="0.600000" />
-							<c2 n="0.600000" />
+							<c1 n="0.630000" />
+							<c2 n="0.520000" />
 						</size>
 						<diffuse x="1.000000" y="1.000000" z="1.000000" />
-						<emission n="5.000000" />
-						<disperse n="0.000000" />
+						<emission n="5.600000" />
+						<disperse n="0.100000" />
 						<shadow-softness n="30.000000" />
-						<shadow-distance n="100.000000" />
-						<shadow-bias n="-0.000300" />
-						<shadow-iterations i="32" />
+						<shadow-distance n="30.000000" />
+						<shadow-bias n="-0.000500" />
+						<shadow-iterations i="64" />
 						<shadow-enabled b="true" />
 					</metadata>
 				</component>
@@ -384,6 +399,194 @@
 							</material>
 						</materials>
 					</metadata>
+				</component>
+			</components>
+		</entity>
+		<entity>
+			<name s="" />
+			<refer i="9" />
+			<transform>
+				<position x="-41.025227" y="16.081957" z="-1.843215" />
+				<rotation x="0.395000" y="1.570000" z="0.000000" />
+				<scale x="1.000000" y="1.000000" z="1.000000" />
+				<scaling b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="-3303215611" />
+					<active b="true" />
+					<metadata>
+						<mode i="0" />
+						<projection m11="0.684872" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.303225" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000400" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100040" m44="0.000000" />
+						<field-of-view n="75.000000" />
+						<far-plane n="250.000000" />
+						<near-plane n="0.100000" />
+						<width n="-1.000000" />
+						<height n="-1.000000" />
+						<occluder-skips i="8" />
+						<occludee-skips i="3" />
+						<occlusion-skips i="2" />
+						<occlusion-cull b="false" />
+						<max-queries i="16384" />
+						<renderers>
+							<renderer>
+								<id i="-451536084" />
+								<active b="true" />
+								<metadata />
+							</renderer>
+							<renderer>
+								<id i="-2915558991" />
+								<active b="true" />
+								<metadata />
+							</renderer>
+							<renderer>
+								<id i="-2873000682" />
+								<active b="true" />
+								<metadata />
+							</renderer>
+							<renderer>
+								<id i="-2782690299" />
+								<active b="true" />
+								<metadata />
+							</renderer>
+							<renderer>
+								<id i="-1252124601" />
+								<active b="true" />
+								<metadata />
+							</renderer>
+							<renderer>
+								<id i="-1262915616" />
+								<active b="true" />
+								<metadata>
+									<sky-map s="" />
+									<high-emission x="0.028000" y="0.028000" z="0.028000" />
+									<low-emission x="0.016000" y="0.016000" z="0.016000" />
+									<sky-emission n="0.000000" />
+									<light-emission n="1.000000" />
+									<sky-color x="1.000000" y="1.000000" z="1.000000" />
+									<fog-color x="0.500000" y="0.600000" z="0.700000" />
+									<fog-amount n="0.000000" />
+									<fog-far-off n="0.100000" />
+									<fog-far x="0.125000" y="0.125000" z="0.125000" />
+									<fog-near-off n="0.100000" />
+									<fog-near x="0.125000" y="0.125000" z="0.125000" />
+									<recursive n="1.000000" />
+									<shadow-distance n="0.500000" />
+									<sf-size i="128" />
+									<gi b="true" />
+								</metadata>
+							</renderer>
+							<renderer>
+								<id i="-756544832" />
+								<active b="true" />
+								<metadata />
+							</renderer>
+						</renderers>
+					</metadata>
+				</component>
+				<component>
+					<id i="-1784846483" />
+					<active b="false" />
+					<metadata />
+				</component>
+				<component>
+					<id i="-2893380685" />
+					<active b="false" />
+					<metadata />
+				</component>
+			</components>
+		</entity>
+		<entity>
+			<name s="" />
+			<refer i="10" />
+			<transform>
+				<position x="-40.994450" y="16.063427" z="-1.850255" />
+				<rotation x="0.540000" y="1.595000" z="0.000000" />
+				<scale x="1.000000" y="1.000000" z="1.000000" />
+				<scaling b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="-3303215611" />
+					<active b="true" />
+					<metadata>
+						<mode i="0" />
+						<projection m11="0.684872" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.303225" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000400" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100040" m44="0.000000" />
+						<field-of-view n="75.000000" />
+						<far-plane n="250.000000" />
+						<near-plane n="0.100000" />
+						<width n="-1.000000" />
+						<height n="-1.000000" />
+						<occluder-skips i="8" />
+						<occludee-skips i="3" />
+						<occlusion-skips i="2" />
+						<occlusion-cull b="false" />
+						<max-queries i="16384" />
+						<renderers>
+							<renderer>
+								<id i="-451536084" />
+								<active b="true" />
+								<metadata />
+							</renderer>
+							<renderer>
+								<id i="-2915558991" />
+								<active b="true" />
+								<metadata />
+							</renderer>
+							<renderer>
+								<id i="-2873000682" />
+								<active b="true" />
+								<metadata />
+							</renderer>
+							<renderer>
+								<id i="-2782690299" />
+								<active b="true" />
+								<metadata />
+							</renderer>
+							<renderer>
+								<id i="-1252124601" />
+								<active b="true" />
+								<metadata />
+							</renderer>
+							<renderer>
+								<id i="-1262915616" />
+								<active b="true" />
+								<metadata>
+									<sky-map s="" />
+									<high-emission x="0.028000" y="0.028000" z="0.028000" />
+									<low-emission x="0.016000" y="0.016000" z="0.016000" />
+									<sky-emission n="0.000000" />
+									<light-emission n="1.000000" />
+									<sky-color x="1.000000" y="1.000000" z="1.000000" />
+									<fog-color x="0.500000" y="0.600000" z="0.700000" />
+									<fog-amount n="0.000000" />
+									<fog-far-off n="0.100000" />
+									<fog-far x="0.125000" y="0.125000" z="0.125000" />
+									<fog-near-off n="0.100000" />
+									<fog-near x="0.125000" y="0.125000" z="0.125000" />
+									<recursive n="1.000000" />
+									<shadow-distance n="0.500000" />
+									<sf-size i="128" />
+									<gi b="true" />
+								</metadata>
+							</renderer>
+							<renderer>
+								<id i="-756544832" />
+								<active b="true" />
+								<metadata />
+							</renderer>
+						</renderers>
+					</metadata>
+				</component>
+				<component>
+					<id i="-1784846483" />
+					<active b="false" />
+					<metadata />
+				</component>
+				<component>
+					<id i="-2893380685" />
+					<active b="false" />
+					<metadata />
 				</component>
 			</components>
 		</entity>
