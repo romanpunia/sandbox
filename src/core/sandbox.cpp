@@ -177,13 +177,16 @@ void Sandbox::Dispatch(Timer* Time)
 	if (!State.IsCameraActive && Scene->GetCamera()->GetEntity() == State.Camera)
 		State.IsCameraActive = true;
 
-	bool Active = (!Scene->IsActive() && GetSceneFocus());
-	State.Camera->GetComponent<Components::Fly>()->SetActive(Active);
-	State.Camera->GetComponent<Components::FreeLook>()->SetActive(Active);
-	if (Active)
+	if (State.Camera != nullptr)
 	{
-		for (auto& Item : *State.Camera)
-			Item.second->Update(Time);
+		bool Active = (!Scene->IsActive() && GetSceneFocus());
+		State.Camera->GetComponent<Components::Fly>()->SetActive(Active);
+		State.Camera->GetComponent<Components::FreeLook>()->SetActive(Active);
+		if (Active)
+		{
+			for (auto& Item : *State.Camera)
+				Item.second->Update(Time);
+		}
 	}
 
 	if (State.IsInteractive)
@@ -370,6 +373,39 @@ void Sandbox::Publish(Timer* Time)
 
 	Renderer->Submit();
 }
+void Sandbox::LoadCamera()
+{
+	State.IsCameraActive = true;
+	State.Camera = Scene->AddEntity();
+	State.Camera->AddComponent<Components::Camera>();
+	State.Camera->AddComponent<Components::FreeLook>();
+	State.Camera->GetTransform()->SetSpacing(Positioning::Global, State.Space);
+
+	auto* Fly = State.Camera->AddComponent<Components::Fly>();
+	Fly->Moving.Slower *= 0.25f;
+	Fly->Moving.Normal *= 0.35f;
+	Scene->SetCamera(State.Camera);
+
+	auto* fRenderer = Scene->GetRenderer();
+	fRenderer->AddRenderer<Renderers::Model>();
+	fRenderer->AddRenderer<Renderers::Skin>();
+	fRenderer->AddRenderer<Renderers::SoftBody>();
+	fRenderer->AddRenderer<Renderers::Emitter>();
+	fRenderer->AddRenderer<Renderers::Decal>();
+	fRenderer->AddRenderer<Renderers::Lighting>();
+	fRenderer->AddRenderer<Renderers::Transparency>();
+}
+void Sandbox::UnloadCamera()
+{
+	State.IsCameraActive = false;
+	if (!State.Camera)
+		return;
+
+	State.Space = State.Camera->GetTransform()->GetSpacing(Positioning::Global);
+	if (Scene != nullptr)
+		Scene->DeleteEntity(State.Camera);
+	State.Camera = nullptr;
+}
 void Sandbox::UpdateProject()
 {
 	SetStatus("Project's hierarchy was updated");
@@ -392,11 +428,10 @@ void Sandbox::UpdateProject()
 void Sandbox::UpdateScene()
 {
 	SetSelection(Inspector_None);
-	State.IsCameraActive = true;
+	UnloadCamera();
+
 	State.Entities->Clear();
 	State.Materials->Clear();
-
-	Transform::Spacing Space = (State.Camera ? State.Camera->GetTransform()->GetSpacing(Positioning::Global) : Transform::Spacing());
 	if (Scene != nullptr)
 		TH_CLEAR(Scene);
 
@@ -425,29 +460,9 @@ void Sandbox::UpdateScene()
 		SetStatus("Scene was loaded");
 
 	Scene->SetListener("mutation", std::bind(&Sandbox::UpdateMutation, this, std::placeholders::_1, std::placeholders::_2));
-	State.Camera = Scene->AddEntity();
-	State.Camera->AddComponent<Components::Camera>();
-	State.Camera->AddComponent<Components::FreeLook>();
-	State.Camera->GetTransform()->SetSpacing(Positioning::Global, Space);
-
-	auto* Fly = State.Camera->AddComponent<Components::Fly>();
-	Fly->Moving.Slower *= 0.25f;
-	Fly->Moving.Normal *= 0.35f;
-
-	Scene->AddEntity(State.Camera);
-	Scene->SetCamera(State.Camera);
-
-	auto* fRenderer = Scene->GetRenderer();
-	fRenderer->AddRenderer<Renderers::Model>();
-	fRenderer->AddRenderer<Renderers::Skin>();
-	fRenderer->AddRenderer<Renderers::SoftBody>();
-	fRenderer->AddRenderer<Renderers::Emitter>();
-	fRenderer->AddRenderer<Renderers::Decal>();
-	fRenderer->AddRenderer<Renderers::Lighting>();
-	fRenderer->AddRenderer<Renderers::Transparency>();
-
 	Resource.ScenePath = Resource.NextPath;
 	Resource.NextPath.clear();
+	LoadCamera();
 }
 void Sandbox::UpdateGrid(Timer* Time)
 {
@@ -474,9 +489,9 @@ void Sandbox::UpdateGrid(Timer* Time)
 
 		auto& From = Value->GetTransform()->GetPosition();
 		auto& To = State.Camera->GetTransform()->GetPosition();
-		float Direction = -Vector2(From.X, From.Z).LookAt(Vector2(To.X, To.Z));
+		float Direction = -Vector2(From.X, From.Z).LookAt(Vector2(To.X, -To.Z));
 		Renderer->Render.TexCoord = (Value == Selection.Entity ? 0.5f : 0.05f);
-		Renderer->Render.Transform = Matrix4x4::Create(Value->GetTransform()->GetPosition(), 0.5f, Vector3(0, Direction))* State.Camera->GetComponent<Components::Camera>()->GetViewProjection();
+		Renderer->Render.Transform = Matrix4x4::Create(Value->GetTransform()->GetPosition(), 0.5f, Vector3(0, Direction)) * State.Camera->GetComponent<Components::Camera>()->GetViewProjection();
 		Renderer->SetTexture2D(GetIcon(Value), 1, TH_PS);
 		Renderer->UpdateBuffer(RenderBufferType::Render);
 		Renderer->Draw(6, 0);
@@ -1369,25 +1384,9 @@ void Sandbox::SetViewModel()
 			VariantArgs Args;
 			Args["type"] = Var::String("XML");
 
-			Scene->RemoveEntity(State.Camera);
+			UnloadCamera();
 			Content->Save<SceneGraph>("./system/cache.xml", Scene, Args);
-			Scene->AddEntity(State.Camera);
 			Scene->SetActive(true);
-			
-			auto& Cameras = Scene->GetComponents<Components::Camera>();
-			for (auto It = Cameras.Begin(); It != Cameras.End(); It++)
-			{
-				Components::Camera* Base = (Components::Camera*)*It;
-				if (Base->GetEntity() == State.Camera)
-					continue;
-
-				if (Base->IsActive())
-				{
-					Scene->SetCamera(Base->GetEntity());
-					State.IsCameraActive = false;
-					break;
-				}
-			}
 		}
 		else
 			this->Resource.NextPath = "./system/cache.xml";
@@ -1649,9 +1648,9 @@ void Sandbox::SetViewModel()
 		else
 			Map["type"] = Var::String("XML");
 
-		Scene->RemoveEntity(State.Camera);
+		UnloadCamera();
 		Content->Save<SceneGraph>(Path, Scene, Map);
-		Scene->AddEntity(State.Camera);
+		LoadCamera();
 
 		if (!Scene->IsActive())
 			Scene->SetCamera(State.Camera);
@@ -2402,7 +2401,7 @@ void Sandbox::GetPathName(std::string& Path)
 }
 void Sandbox::GetEntityCell()
 {
-	if (!GetSceneFocus() || (Selection.Gizmo && Selection.Gizmo->IsActive()))
+	if (!State.Camera || !GetSceneFocus() || (Selection.Gizmo && Selection.Gizmo->IsActive()))
 		return;
 
 	auto* Camera = State.Camera->GetComponent<Components::Camera>();

@@ -43,6 +43,7 @@ public:
 		FileTree* Directory = nullptr;
 		Entity* Camera = nullptr;
 		Entity* Draggable = nullptr;
+		Transform::Spacing Space;
 		std::string Status;
 		std::string Filename;
 		std::string Target;
@@ -105,6 +106,8 @@ public:
 	void Initialize() override;
 	void Dispatch(Timer* Time) override;
 	void Publish(Timer* Time) override;
+	void LoadCamera();
+	void UnloadCamera();
     void UpdateProject();
     void UpdateScene();
 	void UpdateGrid(Timer* Time);
