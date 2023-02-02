@@ -1481,7 +1481,7 @@ void Sandbox::SetViewModel()
 			return;
 
 		if (Selection.Entity != nullptr)
-			Selection.Entity->RemoveComponent(TH_COMPONENT_HASH(Args[0].Serialize()));
+			Selection.Entity->RemoveComponent(TH_HASH(Args[0].Serialize()));
 	});
 	State.System->SetCallback("open_materials", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
@@ -2197,7 +2197,7 @@ void Sandbox::SetViewModel()
 		{
 			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
 			if (Source != nullptr)
-				Source->GetRenderer()->MoveRenderer(TH_COMPONENT_HASH(Args[0].Serialize()), -1);
+				Source->GetRenderer()->MoveRenderer(TH_HASH(Args[0].Serialize()), -1);
 		}
 	});
 	State.System->SetCallback("down_rndr", [this](GUI::IEvent& Event, const VariantList& Args)
@@ -2206,7 +2206,7 @@ void Sandbox::SetViewModel()
 		{
 			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
 			if (Source != nullptr)
-				Source->GetRenderer()->MoveRenderer(TH_COMPONENT_HASH(Args[0].Serialize()), 1);
+				Source->GetRenderer()->MoveRenderer(TH_HASH(Args[0].Serialize()), 1);
 		}
 	});
 	State.System->SetCallback("remove_rndr", [this](GUI::IEvent& Event, const VariantList& Args)
@@ -2215,7 +2215,7 @@ void Sandbox::SetViewModel()
 		{
 			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
 			if (Source != nullptr)
-				Source->GetRenderer()->RemoveRenderer(TH_COMPONENT_HASH(Args[0].Serialize()));
+				Source->GetRenderer()->RemoveRenderer(TH_HASH(Args[0].Serialize()));
 		}
 	});
 	State.System->SetCallback("toggle_rndr", [this](GUI::IEvent& Event, const VariantList& Args)
@@ -2225,7 +2225,7 @@ void Sandbox::SetViewModel()
 			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
 			if (Source != nullptr)
 			{
-				auto* fRenderer = Source->GetRenderer()->GetRenderer(TH_COMPONENT_HASH(Args[0].Serialize()));
+				auto* fRenderer = Source->GetRenderer()->GetRenderer(TH_HASH(Args[0].Serialize()));
 				if (fRenderer != nullptr)
 				{
 					fRenderer->Active = !fRenderer->Active;
@@ -2244,7 +2244,7 @@ void Sandbox::SetViewModel()
 		{
 			auto* Source = Selection.Entity->GetComponent<Components::AudioSource>();
 			if (Source != nullptr)
-				Source->GetSource()->RemoveEffectById(TH_COMPONENT_HASH(Args[0].Serialize()));
+				Source->GetSource()->RemoveEffectById(TH_HASH(Args[0].Serialize()));
 		}
 	});
 }
