@@ -49,7 +49,7 @@ void ResolveEntity(GUI::IElement& Target, const std::string& Name, const std::fu
 }
 void ResolveTexture2D(GUI::Context* UI, const std::string& Id, bool Assigned, const std::function<void(Texture2D*)>& Callback, bool Changed)
 {
-	GUI::IElement Source = UI->GetElementById(0, Id);
+	GUI::IElement Source = UI->GetElementById(Id);
 	if (Source.IsActive() && !Changed)
 	{
 		if (!Assigned)
@@ -77,7 +77,7 @@ void ResolveKeyCode(GUI::Context* UI, const std::string& Id, KeyMap* Output, boo
 	if (!App)
 		return;
 
-	GUI::IElement Source = UI->GetElementById(0, Id);
+	GUI::IElement Source = UI->GetElementById(Id);
 	if (Output->Normal && !Changed)
 	{
 		if (Source.GetInnerHTML().empty())
@@ -121,20 +121,20 @@ void ResolveKeyCode(GUI::Context* UI, const std::string& Id, KeyMap* Output, boo
 }
 bool ResolveColor4(GUI::Context* UI, const std::string& Id, Vector4* Output)
 {
-	if (!UI->GetElementById(0, Id).CastFormColor(Output, true))
+	if (!UI->GetElementById(Id).CastFormColor(Output, true))
 		return false;
 
-	UI->GetElementById(0, Id + "_color").SetProperty("background-color", Form("rgb(%u, %u, %u, %u)", (unsigned int)(Output->X * 255.0f), (unsigned int)(Output->Y * 255.0f), (unsigned int)(Output->Z * 255.0f), (unsigned int)(Output->W * 255.0f)).R());
+	UI->GetElementById(Id + "_color").SetProperty("background-color", Form("rgb(%u, %u, %u, %u)", (unsigned int)(Output->X * 255.0f), (unsigned int)(Output->Y * 255.0f), (unsigned int)(Output->Z * 255.0f), (unsigned int)(Output->W * 255.0f)).R());
 	return true;
 }
 bool ResolveColor3(GUI::Context* UI, const std::string& Id, Vector3* Output)
 {
 	Vector4 Color = *Output;
-	if (!UI->GetElementById(0, Id).CastFormColor(&Color, false))
+	if (!UI->GetElementById(Id).CastFormColor(&Color, false))
 		return false;
 
 	*Output = Color;
-	UI->GetElementById(0, Id + "_color").SetProperty("background-color", Form("rgb(%u, %u, %u)", (unsigned int)(Output->X * 255.0f), (unsigned int)(Output->Y * 255.0f), (unsigned int)(Output->Z * 255.0f)).R());
+	UI->GetElementById(Id + "_color").SetProperty("background-color", Form("rgb(%u, %u, %u)", (unsigned int)(Output->X * 255.0f), (unsigned int)(Output->Y * 255.0f), (unsigned int)(Output->Z * 255.0f)).R());
 	return true;
 }
 void ResolveModel(GUI::Context* UI, const std::string& Id, Components::Model* Output, bool Changed)
@@ -146,7 +146,7 @@ void ResolveModel(GUI::Context* UI, const std::string& Id, Components::Model* Ou
 		Changed = true;
 	}
 
-	GUI::IElement Source = UI->GetElementById(0, Id);
+	GUI::IElement Source = UI->GetElementById(Id);
 	if (Source.IsActive() && !Changed)
 	{
 		if (!Output->GetDrawable())
@@ -178,7 +178,7 @@ void ResolveSkin(GUI::Context* UI, const std::string& Id, Components::Skin* Outp
 		Changed = true;
 	}
 
-	GUI::IElement Source = UI->GetElementById(0, Id);
+	GUI::IElement Source = UI->GetElementById(Id);
 	if (Source.IsActive() && !Changed)
 	{
 		if (!Output->GetDrawable())
@@ -210,7 +210,7 @@ void ResolveSoftBody(GUI::Context* UI, const std::string& Id, Components::SoftBo
 		Changed = true;
 	}
 
-	GUI::IElement Source = UI->GetElementById(0, Id);
+	GUI::IElement Source = UI->GetElementById(Id);
 	if (Source.IsActive() && !Changed)
 	{
 		if (!Output->GetBody())
@@ -241,7 +241,7 @@ void ResolveRigidBody(GUI::Context* UI, const std::string& Id, Components::Rigid
 		Changed = true;
 	}
 
-	GUI::IElement Source = UI->GetElementById(0, Id);
+	GUI::IElement Source = UI->GetElementById(Id);
 	if (Source.IsActive() && !Changed)
 	{
 		if (!Output->GetBody())
@@ -272,7 +272,7 @@ void ResolveSliderConstraint(GUI::Context* UI, const std::string& Id, Components
 		Changed = true;
 	}
 
-	GUI::IElement Source = UI->GetElementById(0, Id);
+	GUI::IElement Source = UI->GetElementById(Id);
 	if (Source.IsActive() && !Changed)
 	{
 		if (!Output->GetConstraint())
@@ -303,7 +303,7 @@ void ResolveSkinAnimator(GUI::Context* UI, const std::string& Id, Components::Sk
 		Changed = true;
 	}
 
-	GUI::IElement Source = UI->GetElementById(0, Id);
+	GUI::IElement Source = UI->GetElementById(Id);
 	if (Source.IsActive() && !Changed)
 	{
 		if (Output->GetPath().empty())
@@ -334,7 +334,7 @@ void ResolveKeyAnimator(GUI::Context* UI, const std::string& Id, Components::Key
 		Changed = true;
 	}
 
-	GUI::IElement Source = UI->GetElementById(0, Id);
+	GUI::IElement Source = UI->GetElementById(Id);
 	if (Source.IsActive() && !Changed)
 	{
 		if (Output->GetPath().empty())
@@ -365,7 +365,7 @@ void ResolveAudioSource(GUI::Context* UI, const std::string& Id, Components::Aud
 		Changed = true;
 	}
 
-	GUI::IElement Source = UI->GetElementById(0, Id);
+	GUI::IElement Source = UI->GetElementById(Id);
 	if (Source.IsActive() && !Changed)
 	{
 		if (!Output->GetSource()->GetClip())
@@ -396,7 +396,7 @@ void ResolveScriptable(GUI::Context* UI, const std::string& Id, Components::Scri
 		Changed = true;
 	}
 
-	GUI::IElement Source = UI->GetElementById(0, Id);
+	GUI::IElement Source = UI->GetElementById(Id);
 	if (Source.IsActive() && !Changed)
 	{
 		if (Output->GetSource().empty())

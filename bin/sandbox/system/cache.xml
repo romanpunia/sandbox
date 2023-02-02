@@ -78,7 +78,7 @@
 					<active b="true" />
 					<metadata>
 						<mode i="0" />
-						<projection m11="0.684872" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.303225" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000100" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100010" m44="0.000000" />
+						<projection m11="0.672151" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.303225" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000100" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100010" m44="0.000000" />
 						<field-of-view n="75.000000" />
 						<far-plane n="1000.000000" />
 						<near-plane n="0.100000" />
@@ -118,12 +118,28 @@
 								</metadata>
 							</renderer>
 							<renderer>
+								<id i="-4073912120" />
+								<active b="true" />
+								<metadata>
+									<samples-1 n="4.000000" />
+									<scale n="0.100000" />
+									<intensity n="2.000000" />
+									<bias n="0.550000" />
+									<radius n="0.100000" />
+									<distance n="4.000000" />
+									<fade n="2.000000" />
+									<power n="1.000000" />
+									<samples-2 n="14.000000" />
+									<blur n="12.000000" />
+								</metadata>
+							</renderer>
+							<renderer>
 								<id i="-393825588" />
 								<active b="true" />
 								<metadata>
 									<samples-1 n="16.000000" />
 									<samples-2 n="32.000000" />
-									<cutoff-1 n="-0.100000" />
+									<cutoff-1 n="-0.300000" />
 									<cutoff-2 n="0.950000" />
 									<attenuation n="1.000000" />
 									<swing n="1.000000" />
@@ -147,26 +163,10 @@
 								</metadata>
 							</renderer>
 							<renderer>
-								<id i="-4073912120" />
-								<active b="true" />
-								<metadata>
-									<samples-1 n="4.000000" />
-									<scale n="0.100000" />
-									<intensity n="2.000000" />
-									<bias n="0.550000" />
-									<radius n="0.100000" />
-									<distance n="4.000000" />
-									<fade n="2.000000" />
-									<power n="1.000000" />
-									<samples-2 n="14.000000" />
-									<blur n="12.000000" />
-								</metadata>
-							</renderer>
-							<renderer>
 								<id i="-2370349920" />
 								<active b="true" />
 								<metadata>
-									<intensity n="8.000000" />
+									<intensity n="16.000000" />
 									<threshold n="0.930000" />
 									<power n="1.000000" />
 									<samples n="14.000000" />
@@ -378,11 +378,11 @@
 							<c2 n="0.520000" />
 						</size>
 						<diffuse x="1.000000" y="1.000000" z="1.000000" />
-						<emission n="5.600000" />
-						<disperse n="0.100000" />
-						<shadow-softness n="30.000000" />
+						<emission n="5.200000" />
+						<disperse n="0.160000" />
+						<shadow-softness n="20.000000" />
 						<shadow-distance n="30.000000" />
-						<shadow-bias n="-0.000500" />
+						<shadow-bias n="-0.003000" />
 						<shadow-iterations i="64" />
 						<shadow-enabled b="true" />
 					</metadata>

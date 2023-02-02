@@ -869,26 +869,26 @@ void Sandbox::InspectEntity()
 		LastBase = Base;
 
 	std::string Name = Base->GetName();
-	if (State.GUI->GetElementById(0, "ent_name").CastFormString(&Name))
+	if (State.GUI->GetElementById("ent_name").CastFormString(&Name))
 		Base->SetName(Name);
 
 	auto& Space = Base->GetTransform()->GetSpacing();
-	if (State.GUI->GetElementById(0, "ent_pos_x").CastFormFloat(&Space.Position.X) ||
-		State.GUI->GetElementById(0, "ent_pos_y").CastFormFloat(&Space.Position.Y) ||
-		State.GUI->GetElementById(0, "ent_pos_z").CastFormFloat(&Space.Position.Z) ||
-		State.GUI->GetElementById(0, "ent_rot_x").CastFormFloat(&Space.Rotation.X, Mathf::Rad2Deg()) ||
-		State.GUI->GetElementById(0, "ent_rot_y").CastFormFloat(&Space.Rotation.Y, Mathf::Rad2Deg()) ||
-		State.GUI->GetElementById(0, "ent_rot_z").CastFormFloat(&Space.Rotation.Z, Mathf::Rad2Deg()) ||
-		State.GUI->GetElementById(0, "ent_scale_x").CastFormFloat(&Space.Scale.X) ||
-		State.GUI->GetElementById(0, "ent_scale_y").CastFormFloat(&Space.Scale.Y) ||
-		State.GUI->GetElementById(0, "ent_scale_z").CastFormFloat(&Space.Scale.Z))
+	if (State.GUI->GetElementById("ent_pos_x").CastFormFloat(&Space.Position.X) ||
+		State.GUI->GetElementById("ent_pos_y").CastFormFloat(&Space.Position.Y) ||
+		State.GUI->GetElementById("ent_pos_z").CastFormFloat(&Space.Position.Z) ||
+		State.GUI->GetElementById("ent_rot_x").CastFormFloat(&Space.Rotation.X, Mathf::Rad2Deg()) ||
+		State.GUI->GetElementById("ent_rot_y").CastFormFloat(&Space.Rotation.Y, Mathf::Rad2Deg()) ||
+		State.GUI->GetElementById("ent_rot_z").CastFormFloat(&Space.Rotation.Z, Mathf::Rad2Deg()) ||
+		State.GUI->GetElementById("ent_scale_x").CastFormFloat(&Space.Scale.X) ||
+		State.GUI->GetElementById("ent_scale_y").CastFormFloat(&Space.Scale.Y) ||
+		State.GUI->GetElementById("ent_scale_z").CastFormFloat(&Space.Scale.Z))
 	{
 		Base->GetTransform()->MakeDirty();
 		GetEntitySync();
 	}
 
 	bool Scaling = Base->GetTransform()->HasScaling();
-	if (State.GUI->GetElementById(0, "ent_const_scale").CastFormBoolean(&Scaling))
+	if (State.GUI->GetElementById("ent_const_scale").CastFormBoolean(&Scaling))
 		Base->GetTransform()->SetScaling(Scaling);
 
 	if (State.System->SetBoolean("sl_cmp_model", Base->GetComponent<Components::Model>() != nullptr)->GetBoolean())
@@ -1037,74 +1037,74 @@ void Sandbox::InspectEntity()
 void Sandbox::InspectSettings()
 {
 	SceneGraph::Desc& Conf = Scene->GetConf();
-	State.GUI->GetElementById(0, "sc_start_grav_x").CastFormFloat(&Conf.Simulator.Gravity.X);
-	State.GUI->GetElementById(0, "sc_start_grav_y").CastFormFloat(&Conf.Simulator.Gravity.Y);
-	State.GUI->GetElementById(0, "sc_start_grav_z").CastFormFloat(&Conf.Simulator.Gravity.Z);
-	State.GUI->GetElementById(0, "sc_wet_norm_x").CastFormFloat(&Conf.Simulator.WaterNormal.X);
-	State.GUI->GetElementById(0, "sc_wet_norm_y").CastFormFloat(&Conf.Simulator.WaterNormal.Y);
-	State.GUI->GetElementById(0, "sc_wet_norm_z").CastFormFloat(&Conf.Simulator.WaterNormal.Z);
-	State.GUI->GetElementById(0, "sc_air_dens").CastFormFloat(&Conf.Simulator.AirDensity);
-	State.GUI->GetElementById(0, "sc_wet_dens").CastFormFloat(&Conf.Simulator.WaterDensity);
-	State.GUI->GetElementById(0, "sc_wet_off").CastFormFloat(&Conf.Simulator.WaterOffset);
-	State.GUI->GetElementById(0, "sc_max_disp").CastFormFloat(&Conf.Simulator.MaxDisplacement);
-	State.GUI->GetElementById(0, "sc_softs").CastFormBoolean(&Conf.Simulator.EnableSoftBody);
-	State.GUI->GetElementById(0, "sc_gp_qual").CastFormFloat(&Conf.RenderQuality, 100.0f);
-	State.GUI->GetElementById(0, "sc_gp_hdr").CastFormBoolean(&Conf.EnableHDR);
-	State.GUI->GetElementById(0, "sc_start_mats").CastFormSize(&Conf.StartEntities);
-	State.GUI->GetElementById(0, "sc_start_ents").CastFormSize(&Conf.StartComponents);
-	State.GUI->GetElementById(0, "sc_start_comps").CastFormSize(&Conf.StartMaterials);
-	State.GUI->GetElementById(0, "sc_grow_marg").CastFormSize(&Conf.GrowMargin);
-	State.GUI->GetElementById(0, "sc_grow_rate").CastFormDouble(&Conf.GrowRate);
-	State.GUI->GetElementById(0, "sc_vp_br").CastFormSize(&Conf.VoxelsSize);
-	State.GUI->GetElementById(0, "sc_vp_bl").CastFormSize(&Conf.VoxelsMax);
-	State.GUI->GetElementById(0, "sc_sp_plr").CastFormSize(&Conf.PointsSize);
-	State.GUI->GetElementById(0, "sc_sp_pll").CastFormSize(&Conf.PointsMax);
-	State.GUI->GetElementById(0, "sc_sp_slr").CastFormSize(&Conf.SpotsSize);
-	State.GUI->GetElementById(0, "sc_sp_sll").CastFormSize(&Conf.SpotsMax);
-	State.GUI->GetElementById(0, "sc_sp_llr").CastFormSize(&Conf.LinesSize);
-	State.GUI->GetElementById(0, "sc_sp_lll").CastFormSize(&Conf.LinesMax);
+	State.GUI->GetElementById("sc_start_grav_x").CastFormFloat(&Conf.Simulator.Gravity.X);
+	State.GUI->GetElementById("sc_start_grav_y").CastFormFloat(&Conf.Simulator.Gravity.Y);
+	State.GUI->GetElementById("sc_start_grav_z").CastFormFloat(&Conf.Simulator.Gravity.Z);
+	State.GUI->GetElementById("sc_wet_norm_x").CastFormFloat(&Conf.Simulator.WaterNormal.X);
+	State.GUI->GetElementById("sc_wet_norm_y").CastFormFloat(&Conf.Simulator.WaterNormal.Y);
+	State.GUI->GetElementById("sc_wet_norm_z").CastFormFloat(&Conf.Simulator.WaterNormal.Z);
+	State.GUI->GetElementById("sc_air_dens").CastFormFloat(&Conf.Simulator.AirDensity);
+	State.GUI->GetElementById("sc_wet_dens").CastFormFloat(&Conf.Simulator.WaterDensity);
+	State.GUI->GetElementById("sc_wet_off").CastFormFloat(&Conf.Simulator.WaterOffset);
+	State.GUI->GetElementById("sc_max_disp").CastFormFloat(&Conf.Simulator.MaxDisplacement);
+	State.GUI->GetElementById("sc_softs").CastFormBoolean(&Conf.Simulator.EnableSoftBody);
+	State.GUI->GetElementById("sc_gp_qual").CastFormFloat(&Conf.RenderQuality, 100.0f);
+	State.GUI->GetElementById("sc_gp_hdr").CastFormBoolean(&Conf.EnableHDR);
+	State.GUI->GetElementById("sc_start_mats").CastFormSize(&Conf.StartEntities);
+	State.GUI->GetElementById("sc_start_ents").CastFormSize(&Conf.StartComponents);
+	State.GUI->GetElementById("sc_start_comps").CastFormSize(&Conf.StartMaterials);
+	State.GUI->GetElementById("sc_grow_marg").CastFormSize(&Conf.GrowMargin);
+	State.GUI->GetElementById("sc_grow_rate").CastFormDouble(&Conf.GrowRate);
+	State.GUI->GetElementById("sc_vp_br").CastFormSize(&Conf.VoxelsSize);
+	State.GUI->GetElementById("sc_vp_bl").CastFormSize(&Conf.VoxelsMax);
+	State.GUI->GetElementById("sc_sp_plr").CastFormSize(&Conf.PointsSize);
+	State.GUI->GetElementById("sc_sp_pll").CastFormSize(&Conf.PointsMax);
+	State.GUI->GetElementById("sc_sp_slr").CastFormSize(&Conf.SpotsSize);
+	State.GUI->GetElementById("sc_sp_sll").CastFormSize(&Conf.SpotsMax);
+	State.GUI->GetElementById("sc_sp_llr").CastFormSize(&Conf.LinesSize);
+	State.GUI->GetElementById("sc_sp_lll").CastFormSize(&Conf.LinesMax);
 
 	Vector3 Gravity = Scene->GetSimulator()->GetGravity();
-	if (State.GUI->GetElementById(0, "sc_sim_grav_x").CastFormFloat(&Gravity.X) ||
-		State.GUI->GetElementById(0, "sc_sim_grav_y").CastFormFloat(&Gravity.Y) ||
-		State.GUI->GetElementById(0, "sc_sim_grav_z").CastFormFloat(&Gravity.Z))
+	if (State.GUI->GetElementById("sc_sim_grav_x").CastFormFloat(&Gravity.X) ||
+		State.GUI->GetElementById("sc_sim_grav_y").CastFormFloat(&Gravity.Y) ||
+		State.GUI->GetElementById("sc_sim_grav_z").CastFormFloat(&Gravity.Z))
 		Scene->GetSimulator()->SetGravity(Gravity);
 
-	State.GUI->GetElementById(0, "sc_sim_time").CastFormFloat(&Scene->GetSimulator()->TimeSpeed);
-	State.GUI->GetElementById(0, "sc_sim").CastFormBoolean(&Scene->GetSimulator()->Active);
+	State.GUI->GetElementById("sc_sim_time").CastFormFloat(&Scene->GetSimulator()->TimeSpeed);
+	State.GUI->GetElementById("sc_sim").CastFormBoolean(&Scene->GetSimulator()->Active);
 }
 void Sandbox::InspectImporter()
 {
-	State.GUI->GetElementById(0, "im_jiv").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::JoinIdenticalVertices);
-	State.GUI->GetElementById(0, "im_tri").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::Triangulate);
-	State.GUI->GetElementById(0, "im_cts").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::CalcTangentSpace);
-	State.GUI->GetElementById(0, "im_rc").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::RemoveComponent);
-	State.GUI->GetElementById(0, "im_mn").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::GenNormals);
-	State.GUI->GetElementById(0, "im_msn").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::GenSmoothNormals);
-	State.GUI->GetElementById(0, "im_slm").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::SplitLargeMeshes);
-	State.GUI->GetElementById(0, "im_ptv").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::PreTransformVertices);
-	State.GUI->GetElementById(0, "im_vds").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::ValidateDataStructure);
-	State.GUI->GetElementById(0, "im_mlh").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::MakeLeftHanded);
-	State.GUI->GetElementById(0, "im_icl").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::ImproveCacheLocality);
-	State.GUI->GetElementById(0, "im_rrm").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::RemoveRedundantMaterials);
-	State.GUI->GetElementById(0, "im_fin").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::FixInfacingNormals);
-	State.GUI->GetElementById(0, "im_sbt").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::SortByPType);
-	State.GUI->GetElementById(0, "im_rd").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::RemoveDegenerates);
-	State.GUI->GetElementById(0, "im_ri").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::RemoveInstances);
-	State.GUI->GetElementById(0, "im_rid").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::RemoveInvalidData);
-	State.GUI->GetElementById(0, "im_muv").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::GenUVCoords);
-	State.GUI->GetElementById(0, "im_tuv").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::TransformUVCoords);
-	State.GUI->GetElementById(0, "im_om").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::OptimizeMeshes);
-	State.GUI->GetElementById(0, "im_og").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::OptimizeGraph);
-	State.GUI->GetElementById(0, "im_fuv").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::FlipUVs);
-	State.GUI->GetElementById(0, "im_fwo").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::FlipWindingOrder);
-	State.GUI->GetElementById(0, "im_sbb").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::SplitByBoneCount);
-	State.GUI->GetElementById(0, "im_dbn").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::Debone);
-	State.GUI->GetElementById(0, "im_gs").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::GlobalScale);
-	State.GUI->GetElementById(0, "im_fmn").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::ForceGenNormals);
-	State.GUI->GetElementById(0, "im_et").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::EmbedTextures);
-	State.GUI->GetElementById(0, "im_dn").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::DropNormals);
-	State.GUI->GetElementById(0, "im_cbb").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::GenBoundingBoxes);
+	State.GUI->GetElementById("im_jiv").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::JoinIdenticalVertices);
+	State.GUI->GetElementById("im_tri").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::Triangulate);
+	State.GUI->GetElementById("im_cts").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::CalcTangentSpace);
+	State.GUI->GetElementById("im_rc").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::RemoveComponent);
+	State.GUI->GetElementById("im_mn").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::GenNormals);
+	State.GUI->GetElementById("im_msn").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::GenSmoothNormals);
+	State.GUI->GetElementById("im_slm").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::SplitLargeMeshes);
+	State.GUI->GetElementById("im_ptv").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::PreTransformVertices);
+	State.GUI->GetElementById("im_vds").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::ValidateDataStructure);
+	State.GUI->GetElementById("im_mlh").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::MakeLeftHanded);
+	State.GUI->GetElementById("im_icl").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::ImproveCacheLocality);
+	State.GUI->GetElementById("im_rrm").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::RemoveRedundantMaterials);
+	State.GUI->GetElementById("im_fin").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::FixInfacingNormals);
+	State.GUI->GetElementById("im_sbt").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::SortByPType);
+	State.GUI->GetElementById("im_rd").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::RemoveDegenerates);
+	State.GUI->GetElementById("im_ri").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::RemoveInstances);
+	State.GUI->GetElementById("im_rid").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::RemoveInvalidData);
+	State.GUI->GetElementById("im_muv").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::GenUVCoords);
+	State.GUI->GetElementById("im_tuv").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::TransformUVCoords);
+	State.GUI->GetElementById("im_om").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::OptimizeMeshes);
+	State.GUI->GetElementById("im_og").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::OptimizeGraph);
+	State.GUI->GetElementById("im_fuv").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::FlipUVs);
+	State.GUI->GetElementById("im_fwo").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::FlipWindingOrder);
+	State.GUI->GetElementById("im_sbb").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::SplitByBoneCount);
+	State.GUI->GetElementById("im_dbn").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::Debone);
+	State.GUI->GetElementById("im_gs").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::GlobalScale);
+	State.GUI->GetElementById("im_fmn").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::ForceGenNormals);
+	State.GUI->GetElementById("im_et").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::EmbedTextures);
+	State.GUI->GetElementById("im_dn").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::DropNormals);
+	State.GUI->GetElementById("im_cbb").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::GenBoundingBoxes);
 }
 void Sandbox::InspectMaterial()
 {
@@ -1142,32 +1142,32 @@ void Sandbox::InspectMaterial()
 	}, false);
 
 	ResolveColor3(State.GUI, "mat_diffuse", &Base->Surface.Diffuse);
-	if (State.GUI->GetElementById(0, "mat_cemn").CastFormColor(&Base->Surface.Emission, false))
-		State.GUI->GetElementById(0, "mat_cemn_color").SetProperty("background-color", Form("rgb(%u, %u, %u)", (unsigned int)(Base->Surface.Emission.X * 255.0f), (unsigned int)(Base->Surface.Emission.Y * 255.0f), (unsigned int)(Base->Surface.Emission.Z * 255.0f)).R());
+	if (State.GUI->GetElementById("mat_cemn").CastFormColor(&Base->Surface.Emission, false))
+		State.GUI->GetElementById("mat_cemn_color").SetProperty("background-color", Form("rgb(%u, %u, %u)", (unsigned int)(Base->Surface.Emission.X * 255.0f), (unsigned int)(Base->Surface.Emission.Y * 255.0f), (unsigned int)(Base->Surface.Emission.Z * 255.0f)).R());
 
-	if (State.GUI->GetElementById(0, "mat_cmet").CastFormColor(&Base->Surface.Metallic, false))
-		State.GUI->GetElementById(0, "mat_cmet_color").SetProperty("background-color", Form("rgb(%u, %u, %u)", (unsigned int)(Base->Surface.Metallic.X * 255.0f), (unsigned int)(Base->Surface.Metallic.Y * 255.0f), (unsigned int)(Base->Surface.Metallic.Z * 255.0f)).R());
+	if (State.GUI->GetElementById("mat_cmet").CastFormColor(&Base->Surface.Metallic, false))
+		State.GUI->GetElementById("mat_cmet_color").SetProperty("background-color", Form("rgb(%u, %u, %u)", (unsigned int)(Base->Surface.Metallic.X * 255.0f), (unsigned int)(Base->Surface.Metallic.Y * 255.0f), (unsigned int)(Base->Surface.Metallic.Z * 255.0f)).R());
 
 	std::string Name = Base->GetName();
-	if (State.GUI->GetElementById(0, "mat_name").CastFormString(&Name))
+	if (State.GUI->GetElementById("mat_name").CastFormString(&Name))
 		Base->SetName(Name);
 
-	State.GUI->GetElementById(0, "mat_scat_x").CastFormFloat(&Base->Surface.Scatter.X);
-	State.GUI->GetElementById(0, "mat_scat_y").CastFormFloat(&Base->Surface.Scatter.Y);
-	State.GUI->GetElementById(0, "mat_scat_z").CastFormFloat(&Base->Surface.Scatter.Z);
-	State.GUI->GetElementById(0, "mat_memn").CastFormFloat(&Base->Surface.Emission.W);
-	State.GUI->GetElementById(0, "mat_mmet").CastFormFloat(&Base->Surface.Metallic.W);
-	State.GUI->GetElementById(0, "mat_rs").CastFormFloat(&Base->Surface.Roughness.X);
-	State.GUI->GetElementById(0, "mat_mrs").CastFormFloat(&Base->Surface.Roughness.Y);
-	State.GUI->GetElementById(0, "mat_occ").CastFormFloat(&Base->Surface.Occlusion.X);
-	State.GUI->GetElementById(0, "mat_mocc").CastFormFloat(&Base->Surface.Occlusion.Y);
-	State.GUI->GetElementById(0, "mat_fres").CastFormFloat(&Base->Surface.Fresnel);
-	State.GUI->GetElementById(0, "mat_refr").CastFormFloat(&Base->Surface.Refraction);
-	State.GUI->GetElementById(0, "mat_alpha").CastFormFloat(&Base->Surface.Transparency);
-	State.GUI->GetElementById(0, "mat_env").CastFormFloat(&Base->Surface.Environment);
-	State.GUI->GetElementById(0, "mat_rad").CastFormFloat(&Base->Surface.Radius);
-	State.GUI->GetElementById(0, "mat_ht_amnt").CastFormFloat(&Base->Surface.Height);
-	State.GUI->GetElementById(0, "mat_ht_bias").CastFormFloat(&Base->Surface.Bias);
+	State.GUI->GetElementById("mat_scat_x").CastFormFloat(&Base->Surface.Scatter.X);
+	State.GUI->GetElementById("mat_scat_y").CastFormFloat(&Base->Surface.Scatter.Y);
+	State.GUI->GetElementById("mat_scat_z").CastFormFloat(&Base->Surface.Scatter.Z);
+	State.GUI->GetElementById("mat_memn").CastFormFloat(&Base->Surface.Emission.W);
+	State.GUI->GetElementById("mat_mmet").CastFormFloat(&Base->Surface.Metallic.W);
+	State.GUI->GetElementById("mat_rs").CastFormFloat(&Base->Surface.Roughness.X);
+	State.GUI->GetElementById("mat_mrs").CastFormFloat(&Base->Surface.Roughness.Y);
+	State.GUI->GetElementById("mat_occ").CastFormFloat(&Base->Surface.Occlusion.X);
+	State.GUI->GetElementById("mat_mocc").CastFormFloat(&Base->Surface.Occlusion.Y);
+	State.GUI->GetElementById("mat_fres").CastFormFloat(&Base->Surface.Fresnel);
+	State.GUI->GetElementById("mat_refr").CastFormFloat(&Base->Surface.Refraction);
+	State.GUI->GetElementById("mat_alpha").CastFormFloat(&Base->Surface.Transparency);
+	State.GUI->GetElementById("mat_env").CastFormFloat(&Base->Surface.Environment);
+	State.GUI->GetElementById("mat_rad").CastFormFloat(&Base->Surface.Radius);
+	State.GUI->GetElementById("mat_ht_amnt").CastFormFloat(&Base->Surface.Height);
+	State.GUI->GetElementById("mat_ht_bias").CastFormFloat(&Base->Surface.Bias);
 }
 void Sandbox::SetViewModel()
 {
