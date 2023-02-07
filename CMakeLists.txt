@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.6)
 
 #Setup toolchain file if needed
-set(TH_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../tomahawk CACHE STRING "Tomahawk directory")
-set(TH_USE_POSTGRESQL OFF CACHE BOOL "PostgreSQL is not used")
-set(TH_USE_MONGOC OFF CACHE BOOL "MongoDB is not used")
-set(TH_WITH_SIMD ON CACHE BOOL "SIMD is preferred for games")
-include(${TH_DIRECTORY}/lib/toolchain.cmake)
+set(ED_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../edge CACHE STRING "Edge directory")
+set(ED_USE_POSTGRESQL OFF CACHE BOOL "PostgreSQL is not used")
+set(ED_USE_MONGOC OFF CACHE BOOL "MongoDB is not used")
+set(ED_USE_SIMD ON CACHE BOOL "SIMD is preferred for games")
+include(${ED_DIRECTORY}/lib/toolchain.cmake)
 
 #Project's metadata
 project(sandbox)
@@ -46,7 +46,7 @@ set_target_properties(sandbox PROPERTIES
 		CXX_STANDARD 17
 		VERSION ${PROJECT_VERSION}
 		SOVERSION ${PROJECT_VERSION})
-target_compile_definitions(sandbox PRIVATE -DTH_EXPORT)
+target_compile_definitions(sandbox PRIVATE -DED_EXPORT)
 
 #Resolve needed options for different compilers and refs linkage
 if (NOT MSVC)
@@ -76,11 +76,11 @@ else()
     set(CMAKE_C_FLAGS_RELEASE "/MD /O2 /Ob2 /DNDEBUG /MP")
 endif()
 
-#Add Tomahawk as dependency
-add_subdirectory(${TH_DIRECTORY} tomahawk)
-link_directories(${TH_DIRECTORY})
-target_include_directories(sandbox PRIVATE ${TH_DIRECTORY})
-target_link_libraries(sandbox PRIVATE tomahawk)
+#Add Edge as dependency
+add_subdirectory(${ED_DIRECTORY} edge)
+link_directories(${ED_DIRECTORY})
+target_include_directories(sandbox PRIVATE ${ED_DIRECTORY})
+target_link_libraries(sandbox PRIVATE edge)
 
 #Project's source resolvers
 include(src/utils/CMakeLists.txt)

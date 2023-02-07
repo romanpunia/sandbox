@@ -14,20 +14,20 @@ Sandbox::Sandbox(Application::Desc* Conf, const std::string& Path) : Application
 }
 Sandbox::~Sandbox()
 {
-	TH_RELEASE(State.GUI);
-	TH_RELEASE(State.Directory);
-	TH_RELEASE(Icons.Empty);
-	TH_RELEASE(Icons.Animation);
-	TH_RELEASE(Icons.Body);
-	TH_RELEASE(Icons.Camera);
-	TH_RELEASE(Icons.Decal);
-	TH_RELEASE(Icons.Mesh);
-	TH_RELEASE(Icons.Motion);
-	TH_RELEASE(Icons.Light);
-	TH_RELEASE(Icons.Probe);
-	TH_RELEASE(Icons.Listener);
-	TH_RELEASE(Icons.Source);
-	TH_RELEASE(Icons.Emitter);
+	ED_RELEASE(State.GUI);
+	ED_RELEASE(State.Directory);
+	ED_RELEASE(Icons.Empty);
+	ED_RELEASE(Icons.Animation);
+	ED_RELEASE(Icons.Body);
+	ED_RELEASE(Icons.Camera);
+	ED_RELEASE(Icons.Decal);
+	ED_RELEASE(Icons.Mesh);
+	ED_RELEASE(Icons.Motion);
+	ED_RELEASE(Icons.Light);
+	ED_RELEASE(Icons.Probe);
+	ED_RELEASE(Icons.Listener);
+	ED_RELEASE(Icons.Source);
+	ED_RELEASE(Icons.Emitter);
 	delete (CGizmoTransformMove*)Resource.Gizmo[0];
 	delete (CGizmoTransformRotate*)Resource.Gizmo[1];
 	delete (CGizmoTransformScale*)Resource.Gizmo[2];
@@ -139,7 +139,7 @@ void Sandbox::Initialize()
 
 	if (!State.GUI->Initialize("system/conf.xml"))
 	{
-		TH_ERR("could not load GUI");
+		ED_ERR("could not load GUI");
 		return Stop();
 	}
 
@@ -416,7 +416,7 @@ void Sandbox::UpdateProject()
 		Selection.Directory = nullptr;
 	}
 
-	TH_RELEASE(State.Directory);
+	ED_RELEASE(State.Directory);
 	State.Directory = new FileTree(Resource.CurrentPath);
 	if (!State.Directories)
 		return;
@@ -433,7 +433,7 @@ void Sandbox::UpdateScene()
 	State.Entities->Clear();
 	State.Materials->Clear();
 	if (Scene != nullptr)
-		TH_CLEAR(Scene);
+		ED_CLEAR(Scene);
 
 	VM->ClearCache();
 	if (!Resource.NextPath.empty())
@@ -478,7 +478,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 	Renderer->SetBlendState(States.Blend);
 	Renderer->SetRasterizerState(States.BackRasterizer);
 	Renderer->SetInputLayout(States.Layout);
-	Renderer->SetShader(Renderer->GetBasicEffect(), TH_VS | TH_PS);
+	Renderer->SetShader(Renderer->GetBasicEffect(), ED_VS | ED_PS);
 	Renderer->SetVertexBuffer(Cache.Primitives->GetQuad());
 
 	for (uint32_t i = 0; i < Scene->GetEntitiesCount(); i++)
@@ -492,7 +492,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 		float Direction = -Vector2(From.X, From.Z).LookAt(Vector2(To.X, -To.Z));
 		Renderer->Render.TexCoord = (Value == Selection.Entity ? 0.5f : 0.05f);
 		Renderer->Render.Transform = Matrix4x4::Create(Value->GetTransform()->GetPosition(), 0.5f, Vector3(0, Direction)) * State.Camera->GetComponent<Components::Camera>()->GetViewProjection();
-		Renderer->SetTexture2D(GetIcon(Value), 1, TH_PS);
+		Renderer->SetTexture2D(GetIcon(Value), 1, ED_PS);
 		Renderer->UpdateBuffer(RenderBufferType::Render);
 		Renderer->Draw(6, 0);
 	}
@@ -1419,7 +1419,7 @@ void Sandbox::SetViewModel()
 					Args["type"] = Var::String("XML");
 
 				Content->Save<Schema>(To, Doc, Args);
-				TH_RELEASE(Doc);
+				ED_RELEASE(Doc);
 				this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Mesh was imported");
 			}
 			else
@@ -1459,7 +1459,7 @@ void Sandbox::SetViewModel()
 					Args["type"] = Var::String("XML");
 
 				Content->Save<Schema>(To, Doc, Args);
-				TH_RELEASE(Doc);
+				ED_RELEASE(Doc);
 				this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Animation was imported");
 			}
 			else
@@ -1481,7 +1481,7 @@ void Sandbox::SetViewModel()
 			return;
 
 		if (Selection.Entity != nullptr)
-			Selection.Entity->RemoveComponent(TH_HASH(Args[0].Serialize()));
+			Selection.Entity->RemoveComponent(ED_HASH(Args[0].Serialize()));
 	});
 	State.System->SetCallback("open_materials", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
@@ -1552,7 +1552,7 @@ void Sandbox::SetViewModel()
 		else
 			this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Skin animation was saved");
 
-		TH_RELEASE(Result);
+		ED_RELEASE(Result);
 		this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
 		this->Activity->Message.Result(nullptr);
 	});
@@ -1589,7 +1589,7 @@ void Sandbox::SetViewModel()
 		else
 			this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Key animation was saved");
 
-		TH_RELEASE(Result);
+		ED_RELEASE(Result);
 		this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
 		this->Activity->Message.Result(nullptr);
 	});
@@ -2197,7 +2197,7 @@ void Sandbox::SetViewModel()
 		{
 			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
 			if (Source != nullptr)
-				Source->GetRenderer()->MoveRenderer(TH_HASH(Args[0].Serialize()), -1);
+				Source->GetRenderer()->MoveRenderer(ED_HASH(Args[0].Serialize()), -1);
 		}
 	});
 	State.System->SetCallback("down_rndr", [this](GUI::IEvent& Event, const VariantList& Args)
@@ -2206,7 +2206,7 @@ void Sandbox::SetViewModel()
 		{
 			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
 			if (Source != nullptr)
-				Source->GetRenderer()->MoveRenderer(TH_HASH(Args[0].Serialize()), 1);
+				Source->GetRenderer()->MoveRenderer(ED_HASH(Args[0].Serialize()), 1);
 		}
 	});
 	State.System->SetCallback("remove_rndr", [this](GUI::IEvent& Event, const VariantList& Args)
@@ -2215,7 +2215,7 @@ void Sandbox::SetViewModel()
 		{
 			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
 			if (Source != nullptr)
-				Source->GetRenderer()->RemoveRenderer(TH_HASH(Args[0].Serialize()));
+				Source->GetRenderer()->RemoveRenderer(ED_HASH(Args[0].Serialize()));
 		}
 	});
 	State.System->SetCallback("toggle_rndr", [this](GUI::IEvent& Event, const VariantList& Args)
@@ -2225,7 +2225,7 @@ void Sandbox::SetViewModel()
 			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
 			if (Source != nullptr)
 			{
-				auto* fRenderer = Source->GetRenderer()->GetRenderer(TH_HASH(Args[0].Serialize()));
+				auto* fRenderer = Source->GetRenderer()->GetRenderer(ED_HASH(Args[0].Serialize()));
 				if (fRenderer != nullptr)
 				{
 					fRenderer->Active = !fRenderer->Active;
@@ -2244,7 +2244,7 @@ void Sandbox::SetViewModel()
 		{
 			auto* Source = Selection.Entity->GetComponent<Components::AudioSource>();
 			if (Source != nullptr)
-				Source->GetSource()->RemoveEffectById(TH_HASH(Args[0].Serialize()));
+				Source->GetSource()->RemoveEffectById(ED_HASH(Args[0].Serialize()));
 		}
 	});
 }
@@ -2330,7 +2330,7 @@ void Sandbox::SetSelection(Inspector Window, void* Object)
 void Sandbox::SetStatus(const std::string& Status)
 {
 	State.Status = Status + '.';
-	TH_INFO("[sandbox] %s", State.Status.c_str());
+	ED_INFO("[sandbox] %s", State.Status.c_str());
 }
 void Sandbox::SetMutation(Entity* Parent, const char* Type)
 {

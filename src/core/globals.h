@@ -1,21 +1,21 @@
 #ifndef APP_H
 #define APP_H
-#include <tomahawk/tomahawk.h>
-#include <tomahawk/core/compute.h>
-#include <tomahawk/core/audio.h>
-#include <tomahawk/core/engine.h>
-#include <tomahawk/core/graphics.h>
-#include <tomahawk/audio/effects.h>
-#include <tomahawk/audio/filters.h>
-#include <tomahawk/engine/components.h>
-#include <tomahawk/engine/processors.h>
-#include <tomahawk/engine/renderers.h>
-#include <tomahawk/engine/gui.h>
+#include <edge/edge.h>
+#include <edge/core/compute.h>
+#include <edge/core/audio.h>
+#include <edge/core/engine.h>
+#include <edge/core/graphics.h>
+#include <edge/audio/effects.h>
+#include <edge/audio/filters.h>
+#include <edge/engine/components.h>
+#include <edge/engine/processors.h>
+#include <edge/engine/renderers.h>
+#include <edge/engine/gui.h>
 
-using namespace Tomahawk::Core;
-using namespace Tomahawk::Audio;
-using namespace Tomahawk::Compute;
-using namespace Tomahawk::Engine;
-using namespace Tomahawk::Graphics;
-using namespace Tomahawk::Script;
+using namespace Edge::Core;
+using namespace Edge::Audio;
+using namespace Edge::Compute;
+using namespace Edge::Engine;
+using namespace Edge::Graphics;
+using namespace Edge::Script;
 #endif

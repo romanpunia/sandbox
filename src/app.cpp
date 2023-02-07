@@ -3,7 +3,7 @@
 
 int main()
 {
-	Tomahawk::Initialize((uint64_t)Tomahawk::Preset::Game);
+	Edge::Initialize((uint64_t)Edge::Preset::Game);
 Entry:
 	{
 		Application::Desc Init;
@@ -18,7 +18,7 @@ Entry:
 #endif
 		Application* App = new Sandbox(&Init);
 		App->Start();
-		TH_CLEAR(App);
+		ED_CLEAR(App);
 
 		if (Demo::GetSource().empty())
 		{
@@ -28,12 +28,12 @@ Entry:
 
 		App = new Demo(&Init);
 		App->Start();
-		TH_CLEAR(App);
+		ED_CLEAR(App);
 
 		goto Entry;
 	}
 Exit:
-	Tomahawk::Uninitialize();
+	Edge::Uninitialize();
 
 	return 0;
 }

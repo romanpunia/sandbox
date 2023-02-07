@@ -56,7 +56,7 @@ void ResolveTexture2D(GUI::Context* UI, const std::string& Id, bool Assigned, co
 		{
 			ResolveResource(Source, "texture", [Callback](const std::string& File)
 			{
-				Callback(Sandbox::Get()->Content->Load<Tomahawk::Graphics::Texture2D>(File));
+				Callback(Sandbox::Get()->Content->Load<Edge::Graphics::Texture2D>(File));
 			}, Changed);
 		}
 		else
@@ -153,7 +153,7 @@ void ResolveModel(GUI::Context* UI, const std::string& Id, Components::Model* Ou
 		{
 			ResolveResource(Source, "model", [Output](const std::string& File)
 			{
-				Output->SetDrawable(Sandbox::Get()->Content->Load<Tomahawk::Graphics::Model>(File));
+				Output->SetDrawable(Sandbox::Get()->Content->Load<Edge::Graphics::Model>(File));
 				((Sandbox*)Sandbox::Get())->SetMetadata(Output->GetEntity());
 			}, Changed);
 		}
@@ -185,7 +185,7 @@ void ResolveSkin(GUI::Context* UI, const std::string& Id, Components::Skin* Outp
 		{
 			ResolveResource(Source, "model", [Output](const std::string& File)
 			{
-				Output->SetDrawable(Sandbox::Get()->Content->Load<Tomahawk::Graphics::SkinModel>(File));
+				Output->SetDrawable(Sandbox::Get()->Content->Load<Edge::Graphics::SkinModel>(File));
 				((Sandbox*)Sandbox::Get())->SetMetadata(Output->GetEntity());
 			}, Changed);
 		}
