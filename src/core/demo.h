@@ -9,7 +9,7 @@ private:
 
 public:
 	explicit Demo(Application::Desc* Conf);
-	virtual ~Demo() override;
+	~Demo() override;
 	void WindowEvent(WindowState State, int X, int Y) override;
 	void Initialize() override;
 	void Dispatch(Timer* Time) override;

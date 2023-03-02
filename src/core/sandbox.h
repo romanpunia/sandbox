@@ -99,7 +99,7 @@ public:
 
 public:
 	explicit Sandbox(Application::Desc* Conf, const std::string& Path = "");
-	virtual ~Sandbox() override;
+	~Sandbox() override;
 	void KeyEvent(KeyCode Key, KeyMod Mod, int Virtual, int Repeat, bool Pressed) override;
 	void WindowEvent(WindowState State, int X, int Y) override;
 	void ScriptHook(VMGlobal* Global) override;
