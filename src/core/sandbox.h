@@ -102,7 +102,6 @@ public:
 	~Sandbox() override;
 	void KeyEvent(KeyCode Key, KeyMod Mod, int Virtual, int Repeat, bool Pressed) override;
 	void WindowEvent(WindowState State, int X, int Y) override;
-	void ScriptHook(VMGlobal* Global) override;
 	void Initialize() override;
 	void Dispatch(Timer* Time) override;
 	void Publish(Timer* Time) override;

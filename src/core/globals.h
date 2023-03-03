@@ -17,5 +17,5 @@ using namespace Edge::Audio;
 using namespace Edge::Compute;
 using namespace Edge::Engine;
 using namespace Edge::Graphics;
-using namespace Edge::Script;
+using namespace Edge::Scripting;
 #endif

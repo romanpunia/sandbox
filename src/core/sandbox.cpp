@@ -70,9 +70,6 @@ void Sandbox::WindowEvent(WindowState NewState, int X, int Y)
 			break;
 	}
 }
-void Sandbox::ScriptHook(VMGlobal* Global)
-{
-}
 void Sandbox::Initialize()
 {
 	States.DepthStencil = Renderer->GetDepthStencilState("none");
