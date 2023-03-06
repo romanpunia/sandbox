@@ -140,8 +140,6 @@ void Sandbox::Initialize()
 		return Stop();
 	}
 
-	Resource.NextPath = "scenes/demo.xml";
-
 	OS::SetLogDeferred(false);
 	Demo::SetSource("");
 	UpdateScene();
@@ -1400,7 +1398,10 @@ void Sandbox::SetViewModel()
 		Processors::Model* Processor = (Processors::Model*)Content->GetProcessor<Model>();
 		if (Processor != nullptr)
 		{
-			Schema* Doc = Processor->Import(From, State.MeshImportOpts);
+			Stream* File = OS::File::Open(From, FileMode::Binary_Read_Only);
+			Schema* Doc = Processor->Import(File, State.MeshImportOpts);
+			ED_RELEASE(File);
+
 			if (Doc != nullptr)
 			{
 				std::string To;
