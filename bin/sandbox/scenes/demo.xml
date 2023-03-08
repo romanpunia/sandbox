@@ -1,0 +1,448 @@
+<scene>
+	<metadata>
+		<materials i="256" />
+		<entities i="4096" />
+		<components i="8192" />
+		<render-quality n="1.000000" />
+		<enable-hdr b="false" />
+		<grow-margin i="128" />
+		<grow-rate n="0.000000" />
+		<max-updates i="256" />
+		<voxels-size i="128" />
+		<voxels-max i="4" />
+		<points-size i="256" />
+		<points-max i="4" />
+		<spots-size i="512" />
+		<spots-max i="8" />
+		<line-size i="1024" />
+		<lines-max i="2" />
+		<simulator>
+			<enable-soft-body b="true" />
+			<max-displacement n="1000.000000" />
+			<air-density n="1.200000" />
+			<water-offset n="0.000000" />
+			<water-density n="0.000000" />
+			<water-normal x="0.000000" y="0.000000" z="0.000000" />
+			<gravity x="0.000000" y="-10.000000" z="0.000000" />
+		</simulator>
+	</metadata>
+	<materials>
+		<material i="0" s="./materials/red-wall.xml" />
+		<material i="1" s="./materials/lamp.xml" />
+		<material i="2" s="./materials/wall.xml" />
+		<material i="3" s="./materials/box.xml" />
+		<material i="4" s="./materials/green-wall.xml" />
+	</materials>
+	<entities>
+		<entity>
+			<name s="floor" />
+			<refer i="8" />
+			<transform>
+				<position x="0.000000" y="-5.000000" z="-0.000000" />
+				<rotation x="0.000000" y="0.000000" z="0.000000" />
+				<scale x="10.000000" y="1.000000" z="12.000000" />
+				<scaling b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="-2412263228" />
+					<active b="true" />
+					<metadata>
+						<model s="./models/cube.obj" />
+						<texcoord x="2.000000" y="2.000000" />
+						<category i="0" />
+						<static b="true" />
+						<materials>
+							<material>
+								<name s="Cube" />
+								<slot i="2" />
+							</material>
+						</materials>
+					</metadata>
+				</component>
+			</components>
+		</entity>
+		<entity>
+			<name s="ceil" />
+			<refer i="8" />
+			<transform>
+				<position x="0.000000" y="17.000000" z="-0.000000" />
+				<rotation x="0.000000" y="0.000000" z="0.000000" />
+				<scale x="10.000000" y="1.000000" z="12.000000" />
+				<scaling b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="-2412263228" />
+					<active b="true" />
+					<metadata>
+						<model s="./models/cube.obj" />
+						<texcoord x="2.000000" y="2.000000" />
+						<category i="0" />
+						<static b="true" />
+						<materials>
+							<material>
+								<name s="Cube" />
+								<slot i="2" />
+							</material>
+						</materials>
+					</metadata>
+				</component>
+			</components>
+		</entity>
+		<entity>
+			<name s="forward-wall" />
+			<refer i="3" />
+			<transform>
+				<position x="11.000000" y="6.000000" z="0.000000" />
+				<rotation x="0.000000" y="1.570796" z="1.570796" />
+				<scale x="12.000000" y="1.000000" z="12.000000" />
+				<scaling b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="-2412263228" />
+					<active b="true" />
+					<metadata>
+						<model s="./models/cube.obj" />
+						<texcoord x="-2.000000" y="2.000000" />
+						<category i="0" />
+						<static b="true" />
+						<materials>
+							<material>
+								<name s="Cube" />
+								<slot i="2" />
+							</material>
+						</materials>
+					</metadata>
+				</component>
+			</components>
+		</entity>
+		<entity>
+			<name s="left-wall" />
+			<refer i="5" />
+			<transform>
+				<position x="0.000000" y="6.000000" z="-11.000000" />
+				<rotation x="-1.570796" y="-0.000000" z="-0.000000" />
+				<scale x="10.000000" y="1.000000" z="10.000000" />
+				<scaling b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="-2412263228" />
+					<active b="true" />
+					<metadata>
+						<model s="./models/cube.obj" />
+						<texcoord x="1.000000" y="1.000000" />
+						<category i="0" />
+						<static b="true" />
+						<materials>
+							<material>
+								<name s="Cube" />
+								<slot i="0" />
+							</material>
+						</materials>
+					</metadata>
+				</component>
+			</components>
+		</entity>
+		<entity>
+			<name s="right-wall" />
+			<refer i="6" />
+			<transform>
+				<position x="0.000000" y="6.000000" z="11.000000" />
+				<rotation x="-1.570796" y="-0.000000" z="-0.000000" />
+				<scale x="10.000000" y="1.000000" z="10.000000" />
+				<scaling b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="-2412263228" />
+					<active b="true" />
+					<metadata>
+						<model s="./models/cube.obj" />
+						<texcoord x="1.000000" y="1.000000" />
+						<category i="0" />
+						<static b="true" />
+						<materials>
+							<material>
+								<name s="Cube" />
+								<slot i="4" />
+							</material>
+						</materials>
+					</metadata>
+				</component>
+			</components>
+		</entity>
+		<entity>
+			<name s="lamp" />
+			<refer i="9" />
+			<transform>
+				<position x="0.000000" y="16.000000" z="-0.000000" />
+				<rotation x="0.000000" y="0.000000" z="0.000000" />
+				<scale x="3.000000" y="0.100000" z="3.000000" />
+				<scaling b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="-2412263228" />
+					<active b="true" />
+					<metadata>
+						<model s="./models/cube.obj" />
+						<texcoord x="2.000000" y="2.000000" />
+						<category i="0" />
+						<static b="true" />
+						<materials>
+							<material>
+								<name s="Cube" />
+								<slot i="1" />
+							</material>
+						</materials>
+					</metadata>
+				</component>
+			</components>
+		</entity>
+		<entity>
+			<name s="long-box" />
+			<refer i="2" />
+			<transform>
+				<position x="2.005981" y="2.000000" z="-3.351882" />
+				<rotation x="0.000000" y="-1.047198" z="-0.000000" />
+				<scale x="3.000000" y="6.000000" z="3.000000" />
+				<scaling b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="-2412263228" />
+					<active b="true" />
+					<metadata>
+						<model s="./models/cube.obj" />
+						<texcoord x="1.000000" y="1.000000" />
+						<category i="0" />
+						<static b="true" />
+						<materials>
+							<material>
+								<name s="Cube" />
+								<slot i="3" />
+							</material>
+						</materials>
+					</metadata>
+				</component>
+			</components>
+		</entity>
+		<entity>
+			<name s="short-box" />
+			<refer i="4" />
+			<transform>
+				<position x="-3.004456" y="-1.000000" z="4.718419" />
+				<rotation x="0.000000" y="-0.523599" z="0.000000" />
+				<scale x="3.000000" y="3.000000" z="3.000000" />
+				<scaling b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="-2412263228" />
+					<active b="true" />
+					<metadata>
+						<model s="./models/cube.obj" />
+						<texcoord x="1.000000" y="1.000000" />
+						<category i="0" />
+						<static b="true" />
+						<materials>
+							<material>
+								<name s="Cube" />
+								<slot i="3" />
+							</material>
+						</materials>
+					</metadata>
+				</component>
+			</components>
+		</entity>
+		<entity>
+			<name s="light" />
+			<refer i="7" />
+			<transform>
+				<position x="-2.000000" y="10.000000" z="0.000000" />
+				<rotation x="0.000000" y="0.000000" z="0.000000" />
+				<scale x="1.000000" y="1.000000" z="1.000000" />
+				<scaling b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="-235292805" />
+					<active b="true" />
+					<metadata>
+						<projection m11="1.000000" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.003345" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100334" m44="0.000000" />
+						<view m11="1.000000" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.000000" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000000" m34="0.000000" m41="0.000000" m42="12.000000" m43="0.000000" m44="1.000000" />
+						<size>
+							<radius n="50.000000" />
+							<c1 n="0.630000" />
+							<c2 n="0.520000" />
+						</size>
+						<diffuse x="1.000000" y="1.000000" z="1.000000" />
+						<emission n="5.200000" />
+						<disperse n="0.020000" />
+						<shadow-softness n="20.000000" />
+						<shadow-distance n="60.000000" />
+						<shadow-bias n="0.000000" />
+						<shadow-iterations i="64" />
+						<shadow-enabled b="true" />
+					</metadata>
+				</component>
+			</components>
+		</entity>
+		<entity>
+			<name s="camera" />
+			<refer i="1" />
+			<transform>
+				<position x="-26.000000" y="10.000000" z="0.000000" />
+				<rotation x="0.174533" y="4.712388" z="0.000000" />
+				<scale x="1.000000" y="1.000000" z="1.000000" />
+				<scaling b="false" />
+			</transform>
+			<components>
+				<component>
+					<id i="-1848687429" />
+					<active b="true" />
+					<metadata>
+						<mode i="0" />
+						<projection m11="0.684872" m12="0.000000" m13="0.000000" m14="0.000000" m21="0.000000" m22="1.303225" m23="0.000000" m24="0.000000" m31="0.000000" m32="0.000000" m33="1.000100" m34="1.000000" m41="0.000000" m42="0.000000" m43="-0.100010" m44="0.000000" />
+						<field-of-view n="75.000000" />
+						<far-plane n="1000.000000" />
+						<near-plane n="0.100000" />
+						<width n="-1.000000" />
+						<height n="-1.000000" />
+						<occluder-skips i="8" />
+						<occludee-skips i="3" />
+						<occlusion-skips i="2" />
+						<occlusion-cull b="false" />
+						<max-queries i="16384" />
+						<renderers>
+							<renderer>
+								<id i="-3300659073" />
+								<active b="true" />
+								<metadata />
+							</renderer>
+							<renderer>
+								<id i="-2501081933" />
+								<active b="true" />
+								<metadata>
+									<sky-map s="" />
+									<high-emission x="0.000000" y="0.000000" z="0.000000" />
+									<low-emission x="0.062745" y="0.062745" z="0.062745" />
+									<sky-emission n="0.000000" />
+									<light-emission n="1.000000" />
+									<sky-color x="1.000000" y="1.000000" z="1.000000" />
+									<fog-color x="0.498039" y="0.600000" z="0.698039" />
+									<fog-amount n="0.000000" />
+									<fog-far-off n="0.500000" />
+									<fog-far x="0.500000" y="0.500000" z="0.500000" />
+									<fog-near-off n="0.100000" />
+									<fog-near x="0.025000" y="0.025000" z="0.025000" />
+									<recursive n="0.000000" />
+									<shadow-distance n="0.500000" />
+									<sf-size i="128" />
+									<gi b="false" />
+								</metadata>
+							</renderer>
+							<renderer>
+								<id i="-747052133" />
+								<active b="true" />
+								<metadata>
+									<samples-1 n="4.000000" />
+									<scale n="0.100000" />
+									<intensity n="2.000000" />
+									<bias n="0.550000" />
+									<radius n="0.100000" />
+									<distance n="4.000000" />
+									<fade n="2.000000" />
+									<power n="1.000000" />
+									<samples-2 n="14.000000" />
+									<blur n="12.000000" />
+								</metadata>
+							</renderer>
+							<renderer>
+								<id i="-3375146593" />
+								<active b="true" />
+								<metadata>
+									<samples-1 n="16.000000" />
+									<samples-2 n="32.000000" />
+									<cutoff-1 n="-0.300000" />
+									<cutoff-2 n="0.950000" />
+									<attenuation n="1.000000" />
+									<swing n="1.000000" />
+									<bias n="3.000000" />
+									<distance n="10.000000" />
+									<blur n="16.000000" />
+								</metadata>
+							</renderer>
+							<renderer>
+								<id i="-2077424530" />
+								<active b="true" />
+								<metadata>
+									<samples-1 n="32.000000" />
+									<samples-2 n="48.000000" />
+									<intensity n="1.000000" />
+									<distance n="16.000000" />
+									<cutoff n="0.950000" />
+									<blur n="64.000000" />
+									<deadzone n="0.050000" />
+									<mips n="10.000000" />
+								</metadata>
+							</renderer>
+							<renderer>
+								<id i="-1394425869" />
+								<active b="true" />
+								<metadata>
+									<intensity n="16.000000" />
+									<threshold n="0.930000" />
+									<power n="1.000000" />
+									<samples n="14.000000" />
+									<blur n="64.000000" />
+								</metadata>
+							</renderer>
+							<renderer>
+								<id i="-3694976591" />
+								<active b="true" />
+								<metadata>
+									<grayscale n="-0.120000" />
+									<aces n="0.600000" />
+									<filmic n="-0.120000" />
+									<lottes n="0.109000" />
+									<reinhard n="-0.090000" />
+									<reinhard2 n="-0.030000" />
+									<unreal n="-0.130000" />
+									<uchimura n="1.000000" />
+									<ubrightness n="2.000000" />
+									<usontrast n="1.000000" />
+									<ustart n="0.820000" />
+									<ulength n="0.400000" />
+									<ublack n="1.130000" />
+									<upedestal n="0.050000" />
+									<exposure n="0.000000" />
+									<eintensity n="0.900000" />
+									<egamma n="2.200000" />
+									<adaptation n="0.000000" />
+									<agray n="1.000000" />
+									<awhite n="1.000000" />
+									<ablack n="0.050000" />
+									<aspeed n="2.000000" />
+								</metadata>
+							</renderer>
+						</renderers>
+					</metadata>
+				</component>
+				<component>
+					<id i="-289577278" />
+					<active b="true" />
+					<metadata />
+				</component>
+				<component>
+					<id i="-1076432799" />
+					<active b="true" />
+					<metadata />
+				</component>
+			</components>
+		</entity>
+	</entities>
+</scene>

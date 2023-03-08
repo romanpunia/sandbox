@@ -115,23 +115,7 @@ void Sandbox::Initialize()
 	State.GizmoScale = 1.25f;
 	State.Status = "Ready";
 	State.ElementsLimit = 1024;
-	State.MeshImportOpts =
-		(uint32_t)Processors::MeshOpt::CalcTangentSpace |
-		(uint32_t)Processors::MeshOpt::GenSmoothNormals |
-		(uint32_t)Processors::MeshOpt::JoinIdenticalVertices |
-		(uint32_t)Processors::MeshOpt::ImproveCacheLocality |
-		(uint32_t)Processors::MeshOpt::LimitBoneWeights |
-		(uint32_t)Processors::MeshOpt::RemoveRedundantMaterials |
-		(uint32_t)Processors::MeshOpt::SplitLargeMeshes |
-		(uint32_t)Processors::MeshOpt::Triangulate |
-		(uint32_t)Processors::MeshOpt::GenUVCoords |
-		(uint32_t)Processors::MeshOpt::SortByPType |
-		(uint32_t)Processors::MeshOpt::RemoveDegenerates |
-		(uint32_t)Processors::MeshOpt::RemoveInvalidData |
-		(uint32_t)Processors::MeshOpt::RemoveInstances |
-		(uint32_t)Processors::MeshOpt::ValidateDataStructure |
-		(uint32_t)Processors::MeshOpt::OptimizeMeshes |
-		(uint32_t)Processors::MeshOpt::TransformUVCoords | 0;
+	State.MeshImportOpts = (uint32_t)Processors::MeshPreset::Default;
 	Selection.Directory = nullptr;
 
 	if (!State.GUI->Initialize("system/conf.xml"))
@@ -139,6 +123,8 @@ void Sandbox::Initialize()
 		ED_ERR("could not load GUI");
 		return Stop();
 	}
+
+	Resource.NextPath = "./scenes/demo.xml";
 
 	OS::SetLogDeferred(false);
 	Demo::SetSource("");
@@ -383,12 +369,12 @@ void Sandbox::LoadCamera()
 
 	auto* fRenderer = Scene->GetRenderer();
 	fRenderer->AddRenderer<Renderers::Model>();
-	fRenderer->AddRenderer<Renderers::Skin>();
-	fRenderer->AddRenderer<Renderers::SoftBody>();
+	//fRenderer->AddRenderer<Renderers::Skin>();
+	//fRenderer->AddRenderer<Renderers::SoftBody>();
 	fRenderer->AddRenderer<Renderers::Emitter>();
-	fRenderer->AddRenderer<Renderers::Decal>();
-	fRenderer->AddRenderer<Renderers::Lighting>();
-	fRenderer->AddRenderer<Renderers::Transparency>();
+	//fRenderer->AddRenderer<Renderers::Decal>();
+	//fRenderer->AddRenderer<Renderers::Lighting>();
+	//fRenderer->AddRenderer<Renderers::Transparency>();
 }
 void Sandbox::UnloadCamera()
 {
@@ -484,7 +470,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 
 		auto& From = Value->GetTransform()->GetPosition();
 		auto& To = State.Camera->GetTransform()->GetPosition();
-		float Direction = -Vector2(From.X, From.Z).LookAt(Vector2(To.X, -To.Z));
+		float Direction = Vector2(From.X, From.Z).LookAt(Vector2(To.X, To.Z));
 		Renderer->Render.TexCoord = (Value == Selection.Entity ? 0.5f : 0.05f);
 		Renderer->Render.Transform = Matrix4x4::Create(Value->GetTransform()->GetPosition(), 0.5f, Vector3(0, Direction)) * State.Camera->GetComponent<Components::Camera>()->GetViewProjection();
 		Renderer->SetTexture2D(GetIcon(Value), 1, ED_PS);
@@ -1438,10 +1424,13 @@ void Sandbox::SetViewModel()
 		if (!OS::File::IsExists(From.c_str()))
 			return;
 
-		Processors::SkinModel* Processor = (Processors::SkinModel*)Content->GetProcessor<Model>();
+		Processors::SkinAnimation* Processor = (Processors::SkinAnimation*)Content->GetProcessor<SkinAnimation>();
 		if (Processor != nullptr)
 		{
-			Schema* Doc = Processor->ImportAnimation(From, State.MeshImportOpts);
+			Stream* File = OS::File::Open(From, FileMode::Binary_Read_Only);
+			Schema* Doc = Processor->Import(File, State.MeshImportOpts);
+			ED_RELEASE(File);
+
 			if (Doc != nullptr)
 			{
 				std::string To;

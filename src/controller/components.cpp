@@ -363,7 +363,7 @@ void ComponentSkinAnimator(GUI::Context* UI, Components::SkinAnimator* Base, boo
 			{
 				auto& fClip = IClip.Keys[i];
 				for (size_t j = 0; j < fClip.Pose.size(); j++)
-					fClip.Pose[j].Rotation = fClip.Pose[j].Rotation.rLerp();
+					fClip.Pose[j].Rotation = fClip.Pose[j].Rotation;
 			}
 		}
 
@@ -468,7 +468,7 @@ void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base, bool 
 		if (UI->GetElementById("cmp_key_animator_cnorm").IsActive())
 		{
 			for (size_t i = 0; i < IClip.Keys.size(); i++)
-				IClip.Keys[i].Rotation = IClip.Keys[i].Rotation.rLerp();
+				IClip.Keys[i].Rotation = IClip.Keys[i].Rotation;
 		}
 
 		if (UI->GetElementById("cmp_key_animator_cadde").IsActive())
@@ -476,7 +476,7 @@ void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base, bool 
 			AnimatorKey Key;
 			Key.Scale = 1.0f;
 			Key.Position = 0.0f;
-			Key.Rotation = 0.0f;
+			Key.Rotation = Quaternion();
 
 			IClip.Keys.push_back(Key);
 		}
@@ -509,7 +509,7 @@ void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base, bool 
 			AnimatorKey Key;
 			Key.Scale = fTransform->GetScale();
 			Key.Position = fTransform->GetPosition();
-			Key.Rotation = 0;
+			Key.Rotation = Quaternion();
 
 			IClip.Keys.push_back(Key);
 		}
