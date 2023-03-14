@@ -1,0 +1,6 @@
+<div style="display: block; margin-top: 16px;">
+	<div class="material-item" data-for="material : materials.all">
+		<button class="selection" data-event-click="set_material(material.at[0].int)">{{ material.at[1].str }}</button>
+	</div>
+</div>
+<p class="message" data-if="materials.size <= 0">No materials here</p>

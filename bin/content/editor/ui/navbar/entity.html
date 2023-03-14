@@ -1,0 +1,31 @@
+<div class="tab">
+	<p>Entity</p>
+	<div class="tab-menu">
+		<button data-event-click="add_entity">Create empty</button>
+		<button data-event-click="remove_entity" data-if="sl_entity != -1">Remove current</button>
+		<div class="sub" data-if="sl_entity != -1">
+			<p>Transform</p>
+			<div class="sub-menu">
+				<button data-event-click="entity">Move</button>
+				<button data-event-click="rotate_entity">Rotate</button>
+				<button data-event-click="scale_entity">Scale</button>
+			</div>
+		</div>
+		<div class="sub" data-if="sl_entity != -1">
+			<p>Placement</p>
+			<div class="sub-menu">
+				<button data-event-click="place_position">Position</button>
+				<button data-event-click="place_rotation">Rotation</button>
+				<button data-event-click="place_combine">Combine</button>
+			</div>
+		</div>
+		<div class="sub" data-if="sl_entity != -1">
+			<p>Reset</p>
+			<div class="sub-menu">
+				<button data-event-click="reset_position">Position</button>
+				<button data-event-click="reset_rotation">Rotation</button>
+				<button data-event-click="reset_scale">Scale</button>
+			</div>
+		</div>
+	</div>
+</div>

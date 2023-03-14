@@ -1,5 +1,0 @@
-<layout>
-	<font-face path="./fnt/sf-ui-display-regular.ttf" fallback="" />
-	<font-face path="./fnt/sf-ui-display-bold.ttf" fallback="" />
-	<document path="./ui/layout.html" show="" />
-</layout>

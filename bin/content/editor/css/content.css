@@ -1,0 +1,163 @@
+.content
+{
+	position: absolute;
+	top: 70%;
+	left: 0;
+	right: 20%;
+	bottom: 20px;
+	background-color: rgba(30, 30, 30, 255);
+	border-top: 1px rgb(22, 22, 22);
+	box-sizing: border-box;
+}
+
+.content .assets
+{
+	position: relative;
+	display: inline-block;
+	width: 25%;
+	height: 100%;
+	border-right: 1px rgb(22, 22, 22);
+	box-sizing: border-box;
+}
+
+.assets .header
+{
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	font-weight: bold;
+	border-bottom: 1px rgb(22, 22, 22);
+	background-color: #333;
+	padding: 2px 6px;
+	decorator: box-shadow(0 -2 5 rgba(0, 0, 0, 50));
+	z-index: 99;
+}
+
+.assets .offset
+{
+	display: block;
+	width: 100%;
+	height: 24px;
+}
+
+.content .directory
+{
+	display: inline-block;
+	width: 75%;
+	height: 100%;
+	border-top: 1px rgb(22, 22, 22);
+}
+
+.directory .header
+{
+	display: block;
+	font-weight: bold;
+	border-bottom: 1px rgb(22, 22, 22);
+	background-color: #333;
+	padding: 2px 6px;
+	width: 100%;
+	box-sizing: border-box;
+	decorator: box-shadow(0 -2 5 rgba(0, 0, 0, 50));
+}
+
+.directory .header button
+{
+	margin-left: 16px;
+	padding: 0 4px;
+	border-radius: 4px;
+	color: rgb(73, 120, 255);
+}
+
+.directory .header button:hover
+{
+	color: #ccc;
+	cursor: pointer;
+}
+
+.directory .menu
+{
+	display: block;
+	height: 100%;
+	position: relative;
+	overflow-y: hidden;
+}
+
+.directory .menu .file-wrapper
+{
+	display: block;
+	float: left;
+	background-color: #333;
+	margin: 10px 10px;
+	padding: 4px;
+	min-width: 64px;
+	line-height: 64px;
+	height: 64px;
+	border-radius: 16px;
+	decorator: box-shadow(0 0 10 rgba(0, 0, 0, 50));
+	transition: background-color 0.05s linear-out;
+	text-align: center;
+	width: 10%;
+}
+
+.directory .menu .file-wrapper:hover
+{
+	background-color: rgb(73, 120, 255);
+	color: #fff;
+	cursor: pointer;
+}
+
+.directory .menu .file-wrapper:active
+{
+	transition: none;
+	background-color: #333;
+}
+
+.directory .menu .message
+{
+	position: absolute;
+	display: block;
+	text-align: center;
+	top: 50%;
+	left: 50%;
+	font-size: 16px;
+	transform: translateX(-50%);
+}
+
+.directory-array
+{
+	display: block;
+	overflow-y: scroll;
+	width: 100%;
+	height: 90%;
+}
+
+.directory-wrapper
+{
+	display: block;
+	padding: 0 18px;
+}
+
+.directory-item
+{
+	display: block;
+	margin: 2px;
+	padding: 1px 2px;
+}
+
+.directory-item:hover
+{
+	background-color: rgb(73, 120, 255);
+	cursor: pointer;
+}
+
+.directory-item:active
+{
+	background-color: #333;
+}
+
+.directory-item button
+{
+	display: block;
+	width: 100%;
+}

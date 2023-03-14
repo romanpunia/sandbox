@@ -1,0 +1,22 @@
+<div class="head">
+	<p class="title">Scriptable component</p>
+	<button data-event-click="remove_cmp('scriptable_component')">Remove</button>
+</div>
+<table class="option">
+	<tr>
+		<td class="label">Source</td>
+		<td><button class="source" id="cmp_scriptable_source" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_scriptable_source">
+	<tr>
+		<td class="label">Compiler</td>
+		<td><button class="source" id="cmp_scriptable_recompile">Recompile source</button></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_scriptable_source">
+	<tr>
+		<td class="label">Typeless invocation</td>
+		<td><div class="check"><input type="checkbox" id="cmp_scriptable_ti" /></div></td>
+	</tr>
+</table>

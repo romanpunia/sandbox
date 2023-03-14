@@ -52,24 +52,24 @@ void ComponentSkin(GUI::Context* UI, Components::Skin* Base, bool Changed)
 
 	if (Base->GetDrawable() != nullptr)
 	{
-		App->State.System->SetInteger("sl_cmp_skin_joints", (int64_t)Base->Skeleton.Pose.size() - 1);
+		App->State.System->SetInteger("sl_cmp_skin_joints", (int64_t)Base->Skeleton.Offsets.size() - 1);
 		UI->GetElementById("cmp_skin_joint").CastFormInt64(&LastJoint);
 
 		if (LastJoint != -1)
 		{
-			auto Current = Base->Skeleton.Pose.find(LastJoint);
-			if (Current != Base->Skeleton.Pose.end())
+			Joint* Current = nullptr;
+			if (Base->GetDrawable()->FindJoint(LastJoint, Current))
 			{
-				auto* Sub = Base->GetDrawable()->FindJoint(LastJoint);
-				std::string Name = (Sub ? Sub->Name : "Unnamed") + (" (" + std::to_string(LastJoint) + ")");
+				std::string Name = Current->Name + (" (" + std::to_string(LastJoint) + ")");
+				auto& Pose = Base->Skeleton.Offsets[Current->Index];
 
 				UI->GetElementById("cmp_skin_jname").CastFormString(&Name);
-				UI->GetElementById("cmp_skin_jp_x").CastFormFloat(&Current->second.Position.X);
-				UI->GetElementById("cmp_skin_jp_y").CastFormFloat(&Current->second.Position.Y);
-				UI->GetElementById("cmp_skin_jp_z").CastFormFloat(&Current->second.Position.Z);
-				UI->GetElementById("cmp_skin_jr_x").CastFormFloat(&Current->second.Rotation.X, Mathf::Rad2Deg());
-				UI->GetElementById("cmp_skin_jr_y").CastFormFloat(&Current->second.Rotation.Y, Mathf::Rad2Deg());
-				UI->GetElementById("cmp_skin_jr_z").CastFormFloat(&Current->second.Rotation.Z, Mathf::Rad2Deg());
+				UI->GetElementById("cmp_skin_jp_x").CastFormFloat(&Pose.Offset.Position.X);
+				UI->GetElementById("cmp_skin_jp_y").CastFormFloat(&Pose.Offset.Position.Y);
+				UI->GetElementById("cmp_skin_jp_z").CastFormFloat(&Pose.Offset.Position.Z);
+				UI->GetElementById("cmp_skin_jr_x").CastFormFloat(&Pose.Offset.Rotation.X, Mathf::Rad2Deg());
+				UI->GetElementById("cmp_skin_jr_y").CastFormFloat(&Pose.Offset.Rotation.Y, Mathf::Rad2Deg());
+				UI->GetElementById("cmp_skin_jr_z").CastFormFloat(&Pose.Offset.Rotation.Z, Mathf::Rad2Deg());
 			}
 		}
 	}
@@ -298,106 +298,19 @@ void ComponentSkinAnimator(GUI::Context* UI, Components::SkinAnimator* Base, boo
 		return;
 
 	static Components::SkinAnimator* LastBase = nullptr;
-	static int64_t Joint = -1, Frame = -1, Clip = -1;
+	static int64_t Frame = -1, Clip = -1;
 
 	if (LastBase != Base)
 	{
-		Joint = Frame = Clip = -1;
+		Frame = Clip = -1;
 		LastBase = Base;
 	}
 
-	App->State.System->SetInteger("sl_cmp_skin_animator_clips", (int64_t)Base->Clips.size() - 1);
+	SkinAnimation* Animation = Base->GetAnimation();
+	App->State.System->SetInteger("sl_cmp_skin_animator_clips", Animation ? (int64_t)Animation->GetClips().size() - 1 : -1);
 	App->State.System->SetInteger("sl_cmp_skin_animator_clip", Clip);
 	App->State.System->SetInteger("sl_cmp_skin_animator_frame", Frame);
-	App->State.System->SetInteger("sl_cmp_skin_animator_joint", Joint);
 	UI->GetElementById("cmp_skin_animator_clip").CastFormInt64(&Clip);
-
-	if (Clip >= 0 && Clip < (int64_t)Base->Clips.size())
-	{
-		auto& IClip = Base->Clips[(size_t)Clip];
-		App->State.System->SetInteger("sl_cmp_skin_animator_frames", (int64_t)IClip.Keys.size() - 1);
-		UI->GetElementById("cmp_skin_animator_cname").CastFormString(&IClip.Name);
-		UI->GetElementById("cmp_skin_animator_cd").CastFormFloat(&IClip.Duration);
-		UI->GetElementById("cmp_skin_animator_cr").CastFormFloat(&IClip.Rate);
-		UI->GetElementById("cmp_skin_animator_frame").CastFormInt64(&Frame);
-
-		if (Frame >= 0 && Frame < (int64_t)IClip.Keys.size())
-		{
-			auto& Array = IClip.Keys[(size_t)Frame].Pose;
-			App->State.System->SetInteger("sl_cmp_skin_animator_joints", (int64_t)Array.size() - 1);
-			UI->GetElementById("cmp_skin_animator_joint").CastFormInt64(&Joint);
-			UI->GetElementById("cmp_skin_animator_fname").CastFormInt64(&Frame);
-
-			if (Joint >= 0 && Joint < (int64_t)Array.size())
-			{
-				auto& Current = Array[(size_t)Joint];
-				auto* Skin = Base->GetSkin();
-				auto* Sub = (Skin && Skin->GetDrawable() ? Skin->GetDrawable()->FindJoint(Joint) : nullptr);
-				std::string Name = (Sub ? Sub->Name : "Unnamed") + (" (" + std::to_string(Joint) + ")");
-
-				UI->GetElementById("cmp_skin_animator_jname").CastFormString(&Name);
-				UI->GetElementById("cmp_skin_animator_jp_x").CastFormFloat(&Current.Position.X);
-				UI->GetElementById("cmp_skin_animator_jp_y").CastFormFloat(&Current.Position.Y);
-				UI->GetElementById("cmp_skin_animator_jp_z").CastFormFloat(&Current.Position.Z);
-				UI->GetElementById("cmp_skin_animator_jr_x").CastFormFloat(&Current.Rotation.X, Mathf::Rad2Deg());
-				UI->GetElementById("cmp_skin_animator_jr_y").CastFormFloat(&Current.Rotation.Y, Mathf::Rad2Deg());
-				UI->GetElementById("cmp_skin_animator_jr_z").CastFormFloat(&Current.Rotation.Z, Mathf::Rad2Deg());
-				UI->GetElementById("cmp_skin_animator_js_x").CastFormFloat(&Current.Scale.X);
-				UI->GetElementById("cmp_skin_animator_js_y").CastFormFloat(&Current.Scale.Y);
-				UI->GetElementById("cmp_skin_animator_js_z").CastFormFloat(&Current.Scale.Z);
-				UI->GetElementById("cmp_skin_animator_jt").CastFormFloat(&Current.Time);
-			}
-
-			if (UI->GetElementById("cmp_skin_animator_frem").IsActive())
-			{
-				IClip.Keys.erase(IClip.Keys.begin() + (size_t)Frame);
-				Frame = Joint = -1;
-			}
-		}
-		else
-			App->State.System->SetInteger("sl_cmp_skin_animator_joints", -1);
-
-		if (UI->GetElementById("cmp_skin_animator_cnorm").IsActive())
-		{
-			for (size_t i = 0; i < IClip.Keys.size(); i++)
-			{
-				auto& fClip = IClip.Keys[i];
-				for (size_t j = 0; j < fClip.Pose.size(); j++)
-					fClip.Pose[j].Rotation = fClip.Pose[j].Rotation;
-			}
-		}
-
-		if (UI->GetElementById("cmp_skin_animator_cadde").IsActive())
-		{
-			SkinAnimatorKey Key;
-			Key.Pose.resize(Base->Default.Pose.size());
-			Key.Time = Base->Default.Time;
-
-			IClip.Keys.push_back(Key);
-		}
-
-		if (UI->GetElementById("cmp_skin_animator_caddm").IsActive())
-		{
-			SkinAnimatorKey Key;
-			Base->GetPose(&Key);
-
-			IClip.Keys.push_back(Key);
-		}
-
-		if (UI->GetElementById("cmp_skin_animator_crem").IsActive())
-		{
-			Base->Clips.erase(Base->Clips.begin() + (size_t)Clip);
-			Clip = Frame = Joint = -1;
-		}
-	}
-	else
-	{
-		App->State.System->SetInteger("sl_cmp_skin_animator_frames", -1);
-		App->State.System->SetInteger("sl_cmp_skin_animator_joints", -1);
-	}
-
-	if (UI->GetElementById("cmp_skin_animator_cap").IsActive())
-		Base->Clips.emplace_back();
 
 	std::string Path = Base->GetPath();
 	ResolveSkinAnimator(UI, "cmp_skin_animator_source", Base, Changed);

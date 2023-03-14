@@ -10,7 +10,7 @@ Entry:
 		Init.GraphicsDevice.VSyncMode = VSync::On;
 		Init.Activity.Maximized = true;
 		Init.Activity.Title = "Sandbox";
-		Init.Directory = "sandbox";
+		Init.Directory = "content";
 #ifdef _DEBUG
 		Init.GraphicsDevice.Debug = true;
 #else

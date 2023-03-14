@@ -1,0 +1,40 @@
+<div class="head">
+	<p class="title">Skin animator component</p>
+	<button data-event-click="remove_cmp('skin_animator_component')">Remove</button>
+</div>
+<table class="option">
+	<tr>
+		<td class="label">Source</td>
+		<td><button class="source" id="cmp_skin_animator_source" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_skin_animator_clips >= 0">
+	<tr>
+		<td class="label">Play</td>
+		<td><button class="source" id="cmp_skin_animator_play">Start</button></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_skin_animator_clips >= 0">
+	<tr>
+		<td class="label">Pause</td>
+		<td><button class="source" id="cmp_skin_animator_pause">Freeze</button></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_skin_animator_clips >= 0">
+	<tr>
+		<td class="label">Stop</td>
+		<td><button class="source" id="cmp_skin_animator_stop">Abort</button></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_skin_animator_clips >= 0">
+	<tr>
+		<td class="label">Looped</td>
+		<td><div class="check"><input type="checkbox" id="cmp_skin_animator_loop" /></div></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_skin_animator_clips >= 0">
+	<tr>
+		<td class="label">Clip</td>
+		<td><input type="range" min="-1" data-attr-max="sl_cmp_skin_animator_clips" step="1" id="cmp_skin_animator_clip" /></td>
+	</tr>
+</table>

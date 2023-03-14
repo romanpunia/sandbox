@@ -1,0 +1,189 @@
+<form class="dynamics">
+	<p class="title">Entity parameters</p>
+	<table class="option">
+		<tr>
+			<td class="label">Name</td>
+			<td><input type="text" maxlength="64" id="ent_name" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Position</td>
+			<td><input type="text" maxlength="16" id="ent_pos_x" /></td>
+			<td><input type="text" maxlength="16" id="ent_pos_y" /></td>
+			<td><input type="text" maxlength="16" id="ent_pos_z" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Rotation</td>
+			<td><input type="text" maxlength="16" id="ent_rot_x" /></td>
+			<td><input type="text" maxlength="16" id="ent_rot_y" /></td>
+			<td><input type="text" maxlength="16" id="ent_rot_z" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Scale</td>
+			<td><input type="text" maxlength="16" id="ent_scale_x" /></td>
+			<td><input type="text" maxlength="16" id="ent_scale_y" /></td>
+			<td><input type="text" maxlength="16" id="ent_scale_z" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Constant scale</td>
+			<td><div class="check"><input type="checkbox" id="ent_const_scale" /></div></td>
+		</tr>
+	</table>
+</form>
+<form class="dynamics" data-if="sl_cmp_model">
+	<!-- #include "./../components/model.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_skin">
+	<!-- #include "./../components/skin.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_emitter">
+	<!-- #include "./../components/emitter.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_decal">
+	<!-- #include "./../components/decal.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_soft_body">
+	<!-- #include "./../components/soft-body.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_skin_animator">
+	<!-- #include "./../components/skin-animator.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_key_animator">
+	<!-- #include "./../components/key-animator.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_emitter_animator">
+	<!-- #include "./../components/emitter-animator.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_rigid_body">
+	<!-- #include "./../components/rigid-body.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_acceleration">
+	<!-- #include "./../components/acceleration.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_slider_constraint">
+	<!-- #include "./../components/slider-constraint.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_free_look">
+	<!-- #include "./../components/free-look.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_fly">
+	<!-- #include "./../components/fly.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_audio_source">
+	<!-- #include "./../components/audio-source.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_reverb">
+	<!-- #include "./../effects/reverb.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_chorus">
+	<!-- #include "./../effects/chorus.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_distortion">
+	<!-- #include "./../effects/distortion.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_echo">
+	<!-- #include "./../effects/echo.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_flanger">
+	<!-- #include "./../effects/flanger.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_frequency_shifter">
+	<!-- #include "./../effects/frequency-shifter.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_vocal_morpher">
+	<!-- #include "./../effects/vocal-morpher.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_pitch_shifter">
+	<!-- #include "./../effects/pitch-shifter.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_ring_modulator">
+	<!-- #include "./../effects/ring-modulator.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_autowah">
+	<!-- #include "./../effects/autowah.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_compressor">
+	<!-- #include "./../effects/compressor.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_audio_source && sl_cmp_audio_source_equalizer">
+	<!-- #include "./../effects/equalizer.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_audio_listener">
+	<!-- #include "./../components/audio-listener.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_point_light">
+	<!-- #include "./../components/point-light.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_spot_light">
+	<!-- #include "./../components/spot-light.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_line_light">
+	<!-- #include "./../components/line-light.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_surface_light">
+	<!-- #include "./../components/surface-light.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_illuminator">
+	<!-- #include "./../components/illuminator.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_camera">
+	<!-- #include "./../components/camera.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_model >= 0">
+	<!-- #include "./../renderers/model.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_skin >= 0">
+	<!-- #include "./../renderers/skin.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_soft_body >= 0">
+	<!-- #include "./../renderers/soft-body.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_decal >= 0">
+	<!-- #include "./../renderers/decal.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_emitter >= 0">
+	<!-- #include "./../renderers/emitter.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_lighting >= 0">
+	<!-- #include "./../renderers/lighting.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_transparency >= 0">
+	<!-- #include "./../renderers/transparency.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_ssr >= 0">
+	<!-- #include "./../renderers/ssr.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_ssgi >= 0">
+	<!-- #include "./../renderers/ssgi.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_ssao >= 0">
+	<!-- #include "./../renderers/ssao.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_motionblur >= 0">
+	<!-- #include "./../renderers/motion-blur.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_bloom >= 0">
+	<!-- #include "./../renderers/bloom.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_dof >= 0">
+	<!-- #include "./../renderers/dof.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_tone >= 0">
+	<!-- #include "./../renderers/tone.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_glitch >= 0">
+	<!-- #include "./../renderers/glitch.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_camera && sl_cmp_camera_gui >= 0">
+	<!-- #include "./../renderers/gui.html" -->
+</form>
+<form class="dynamics" data-if="sl_cmp_scriptable">
+	<!-- #include "./../components/scriptable.html" -->
+</form>

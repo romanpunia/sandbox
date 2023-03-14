@@ -1,0 +1,40 @@
+<div class="head">
+	<p class="title">Decal component</p>
+	<button data-event-click="remove_cmp('decal_component')">Remove</button>
+</div>
+<table class="option">
+	<tr>
+		<td class="label">Material</td>
+		<td>
+			<select id="cmp_decal_material">
+				<option class="selection" value="0" selected>None</option>
+				<option class="selection" data-for="material : materials.all" data-attr-value="material.at[2].str">{{ material.at[1].str }}</option>
+			</select>
+		</td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Texture offset</td>
+		<td><input type="text" maxlength="16" id="cmp_decal_uv_x" /></td>
+		<td><input type="text" maxlength="16" id="cmp_decal_uv_y" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Field of view</td>
+		<td><input type="text" maxlength="16" id="cmp_decal_fov" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Distance</td>
+		<td><input type="text" maxlength="16" id="cmp_decal_dist" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Transparency</td>
+		<td><div class="check"><input type="checkbox" id="cmp_decal_alpha" /></div></td>
+	</tr>
+</table>

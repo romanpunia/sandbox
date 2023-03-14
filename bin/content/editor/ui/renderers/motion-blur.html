@@ -1,0 +1,25 @@
+<div class="head">
+	<p class="title">Motion blur layer ({{ sl_cmp_camera_motionblur }})</p>
+	<button data-event-click="remove_rndr('motion_blur_renderer')">Remove</button>
+	<button style="margin-right: 4px;" data-event-click="toggle_rndr('motion_blur_renderer')">Toggle</button>
+	<button style="margin-right: 4px;" data-event-click="down_rndr('motion_blur_renderer')">Down</button>
+	<button style="margin-right: 4px;" data-event-click="up_rndr('motion_blur_renderer')">Up</button>
+</div>
+<table class="option">
+	<tr>
+		<td class="label">Sample count</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_motionblur_sc" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Blur</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_motionblur_bl" /></td>
+	</tr>
+</table>
+<table class="option">
+	<tr>
+		<td class="label">Motion</td>
+		<td><input type="text" maxlength="16" id="cmp_camera_motionblur_mn" /></td>
+	</tr>
+</table>

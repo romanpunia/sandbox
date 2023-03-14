@@ -1,0 +1,188 @@
+<div class="head">
+	<p class="title">Rigid body component</p>
+	<button data-event-click="remove_cmp('rigid_body_component')">Remove</button>
+</div>
+<table class="option">
+	<tr>
+		<td class="label">Shape</td>
+		<td>
+			<select id="cmp_rigid_body_shape">
+				<option value="none" selected>None</option>
+				<option value="box">Box</option>
+				<option value="sphere">Sphere</option>
+				<option value="capsule">Capsule</option>
+				<option value="cone">Cone</option>
+				<option value="cylinder">Cylinder</option>
+				<option value="other">Other</option>
+			</select>
+		</td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_from_source">
+	<tr>
+		<td class="label">Source</td>
+		<td><button class="source" id="cmp_rigid_body_source" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Velocity</td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_v_x" /></td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_v_y" /></td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_v_z" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Torque</td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_t_x" /></td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_t_y" /></td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_t_z" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Gravity</td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_g_x" /></td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_g_y" /></td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_g_z" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Angular factor</td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_af_x" /></td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_af_y" /></td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_af_z" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Linear factor</td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_lf_x" /></td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_lf_y" /></td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_lf_z" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Anisotropic friction</td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_afric_x" /></td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_afric_y" /></td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_afric_z" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Mass</td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_mass" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Angular damping</td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_ad" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Linear damping</td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_ld" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Contact damping</td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_cd" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Hit fraction</td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_frac" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Restitution</td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_rest" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Friction</td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_fric" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Spinning friction</td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_spinf" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Rolling friction</td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_rollf" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Contact stiffness</td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_stiff" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Angular threshold</td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_ath" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Linear threshold</td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_lth" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Motion threshold</td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_mth" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Swept sphere radius</td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_srad" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Deactivation time</td>
+		<td><input type="text" maxlength="16" id="cmp_rigid_body_dtime" /></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Can be deactivated</td>
+		<td><div class="check"><input type="checkbox" id="cmp_rigid_body_deact" /></div></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Active</td>
+		<td><div class="check"><input type="checkbox" id="cmp_rigid_body_active" /></div></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Ghost</td>
+		<td><div class="check"><input type="checkbox" id="cmp_rigid_body_ghost" /></div></td>
+	</tr>
+</table>
+<table class="option" data-if="sl_cmp_rigid_body_source">
+	<tr>
+		<td class="label">Kinematic</td>
+		<td><div class="check"><input type="checkbox" id="cmp_rigid_body_kinemat" /></div></td>
+	</tr>
+</table>

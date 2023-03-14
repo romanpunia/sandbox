@@ -1,0 +1,175 @@
+<form class="dynamics">
+	<p class="title">Physics parameters</p>
+	<table class="option">
+		<tr>
+			<td class="label">Gravity</td>
+			<td><input type="text" maxlength="16" id="sc_start_grav_x" /></td>
+			<td><input type="text" maxlength="16" id="sc_start_grav_y" /></td>
+			<td><input type="text" maxlength="16" id="sc_start_grav_z" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Water normal</td>
+			<td><input type="text" maxlength="16" id="sc_wet_norm_x" /></td>
+			<td><input type="text" maxlength="16" id="sc_wet_norm_y" /></td>
+			<td><input type="text" maxlength="16" id="sc_wet_norm_z" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Air density</td>
+			<td><input type="text" maxlength="64" id="sc_air_dens" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Water density</td>
+			<td><input type="text" maxlength="64" id="sc_wet_dens" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Water offset</td>
+			<td><input type="text" maxlength="64" id="sc_wet_off" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Max displacement</td>
+			<td><input type="text" maxlength="64" id="sc_max_disp" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Enable soft bodies</td>
+			<td><div class="check"><input type="checkbox" id="sc_softs" /></div></td>
+		</tr>
+	</table>
+</form>
+<form class="dynamics">
+	<p class="title">Simulator parameters</p>
+	<table class="option">
+		<tr>
+			<td class="label">Gravity</td>
+			<td><input type="text" maxlength="16" id="sc_sim_grav_x" /></td>
+			<td><input type="text" maxlength="16" id="sc_sim_grav_y" /></td>
+			<td><input type="text" maxlength="16" id="sc_sim_grav_z" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Time mult.</td>
+			<td><input type="text" maxlength="64" id="sc_sim_time" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Active</td>
+			<td><div class="check"><input type="checkbox" id="sc_sim" /></div></td>
+		</tr>
+	</table>
+</form>
+<form class="dynamics">
+	<p class="title">Renderer parameters</p>
+	<table class="option">
+		<tr>
+			<td class="label">Graphics quality</td>
+			<td><input type="text" maxlength="64" id="sc_gp_qual" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Enable HDR</td>
+			<td><div class="check"><input type="checkbox" id="sc_gp_hdr" /></div></td>
+		</tr>
+	</table>
+</form>
+<form class="dynamics">
+	<p class="title">Shadow parameters</p>
+	<table class="option">
+		<tr>
+			<td class="label">Point light resolution</td>
+			<td><input type="text" maxlength="16" id="sc_sp_plr" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Point light limit</td>
+			<td><input type="text" maxlength="16" id="sc_sp_pll" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Spot light resolution</td>
+			<td><input type="text" maxlength="16" id="sc_sp_slr" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Spot light limit</td>
+			<td><input type="text" maxlength="16" id="sc_sp_sll" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Line light resolution</td>
+			<td><input type="text" maxlength="16" id="sc_sp_llr" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Line light limit</td>
+			<td><input type="text" maxlength="16" id="sc_sp_lll" /></td>
+		</tr>
+	</table>
+</form>
+<form class="dynamics">
+	<p class="title">Voxel parameters</p>
+	<table class="option">
+		<tr>
+			<td class="label">Buffer resolution</td>
+			<td><input type="text" maxlength="16" id="sc_vp_br" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Buffer limit</td>
+			<td><input type="text" maxlength="16" id="sc_vp_bl" /></td>
+		</tr>
+	</table>
+</form>
+<form class="dynamics">
+	<p class="title">Memory parameters</p>
+	<table class="option">
+		<tr>
+			<td class="label">Start materials</td>
+			<td><input type="text" maxlength="64" id="sc_start_mats" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Start entities</td>
+			<td><input type="text" maxlength="64" id="sc_start_ents" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Start components</td>
+			<td><input type="text" maxlength="64" id="sc_start_comps" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Grow margin</td>
+			<td><input type="text" maxlength="64" id="sc_grow_marg" /></td>
+		</tr>
+	</table>
+	<table class="option">
+		<tr>
+			<td class="label">Grow rate</td>
+			<td><input type="text" maxlength="64" id="sc_grow_rate" /></td>
+		</tr>
+	</table>
+</form>
+<button class="submit" data-event-click="save_settings">Save</button>

@@ -74,6 +74,7 @@ public:
 
 	struct
 	{
+		Texture2D* Sandbox = nullptr;
 		Texture2D* Empty = nullptr;
 		Texture2D* Animation = nullptr;
 		Texture2D* Body = nullptr;
@@ -87,6 +88,11 @@ public:
 		Texture2D* Source = nullptr;
 		Texture2D* Emitter = nullptr;
 	} Icons;
+
+	struct
+	{
+		Surface* Sandbox = nullptr;
+	} Favicons;
 
 	struct
 	{
@@ -110,7 +116,6 @@ public:
     void UpdateProject();
     void UpdateScene();
 	void UpdateGrid(Timer* Time);
-	void UpdateJoint(PoseBuffer* Map, Joint* Base, Matrix4x4* World);
 	void UpdateMutation(const std::string& Name, VariantArgs& Args);
 	void UpdateSystem();
 	void InspectEntity();

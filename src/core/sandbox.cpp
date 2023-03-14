@@ -28,6 +28,8 @@ Sandbox::~Sandbox()
 	ED_RELEASE(Icons.Listener);
 	ED_RELEASE(Icons.Source);
 	ED_RELEASE(Icons.Emitter);
+	ED_RELEASE(Icons.Sandbox);
+	ED_RELEASE(Favicons.Sandbox);
 	delete (CGizmoTransformMove*)Resource.Gizmo[0];
 	delete (CGizmoTransformRotate*)Resource.Gizmo[1];
 	delete (CGizmoTransformScale*)Resource.Gizmo[2];
@@ -77,18 +79,20 @@ void Sandbox::Initialize()
 	States.BackRasterizer = Renderer->GetRasterizerState("cull-back");
 	States.Blend = Renderer->GetBlendState("additive");
 	States.Layout = Renderer->GetInputLayout("shape-vertex");
-	Icons.Empty = Content->Load<Texture2D>("system/img/empty.png");
-	Icons.Animation = Content->Load<Texture2D>("system/img/animation.png");
-	Icons.Body = Content->Load<Texture2D>("system/img/body.png");
-	Icons.Camera = Content->Load<Texture2D>("system/img/camera.png");
-	Icons.Decal = Content->Load<Texture2D>("system/img/decal.png");
-	Icons.Mesh = Content->Load<Texture2D>("system/img/mesh.png");
-	Icons.Motion = Content->Load<Texture2D>("system/img/motion.png");
-	Icons.Light = Content->Load<Texture2D>("system/img/light.png");
-	Icons.Probe = Content->Load<Texture2D>("system/img/probe.png");
-	Icons.Listener = Content->Load<Texture2D>("system/img/listener.png");
-	Icons.Source = Content->Load<Texture2D>("system/img/source.png");
-	Icons.Emitter = Content->Load<Texture2D>("system/img/emitter.png");
+	Icons.Sandbox = Content->Load<Texture2D>("editor/img/sandbox.png");
+	Icons.Empty = Content->Load<Texture2D>("editor/img/empty.png");
+	Icons.Animation = Content->Load<Texture2D>("editor/img/animation.png");
+	Icons.Body = Content->Load<Texture2D>("editor/img/body.png");
+	Icons.Camera = Content->Load<Texture2D>("editor/img/camera.png");
+	Icons.Decal = Content->Load<Texture2D>("editor/img/decal.png");
+	Icons.Mesh = Content->Load<Texture2D>("editor/img/mesh.png");
+	Icons.Motion = Content->Load<Texture2D>("editor/img/motion.png");
+	Icons.Light = Content->Load<Texture2D>("editor/img/light.png");
+	Icons.Probe = Content->Load<Texture2D>("editor/img/probe.png");
+	Icons.Listener = Content->Load<Texture2D>("editor/img/listener.png");
+	Icons.Source = Content->Load<Texture2D>("editor/img/source.png");
+	Icons.Emitter = Content->Load<Texture2D>("editor/img/emitter.png");
+	Favicons.Sandbox = Renderer->CreateSurface(Icons.Sandbox);
 	Resource.CurrentPath = Content->GetEnvironment();
 	Resource.Gizmo[0] = CreateMoveGizmo();
 	Resource.Gizmo[1] = CreateRotateGizmo();
@@ -118,20 +122,20 @@ void Sandbox::Initialize()
 	State.MeshImportOpts = (uint32_t)Processors::MeshPreset::Default;
 	Selection.Directory = nullptr;
 
-	if (!State.GUI->Initialize("system/conf.xml"))
+	if (!State.GUI->Initialize("editor/conf.xml"))
 	{
 		ED_ERR("could not load GUI");
 		return Stop();
 	}
 
 	Resource.NextPath = "./scenes/demo.xml";
-
 	OS::SetLogDeferred(false);
 	Demo::SetSource("");
 	UpdateScene();
 	UpdateProject();
-	SetStatus("Setting up done");
+	SetStatus("Initialization done");
 
+	Activity->SetIcon(Favicons.Sandbox);
 	Activity->Callbacks.CursorMove = [this](int X, int Y, int RX, int RY)
 	{
 		State.Cursor = Activity->GetCursorPosition();
@@ -148,7 +152,7 @@ void Sandbox::Dispatch(Timer* Time)
 		{
 			State.GUI->ClearDocuments();
 			State.GUI->ClearStyles();
-			State.GUI->Initialize("system/conf.xml");
+			State.GUI->Initialize("editor/conf.xml");
 		}
 	}
 #endif
@@ -240,7 +244,7 @@ void Sandbox::Dispatch(Timer* Time)
 					{
 						Transform::Spacing Space;
 						Space.Position = State.Gizmo.Position();
-						Space.Rotation = State.Gizmo.Rotation();
+						Space.Rotation = State.Gizmo.RotationEuler();
 						Selection.Entity->GetTransform()->Localize(Space);
 
 						if (Selection.Gizmo->IsActive())
@@ -369,12 +373,12 @@ void Sandbox::LoadCamera()
 
 	auto* fRenderer = Scene->GetRenderer();
 	fRenderer->AddRenderer<Renderers::Model>();
-	//fRenderer->AddRenderer<Renderers::Skin>();
-	//fRenderer->AddRenderer<Renderers::SoftBody>();
+	fRenderer->AddRenderer<Renderers::Skin>();
+	fRenderer->AddRenderer<Renderers::SoftBody>();
 	fRenderer->AddRenderer<Renderers::Emitter>();
-	//fRenderer->AddRenderer<Renderers::Decal>();
-	//fRenderer->AddRenderer<Renderers::Lighting>();
-	//fRenderer->AddRenderer<Renderers::Transparency>();
+	fRenderer->AddRenderer<Renderers::Decal>();
+	fRenderer->AddRenderer<Renderers::Lighting>();
+	fRenderer->AddRenderer<Renderers::Transparency>();
 }
 void Sandbox::UnloadCamera()
 {
@@ -539,16 +543,6 @@ void Sandbox::UpdateGrid(Timer* Time)
 			}
 		}
 
-		auto* Skin = Value->GetComponent<Components::Skin>();
-		if (Skin != nullptr && Skin->GetDrawable() != nullptr)
-		{
-			for (auto& Joint : Skin->GetDrawable()->Joints)
-			{
-				Matrix4x4 Offset = Value->GetTransform()->GetBiasUnscaled();
-				UpdateJoint(&Skin->Skeleton, &Joint, &Offset);
-			}
-		}
-
 		Matrix4x4 Transform = Value->GetBox();
 		for (int j = 0; j < 4; j++)
 		{
@@ -669,28 +663,6 @@ void Sandbox::UpdateGrid(Timer* Time)
 			}
 		}
 	}
-}
-void Sandbox::UpdateJoint(PoseBuffer* Map, Joint* Base, Matrix4x4* World)
-{
-	PoseNode* Node = Map->GetNode(Base->Index);
-	if (!Node || true)
-		return;
-
-	Vector3 Position1 = World->Position();
-	*World = *World * Map->GetOffset(Node);
-	Vector3 Position2 = Node->Position.Transform(*World);
-
-	Renderer->ImBegin();
-	Renderer->ImTopology(PrimitiveTopology::Line_Strip);
-	Renderer->ImTransform(((Components::Camera*)Scene->GetCamera())->GetViewProjection());
-	Renderer->ImEmit();
-	Renderer->ImPosition(Position1.X, Position1.Y, -Position1.Z);
-	Renderer->ImEmit();
-	Renderer->ImPosition(Position2.X, Position2.Y, -Position2.Z);
-	Renderer->ImEnd();
-
-	for (auto& Child : Base->Childs)
-		UpdateJoint(Map, &Child, World);
 }
 void Sandbox::UpdateMutation(const std::string& Name, VariantArgs& Args)
 {
@@ -1156,7 +1128,7 @@ void Sandbox::SetViewModel()
 	if (!State.GUI)
 		return;
 
-	State.System = State.GUI->SetDataModel("system");
+	State.System = State.GUI->SetDataModel("editor");
 	State.Entities = State.System->SetArray("entities");
 	State.Materials = State.System->SetArray("materials");
 	State.Models = State.System->SetArray("models");
@@ -1366,11 +1338,11 @@ void Sandbox::SetViewModel()
 			Args["type"] = Var::String("XML");
 
 			UnloadCamera();
-			Content->Save<SceneGraph>("./system/cache.xml", Scene, Args);
+			Content->Save<SceneGraph>("./editor/cache.xml", Scene, Args);
 			Scene->SetActive(true);
 		}
 		else
-			this->Resource.NextPath = "./system/cache.xml";
+			this->Resource.NextPath = "./editor/cache.xml";
 	});
 	State.System->SetCallback("import_model_action", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
@@ -1506,43 +1478,6 @@ void Sandbox::SetViewModel()
 	{
 		SetSelection(Inspector_ImportAnimation);
 	});
-	State.System->SetCallback("export_skin_animation", [this](GUI::IEvent& Event, const VariantList& Args)
-	{
-		if (!Selection.Entity || !Selection.Entity->GetComponent<Components::SkinAnimator>())
-		{
-			this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Select entity with skin animator to export");
-			this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
-			this->Activity->Message.Result(nullptr);
-			return;
-		}
-
-		std::string Path;
-		if (!OS::Input::Save("Save skin animation", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized skin animation (*.xml, *.json, *.jsonb)", &Path))
-			return;
-
-		Schema* Result = Var::Set::Object();
-		Result->Key = "skin-animation";
-
-		auto* Animator = Selection.Entity->GetComponent<Components::SkinAnimator>();
-		Series::Pack(Result, Animator->Clips);
-
-		VariantArgs Map;
-		if (Parser(&Path).EndsWith(".jsonb"))
-			Map["type"] = Var::String("JSONB");
-		else if (Parser(&Path).EndsWith(".json"))
-			Map["type"] = Var::String("JSON");
-		else
-			Map["type"] = Var::String("XML");
-
-		if (!Content->Save<Schema>(Path, Result, Map))
-			this->Activity->Message.Setup(AlertType::Error, "Sandbox", "Skin animation cannot be saved");
-		else
-			this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Skin animation was saved");
-
-		ED_RELEASE(Result);
-		this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
-		this->Activity->Message.Result(nullptr);
-	});
 	State.System->SetCallback("export_key_animation", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		if (!Selection.Entity || !Selection.Entity->GetComponent<Components::KeyAnimator>())
@@ -1613,6 +1548,29 @@ void Sandbox::SetViewModel()
 			this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
 			this->Activity->Message.Result(nullptr);
 		}
+	});
+	State.System->SetCallback("compile_shaders", [this](GUI::IEvent& Event, const VariantList& Args)
+	{
+		std::string Path = Content->GetEnvironment() + "./shaders";
+		Path = OS::Path::Resolve(Path.c_str());
+		OS::Directory::Patch(Path);
+
+		GraphicsDevice::Desc D3D11;
+		D3D11.Backend = RenderBackend::D3D11;
+		D3D11.CacheDirectory = Path;
+
+		GraphicsDevice::Desc OGL;
+		OGL.Backend = RenderBackend::OGL;
+		OGL.CacheDirectory = Path;
+
+		std::vector<GraphicsDevice*> Devices;
+		Devices.push_back(Renderer->GetBackend() == D3D11.Backend ? Renderer : GraphicsDevice::Create(D3D11));
+		Devices.push_back(Renderer->GetBackend() == OGL.Backend ? Renderer : GraphicsDevice::Create(OGL));
+		this->Renderer->AddRef();
+
+		GraphicsDevice::CompileBuiltinShaders(Devices);
+		for (auto* Device : Devices)
+			ED_RELEASE(Device);
 	});
 	State.System->SetCallback("open_scene", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
@@ -2260,7 +2218,7 @@ void Sandbox::SetContents(FileTree* Base, int64_t Depth)
 
 	for (auto* Next : Base->Directories)
 	{
-		if (IsRoot && (Parser(&Next->Path).EndsWith("system") || Parser(&Next->Path).EndsWith("assembly")))
+		if (IsRoot && (Parser(&Next->Path).EndsWith("editor") || Parser(&Next->Path).EndsWith("shaders")))
 			continue;
 
 		auto Top = std::make_pair((void*)(uintptr_t)Index++, (size_t)Depth);

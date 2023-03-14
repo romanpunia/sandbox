@@ -310,13 +310,13 @@ void ResolveSkinAnimator(GUI::Context* UI, const std::string& Id, Components::Sk
 		{
 			ResolveResource(Source, "skin animation", [Output](const std::string& File)
 			{
-				Output->LoadAnimation(File);
+				Output->SetAnimation(Sandbox::Get()->Content->Load<SkinAnimation>(File));
 			}, Changed);
 		}
 		else
 		{
 			Source.SetInnerHTML("Assign source");
-			Output->ClearAnimation();
+			Output->SetAnimation(nullptr);
 		}
 	}
 	else if (Source.GetInnerHTML().empty() || Changed)

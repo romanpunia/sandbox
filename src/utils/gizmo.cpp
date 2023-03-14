@@ -11,7 +11,7 @@ void CGizmoTransformRender::DrawCircle(const tvector3 &orig, float r, float g, f
 
 	App->Renderer->ImBegin();
 	App->Renderer->ImTopology(PrimitiveTopology::Line_Strip);
-	App->Renderer->ImTransform(Matrix4x4::Create(App->State.Gizmo.Position(), App->State.Gizmo.Rotation()) * ViewProjection);
+	App->Renderer->ImTransform(Matrix4x4::Create(App->State.Gizmo.Position(), App->State.Gizmo.RotationEuler()) * ViewProjection);
 
 	for (uint32_t i = 0; i <= 50; i++)
 	{
@@ -36,7 +36,7 @@ void CGizmoTransformRender::DrawCircleHalf(const tvector3 &orig, float r, float 
 
 	App->Renderer->ImBegin();
 	App->Renderer->ImTopology(PrimitiveTopology::Line_Strip);
-	App->Renderer->ImTransform(Matrix4x4::Create(App->State.Gizmo.Position(), App->State.Gizmo.Rotation()) * ViewProjection);
+	App->Renderer->ImTransform(Matrix4x4::Create(App->State.Gizmo.Position(), App->State.Gizmo.RotationEuler()) * ViewProjection);
 
 	for (uint32_t i = 0; i < 30; i++)
 	{
@@ -55,7 +55,7 @@ void CGizmoTransformRender::DrawCircleHalf(const tvector3 &orig, float r, float 
 	App->Renderer->ImEnd();
 	App->Renderer->ImBegin();
 	App->Renderer->ImTopology(PrimitiveTopology::Line_Strip);
-	App->Renderer->ImTransform(Matrix4x4::Create(App->State.Gizmo.Position(), -1, App->State.Gizmo.Rotation()) * ViewProjection);
+	App->Renderer->ImTransform(Matrix4x4::Create(App->State.Gizmo.Position(), -1, App->State.Gizmo.RotationEuler()) * ViewProjection);
 
 	for (uint32_t i = 0; i < 30; i++)
 	{
