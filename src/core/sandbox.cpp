@@ -36,7 +36,7 @@ Sandbox::~Sandbox()
 }
 void Sandbox::KeyEvent(KeyCode Key, KeyMod, int, int, bool Pressed)
 {
-	if (Key == KeyCode::CURSORLEFT && Selection.Gizmo)
+	if (Key == KeyCode::CursorLeft && Selection.Gizmo)
 	{
 		if (!Pressed)
 		{
@@ -202,7 +202,7 @@ void Sandbox::Dispatch(Timer* Time)
 			{
 				if (Selection.Entity != nullptr)
 				{
-					if (Activity->IsKeyDownHit(KeyCode::DELETEKEY))
+					if (Activity->IsKeyDownHit(KeyCode::Delete))
 					{
 						SetStatus("Entity was removed");
 						Scene->DeleteEntity(Selection.Entity);
@@ -282,14 +282,14 @@ void Sandbox::Dispatch(Timer* Time)
 				GetEntityCell();
 				if (Selection.Entity != nullptr && Selection.Entity != State.Camera)
 				{
-					if (Activity->IsKeyDownHit(KeyCode::DELETEKEY))
+					if (Activity->IsKeyDownHit(KeyCode::Delete))
 					{
 						SetStatus("Entity was removed");
 						Scene->DeleteEntity(Selection.Entity);
 						SetSelection(Inspector_None);
 					}
 
-					if (Activity->IsKeyDown(KeyMod::LCTRL) && GetSceneFocus())
+					if (Activity->IsKeyDown(KeyMod::LeftControl) && GetSceneFocus())
 					{
 						if (Activity->IsKeyDownHit(KeyCode::V) || Activity->IsKeyDown(KeyCode::B))
 						{
@@ -307,7 +307,7 @@ void Sandbox::Dispatch(Timer* Time)
 					}
 				}
 
-				if (Activity->IsKeyDown(KeyMod::LCTRL))
+				if (Activity->IsKeyDown(KeyMod::LeftControl))
 				{
 					if (Activity->IsKeyDown(KeyCode::N))
 					{
@@ -1367,9 +1367,9 @@ void Sandbox::SetViewModel()
 					return;
 
 				VariantArgs Args;
-				if (Parser(&To).EndsWith(".jsonb"))
+				if (String(&To).EndsWith(".jsonb"))
 					Args["type"] = Var::String("JSONB");
-				else if (Parser(&To).EndsWith(".json"))
+				else if (String(&To).EndsWith(".json"))
 					Args["type"] = Var::String("JSON");
 				else
 					Args["type"] = Var::String("XML");
@@ -1410,9 +1410,9 @@ void Sandbox::SetViewModel()
 					return;
 
 				VariantArgs Args;
-				if (Parser(&To).EndsWith(".jsonb"))
+				if (String(&To).EndsWith(".jsonb"))
 					Args["type"] = Var::String("JSONB");
-				else if (Parser(&To).EndsWith(".json"))
+				else if (String(&To).EndsWith(".json"))
 					Args["type"] = Var::String("JSON");
 				else
 					Args["type"] = Var::String("XML");
@@ -1499,9 +1499,9 @@ void Sandbox::SetViewModel()
 		Series::Pack(Result, Animator->Clips);
 
 		VariantArgs Map;
-		if (Parser(&Path).EndsWith(".jsonb"))
+		if (String(&Path).EndsWith(".jsonb"))
 			Map["type"] = Var::String("JSONB");
-		else if (Parser(&Path).EndsWith(".json"))
+		else if (String(&Path).EndsWith(".json"))
 			Map["type"] = Var::String("JSON");
 		else
 			Map["type"] = Var::String("XML");
@@ -1586,9 +1586,9 @@ void Sandbox::SetViewModel()
 			return;
 
 		VariantArgs Map;
-		if (Parser(&Path).EndsWith(".jsonb"))
+		if (String(&Path).EndsWith(".jsonb"))
 			Map["type"] = Var::String("JSONB");
-		else if (Parser(&Path).EndsWith(".json"))
+		else if (String(&Path).EndsWith(".json"))
 			Map["type"] = Var::String("JSON");
 		else
 			Map["type"] = Var::String("XML");
@@ -2218,7 +2218,7 @@ void Sandbox::SetContents(FileTree* Base, int64_t Depth)
 
 	for (auto* Next : Base->Directories)
 	{
-		if (IsRoot && (Parser(&Next->Path).EndsWith("editor") || Parser(&Next->Path).EndsWith("shaders")))
+		if (IsRoot && (String(&Next->Path).EndsWith("editor") || String(&Next->Path).EndsWith("shaders")))
 			continue;
 
 		auto Top = std::make_pair((void*)(uintptr_t)Index++, (size_t)Depth);
@@ -2350,7 +2350,7 @@ void Sandbox::GetEntityCell()
 		return;
 
 	auto* Camera = State.Camera->GetComponent<Components::Camera>();
-	bool WantChange = Activity->IsKeyDownHit(KeyCode::CURSORLEFT);
+	bool WantChange = Activity->IsKeyDownHit(KeyCode::CursorLeft);
 	Ray Cursor = Camera->GetCursorRay();
 	float Distance = -1.0f;
 	Entity* Current = nullptr;
