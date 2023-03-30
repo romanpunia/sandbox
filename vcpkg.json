@@ -1,0 +1,17 @@
+{
+    "name": "sandbox",
+    "description": "Simple scene editor for Edge framework",
+    "version": "1.0.0",
+    "dependencies": [
+        "zlib",
+        "assimp",
+        "freetype",
+        "sdl2",
+        "spirv-cross",
+        "glslang",
+        "openal-soft",
+        "glew",
+        "openssl"
+    ]
+}
+  
