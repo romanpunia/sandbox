@@ -153,8 +153,11 @@ void ResolveModel(GUI::Context* UI, const std::string& Id, Components::Model* Ou
 		{
 			ResolveResource(Source, "model", [Output](const std::string& File)
 			{
-				Output->SetDrawable(Sandbox::Get()->Content->Load<Edge::Graphics::Model>(File));
-				((Sandbox*)Sandbox::Get())->SetMetadata(Output->GetEntity());
+				auto* App = ((Sandbox*)Sandbox::Get());
+				auto* Instance = App->Content->Load<Edge::Engine::Model>(File);
+				Output->SetDrawable(Instance);
+				App->SetMetadata(Output->GetEntity());
+				ED_RELEASE(Instance);
 			}, Changed);
 		}
 		else
@@ -185,8 +188,11 @@ void ResolveSkin(GUI::Context* UI, const std::string& Id, Components::Skin* Outp
 		{
 			ResolveResource(Source, "model", [Output](const std::string& File)
 			{
-				Output->SetDrawable(Sandbox::Get()->Content->Load<Edge::Graphics::SkinModel>(File));
-				((Sandbox*)Sandbox::Get())->SetMetadata(Output->GetEntity());
+				auto* App = ((Sandbox*)Sandbox::Get());
+				auto* Instance = App->Content->Load<Edge::Engine::SkinModel>(File);
+				Output->SetDrawable(Instance);
+				App->SetMetadata(Output->GetEntity());
+				ED_RELEASE(Instance);
 			}, Changed);
 		}
 		else
@@ -310,7 +316,9 @@ void ResolveSkinAnimator(GUI::Context* UI, const std::string& Id, Components::Sk
 		{
 			ResolveResource(Source, "skin animation", [Output](const std::string& File)
 			{
-				Output->SetAnimation(Sandbox::Get()->Content->Load<SkinAnimation>(File));
+				auto* Instance = Sandbox::Get()->Content->Load<SkinAnimation>(File);
+				Output->SetAnimation(Instance);
+				ED_RELEASE(Instance);
 			}, Changed);
 		}
 		else
@@ -372,7 +380,9 @@ void ResolveAudioSource(GUI::Context* UI, const std::string& Id, Components::Aud
 		{
 			ResolveResource(Source, "audio clip", [Output](const std::string& File)
 			{
-				Output->GetSource()->SetClip(Sandbox::Get()->Content->Load<AudioClip>(File));
+				auto* Instance = Sandbox::Get()->Content->Load<AudioClip>(File);
+				Output->GetSource()->SetClip(Instance);
+				ED_RELEASE(Instance);
 			}, Changed);
 		}
 		else

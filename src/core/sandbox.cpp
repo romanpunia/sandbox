@@ -463,7 +463,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 	Renderer->SetBlendState(States.Blend);
 	Renderer->SetRasterizerState(States.BackRasterizer);
 	Renderer->SetInputLayout(States.Layout);
-	Renderer->SetShader(Renderer->GetBasicEffect(), ED_VS | ED_PS);
+	Renderer->SetShader(Constants->GetBasicEffect(), ED_VS | ED_PS);
 	Renderer->SetVertexBuffer(Cache.Primitives->GetQuad());
 
 	for (uint32_t i = 0; i < Scene->GetEntitiesCount(); i++)
@@ -475,10 +475,10 @@ void Sandbox::UpdateGrid(Timer* Time)
 		auto& From = Value->GetTransform()->GetPosition();
 		auto& To = State.Camera->GetTransform()->GetPosition();
 		float Direction = Vector2(From.X, From.Z).LookAt(Vector2(To.X, To.Z));
-		Renderer->Render.TexCoord = (Value == Selection.Entity ? 0.5f : 0.05f);
-		Renderer->Render.Transform = Matrix4x4::Create(Value->GetTransform()->GetPosition(), 0.5f, Vector3(0, Direction)) * State.Camera->GetComponent<Components::Camera>()->GetViewProjection();
+		Constants->Render.TexCoord = (Value == Selection.Entity ? 0.5f : 0.05f);
+		Constants->Render.Transform = Matrix4x4::Create(Value->GetTransform()->GetPosition(), 0.5f, Vector3(0, Direction)) * State.Camera->GetComponent<Components::Camera>()->GetViewProjection();
+		Constants->UpdateConstantBuffer(RenderBufferType::Render);
 		Renderer->SetTexture2D(GetIcon(Value), 1, ED_PS);
-		Renderer->UpdateBuffer(RenderBufferType::Render);
 		Renderer->Draw(6, 0);
 	}
 
@@ -1068,30 +1068,37 @@ void Sandbox::InspectMaterial()
 	ResolveTexture2D(State.GUI, "mat_diffuse_source", Base->GetDiffuseMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetDiffuseMap(New);
+		ED_RELEASE(New);
 	}, false);
 	ResolveTexture2D(State.GUI, "mat_normal_source", Base->GetNormalMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetNormalMap(New);
+		ED_RELEASE(New);
 	}, false);
 	ResolveTexture2D(State.GUI, "mat_metallic_source", Base->GetMetallicMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetMetallicMap(New);
+		ED_RELEASE(New);
 	}, false);
 	ResolveTexture2D(State.GUI, "mat_roughness_source", Base->GetRoughnessMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetRoughnessMap(New);
+		ED_RELEASE(New);
 	}, false);
 	ResolveTexture2D(State.GUI, "mat_height_source", Base->GetHeightMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetHeightMap(New);
+		ED_RELEASE(New);
 	}, false);
 	ResolveTexture2D(State.GUI, "mat_occlusion_source", Base->GetOcclusionMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetOcclusionMap(New);
+		ED_RELEASE(New);
 	}, false);
 	ResolveTexture2D(State.GUI, "mat_emission_source", Base->GetEmissionMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetEmissionMap(New);
+		ED_RELEASE(New);
 	}, false);
 
 	ResolveColor3(State.GUI, "mat_diffuse", &Base->Surface.Diffuse);
@@ -1353,7 +1360,7 @@ void Sandbox::SetViewModel()
 		if (!OS::File::IsExists(From.c_str()))
 			return;
 
-		Processors::Model* Processor = (Processors::Model*)Content->GetProcessor<Model>();
+		Processors::ModelProcessor* Processor = (Processors::ModelProcessor*)Content->GetProcessor<Model>();
 		if (Processor != nullptr)
 		{
 			Stream* File = OS::File::Open(From, FileMode::Binary_Read_Only);
@@ -1396,7 +1403,7 @@ void Sandbox::SetViewModel()
 		if (!OS::File::IsExists(From.c_str()))
 			return;
 
-		Processors::SkinAnimation* Processor = (Processors::SkinAnimation*)Content->GetProcessor<SkinAnimation>();
+		Processors::SkinAnimationProcessor* Processor = (Processors::SkinAnimationProcessor*)Content->GetProcessor<SkinAnimation>();
 		if (Processor != nullptr)
 		{
 			Stream* File = OS::File::Open(From, FileMode::Binary_Read_Only);
