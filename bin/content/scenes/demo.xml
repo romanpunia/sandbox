@@ -316,6 +316,7 @@
 						<occludee-skips i="3" />
 						<occlusion-skips i="2" />
 						<occlusion-cull b="false" />
+						<occludee-scaling n="1.000000" />
 						<max-queries i="16384" />
 						<renderers>
 							<renderer>

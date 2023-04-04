@@ -32,6 +32,7 @@
 		<material i="2" s="./materials/wall.xml" />
 		<material i="3" s="./materials/box.xml" />
 		<material i="4" s="./materials/green-wall.xml" />
+		<material i="5" s="./materials/_f19ff69db757.xml" />
 	</materials>
 	<entities>
 		<entity>
@@ -316,6 +317,7 @@
 						<occludee-skips i="3" />
 						<occlusion-skips i="2" />
 						<occlusion-cull b="false" />
+						<occludee-scaling n="1.000000" />
 						<max-queries i="16384" />
 						<renderers>
 							<renderer>

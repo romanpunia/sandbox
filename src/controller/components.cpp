@@ -1083,6 +1083,7 @@ void ComponentCamera(GUI::Context* UI, Components::Camera* Base, bool Changed)
 	UI->GetElementById("cmp_camera_oc_sp1").CastFormSize(&fRenderer->OcclusionSkips);
 	UI->GetElementById("cmp_camera_oc_sp2").CastFormSize(&fRenderer->OccluderSkips);
 	UI->GetElementById("cmp_camera_oc_sp3").CastFormSize(&fRenderer->OccludeeSkips);
+	UI->GetElementById("cmp_camera_oc_sp4").CastFormFloat(&fRenderer->OccludeeScaling);
 	UI->GetElementById("cmp_camera_oc_mq").CastFormSize(&fRenderer->MaxQueries);
 	UI->GetElementById("cmp_camera_oc_thrs").CastFormFloat(&fRenderer->Threshold);
 	UI->GetElementById("cmp_camera_oc_ov").CastFormFloat(&fRenderer->OverflowVisibility);
@@ -1094,7 +1095,7 @@ void ComponentCamera(GUI::Context* UI, Components::Camera* Base, bool Changed)
 
 	if (UI->GetElementById("cmp_camera_preview").CastFormBoolean(&Preview))
 	{
-		if (!Base->IsActive() || !Preview)
+		if (App->State.Camera != nullptr && (!Base->IsActive() || !Preview))
 		{
 			auto* Main = App->State.Camera->GetComponent<Components::Camera>();
 			App->Scene->SetCamera(App->State.Camera);
@@ -1108,7 +1109,7 @@ void ComponentCamera(GUI::Context* UI, Components::Camera* Base, bool Changed)
 		else
 			App->Scene->SetCamera(Base->GetEntity());
 
-		App->State.IsCameraActive = !Preview;
+		App->State.IsCameraActive = !Preview && App->State.Camera != nullptr;
 		if (!Base->IsActive())
 			App->State.IsCameraActive = true;
 	}
