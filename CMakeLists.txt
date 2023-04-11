@@ -5,6 +5,7 @@ set(ED_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../edge CACHE STRING "Edge director
 set(ED_USE_POSTGRESQL OFF CACHE BOOL "PostgreSQL is not used")
 set(ED_USE_MONGOC OFF CACHE BOOL "MongoDB is not used")
 set(ED_USE_SIMD ON CACHE BOOL "SIMD is preferred for games")
+set(ED_USE_FAST_MEMORY ON CACHE BOOL "Fast memory is preferred for games")
 include(${ED_DIRECTORY}/lib/toolchain.cmake)
 
 #Project's metadata

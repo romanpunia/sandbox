@@ -5,7 +5,7 @@
 #include "../controller/renderers.h"
 #include "../controller/effects.h"
 
-Sandbox::Sandbox(Application::Desc* Conf, const std::string& Path) : Application(Conf)
+Sandbox::Sandbox(Application::Desc* Conf, const String& Path) : Application(Conf)
 {
 	Resource.NextPath = Path;
 #ifdef _DEBUG
@@ -14,6 +14,7 @@ Sandbox::Sandbox(Application::Desc* Conf, const std::string& Path) : Application
 }
 Sandbox::~Sandbox()
 {
+	SetLogging(false);
 	ED_RELEASE(State.GUI);
 	ED_RELEASE(State.Directory);
 	ED_RELEASE(Icons.Empty);
@@ -131,6 +132,7 @@ void Sandbox::Initialize()
 	Resource.NextPath = "./scenes/demo.xml";
 	OS::SetLogDeferred(false);
 	Demo::SetSource("");
+	SetLogging(true);
 	UpdateScene();
 	UpdateProject();
 	SetStatus("Initialization done");
@@ -394,7 +396,7 @@ void Sandbox::UnloadCamera()
 void Sandbox::UpdateProject()
 {
 	SetStatus("Project's hierarchy was updated");
-	std::string Directory = "";
+	String Directory = "";
 	if (Selection.Directory != nullptr)
 	{
 		Directory = Selection.Directory->Path;
@@ -509,7 +511,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 			auto* KeyAnimator = Value->GetComponent<Components::KeyAnimator>();
 			if (KeyAnimator != nullptr && KeyAnimator->IsExists(KeyAnimator->State.Clip))
 			{
-				std::vector<AnimatorKey>* Keys = KeyAnimator->GetClip(KeyAnimator->State.Clip);
+				Vector<AnimatorKey>* Keys = KeyAnimator->GetClip(KeyAnimator->State.Clip);
 				if (Keys != nullptr)
 				{
 					Matrix4x4 Offset = (Value->GetTransform()->GetRoot() ? Value->GetTransform()->GetRoot()->GetBias() : Matrix4x4::Identity());
@@ -664,7 +666,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 		}
 	}
 }
-void Sandbox::UpdateMutation(const std::string& Name, VariantArgs& Args)
+void Sandbox::UpdateMutation(const String& Name, VariantArgs& Args)
 {
 	if (Args.find("entity") != Args.end())
 	{
@@ -766,7 +768,7 @@ void Sandbox::UpdateMutation(const std::string& Name, VariantArgs& Args)
 
 		VariantList Item;
 		Item.emplace_back(std::move(Var::Integer(Base->Slot)));
-		Item.emplace_back(std::move(Var::String(Base->GetName().empty() ? "Material #" + std::to_string(Base->Slot) : Base->GetName())));
+		Item.emplace_back(std::move(Var::String(Base->GetName().empty() ? "Material #" + ToString(Base->Slot) : Base->GetName())));
 		Item.emplace_back(std::move(Var::String(GUI::IElement::FromPointer((void*)Base))));
 		State.Materials->Add(Item);
 	}
@@ -821,7 +823,7 @@ void Sandbox::InspectEntity()
 	if (Changed)
 		LastBase = Base;
 
-	std::string Name = Base->GetName();
+	String Name = Base->GetName();
 	if (State.GUI->GetElementById("ent_name").CastFormString(&Name))
 		Base->SetName(Name);
 
@@ -1108,7 +1110,7 @@ void Sandbox::InspectMaterial()
 	if (State.GUI->GetElementById("mat_cmet").CastFormColor(&Base->Surface.Metallic, false))
 		State.GUI->GetElementById("mat_cmet_color").SetProperty("background-color", Form("rgb(%u, %u, %u)", (unsigned int)(Base->Surface.Metallic.X * 255.0f), (unsigned int)(Base->Surface.Metallic.Y * 255.0f), (unsigned int)(Base->Surface.Metallic.Z * 255.0f)).R());
 
-	std::string Name = Base->GetName();
+	String Name = Base->GetName();
 	if (State.GUI->GetElementById("mat_name").CastFormString(&Name))
 		Base->SetName(Name);
 
@@ -1128,6 +1130,16 @@ void Sandbox::InspectMaterial()
 	State.GUI->GetElementById("mat_rad").CastFormFloat(&Base->Surface.Radius);
 	State.GUI->GetElementById("mat_ht_amnt").CastFormFloat(&Base->Surface.Height);
 	State.GUI->GetElementById("mat_ht_bias").CastFormFloat(&Base->Surface.Bias);
+}
+void Sandbox::SetLogging(bool Active)
+{
+	if (!Active)
+		return OS::SetLogCallback(nullptr);
+
+	OS::SetLogCallback([this](OS::Message& Data)
+	{
+		SetStatus(Data.GetText());
+	});
 }
 void Sandbox::SetViewModel()
 {
@@ -1294,7 +1306,7 @@ void Sandbox::SetViewModel()
 			}
 		}
 
-		std::vector<GUI::IElement> Tabs = Target.QuerySelectorAll(".tab");
+		Vector<GUI::IElement> Tabs = Target.QuerySelectorAll(".tab");
 		bool Enabled = Args[0].GetBoolean();
 
 		for (auto& Tab : Tabs)
@@ -1317,7 +1329,7 @@ void Sandbox::SetViewModel()
 		if (Args.size() != 1)
 			return;
 
-		std::string fResource = Args[0].Serialize();
+		String fResource = Args[0].Serialize();
 		if (fResource.empty() || !State.OnResource)
 			return;
 
@@ -1353,7 +1365,7 @@ void Sandbox::SetViewModel()
 	});
 	State.System->SetCallback("import_model_action", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
-		std::string From;
+		String From;
 		if (!OS::Input::Open("Import mesh", Content->GetEnvironment(), "*.dae,*.fbx,*.gltf,*.glb,*.blend,*.3d,*.3ds,*.ase,*.obj,*.ifc,*.xgl,*.zgl,*.ply,*.lwo,*.lws,*.lxo,*.stl,*.x,*.ac,*.ms3d,*.mdl,*.md2,.*md3", "", false, &From))
 			return;
 
@@ -1369,14 +1381,14 @@ void Sandbox::SetViewModel()
 
 			if (Doc != nullptr)
 			{
-				std::string To;
+				String To;
 				if (!OS::Input::Save("Save mesh", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized mesh (*.xml, *.json, *.jsonb)", &To))
 					return;
 
 				VariantArgs Args;
-				if (String(&To).EndsWith(".jsonb"))
+				if (Stringify(&To).EndsWith(".jsonb"))
 					Args["type"] = Var::String("JSONB");
-				else if (String(&To).EndsWith(".json"))
+				else if (Stringify(&To).EndsWith(".json"))
 					Args["type"] = Var::String("JSON");
 				else
 					Args["type"] = Var::String("XML");
@@ -1396,7 +1408,7 @@ void Sandbox::SetViewModel()
 	});
 	State.System->SetCallback("import_skin_animation_action", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
-		std::string From;
+		String From;
 		if (!OS::Input::Open("Import animation from mesh", Content->GetEnvironment(), "*.dae,*.fbx,*.gltf,*.glb,*.blend,*.3d,*.3ds,*.ase,*.obj,*.ifc,*.xgl,*.zgl,*.ply,*.lwo,*.lws,*.lxo,*.stl,*.x,*.ac,*.ms3d,*.mdl,*.md2,.*md3", "", false, &From))
 			return;
 
@@ -1412,14 +1424,14 @@ void Sandbox::SetViewModel()
 
 			if (Doc != nullptr)
 			{
-				std::string To;
+				String To;
 				if (!OS::Input::Save("Save animation", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized skin animation (*.xml, *.json, *.jsonb)", &To))
 					return;
 
 				VariantArgs Args;
-				if (String(&To).EndsWith(".jsonb"))
+				if (Stringify(&To).EndsWith(".jsonb"))
 					Args["type"] = Var::String("JSONB");
-				else if (String(&To).EndsWith(".json"))
+				else if (Stringify(&To).EndsWith(".json"))
 					Args["type"] = Var::String("JSON");
 				else
 					Args["type"] = Var::String("XML");
@@ -1474,7 +1486,7 @@ void Sandbox::SetViewModel()
 	State.System->SetCallback("add_material", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		Material* New = Scene->AddMaterial();
-	    New->SetName("Material " + std::to_string(Scene->GetMaterialsCount() + 1));
+	    New->SetName("Material " + ToString(Scene->GetMaterialsCount() + 1));
 		SetSelection(Inspector_Material, New);
 	});
 	State.System->SetCallback("import_model", [this](GUI::IEvent& Event, const VariantList& Args)
@@ -1495,7 +1507,7 @@ void Sandbox::SetViewModel()
 			return;
 		}
 
-		std::string Path;
+		String Path;
 		if (!OS::Input::Save("Save key animation", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized key animation (*.xml, *.json, *.jsonb)", &Path))
 			return;
 
@@ -1506,9 +1518,9 @@ void Sandbox::SetViewModel()
 		Series::Pack(Result, Animator->Clips);
 
 		VariantArgs Map;
-		if (String(&Path).EndsWith(".jsonb"))
+		if (Stringify(&Path).EndsWith(".jsonb"))
 			Map["type"] = Var::String("JSONB");
-		else if (String(&Path).EndsWith(".json"))
+		else if (Stringify(&Path).EndsWith(".json"))
 			Map["type"] = Var::String("JSON");
 		else
 			Map["type"] = Var::String("XML");
@@ -1524,7 +1536,7 @@ void Sandbox::SetViewModel()
 	});
 	State.System->SetCallback("import_material", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
-		GetResource("material", [this](const std::string& File)
+		GetResource("material", [this](const String& File)
 		{
 			Material* Result = Content->Load<Material>(File);
 			if (!Result || !Scene->AddMaterial(Result))
@@ -1558,7 +1570,7 @@ void Sandbox::SetViewModel()
 	});
 	State.System->SetCallback("compile_shaders", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
-		std::string Path = Content->GetEnvironment() + "./shaders";
+		String Path = Content->GetEnvironment() + "./shaders";
 		Path = OS::Path::Resolve(Path.c_str());
 		OS::Directory::Patch(Path);
 
@@ -1570,7 +1582,7 @@ void Sandbox::SetViewModel()
 		OGL.Backend = RenderBackend::OGL;
 		OGL.CacheDirectory = Path;
 
-		std::vector<GraphicsDevice*> Devices;
+		Vector<GraphicsDevice*> Devices;
 		Devices.push_back(Renderer->GetBackend() == D3D11.Backend ? Renderer : GraphicsDevice::Create(D3D11));
 		Devices.push_back(Renderer->GetBackend() == OGL.Backend ? Renderer : GraphicsDevice::Create(OGL));
 		this->Renderer->AddRef();
@@ -1581,21 +1593,21 @@ void Sandbox::SetViewModel()
 	});
 	State.System->SetCallback("open_scene", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
-		GetResource("scene", [this](const std::string& File)
+		GetResource("scene", [this](const String& File)
 		{
 			this->Resource.NextPath = File;
 		});
 	});
 	State.System->SetCallback("close_scene", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
-		std::string Path;
+		String Path;
 		if (!OS::Input::Save("Save scene", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized scene (*.xml, *.json, *.jsonb)", &Path))
 			return;
 
 		VariantArgs Map;
-		if (String(&Path).EndsWith(".jsonb"))
+		if (Stringify(&Path).EndsWith(".jsonb"))
 			Map["type"] = Var::String("JSONB");
-		else if (String(&Path).EndsWith(".json"))
+		else if (Stringify(&Path).EndsWith(".json"))
 			Map["type"] = Var::String("JSON");
 		else
 			Map["type"] = Var::String("XML");
@@ -2209,7 +2221,7 @@ void Sandbox::SetDirectory(FileTree* Base)
 	State.Files->Clear();
 	for (auto& Next : Selection.Directory->Files)
 	{
-		std::string Name = Next;
+		String Name = Next;
 		GetPathName(Name);
 
 		VariantList Item;
@@ -2225,11 +2237,11 @@ void Sandbox::SetContents(FileTree* Base, int64_t Depth)
 
 	for (auto* Next : Base->Directories)
 	{
-		if (IsRoot && (String(&Next->Path).EndsWith("editor") || String(&Next->Path).EndsWith("shaders")))
+		if (IsRoot && (Stringify(&Next->Path).EndsWith("editor") || Stringify(&Next->Path).EndsWith("shaders")))
 			continue;
 
 		auto Top = std::make_pair((void*)(uintptr_t)Index++, (size_t)Depth);
-		std::string Result = Next->Path;
+		String Result = Next->Path;
 		GetPathName(Result);
 
 		VariantList Item;
@@ -2279,10 +2291,9 @@ void Sandbox::SetSelection(Inspector Window, void* Object)
 			break;
 	}
 }
-void Sandbox::SetStatus(const std::string& Status)
+void Sandbox::SetStatus(const String& Status)
 {
-	State.Status = Status + '.';
-	ED_INFO("[sandbox] %s", State.Status.c_str());
+	State.Status = Status;
 }
 void Sandbox::SetMutation(Entity* Parent, const char* Type)
 {
@@ -2333,7 +2344,7 @@ void Sandbox::SetMetadata(Entity* Source)
 		}
 	}
 }
-void Sandbox::GetPathName(std::string& Path)
+void Sandbox::GetPathName(String& Path)
 {
 	int64_t Distance = 0;
 	if (Path.back() == '/' || Path.back() == '\\')
@@ -2418,7 +2429,7 @@ void Sandbox::GetEntitySync()
 			SoftBody->GetBody()->SetVelocity(0);
 	}
 }
-void Sandbox::GetResource(const std::string& Name, const std::function<void(const std::string&)>& Callback)
+void Sandbox::GetResource(const String& Name, const std::function<void(const String&)>& Callback)
 {
 	if (Name == "__got__")
 	{
@@ -2443,7 +2454,7 @@ void Sandbox::GetResource(const std::string& Name, const std::function<void(cons
 	State.OnResource = Callback;
 	State.Filename = Name;
 }
-void Sandbox::GetEntity(const std::string& Name, const std::function<void(Entity*)>& Callback)
+void Sandbox::GetEntity(const String& Name, const std::function<void(Entity*)>& Callback)
 {
 	if (Name == "__got__")
 	{
@@ -2478,11 +2489,11 @@ bool Sandbox::GetSceneFocus()
 {
 	return State.IsSceneFocused && !State.GUI->IsInputFocused();
 }
-bool Sandbox::GetResourceState(const std::string& Name)
+bool Sandbox::GetResourceState(const String& Name)
 {
 	return State.Filename == Name;
 }
-bool Sandbox::GetEntityState(const std::string& Name)
+bool Sandbox::GetEntityState(const String& Name)
 {
 	return State.Target == Name;
 }
@@ -2557,7 +2568,7 @@ void* Sandbox::GetEntityIndex(Entity* Value)
 
 	return (void*)Value;
 }
-std::string Sandbox::GetLabel(Entity* Value)
+String Sandbox::GetLabel(Entity* Value)
 {
 	if (Value->GetComponent<Components::Camera>())
 		return "[Camera]";
@@ -2627,9 +2638,9 @@ std::string Sandbox::GetLabel(Entity* Value)
 
 	return "[Empty]";
 }
-std::string Sandbox::GetName(Entity* Value)
+String Sandbox::GetName(Entity* Value)
 {
-	std::string Result;
+	String Result;
 	if (Value == nullptr)
 		return "[Empty] unknown";
 
@@ -2641,7 +2652,7 @@ std::string Sandbox::GetName(Entity* Value)
 	auto* Scriptable = Value->GetComponent<Components::Scriptable>();
 	if (Scriptable != nullptr && !Scriptable->GetSource().empty())
 	{
-		const std::string& Module = Scriptable->GetName();
+		const String& Module = Scriptable->GetName();
 		Result += " " + (Module.empty() ? "anonymous" : Module);
 	}
 	else if (Value->GetName().empty())
@@ -2649,9 +2660,9 @@ std::string Sandbox::GetName(Entity* Value)
 
 	return Result;
 }
-std::string Sandbox::GetPascal(const std::string& Value)
+String Sandbox::GetPascal(const String& Value)
 {
-	std::string Result;
+	String Result;
 	Result.reserve(Value.size() * 2);
 
 	for (auto& Char : Value)

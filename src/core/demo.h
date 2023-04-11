@@ -5,7 +5,7 @@
 class Demo : public Application
 {
 private:
-	static std::string Source;
+	static String Source;
 
 public:
 	explicit Demo(Application::Desc* Conf);
@@ -16,7 +16,7 @@ public:
 	void Publish(Timer* Time) override;
 
 public:
-	static void SetSource(const std::string& Resource);
-	static std::string& GetSource();
+	static void SetSource(const String& Resource);
+	static String& GetSource();
 };
 #endif

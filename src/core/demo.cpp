@@ -49,12 +49,12 @@ void Demo::Publish(Timer* Time)
 
 	Renderer->Submit();
 }
-void Demo::SetSource(const std::string& Resource)
+void Demo::SetSource(const String& Resource)
 {
 	Source = Resource;
 }
-std::string& Demo::GetSource()
+String& Demo::GetSource()
 {
 	return Source;
 }
-std::string Demo::Source;
+String Demo::Source;

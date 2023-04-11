@@ -60,7 +60,7 @@ void ComponentSkin(GUI::Context* UI, Components::Skin* Base, bool Changed)
 			Joint* Current = nullptr;
 			if (Base->GetDrawable()->FindJoint(LastJoint, Current))
 			{
-				std::string Name = Current->Name + (" (" + std::to_string(LastJoint) + ")");
+				String Name = Current->Name + (" (" + ToString(LastJoint) + ")");
 				auto& Pose = Base->Skeleton.Offsets[Current->Index];
 
 				UI->GetElementById("cmp_skin_jname").CastFormString(&Name);
@@ -312,7 +312,7 @@ void ComponentSkinAnimator(GUI::Context* UI, Components::SkinAnimator* Base, boo
 	App->State.System->SetInteger("sl_cmp_skin_animator_frame", Frame);
 	UI->GetElementById("cmp_skin_animator_clip").CastFormInt64(&Clip);
 
-	std::string Path = Base->GetPath();
+	String Path = Base->GetPath();
 	ResolveSkinAnimator(UI, "cmp_skin_animator_source", Base, Changed);
 	if (Path != Base->GetPath())
 		LastBase = nullptr;
@@ -439,7 +439,7 @@ void ComponentKeyAnimator(GUI::Context* UI, Components::KeyAnimator* Base, bool 
 	if (UI->GetElementById("cmp_key_animator_cap").IsActive())
 		Base->Clips.emplace_back();
 
-	std::string Path = Base->GetPath();
+	String Path = Base->GetPath();
 	ResolveKeyAnimator(UI, "cmp_key_animator_source", Base, Changed);
 	if (Path != Base->GetPath())
 		LastBase = nullptr;
@@ -544,7 +544,7 @@ void ComponentRigidBody(GUI::Context* UI, Components::RigidBody* Base, bool Chan
 		LastBase = Base;
 	}
 
-	std::string Shape = UI->GetElementById("cmp_rigid_body_shape").GetFormValue();
+	String Shape = UI->GetElementById("cmp_rigid_body_shape").GetFormValue();
 	if (Shape == "other")
 	{
 		App->State.System->SetBoolean("sl_cmp_rigid_body_from_source", true);

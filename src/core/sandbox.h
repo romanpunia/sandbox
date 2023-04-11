@@ -30,7 +30,7 @@ public:
 
     struct
     {
-		std::function<void(const std::string&)> OnResource;
+		std::function<void(const String&)> OnResource;
 		std::function<void(Entity*)> OnEntity;
 		GUI::DataModel* System = nullptr;
 		GUI::DataNode* Entities = nullptr;
@@ -44,9 +44,9 @@ public:
 		Entity* Camera = nullptr;
 		Entity* Draggable = nullptr;
 		Transform::Spacing Space;
-		std::string Status;
-		std::string Filename;
-		std::string Target;
+		String Status;
+		String Filename;
+		String Target;
         Vector2 Cursor;
         Matrix4x4 Gizmo;
         float GizmoScale = 1.0f;
@@ -67,9 +67,9 @@ public:
     struct
     {
 		IGizmo* Gizmo[3] = { nullptr };
-        std::string CurrentPath;
-        std::string NextPath;
-		std::string ScenePath;
+        String CurrentPath;
+        String NextPath;
+		String ScenePath;
     } Resource;
 
 	struct
@@ -104,7 +104,7 @@ public:
 	} States;
 
 public:
-	explicit Sandbox(Application::Desc* Conf, const std::string& Path = "");
+	explicit Sandbox(Application::Desc* Conf, const String& Path = "");
 	~Sandbox() override;
 	void KeyEvent(KeyCode Key, KeyMod Mod, int Virtual, int Repeat, bool Pressed) override;
 	void WindowEvent(WindowState State, int X, int Y) override;
@@ -116,34 +116,35 @@ public:
     void UpdateProject();
     void UpdateScene();
 	void UpdateGrid(Timer* Time);
-	void UpdateMutation(const std::string& Name, VariantArgs& Args);
+	void UpdateMutation(const String& Name, VariantArgs& Args);
 	void UpdateSystem();
 	void InspectEntity();
 	void InspectSettings();
 	void InspectImporter();
 	void InspectMaterial();
+	void SetLogging(bool Active);
 	void SetViewModel();
 	void SetDirectory(FileTree* Base);
 	void SetContents(FileTree* Base, int64_t Depth = 0);
 	void SetSelection(Inspector Window, void* Object = nullptr);
-	void SetStatus(const std::string& Status);
+	void SetStatus(const String& Status);
 	void SetMutation(Entity* Parent, const char* Type);
 	void SetMetadata(Entity* Source);
-    void GetPathName(std::string& Path);
+    void GetPathName(String& Path);
     void GetEntityCell();
     void GetEntitySync();
-	void GetResource(const std::string& Name, const std::function<void(const std::string&)>& Callback);
-	void GetEntity(const std::string& Name, const std::function<void(Entity*)>& Callback);
+	void GetResource(const String& Name, const std::function<void(const String&)>& Callback);
+	void GetEntity(const String& Name, const std::function<void(Entity*)>& Callback);
 	GUI::Context* GetGUI() const override;
 	bool GetSceneFocus();
-	bool GetResourceState(const std::string& Name);
-	bool GetEntityState(const std::string& Name);
+	bool GetResourceState(const String& Name);
+	bool GetEntityState(const String& Name);
 	bool GetSelectionState();
 	Texture2D* GetIcon(Entity* Value);
 	void* GetEntityIndex(Entity* Value);
 	uint64_t GetEntityNesting(Entity* Value);
-    std::string GetLabel(Entity* Value);
-    std::string GetName(Entity* Value);
-	std::string GetPascal(const std::string& Value);
+    String GetLabel(Entity* Value);
+    String GetName(Entity* Value);
+	String GetPascal(const String& Value);
 };
 #endif

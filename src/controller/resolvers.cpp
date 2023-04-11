@@ -1,7 +1,7 @@
 #include "resolvers.h"
 #include "../core/sandbox.h"
 
-void ResolveResource(GUI::IElement& Target, const std::string& Name, const std::function<void(const std::string&)>& Callback, bool Changed)
+void ResolveResource(GUI::IElement& Target, const String& Name, const std::function<void(const String&)>& Callback, bool Changed)
 {
 	Sandbox* App = ((Sandbox*)Sandbox::Get());
 	if (!App || !Callback)
@@ -10,7 +10,7 @@ void ResolveResource(GUI::IElement& Target, const std::string& Name, const std::
 	if (!App->GetResourceState(Name) && !Changed)
 	{
 		Target.SetInnerHTML("Awaiting source...");
-		App->GetResource(Name, [Target, Callback](const std::string& File)
+		App->GetResource(Name, [Target, Callback](const String& File)
 		{
 			GUI::IElement Copy = Target;
 			Copy.SetInnerHTML(File.empty() ? "Assign source" : "Unassign source");
@@ -24,7 +24,7 @@ void ResolveResource(GUI::IElement& Target, const std::string& Name, const std::
 		App->GetResource("", nullptr);
 	}
 }
-void ResolveEntity(GUI::IElement& Target, const std::string& Name, const std::function<void(Entity*)>& Callback, bool Changed)
+void ResolveEntity(GUI::IElement& Target, const String& Name, const std::function<void(Entity*)>& Callback, bool Changed)
 {
 	Sandbox* App = ((Sandbox*)Sandbox::Get());
 	if (!App || !Callback)
@@ -47,14 +47,14 @@ void ResolveEntity(GUI::IElement& Target, const std::string& Name, const std::fu
 		App->GetEntity("", nullptr);
 	}
 }
-void ResolveTexture2D(GUI::Context* UI, const std::string& Id, bool Assigned, const std::function<void(Texture2D*)>& Callback, bool Changed)
+void ResolveTexture2D(GUI::Context* UI, const String& Id, bool Assigned, const std::function<void(Texture2D*)>& Callback, bool Changed)
 {
 	GUI::IElement Source = UI->GetElementById(Id);
 	if (Source.IsActive() && !Changed)
 	{
 		if (!Assigned)
 		{
-			ResolveResource(Source, "texture", [Callback](const std::string& File)
+			ResolveResource(Source, "texture", [Callback](const String& File)
 			{
 				Callback(Sandbox::Get()->Content->Load<Edge::Graphics::Texture2D>(File));
 			}, Changed);
@@ -71,7 +71,7 @@ void ResolveTexture2D(GUI::Context* UI, const std::string& Id, bool Assigned, co
 		Source.SetInnerHTML(Assigned ? "Unassign source" : "Assign source");
 	}
 }
-void ResolveKeyCode(GUI::Context* UI, const std::string& Id, KeyMap* Output, bool Changed)
+void ResolveKeyCode(GUI::Context* UI, const String& Id, KeyMap* Output, bool Changed)
 {
 	Sandbox* App = ((Sandbox*)Sandbox::Get());
 	if (!App)
@@ -119,7 +119,7 @@ void ResolveKeyCode(GUI::Context* UI, const std::string& Id, KeyMap* Output, boo
 		}
 	}
 }
-bool ResolveColor4(GUI::Context* UI, const std::string& Id, Vector4* Output)
+bool ResolveColor4(GUI::Context* UI, const String& Id, Vector4* Output)
 {
 	if (!UI->GetElementById(Id).CastFormColor(Output, true))
 		return false;
@@ -127,7 +127,7 @@ bool ResolveColor4(GUI::Context* UI, const std::string& Id, Vector4* Output)
 	UI->GetElementById(Id + "_color").SetProperty("background-color", Form("rgb(%u, %u, %u, %u)", (unsigned int)(Output->X * 255.0f), (unsigned int)(Output->Y * 255.0f), (unsigned int)(Output->Z * 255.0f), (unsigned int)(Output->W * 255.0f)).R());
 	return true;
 }
-bool ResolveColor3(GUI::Context* UI, const std::string& Id, Vector3* Output)
+bool ResolveColor3(GUI::Context* UI, const String& Id, Vector3* Output)
 {
 	Vector4 Color = *Output;
 	if (!UI->GetElementById(Id).CastFormColor(&Color, false))
@@ -137,7 +137,7 @@ bool ResolveColor3(GUI::Context* UI, const std::string& Id, Vector3* Output)
 	UI->GetElementById(Id + "_color").SetProperty("background-color", Form("rgb(%u, %u, %u)", (unsigned int)(Output->X * 255.0f), (unsigned int)(Output->Y * 255.0f), (unsigned int)(Output->Z * 255.0f)).R());
 	return true;
 }
-void ResolveModel(GUI::Context* UI, const std::string& Id, Components::Model* Output, bool Changed)
+void ResolveModel(GUI::Context* UI, const String& Id, Components::Model* Output, bool Changed)
 {
 	static Components::Model* Last = nullptr;
 	if (Last != Output)
@@ -151,7 +151,7 @@ void ResolveModel(GUI::Context* UI, const std::string& Id, Components::Model* Ou
 	{
 		if (!Output->GetDrawable())
 		{
-			ResolveResource(Source, "model", [Output](const std::string& File)
+			ResolveResource(Source, "model", [Output](const String& File)
 			{
 				auto* App = ((Sandbox*)Sandbox::Get());
 				auto* Instance = App->Content->Load<Edge::Engine::Model>(File);
@@ -172,7 +172,7 @@ void ResolveModel(GUI::Context* UI, const std::string& Id, Components::Model* Ou
 		Source.SetInnerHTML(Output->GetDrawable() ? "Unassign source" : "Assign source");
 	}
 }
-void ResolveSkin(GUI::Context* UI, const std::string& Id, Components::Skin* Output, bool Changed)
+void ResolveSkin(GUI::Context* UI, const String& Id, Components::Skin* Output, bool Changed)
 {
 	static Components::Skin* Last = nullptr;
 	if (Last != Output)
@@ -186,7 +186,7 @@ void ResolveSkin(GUI::Context* UI, const std::string& Id, Components::Skin* Outp
 	{
 		if (!Output->GetDrawable())
 		{
-			ResolveResource(Source, "model", [Output](const std::string& File)
+			ResolveResource(Source, "model", [Output](const String& File)
 			{
 				auto* App = ((Sandbox*)Sandbox::Get());
 				auto* Instance = App->Content->Load<Edge::Engine::SkinModel>(File);
@@ -207,7 +207,7 @@ void ResolveSkin(GUI::Context* UI, const std::string& Id, Components::Skin* Outp
 		Source.SetInnerHTML(Output->GetDrawable() ? "Unassign source" : "Assign source");
 	}
 }
-void ResolveSoftBody(GUI::Context* UI, const std::string& Id, Components::SoftBody* Output, bool Changed)
+void ResolveSoftBody(GUI::Context* UI, const String& Id, Components::SoftBody* Output, bool Changed)
 {
 	static Components::SoftBody* Last = nullptr;
 	if (Last != Output)
@@ -221,7 +221,7 @@ void ResolveSoftBody(GUI::Context* UI, const std::string& Id, Components::SoftBo
 	{
 		if (!Output->GetBody())
 		{
-			ResolveResource(Source, "soft body", [Output](const std::string& File)
+			ResolveResource(Source, "soft body", [Output](const String& File)
 			{
 				Output->Load(File, 0.0f);
 			}, Changed);
@@ -238,7 +238,7 @@ void ResolveSoftBody(GUI::Context* UI, const std::string& Id, Components::SoftBo
 		Source.SetInnerHTML(Output->GetBody() ? "Unassign source" : "Assign source");
 	}
 }
-void ResolveRigidBody(GUI::Context* UI, const std::string& Id, Components::RigidBody* Output, bool Changed)
+void ResolveRigidBody(GUI::Context* UI, const String& Id, Components::RigidBody* Output, bool Changed)
 {
 	static Components::RigidBody* Last = nullptr;
 	if (Last != Output)
@@ -252,7 +252,7 @@ void ResolveRigidBody(GUI::Context* UI, const std::string& Id, Components::Rigid
 	{
 		if (!Output->GetBody())
 		{
-			ResolveResource(Source, "rigid body", [Output](const std::string& File)
+			ResolveResource(Source, "rigid body", [Output](const String& File)
 			{
 				Output->Load(File, 0.0f, 0.0f);
 			}, Changed);
@@ -269,7 +269,7 @@ void ResolveRigidBody(GUI::Context* UI, const std::string& Id, Components::Rigid
 		Source.SetInnerHTML(Output->GetBody() ? "Unassign source" : "Assign source");
 	}
 }
-void ResolveSliderConstraint(GUI::Context* UI, const std::string& Id, Components::SliderConstraint* Output, bool Ghost, bool Linear, bool Changed)
+void ResolveSliderConstraint(GUI::Context* UI, const String& Id, Components::SliderConstraint* Output, bool Ghost, bool Linear, bool Changed)
 {
 	static Components::SliderConstraint* Last = nullptr;
 	if (Last != Output)
@@ -300,7 +300,7 @@ void ResolveSliderConstraint(GUI::Context* UI, const std::string& Id, Components
 		Source.SetInnerHTML(Output->GetConstraint() ? "Unassign entity" : "Assign entity");
 	}
 }
-void ResolveSkinAnimator(GUI::Context* UI, const std::string& Id, Components::SkinAnimator* Output, bool Changed)
+void ResolveSkinAnimator(GUI::Context* UI, const String& Id, Components::SkinAnimator* Output, bool Changed)
 {
 	static Components::SkinAnimator* Last = nullptr;
 	if (Last != Output)
@@ -314,7 +314,7 @@ void ResolveSkinAnimator(GUI::Context* UI, const std::string& Id, Components::Sk
 	{
 		if (Output->GetPath().empty())
 		{
-			ResolveResource(Source, "skin animation", [Output](const std::string& File)
+			ResolveResource(Source, "skin animation", [Output](const String& File)
 			{
 				auto* Instance = Sandbox::Get()->Content->Load<SkinAnimation>(File);
 				Output->SetAnimation(Instance);
@@ -333,7 +333,7 @@ void ResolveSkinAnimator(GUI::Context* UI, const std::string& Id, Components::Sk
 		Source.SetInnerHTML(!Output->GetPath().empty() ? "Unassign source" : "Assign source");
 	}
 }
-void ResolveKeyAnimator(GUI::Context* UI, const std::string& Id, Components::KeyAnimator* Output, bool Changed)
+void ResolveKeyAnimator(GUI::Context* UI, const String& Id, Components::KeyAnimator* Output, bool Changed)
 {
 	static Components::KeyAnimator* Last = nullptr;
 	if (Last != Output)
@@ -347,7 +347,7 @@ void ResolveKeyAnimator(GUI::Context* UI, const std::string& Id, Components::Key
 	{
 		if (Output->GetPath().empty())
 		{
-			ResolveResource(Source, "key animation", [Output](const std::string& File)
+			ResolveResource(Source, "key animation", [Output](const String& File)
 			{
 				Output->LoadAnimation(File);
 			}, Changed);
@@ -364,7 +364,7 @@ void ResolveKeyAnimator(GUI::Context* UI, const std::string& Id, Components::Key
 		Source.SetInnerHTML(!Output->GetPath().empty() ? "Unassign source" : "Assign source");
 	}
 }
-void ResolveAudioSource(GUI::Context* UI, const std::string& Id, Components::AudioSource* Output, bool Changed)
+void ResolveAudioSource(GUI::Context* UI, const String& Id, Components::AudioSource* Output, bool Changed)
 {
 	static Components::AudioSource* Last = nullptr;
 	if (Last != Output)
@@ -378,7 +378,7 @@ void ResolveAudioSource(GUI::Context* UI, const std::string& Id, Components::Aud
 	{
 		if (!Output->GetSource()->GetClip())
 		{
-			ResolveResource(Source, "audio clip", [Output](const std::string& File)
+			ResolveResource(Source, "audio clip", [Output](const String& File)
 			{
 				auto* Instance = Sandbox::Get()->Content->Load<AudioClip>(File);
 				Output->GetSource()->SetClip(Instance);
@@ -397,7 +397,7 @@ void ResolveAudioSource(GUI::Context* UI, const std::string& Id, Components::Aud
 		Source.SetInnerHTML(Output->GetSource()->GetClip() ? "Unassign source" : "Assign source");
 	}
 }
-void ResolveScriptable(GUI::Context* UI, const std::string& Id, Components::Scriptable* Output, bool Changed)
+void ResolveScriptable(GUI::Context* UI, const String& Id, Components::Scriptable* Output, bool Changed)
 {
 	static Components::Scriptable* Last = nullptr;
 	if (Last != Output)
@@ -411,7 +411,7 @@ void ResolveScriptable(GUI::Context* UI, const std::string& Id, Components::Scri
 	{
 		if (Output->GetSource().empty())
 		{
-			ResolveResource(Source, "script", [Output](const std::string& File)
+			ResolveResource(Source, "script", [Output](const String& File)
 			{
 				Output->LoadSource(Components::Scriptable::SourceType::Resource, File);
 			}, Changed);
