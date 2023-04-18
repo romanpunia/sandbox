@@ -27,10 +27,6 @@ void RendererLighting(GUI::Context* UI, Renderers::Lighting* Base)
 	UI->GetElementById("cmp_camera_lighting_le").CastFormFloat(&Base->AmbientLight.LightEmission);
 	UI->GetElementById("cmp_camera_lighting_gi").CastFormBoolean(&Base->EnableGI);
 
-	unsigned int MaxSteps = (unsigned int)Base->VoxelBuffer.MaxSteps;
-	if (UI->GetElementById("cmp_camera_lighting_gms").CastFormUInt32(&MaxSteps))
-		Base->VoxelBuffer.MaxSteps = (float)MaxSteps;
-
 	bool Recursive = (Base->AmbientLight.Recursive > 0.0f);
 	if (UI->GetElementById("cmp_camera_lighting_rp").CastFormBoolean(&Recursive))
 		Base->AmbientLight.Recursive = (Recursive ? 1.0f : 0.0f);
