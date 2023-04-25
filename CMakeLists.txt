@@ -43,7 +43,9 @@ endforeach()
 add_executable(sandbox ${SOURCE})
 set_target_properties(sandbox PROPERTIES
 		OUTPUT_NAME "sandbox"
-		CXX_STANDARD 17
+		CXX_STANDARD ${ED_CXX}
+        CXX_STANDARD_REQUIRED ON
+		CXX_EXTENSIONS OFF
 		VERSION ${PROJECT_VERSION}
 		SOVERSION ${PROJECT_VERSION})
 target_compile_definitions(sandbox PRIVATE
