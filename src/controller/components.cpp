@@ -1030,7 +1030,7 @@ void ComponentSurfaceLight(GUI::Context* UI, Components::SurfaceLight* Base, boo
 	ResolveTexture2D(UI, "cmp_surface_light_source", Base->GetDiffuseMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetDiffuseMap(New);
-		ED_RELEASE(New);
+		VI_RELEASE(New);
 	}, Changed);
 
 	UI->GetElementById("cmp_surface_light_vo_x").CastFormFloat(&Base->Offset.X);

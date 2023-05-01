@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.6)
 
 #Setup toolchain file if needed
-set(ED_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../edge CACHE STRING "Edge directory")
-set(ED_USE_POSTGRESQL OFF CACHE BOOL "PostgreSQL is not used")
-set(ED_USE_MONGOC OFF CACHE BOOL "MongoDB is not used")
-set(ED_USE_SIMD ON CACHE BOOL "SIMD is preferred for games")
-set(ED_USE_FAST_MEMORY ON CACHE BOOL "Fast memory is preferred for games")
-include(${ED_DIRECTORY}/lib/toolchain.cmake)
+set(VI_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../mavi CACHE STRING "Mavi directory")
+set(VI_USE_POSTGRESQL OFF CACHE BOOL "PostgreSQL is not used")
+set(VI_USE_MONGOC OFF CACHE BOOL "MongoDB is not used")
+set(VI_USE_SIMD ON CACHE BOOL "SIMD is preferred for games")
+set(VI_USE_FAST_MEMORY ON CACHE BOOL "Fast memory is preferred for games")
+include(${VI_DIRECTORY}/lib/toolchain.cmake)
 
 #Project's metadata
 project(sandbox)
@@ -43,26 +43,26 @@ endforeach()
 add_executable(sandbox ${SOURCE})
 set_target_properties(sandbox PROPERTIES
 		OUTPUT_NAME "sandbox"
-		CXX_STANDARD ${ED_CXX}
+		CXX_STANDARD ${VI_CXX}
         CXX_STANDARD_REQUIRED ON
 		CXX_EXTENSIONS OFF
 		VERSION ${PROJECT_VERSION}
 		SOVERSION ${PROJECT_VERSION})
 target_compile_definitions(sandbox PRIVATE
-    -DED_EXPORT
+    -DVI_EXPORT
     -DNOMINMAX)
 
 #Inherit compiler options
-include(${ED_DIRECTORY}/lib/compiler.cmake)
+include(${VI_DIRECTORY}/lib/compiler.cmake)
 if (MSVC)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS")
 endif()
 
-#Add Edge as dependency
-add_subdirectory(${ED_DIRECTORY} edge)
-link_directories(${ED_DIRECTORY})
-target_include_directories(sandbox PRIVATE ${ED_DIRECTORY})
-target_link_libraries(sandbox PRIVATE edge)
+#Add Mavi as dependency
+add_subdirectory(${VI_DIRECTORY} mavi)
+link_directories(${VI_DIRECTORY})
+target_include_directories(sandbox PRIVATE ${VI_DIRECTORY})
+target_link_libraries(sandbox PRIVATE mavi)
 
 #Project's source resolvers
 include(src/utils/CMakeLists.txt)

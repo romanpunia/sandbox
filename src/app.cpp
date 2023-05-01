@@ -3,7 +3,7 @@
 
 int main()
 {
-	Edge::Initialize((uint64_t)Edge::Preset::Game);
+	Mavi::Initialize((uint64_t)Mavi::Preset::Game);
 Entry:
 	{
 		Application::Desc Init;
@@ -18,7 +18,7 @@ Entry:
 #endif
 		Application* App = new Sandbox(&Init);
 		App->Start();
-		ED_CLEAR(App);
+		VI_CLEAR(App);
 
 		if (Demo::GetSource().empty())
 		{
@@ -28,12 +28,12 @@ Entry:
 
 		App = new Demo(&Init);
 		App->Start();
-		ED_CLEAR(App);
+		VI_CLEAR(App);
 
 		goto Entry;
 	}
 Exit:
-	Edge::Uninitialize();
+	Mavi::Uninitialize();
 
 	return 0;
 }

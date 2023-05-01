@@ -56,7 +56,7 @@ void ResolveTexture2D(GUI::Context* UI, const String& Id, bool Assigned, const s
 		{
 			ResolveResource(Source, "texture", [Callback](const String& File)
 			{
-				Callback(Sandbox::Get()->Content->Load<Edge::Graphics::Texture2D>(File));
+				Callback(Sandbox::Get()->Content->Load<Mavi::Graphics::Texture2D>(File));
 			}, Changed);
 		}
 		else
@@ -154,10 +154,10 @@ void ResolveModel(GUI::Context* UI, const String& Id, Components::Model* Output,
 			ResolveResource(Source, "model", [Output](const String& File)
 			{
 				auto* App = ((Sandbox*)Sandbox::Get());
-				auto* Instance = App->Content->Load<Edge::Engine::Model>(File);
+				auto* Instance = App->Content->Load<Mavi::Engine::Model>(File);
 				Output->SetDrawable(Instance);
 				App->SetMetadata(Output->GetEntity());
-				ED_RELEASE(Instance);
+				VI_RELEASE(Instance);
 			}, Changed);
 		}
 		else
@@ -189,10 +189,10 @@ void ResolveSkin(GUI::Context* UI, const String& Id, Components::Skin* Output, b
 			ResolveResource(Source, "model", [Output](const String& File)
 			{
 				auto* App = ((Sandbox*)Sandbox::Get());
-				auto* Instance = App->Content->Load<Edge::Engine::SkinModel>(File);
+				auto* Instance = App->Content->Load<Mavi::Engine::SkinModel>(File);
 				Output->SetDrawable(Instance);
 				App->SetMetadata(Output->GetEntity());
-				ED_RELEASE(Instance);
+				VI_RELEASE(Instance);
 			}, Changed);
 		}
 		else
@@ -318,7 +318,7 @@ void ResolveSkinAnimator(GUI::Context* UI, const String& Id, Components::SkinAni
 			{
 				auto* Instance = Sandbox::Get()->Content->Load<SkinAnimation>(File);
 				Output->SetAnimation(Instance);
-				ED_RELEASE(Instance);
+				VI_RELEASE(Instance);
 			}, Changed);
 		}
 		else
@@ -382,7 +382,7 @@ void ResolveAudioSource(GUI::Context* UI, const String& Id, Components::AudioSou
 			{
 				auto* Instance = Sandbox::Get()->Content->Load<AudioClip>(File);
 				Output->GetSource()->SetClip(Instance);
-				ED_RELEASE(Instance);
+				VI_RELEASE(Instance);
 			}, Changed);
 		}
 		else

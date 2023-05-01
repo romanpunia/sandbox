@@ -4,15 +4,15 @@
 </p>
 
 ## About
-Sandbox is a simple (or even primitive) scene editor for Edge.
+Sandbox is a simple (or even primitive) scene editor for Mavi.
 
 ## Core built-in dependencies
 
 * [LibGizmo](https://github.com/CedricGuillemet/LibGizmo)
-* [Edge](https://github.com/romanpunia/edge)
+* [Mavi](https://github.com/romanpunia/mavi)
 
 ## Building
-To build this project you have to clone Edge, also you need to make sure that it can be build on your machine. CMake's **ED_DIRECTORY** is a path to Edge source folder.
+To build this project you have to clone Mavi, also you need to make sure that it can be build on your machine. CMake's **VI_DIRECTORY** is a path to Mavi source folder.
 
 ## License
 Sandbox is licensed under the MIT license

@@ -1,21 +1,21 @@
 #ifndef APP_H
 #define APP_H
-#include <edge/edge.h>
-#include <edge/core/compute.h>
-#include <edge/core/audio.h>
-#include <edge/core/engine.h>
-#include <edge/core/graphics.h>
-#include <edge/audio/effects.h>
-#include <edge/audio/filters.h>
-#include <edge/engine/components.h>
-#include <edge/engine/processors.h>
-#include <edge/engine/renderers.h>
-#include <edge/engine/gui.h>
+#include <mavi/mavi.h>
+#include <mavi/core/compute.h>
+#include <mavi/core/audio.h>
+#include <mavi/core/engine.h>
+#include <mavi/core/graphics.h>
+#include <mavi/audio/effects.h>
+#include <mavi/audio/filters.h>
+#include <mavi/engine/components.h>
+#include <mavi/engine/processors.h>
+#include <mavi/engine/renderers.h>
+#include <mavi/engine/gui.h>
 
-using namespace Edge::Core;
-using namespace Edge::Audio;
-using namespace Edge::Compute;
-using namespace Edge::Engine;
-using namespace Edge::Graphics;
-using namespace Edge::Scripting;
+using namespace Mavi::Core;
+using namespace Mavi::Audio;
+using namespace Mavi::Compute;
+using namespace Mavi::Engine;
+using namespace Mavi::Graphics;
+using namespace Mavi::Scripting;
 #endif

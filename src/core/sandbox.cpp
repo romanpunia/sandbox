@@ -15,22 +15,22 @@ Sandbox::Sandbox(Application::Desc* Conf, const String& Path) : Application(Conf
 Sandbox::~Sandbox()
 {
 	SetLogging(false);
-	ED_RELEASE(State.GUI);
-	ED_RELEASE(State.Directory);
-	ED_RELEASE(Icons.Empty);
-	ED_RELEASE(Icons.Animation);
-	ED_RELEASE(Icons.Body);
-	ED_RELEASE(Icons.Camera);
-	ED_RELEASE(Icons.Decal);
-	ED_RELEASE(Icons.Mesh);
-	ED_RELEASE(Icons.Motion);
-	ED_RELEASE(Icons.Light);
-	ED_RELEASE(Icons.Probe);
-	ED_RELEASE(Icons.Listener);
-	ED_RELEASE(Icons.Source);
-	ED_RELEASE(Icons.Emitter);
-	ED_RELEASE(Icons.Sandbox);
-	ED_RELEASE(Favicons.Sandbox);
+	VI_RELEASE(State.GUI);
+	VI_RELEASE(State.Directory);
+	VI_RELEASE(Icons.Empty);
+	VI_RELEASE(Icons.Animation);
+	VI_RELEASE(Icons.Body);
+	VI_RELEASE(Icons.Camera);
+	VI_RELEASE(Icons.Decal);
+	VI_RELEASE(Icons.Mesh);
+	VI_RELEASE(Icons.Motion);
+	VI_RELEASE(Icons.Light);
+	VI_RELEASE(Icons.Probe);
+	VI_RELEASE(Icons.Listener);
+	VI_RELEASE(Icons.Source);
+	VI_RELEASE(Icons.Emitter);
+	VI_RELEASE(Icons.Sandbox);
+	VI_RELEASE(Favicons.Sandbox);
 	delete (CGizmoTransformMove*)Resource.Gizmo[0];
 	delete (CGizmoTransformRotate*)Resource.Gizmo[1];
 	delete (CGizmoTransformScale*)Resource.Gizmo[2];
@@ -125,7 +125,7 @@ void Sandbox::Initialize()
 
 	if (!State.GUI->Initialize("editor/conf.xml"))
 	{
-		ED_ERR("could not load GUI");
+		VI_ERR("could not load GUI");
 		return Stop();
 	}
 
@@ -403,7 +403,7 @@ void Sandbox::UpdateProject()
 		Selection.Directory = nullptr;
 	}
 
-	ED_RELEASE(State.Directory);
+	VI_RELEASE(State.Directory);
 	State.Directory = new FileTree(Resource.CurrentPath);
 	if (!State.Directories)
 		return;
@@ -420,7 +420,7 @@ void Sandbox::UpdateScene()
 	State.Entities->Clear();
 	State.Materials->Clear();
 	if (Scene != nullptr)
-		ED_CLEAR(Scene);
+		VI_CLEAR(Scene);
 
 	VM->ClearCache();
 	if (!Resource.NextPath.empty())
@@ -465,7 +465,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 	Renderer->SetBlendState(States.Blend);
 	Renderer->SetRasterizerState(States.BackRasterizer);
 	Renderer->SetInputLayout(States.Layout);
-	Renderer->SetShader(Constants->GetBasicEffect(), ED_VS | ED_PS);
+	Renderer->SetShader(Constants->GetBasicEffect(), VI_VS | VI_PS);
 	Renderer->SetVertexBuffer(Cache.Primitives->GetQuad());
 
 	for (uint32_t i = 0; i < Scene->GetEntitiesCount(); i++)
@@ -480,7 +480,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 		Constants->Render.TexCoord = (Value == Selection.Entity ? 0.5f : 0.05f);
 		Constants->Render.Transform = Matrix4x4::Create(Value->GetTransform()->GetPosition(), 0.5f, Vector3(0, Direction)) * State.Camera->GetComponent<Components::Camera>()->GetViewProjection();
 		Constants->UpdateConstantBuffer(RenderBufferType::Render);
-		Renderer->SetTexture2D(GetIcon(Value), 1, ED_PS);
+		Renderer->SetTexture2D(GetIcon(Value), 1, VI_PS);
 		Renderer->Draw(6, 0);
 	}
 
@@ -1070,37 +1070,37 @@ void Sandbox::InspectMaterial()
 	ResolveTexture2D(State.GUI, "mat_diffuse_source", Base->GetDiffuseMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetDiffuseMap(New);
-		ED_RELEASE(New);
+		VI_RELEASE(New);
 	}, false);
 	ResolveTexture2D(State.GUI, "mat_normal_source", Base->GetNormalMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetNormalMap(New);
-		ED_RELEASE(New);
+		VI_RELEASE(New);
 	}, false);
 	ResolveTexture2D(State.GUI, "mat_metallic_source", Base->GetMetallicMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetMetallicMap(New);
-		ED_RELEASE(New);
+		VI_RELEASE(New);
 	}, false);
 	ResolveTexture2D(State.GUI, "mat_roughness_source", Base->GetRoughnessMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetRoughnessMap(New);
-		ED_RELEASE(New);
+		VI_RELEASE(New);
 	}, false);
 	ResolveTexture2D(State.GUI, "mat_height_source", Base->GetHeightMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetHeightMap(New);
-		ED_RELEASE(New);
+		VI_RELEASE(New);
 	}, false);
 	ResolveTexture2D(State.GUI, "mat_occlusion_source", Base->GetOcclusionMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetOcclusionMap(New);
-		ED_RELEASE(New);
+		VI_RELEASE(New);
 	}, false);
 	ResolveTexture2D(State.GUI, "mat_emission_source", Base->GetEmissionMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetEmissionMap(New);
-		ED_RELEASE(New);
+		VI_RELEASE(New);
 	}, false);
 
 	ResolveColor3(State.GUI, "mat_diffuse", &Base->Surface.Diffuse);
@@ -1377,7 +1377,7 @@ void Sandbox::SetViewModel()
 		{
 			Stream* File = OS::File::Open(From, FileMode::Binary_Read_Only);
 			Schema* Doc = Processor->Import(File, State.MeshImportOpts);
-			ED_RELEASE(File);
+			VI_RELEASE(File);
 
 			if (Doc != nullptr)
 			{
@@ -1394,7 +1394,7 @@ void Sandbox::SetViewModel()
 					Args["type"] = Var::String("XML");
 
 				Content->Save<Schema>(To, Doc, Args);
-				ED_RELEASE(Doc);
+				VI_RELEASE(Doc);
 				this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Mesh was imported");
 			}
 			else
@@ -1420,7 +1420,7 @@ void Sandbox::SetViewModel()
 		{
 			Stream* File = OS::File::Open(From, FileMode::Binary_Read_Only);
 			Schema* Doc = Processor->Import(File, State.MeshImportOpts);
-			ED_RELEASE(File);
+			VI_RELEASE(File);
 
 			if (Doc != nullptr)
 			{
@@ -1437,7 +1437,7 @@ void Sandbox::SetViewModel()
 					Args["type"] = Var::String("XML");
 
 				Content->Save<Schema>(To, Doc, Args);
-				ED_RELEASE(Doc);
+				VI_RELEASE(Doc);
 				this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Animation was imported");
 			}
 			else
@@ -1459,7 +1459,7 @@ void Sandbox::SetViewModel()
 			return;
 
 		if (Selection.Entity != nullptr)
-			Selection.Entity->RemoveComponent(ED_HASH(Args[0].Serialize()));
+			Selection.Entity->RemoveComponent(VI_HASH(Args[0].Serialize()));
 	});
 	State.System->SetCallback("open_materials", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
@@ -1530,7 +1530,7 @@ void Sandbox::SetViewModel()
 		else
 			this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Key animation was saved");
 
-		ED_RELEASE(Result);
+		VI_RELEASE(Result);
 		this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
 		this->Activity->Message.Result(nullptr);
 	});
@@ -1589,7 +1589,7 @@ void Sandbox::SetViewModel()
 
 		GraphicsDevice::CompileBuiltinShaders(Devices);
 		for (auto* Device : Devices)
-			ED_RELEASE(Device);
+			VI_RELEASE(Device);
 	});
 	State.System->SetCallback("open_scene", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
@@ -2161,7 +2161,7 @@ void Sandbox::SetViewModel()
 		{
 			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
 			if (Source != nullptr)
-				Source->GetRenderer()->MoveRenderer(ED_HASH(Args[0].Serialize()), -1);
+				Source->GetRenderer()->MoveRenderer(VI_HASH(Args[0].Serialize()), -1);
 		}
 	});
 	State.System->SetCallback("down_rndr", [this](GUI::IEvent& Event, const VariantList& Args)
@@ -2170,7 +2170,7 @@ void Sandbox::SetViewModel()
 		{
 			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
 			if (Source != nullptr)
-				Source->GetRenderer()->MoveRenderer(ED_HASH(Args[0].Serialize()), 1);
+				Source->GetRenderer()->MoveRenderer(VI_HASH(Args[0].Serialize()), 1);
 		}
 	});
 	State.System->SetCallback("remove_rndr", [this](GUI::IEvent& Event, const VariantList& Args)
@@ -2179,7 +2179,7 @@ void Sandbox::SetViewModel()
 		{
 			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
 			if (Source != nullptr)
-				Source->GetRenderer()->RemoveRenderer(ED_HASH(Args[0].Serialize()));
+				Source->GetRenderer()->RemoveRenderer(VI_HASH(Args[0].Serialize()));
 		}
 	});
 	State.System->SetCallback("toggle_rndr", [this](GUI::IEvent& Event, const VariantList& Args)
@@ -2189,7 +2189,7 @@ void Sandbox::SetViewModel()
 			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
 			if (Source != nullptr)
 			{
-				auto* fRenderer = Source->GetRenderer()->GetRenderer(ED_HASH(Args[0].Serialize()));
+				auto* fRenderer = Source->GetRenderer()->GetRenderer(VI_HASH(Args[0].Serialize()));
 				if (fRenderer != nullptr)
 				{
 					fRenderer->Active = !fRenderer->Active;
@@ -2208,7 +2208,7 @@ void Sandbox::SetViewModel()
 		{
 			auto* Source = Selection.Entity->GetComponent<Components::AudioSource>();
 			if (Source != nullptr)
-				Source->GetSource()->RemoveEffectById(ED_HASH(Args[0].Serialize()));
+				Source->GetSource()->RemoveEffectById(VI_HASH(Args[0].Serialize()));
 		}
 	});
 }
