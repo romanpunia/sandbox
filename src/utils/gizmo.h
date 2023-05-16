@@ -6,4 +6,7 @@
 #include <GizmoTransformMove.h>
 #include <GizmoTransformRotate.h>
 #include <GizmoTransformScale.h>
+#ifdef max
+#undef max
+#endif
 #endif
