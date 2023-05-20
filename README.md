@@ -6,10 +6,9 @@
 ## About
 Sandbox is a simple (or even primitive) scene editor for Mavi.
 
-## Core built-in dependencies
-
-* [LibGizmo](https://github.com/CedricGuillemet/LibGizmo)
-* [Mavi](https://github.com/romanpunia/mavi)
+## Dependencies
+* [LibGizmo (embedded)](https://github.com/CedricGuillemet/LibGizmo)
+* [Mavi (submodule)](https://github.com/romanpunia/mavi)
 
 ## Building
 To build this project you have to clone Mavi, also you need to make sure that it can be build on your machine. CMake's **VI_DIRECTORY** is a path to Mavi source folder.

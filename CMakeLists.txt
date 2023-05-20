@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.6)
 
 #Setup toolchain file if needed
-set(VI_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../mavi CACHE STRING "Mavi directory")
+set(VI_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/deps/mavi CACHE STRING "Mavi directory")
 set(VI_USE_POSTGRESQL OFF CACHE BOOL "PostgreSQL is not used")
 set(VI_USE_MONGOC OFF CACHE BOOL "MongoDB is not used")
 set(VI_USE_SIMD ON CACHE BOOL "SIMD is preferred for games")
