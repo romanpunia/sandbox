@@ -7,6 +7,7 @@
 
 Sandbox::Sandbox(Application::Desc* Conf, const String& Path) : Application(Conf)
 {
+	OS::Directory::SetWorking(OS::Directory::GetModule().c_str());
 	Resource.NextPath = Path;
 #ifdef _DEBUG
 	Console::Get()->Show();
