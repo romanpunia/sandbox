@@ -131,7 +131,7 @@ void Sandbox::Initialize()
 	}
 
 	Resource.NextPath = "./scenes/demo.xml";
-	OS::SetLogDeferred(false);
+	OS::SetLogFlag(LogOption::Async, false);
 	Demo::SetSource("");
 	SetLogging(true);
 	UpdateScene();
@@ -1026,7 +1026,7 @@ void Sandbox::InspectSettings()
 		State.GUI->GetElementById("sc_sim_grav_z").CastFormFloat(&Gravity.Z))
 		Scene->GetSimulator()->SetGravity(Gravity);
 
-	State.GUI->GetElementById("sc_sim_time").CastFormFloat(&Scene->GetSimulator()->TimeSpeed);
+	State.GUI->GetElementById("sc_sim_time").CastFormFloat(&Scene->GetSimulator()->Speedup);
 	State.GUI->GetElementById("sc_sim").CastFormBoolean(&Scene->GetSimulator()->Active);
 }
 void Sandbox::InspectImporter()
