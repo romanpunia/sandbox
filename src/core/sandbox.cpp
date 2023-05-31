@@ -131,7 +131,7 @@ void Sandbox::Initialize()
 	}
 
 	Resource.NextPath = "./scenes/demo.xml";
-	OS::SetLogFlag(LogOption::Async, false);
+	ErrorHandling::SetFlag(LogOption::Async, false);
 	Demo::SetSource("");
 	SetLogging(true);
 	UpdateScene();
@@ -1135,11 +1135,11 @@ void Sandbox::InspectMaterial()
 void Sandbox::SetLogging(bool Active)
 {
 	if (!Active)
-		return OS::SetLogCallback(nullptr);
+		return ErrorHandling::SetCallback(nullptr);
 
-	OS::SetLogCallback([this](OS::Message& Data)
+	ErrorHandling::SetCallback([this](ErrorHandling::Details& Data)
 	{
-		SetStatus(Data.GetText());
+		SetStatus(ErrorHandling::GetMessageText(Data));
 	});
 }
 void Sandbox::SetViewModel()
