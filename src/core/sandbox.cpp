@@ -1106,10 +1106,10 @@ void Sandbox::InspectMaterial()
 
 	ResolveColor3(State.GUI, "mat_diffuse", &Base->Surface.Diffuse);
 	if (State.GUI->GetElementById("mat_cemn").CastFormColor(&Base->Surface.Emission, false))
-		State.GUI->GetElementById("mat_cemn_color").SetProperty("background-color", Form("rgb(%u, %u, %u)", (unsigned int)(Base->Surface.Emission.X * 255.0f), (unsigned int)(Base->Surface.Emission.Y * 255.0f), (unsigned int)(Base->Surface.Emission.Z * 255.0f)).R());
+		State.GUI->GetElementById("mat_cemn_color").SetProperty("background-color", Stringify::Text("rgb(%u, %u, %u)", (unsigned int)(Base->Surface.Emission.X * 255.0f), (unsigned int)(Base->Surface.Emission.Y * 255.0f), (unsigned int)(Base->Surface.Emission.Z * 255.0f)));
 
 	if (State.GUI->GetElementById("mat_cmet").CastFormColor(&Base->Surface.Metallic, false))
-		State.GUI->GetElementById("mat_cmet_color").SetProperty("background-color", Form("rgb(%u, %u, %u)", (unsigned int)(Base->Surface.Metallic.X * 255.0f), (unsigned int)(Base->Surface.Metallic.Y * 255.0f), (unsigned int)(Base->Surface.Metallic.Z * 255.0f)).R());
+		State.GUI->GetElementById("mat_cmet_color").SetProperty("background-color", Stringify::Text("rgb(%u, %u, %u)", (unsigned int)(Base->Surface.Metallic.X * 255.0f), (unsigned int)(Base->Surface.Metallic.Y * 255.0f), (unsigned int)(Base->Surface.Metallic.Z * 255.0f)));
 
 	String Name = Base->GetName();
 	if (State.GUI->GetElementById("mat_name").CastFormString(&Name))
@@ -1387,9 +1387,9 @@ void Sandbox::SetViewModel()
 					return;
 
 				VariantArgs Args;
-				if (Stringify(&To).EndsWith(".jsonb"))
+				if (Stringify::EndsWith(To, ".jsonb"))
 					Args["type"] = Var::String("JSONB");
-				else if (Stringify(&To).EndsWith(".json"))
+				else if (Stringify::EndsWith(To, ".json"))
 					Args["type"] = Var::String("JSON");
 				else
 					Args["type"] = Var::String("XML");
@@ -1430,9 +1430,9 @@ void Sandbox::SetViewModel()
 					return;
 
 				VariantArgs Args;
-				if (Stringify(&To).EndsWith(".jsonb"))
+				if (Stringify::EndsWith(To, ".jsonb"))
 					Args["type"] = Var::String("JSONB");
-				else if (Stringify(&To).EndsWith(".json"))
+				else if (Stringify::EndsWith(To, ".json"))
 					Args["type"] = Var::String("JSON");
 				else
 					Args["type"] = Var::String("XML");
@@ -1519,9 +1519,9 @@ void Sandbox::SetViewModel()
 		Series::Pack(Result, Animator->Clips);
 
 		VariantArgs Map;
-		if (Stringify(&Path).EndsWith(".jsonb"))
+		if (Stringify::EndsWith(Path, ".jsonb"))
 			Map["type"] = Var::String("JSONB");
-		else if (Stringify(&Path).EndsWith(".json"))
+		else if (Stringify::EndsWith(Path, ".json"))
 			Map["type"] = Var::String("JSON");
 		else
 			Map["type"] = Var::String("XML");
@@ -1606,9 +1606,9 @@ void Sandbox::SetViewModel()
 			return;
 
 		VariantArgs Map;
-		if (Stringify(&Path).EndsWith(".jsonb"))
+		if (Stringify::EndsWith(Path, ".jsonb"))
 			Map["type"] = Var::String("JSONB");
-		else if (Stringify(&Path).EndsWith(".json"))
+		else if (Stringify::EndsWith(Path, ".json"))
 			Map["type"] = Var::String("JSON");
 		else
 			Map["type"] = Var::String("XML");
@@ -2238,7 +2238,7 @@ void Sandbox::SetContents(FileTree* Base, int64_t Depth)
 
 	for (auto* Next : Base->Directories)
 	{
-		if (IsRoot && (Stringify(&Next->Path).EndsWith("editor") || Stringify(&Next->Path).EndsWith("shaders")))
+		if (IsRoot && (Stringify::EndsWith(Next->Path, "editor") || Stringify::EndsWith(Next->Path, "shaders")))
 			continue;
 
 		auto Top = std::make_pair((void*)(uintptr_t)Index++, (size_t)Depth);

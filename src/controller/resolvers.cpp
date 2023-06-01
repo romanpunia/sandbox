@@ -103,11 +103,11 @@ void ResolveKeyCode(GUI::Context* UI, const String& Id, KeyMap* Output, bool Cha
 		if (Source.GetInnerHTML().empty())
 		{
 			if (KeyCode != nullptr && KeyMod != nullptr)
-				Source.SetInnerHTML(Form("%s + %s", KeyMod, KeyCode).R());
+				Source.SetInnerHTML(Stringify::Text("%s + %s", KeyMod, KeyCode));
 			else if (KeyCode != nullptr && !KeyMod)
-				Source.SetInnerHTML(Form("%s", KeyCode).R());
+				Source.SetInnerHTML(Stringify::Text("%s", KeyCode));
 			else if (!KeyCode && KeyMod != nullptr)
-				Source.SetInnerHTML(Form("%s", KeyMod).R());
+				Source.SetInnerHTML(Stringify::Text("%s", KeyMod));
 			else
 				Source.SetInnerHTML("None");
 		}
@@ -124,7 +124,7 @@ bool ResolveColor4(GUI::Context* UI, const String& Id, Vector4* Output)
 	if (!UI->GetElementById(Id).CastFormColor(Output, true))
 		return false;
 
-	UI->GetElementById(Id + "_color").SetProperty("background-color", Form("rgb(%u, %u, %u, %u)", (unsigned int)(Output->X * 255.0f), (unsigned int)(Output->Y * 255.0f), (unsigned int)(Output->Z * 255.0f), (unsigned int)(Output->W * 255.0f)).R());
+	UI->GetElementById(Id + "_color").SetProperty("background-color", Stringify::Text("rgb(%u, %u, %u, %u)", (unsigned int)(Output->X * 255.0f), (unsigned int)(Output->Y * 255.0f), (unsigned int)(Output->Z * 255.0f), (unsigned int)(Output->W * 255.0f)));
 	return true;
 }
 bool ResolveColor3(GUI::Context* UI, const String& Id, Vector3* Output)
@@ -134,7 +134,7 @@ bool ResolveColor3(GUI::Context* UI, const String& Id, Vector3* Output)
 		return false;
 
 	*Output = Color;
-	UI->GetElementById(Id + "_color").SetProperty("background-color", Form("rgb(%u, %u, %u)", (unsigned int)(Output->X * 255.0f), (unsigned int)(Output->Y * 255.0f), (unsigned int)(Output->Z * 255.0f)).R());
+	UI->GetElementById(Id + "_color").SetProperty("background-color", Stringify::Text("rgb(%u, %u, %u)", (unsigned int)(Output->X * 255.0f), (unsigned int)(Output->Y * 255.0f), (unsigned int)(Output->Z * 255.0f)));
 	return true;
 }
 void ResolveModel(GUI::Context* UI, const String& Id, Components::Model* Output, bool Changed)
