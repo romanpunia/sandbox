@@ -3,7 +3,7 @@
 
 int main()
 {
-	Mavi::Initialize((uint64_t)Mavi::Preset::Game);
+	Mavi::Runtime Scope((uint64_t)Mavi::Preset::Game);
 Entry:
 	{
 		Application::Desc Init;
@@ -33,7 +33,5 @@ Entry:
 		goto Entry;
 	}
 Exit:
-	Mavi::Uninitialize();
-
 	return 0;
 }
