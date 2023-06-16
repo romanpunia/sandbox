@@ -7,7 +7,7 @@
 
 Sandbox::Sandbox(Application::Desc* Conf, const String& Path) : Application(Conf)
 {
-	OS::Directory::SetWorking(OS::Directory::GetModule().c_str());
+	OS::Directory::SetWorking(OS::Directory::GetModule()->c_str());
 	Resource.NextPath = Path;
 #ifdef _DEBUG
 	Console::Get()->Show();
@@ -1376,7 +1376,7 @@ void Sandbox::SetViewModel()
 		Processors::ModelProcessor* Processor = (Processors::ModelProcessor*)Content->GetProcessor<Model>();
 		if (Processor != nullptr)
 		{
-			Stream* File = OS::File::Open(From, FileMode::Binary_Read_Only);
+			Stream* File = *OS::File::Open(From, FileMode::Binary_Read_Only);
 			Schema* Doc = Processor->Import(File, State.MeshImportOpts);
 			VI_RELEASE(File);
 
@@ -1419,7 +1419,7 @@ void Sandbox::SetViewModel()
 		Processors::SkinAnimationProcessor* Processor = (Processors::SkinAnimationProcessor*)Content->GetProcessor<SkinAnimation>();
 		if (Processor != nullptr)
 		{
-			Stream* File = OS::File::Open(From, FileMode::Binary_Read_Only);
+			Stream* File = *OS::File::Open(From, FileMode::Binary_Read_Only);
 			Schema* Doc = Processor->Import(File, State.MeshImportOpts);
 			VI_RELEASE(File);
 
@@ -1572,7 +1572,9 @@ void Sandbox::SetViewModel()
 	State.System->SetCallback("compile_shaders", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		String Path = Content->GetEnvironment() + "./shaders";
-		Path = OS::Path::Resolve(Path.c_str());
+		auto Subpath = OS::Path::Resolve(Path.c_str());
+		if (Subpath)
+			Path = *Subpath;
 		OS::Directory::Patch(Path);
 
 		GraphicsDevice::Desc D3D11;
