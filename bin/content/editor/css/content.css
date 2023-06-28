@@ -1,6 +1,7 @@
 .content
 {
 	position: absolute;
+    display: flex;
 	top: 70%;
 	left: 0;
 	right: 20%;
@@ -13,7 +14,6 @@
 .content .assets
 {
 	position: relative;
-	display: inline-block;
 	width: 25%;
 	height: 100%;
 	border-right: 1px rgb(22, 22, 22);
@@ -43,7 +43,6 @@
 
 .content .directory
 {
-	display: inline-block;
 	width: 75%;
 	height: 100%;
 	border-top: 1px rgb(22, 22, 22);

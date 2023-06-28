@@ -108,7 +108,7 @@ void Sandbox::Initialize()
 	State.IsDragHovered = false;
 	State.IsCaptured = false;
 	State.Directory = nullptr;
-	State.GUI = new GUI::Context(Renderer);
+	State.GUI = new GUI::Context(nullptr, Renderer);
 	State.GUI->SetMountCallback([this](GUI::Context*)
 	{
 		if (!State.IsMounted)
