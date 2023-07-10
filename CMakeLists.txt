@@ -5,7 +5,7 @@ set(VI_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/deps/mavi CACHE STRING "Mavi direct
 set(VI_POSTGRESQL OFF CACHE BOOL "PostgreSQL is not used")
 set(VI_MONGOC OFF CACHE BOOL "MongoDB is not used")
 set(VI_SIMD ON CACHE BOOL "SIMD is preferred for games")
-include(${VI_DIRECTORY}/lib/toolchain.cmake)
+include(${VI_DIRECTORY}/deps/toolchain.cmake)
 
 #Project's metadata
 project(sandbox)

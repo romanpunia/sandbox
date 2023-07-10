@@ -108,7 +108,7 @@ void Sandbox::Initialize()
 	State.IsDragHovered = false;
 	State.IsCaptured = false;
 	State.Directory = nullptr;
-	State.GUI = new GUI::Context(nullptr, Renderer);
+	State.GUI = new GUI::Context(Renderer);
 	State.GUI->SetMountCallback([this](GUI::Context*)
 	{
 		if (!State.IsMounted)
@@ -124,7 +124,7 @@ void Sandbox::Initialize()
 	State.MeshImportOpts = (uint32_t)Processors::MeshPreset::Default;
 	Selection.Directory = nullptr;
 
-	if (!State.GUI->Initialize("editor/conf.xml"))
+	if (!State.GUI->LoadManifest("editor/manifest.xml"))
 	{
 		VI_ERR("could not load GUI");
 		return Stop();
@@ -155,7 +155,7 @@ void Sandbox::Dispatch(Timer* Time)
 		{
 			State.GUI->ClearDocuments();
 			State.GUI->ClearStyles();
-			State.GUI->Initialize("editor/conf.xml");
+			State.GUI->LoadManifest("editor/manifest.xml");
 		}
 	}
 #endif
