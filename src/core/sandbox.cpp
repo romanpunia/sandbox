@@ -675,7 +675,7 @@ void Sandbox::UpdateMutation(const String& Name, VariantArgs& Args)
 		if (!Base || Base == State.Camera || !State.Entities)
 			return;
 
-		for (size_t i = 0; i < State.Entities->GetSize(); i++)
+		for (size_t i = 0; i < State.Entities->Size(); i++)
 		{
 			GUI::DataNode& Node = State.Entities->At(i);
 			if (GUI::IElement::ToPointer(Node.At(1).GetString()) == (void*)Base)
@@ -709,7 +709,7 @@ void Sandbox::UpdateMutation(const String& Name, VariantArgs& Args)
 		Item.emplace_back(std::move(Var::String(GUI::IElement::FromPointer((void*)Base))));
 		Item.emplace_back(std::move(Var::String(GetName(Base))));
 
-		for (size_t i = 0; i < State.Entities->GetSize(); i++)
+		for (size_t i = 0; i < State.Entities->Size(); i++)
 		{
 			GUI::DataNode& Node = State.Entities->At(i);
 			if (GUI::IElement::ToPointer(Node.At(1).GetString()) == (void*)Base)
@@ -730,7 +730,7 @@ void Sandbox::UpdateMutation(const String& Name, VariantArgs& Args)
 			return;
 
 		Entity* Base = Child->GetEntity();
-		for (size_t i = 0; i < State.Entities->GetSize(); i++)
+		for (size_t i = 0; i < State.Entities->Size(); i++)
 		{
 			GUI::DataNode& Node = State.Entities->At(i);
 			if (GUI::IElement::ToPointer(Node.At(1).GetString()) == (void*)Base)
@@ -754,7 +754,7 @@ void Sandbox::UpdateMutation(const String& Name, VariantArgs& Args)
 		if (!Base || !State.Materials)
 			return;
 
-		for (size_t i = 0; i < State.Materials->GetSize(); i++)
+		for (size_t i = 0; i < State.Materials->Size(); i++)
 		{
 			GUI::DataNode& Node = State.Materials->At(i);
 			if (Node.At(0).GetInteger() == Base->Slot)
