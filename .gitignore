@@ -2,7 +2,7 @@
 .git/
 debug/
 release/
-bin/assembly/hlsl.*
+bin/shaders/
 bin/*.so
 bin/*.a
 bin/*.dylib
