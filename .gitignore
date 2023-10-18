@@ -2,7 +2,7 @@
 .git/
 debug/
 release/
-bin/shaders/
+bin/content/shaders/
 bin/*.so
 bin/*.a
 bin/*.dylib
