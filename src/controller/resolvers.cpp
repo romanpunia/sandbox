@@ -98,8 +98,8 @@ void ResolveKeyCode(GUI::Context* UI, const String& Id, KeyMap* Output, bool Cha
 	}
 	else
 	{
-		const char* KeyCode = Activity::GetKeyCodeName(Output->Key);
-		const char* KeyMod = Activity::GetKeyModName(Output->Mod);
+		const char* KeyCode = Video::GetKeyCodeAsLiteral(Output->Key);
+		const char* KeyMod = Video::GetKeyModAsLiteral(Output->Mod);
 		if (Source.GetInnerHTML().empty())
 		{
 			if (KeyCode != nullptr && KeyMod != nullptr)
