@@ -76,11 +76,11 @@ void Sandbox::WindowEvent(WindowState NewState, int X, int Y)
 }
 void Sandbox::Initialize()
 {
-	States.DepthStencil = Renderer->GetDepthStencilState("none");
-	States.NoneRasterizer = Renderer->GetRasterizerState("cull-none");
-	States.BackRasterizer = Renderer->GetRasterizerState("cull-back");
-	States.Blend = Renderer->GetBlendState("additive");
-	States.Layout = Renderer->GetInputLayout("shape-vertex");
+	States.DepthStencil = Renderer->GetDepthStencilState("doo_soo_lt");
+	States.NoneRasterizer = Renderer->GetRasterizerState("so_co");
+	States.BackRasterizer = Renderer->GetRasterizerState("so_cback");
+	States.Blend = Renderer->GetBlendState("bw_wrgba_one");
+	States.Layout = Renderer->GetInputLayout("vx_shape");
 	Icons.Sandbox = Content->Load<Texture2D>("editor/img/sandbox.png");
 	Icons.Empty = Content->Load<Texture2D>("editor/img/empty.png");
 	Icons.Animation = Content->Load<Texture2D>("editor/img/animation.png");
