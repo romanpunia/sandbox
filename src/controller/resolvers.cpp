@@ -56,7 +56,7 @@ void ResolveTexture2D(GUI::Context* UI, const String& Id, bool Assigned, const s
 		{
 			ResolveResource(Source, "texture", [Callback](const String& File)
 			{
-				Callback(Sandbox::Get()->Content->Load<Mavi::Graphics::Texture2D>(File));
+				Callback(Sandbox::Get()->Content->Load<Vitex::Graphics::Texture2D>(File));
 			}, Changed);
 		}
 		else
@@ -154,7 +154,7 @@ void ResolveModel(GUI::Context* UI, const String& Id, Components::Model* Output,
 			ResolveResource(Source, "model", [Output](const String& File)
 			{
 				auto* App = ((Sandbox*)Sandbox::Get());
-				auto* Instance = App->Content->Load<Mavi::Engine::Model>(File);
+				auto* Instance = App->Content->Load<Vitex::Engine::Model>(File);
 				Output->SetDrawable(Instance);
 				App->SetMetadata(Output->GetEntity());
 				VI_RELEASE(Instance);
@@ -189,7 +189,7 @@ void ResolveSkin(GUI::Context* UI, const String& Id, Components::Skin* Output, b
 			ResolveResource(Source, "model", [Output](const String& File)
 			{
 				auto* App = ((Sandbox*)Sandbox::Get());
-				auto* Instance = App->Content->Load<Mavi::Engine::SkinModel>(File);
+				auto* Instance = App->Content->Load<Vitex::Engine::SkinModel>(File);
 				Output->SetDrawable(Instance);
 				App->SetMetadata(Output->GetEntity());
 				VI_RELEASE(Instance);

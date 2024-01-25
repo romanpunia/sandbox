@@ -1,21 +1,21 @@
 #ifndef APP_H
 #define APP_H
-#include <mavi/mavi.h>
-#include <mavi/core/compute.h>
-#include <mavi/core/audio.h>
-#include <mavi/core/engine.h>
-#include <mavi/core/graphics.h>
-#include <mavi/audio/effects.h>
-#include <mavi/audio/filters.h>
-#include <mavi/engine/components.h>
-#include <mavi/engine/processors.h>
-#include <mavi/engine/renderers.h>
-#include <mavi/engine/gui.h>
+#include <vitex/vitex.h>
+#include <vitex/core/compute.h>
+#include <vitex/core/audio.h>
+#include <vitex/core/engine.h>
+#include <vitex/core/graphics.h>
+#include <vitex/audio/effects.h>
+#include <vitex/audio/filters.h>
+#include <vitex/engine/components.h>
+#include <vitex/engine/processors.h>
+#include <vitex/engine/renderers.h>
+#include <vitex/engine/gui.h>
 
-using namespace Mavi::Core;
-using namespace Mavi::Audio;
-using namespace Mavi::Compute;
-using namespace Mavi::Engine;
-using namespace Mavi::Graphics;
-using namespace Mavi::Scripting;
+using namespace Vitex::Core;
+using namespace Vitex::Audio;
+using namespace Vitex::Compute;
+using namespace Vitex::Engine;
+using namespace Vitex::Graphics;
+using namespace Vitex::Scripting;
 #endif

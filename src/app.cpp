@@ -3,7 +3,7 @@
 
 int main()
 {
-	Mavi::Runtime Scope((uint64_t)Mavi::Preset::Game);
+	Vitex::Runtime Scope((uint64_t)Vitex::Preset::Game);
 Entry:
 	{
 		Application::Desc Init;
