@@ -81,20 +81,20 @@ void Sandbox::Initialize()
 	States.BackRasterizer = Renderer->GetRasterizerState("so_cback");
 	States.Blend = Renderer->GetBlendState("bw_wrgba_one");
 	States.Layout = Renderer->GetInputLayout("vx_shape");
-	Icons.Sandbox = Content->Load<Texture2D>("editor/img/sandbox.png");
-	Icons.Empty = Content->Load<Texture2D>("editor/img/empty.png");
-	Icons.Animation = Content->Load<Texture2D>("editor/img/animation.png");
-	Icons.Body = Content->Load<Texture2D>("editor/img/body.png");
-	Icons.Camera = Content->Load<Texture2D>("editor/img/camera.png");
-	Icons.Decal = Content->Load<Texture2D>("editor/img/decal.png");
-	Icons.Mesh = Content->Load<Texture2D>("editor/img/mesh.png");
-	Icons.Motion = Content->Load<Texture2D>("editor/img/motion.png");
-	Icons.Light = Content->Load<Texture2D>("editor/img/light.png");
-	Icons.Probe = Content->Load<Texture2D>("editor/img/probe.png");
-	Icons.Listener = Content->Load<Texture2D>("editor/img/listener.png");
-	Icons.Source = Content->Load<Texture2D>("editor/img/source.png");
-	Icons.Emitter = Content->Load<Texture2D>("editor/img/emitter.png");
-	Favicons.Sandbox = Renderer->CreateSurface(Icons.Sandbox);
+	Icons.Sandbox = *Content->Load<Texture2D>("editor/img/sandbox.png");
+	Icons.Empty = *Content->Load<Texture2D>("editor/img/empty.png");
+	Icons.Animation = *Content->Load<Texture2D>("editor/img/animation.png");
+	Icons.Body = *Content->Load<Texture2D>("editor/img/body.png");
+	Icons.Camera = *Content->Load<Texture2D>("editor/img/camera.png");
+	Icons.Decal = *Content->Load<Texture2D>("editor/img/decal.png");
+	Icons.Mesh = *Content->Load<Texture2D>("editor/img/mesh.png");
+	Icons.Motion = *Content->Load<Texture2D>("editor/img/motion.png");
+	Icons.Light = *Content->Load<Texture2D>("editor/img/light.png");
+	Icons.Probe = *Content->Load<Texture2D>("editor/img/probe.png");
+	Icons.Listener = *Content->Load<Texture2D>("editor/img/listener.png");
+	Icons.Source = *Content->Load<Texture2D>("editor/img/source.png");
+	Icons.Emitter = *Content->Load<Texture2D>("editor/img/emitter.png");
+	Favicons.Sandbox = *Renderer->CreateSurface(Icons.Sandbox);
 	Resource.CurrentPath = Content->GetEnvironment();
 	Resource.Gizmo[0] = CreateMoveGizmo();
 	Resource.Gizmo[1] = CreateRotateGizmo();
@@ -429,8 +429,7 @@ void Sandbox::UpdateScene()
 		VariantArgs Args;
 		Args["active"] = Var::Boolean(false);
 		Args["mutations"] = Var::Boolean(true);
-
-		Scene = Content->Load<SceneGraph>(Resource.NextPath, Args);
+		Scene = Content->Load<SceneGraph>(Resource.NextPath, Args).Or(nullptr);
 	}
 
 	if (Scene == nullptr)
@@ -1377,10 +1376,10 @@ void Sandbox::SetViewModel()
 		if (Processor != nullptr)
 		{
 			Stream* File = *OS::File::Open(From, FileMode::Binary_Read_Only);
-			Schema* Doc = Processor->Import(File, State.MeshImportOpts);
+			auto Target = Processor->Import(File, State.MeshImportOpts);
 			VI_RELEASE(File);
 
-			if (Doc != nullptr)
+			if (Target)
 			{
 				String To;
 				if (!OS::Input::Save("Save mesh", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized mesh (*.xml, *.json, *.jsonb)", &To))
@@ -1394,8 +1393,8 @@ void Sandbox::SetViewModel()
 				else
 					Args["type"] = Var::String("XML");
 
-				Content->Save<Schema>(To, Doc, Args);
-				VI_RELEASE(Doc);
+				Content->Save<Schema>(To, *Target, Args);
+				VI_RELEASE(Target);
 				this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Mesh was imported");
 			}
 			else
@@ -1420,10 +1419,10 @@ void Sandbox::SetViewModel()
 		if (Processor != nullptr)
 		{
 			Stream* File = *OS::File::Open(From, FileMode::Binary_Read_Only);
-			Schema* Doc = Processor->Import(File, State.MeshImportOpts);
+			auto Target = Processor->Import(File, State.MeshImportOpts);
 			VI_RELEASE(File);
 
-			if (Doc != nullptr)
+			if (Target)
 			{
 				String To;
 				if (!OS::Input::Save("Save animation", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized skin animation (*.xml, *.json, *.jsonb)", &To))
@@ -1437,8 +1436,8 @@ void Sandbox::SetViewModel()
 				else
 					Args["type"] = Var::String("XML");
 
-				Content->Save<Schema>(To, Doc, Args);
-				VI_RELEASE(Doc);
+				Content->Save<Schema>(To, *Target, Args);
+				VI_RELEASE(Target);
 				this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Animation was imported");
 			}
 			else
@@ -1539,11 +1538,11 @@ void Sandbox::SetViewModel()
 	{
 		GetResource("material", [this](const String& File)
 		{
-			Material* Result = Content->Load<Material>(File);
-			if (!Result || !Scene->AddMaterial(Result))
+			auto Result = Content->Load<Material>(File);
+			if (!Result || !Scene->AddMaterial(*Result))
 				return;
 
-			SetSelection(Inspector_Material, Result);
+			SetSelection(Inspector_Material, *Result);
 		});
 	});
 	State.System->SetCallback("deploy_scene", [this](GUI::IEvent& Event, const VariantList& Args)
@@ -1590,7 +1589,30 @@ void Sandbox::SetViewModel()
 		Devices.push_back(Renderer->GetBackend() == OGL.Backend ? Renderer : GraphicsDevice::Create(OGL));
 		this->Renderer->AddRef();
 
-		GraphicsDevice::CompileBuiltinShaders(Devices);
+		GraphicsDevice::CompileBuiltinShaders(Devices, [](GraphicsDevice* Device, const String& Name, const ExpectsGraphics<Shader*>& Result) -> bool
+		{
+			auto GetDeviceName = [&Device]() -> const char*
+			{
+				switch (Device->GetBackend())
+				{
+					case RenderBackend::D3D11:
+						return "d3d11";
+					case RenderBackend::OGL:
+						return "opengl";
+					default:
+						return "unknown";
+				}
+			};
+
+			if (Result)
+			{
+				VI_INFO("[sandbox] OK compile %s shader %s", GetDeviceName(), Name.c_str());
+				VI_RELEASE(*Result);
+			}
+			else
+				VI_ERR("[sandbox] cannot compile %s shader %s: %s", GetDeviceName(), Name.c_str(), Result.Error().what());
+			return !!Result;
+		});
 		for (auto* Device : Devices)
 			VI_RELEASE(Device);
 	});

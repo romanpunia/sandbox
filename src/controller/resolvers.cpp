@@ -56,7 +56,7 @@ void ResolveTexture2D(GUI::Context* UI, const String& Id, bool Assigned, const s
 		{
 			ResolveResource(Source, "texture", [Callback](const String& File)
 			{
-				Callback(Sandbox::Get()->Content->Load<Vitex::Graphics::Texture2D>(File));
+				Callback(Sandbox::Get()->Content->Load<Vitex::Graphics::Texture2D>(File).Or(nullptr));
 			}, Changed);
 		}
 		else
@@ -154,8 +154,8 @@ void ResolveModel(GUI::Context* UI, const String& Id, Components::Model* Output,
 			ResolveResource(Source, "model", [Output](const String& File)
 			{
 				auto* App = ((Sandbox*)Sandbox::Get());
-				auto* Instance = App->Content->Load<Vitex::Engine::Model>(File);
-				Output->SetDrawable(Instance);
+				auto Instance = App->Content->Load<Vitex::Engine::Model>(File);
+				Output->SetDrawable(Instance.Or(nullptr));
 				App->SetMetadata(Output->GetEntity());
 				VI_RELEASE(Instance);
 			}, Changed);
@@ -189,8 +189,8 @@ void ResolveSkin(GUI::Context* UI, const String& Id, Components::Skin* Output, b
 			ResolveResource(Source, "model", [Output](const String& File)
 			{
 				auto* App = ((Sandbox*)Sandbox::Get());
-				auto* Instance = App->Content->Load<Vitex::Engine::SkinModel>(File);
-				Output->SetDrawable(Instance);
+				auto Instance = App->Content->Load<Vitex::Engine::SkinModel>(File);
+				Output->SetDrawable(Instance.Or(nullptr));
 				App->SetMetadata(Output->GetEntity());
 				VI_RELEASE(Instance);
 			}, Changed);
@@ -316,8 +316,8 @@ void ResolveSkinAnimator(GUI::Context* UI, const String& Id, Components::SkinAni
 		{
 			ResolveResource(Source, "skin animation", [Output](const String& File)
 			{
-				auto* Instance = Sandbox::Get()->Content->Load<SkinAnimation>(File);
-				Output->SetAnimation(Instance);
+				auto Instance = Sandbox::Get()->Content->Load<SkinAnimation>(File);
+				Output->SetAnimation(Instance.Or(nullptr));
 				VI_RELEASE(Instance);
 			}, Changed);
 		}
@@ -380,8 +380,8 @@ void ResolveAudioSource(GUI::Context* UI, const String& Id, Components::AudioSou
 		{
 			ResolveResource(Source, "audio clip", [Output](const String& File)
 			{
-				auto* Instance = Sandbox::Get()->Content->Load<AudioClip>(File);
-				Output->GetSource()->SetClip(Instance);
+				auto Instance = Sandbox::Get()->Content->Load<AudioClip>(File);
+				Output->GetSource()->SetClip(Instance.Or(nullptr));
 				VI_RELEASE(Instance);
 			}, Changed);
 		}

@@ -31,9 +31,10 @@ void Demo::WindowEvent(WindowState NewState, int X, int Y)
 }
 void Demo::Initialize()
 {
-	Scene = Content->Load<SceneGraph>(Source);
-	if (!Scene)
+	auto NewScene = Content->Load<SceneGraph>(Source);
+	if (!NewScene)
 		return Stop();
+	Scene = *NewScene;
 }
 void Demo::Dispatch(Timer* Time)
 {
