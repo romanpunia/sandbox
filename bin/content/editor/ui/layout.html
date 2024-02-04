@@ -1,19 +1,20 @@
 <html>
 	<head>
+		<!--- #pragma fontface(path:"./../fnt/sf-ui-display-regular.ttf", fallback:false, weight:auto) --->
+		<!--- #pragma fontface(path:"./../fnt/sf-ui-display-bold.ttf", fallback:false, weight:auto) --->
 		<link type="text/css" href="./../css/main.css"/>
 		<link type="text/css" href="./../css/header.css"/>
 		<link type="text/css" href="./../css/hierarchy.css"/>
 		<link type="text/css" href="./../css/preview.css"/>
 		<link type="text/css" href="./../css/inspector.css"/>
 		<link type="text/css" href="./../css/content.css"/>
-		<title>Sandbox</title>
 	</head>
 	<body>
 		<div class="navbar" data-model="editor" data-event-click="set_menu(false)" data-event-mouseout="set_menu(false)">
-			<!-- #include "./navbar/file.html" -->
-			<!-- #include "./navbar/entity.html" -->
-			<!-- #include "./navbar/components.html" -->
-			<!-- #include "./navbar/scene.html" -->
+			<!--- #include "./navbar/file.html" --->
+			<!--- #include "./navbar/entity.html" --->
+			<!--- #include "./navbar/components.html" --->
+			<!--- #include "./navbar/scene.html" --->
 		</div>
 		<div class="hierarchy" data-model="editor">
 			<div class="header">
@@ -41,19 +42,19 @@
 			<p class="header">Inspector</p>
 			<div class="container">
 				<div class="menu" data-if="sl_window == 'entity'">
-					<!-- #include "./inspector/entity.html" -->
+					<!--- #include "./inspector/entity.html" --->
 				</div>
 				<div class="menu" data-if="sl_window == 'material'">
-					<!-- #include "./inspector/material.html" -->
+					<!--- #include "./inspector/material.html" --->
 				</div>
 				<div class="menu" data-if="sl_window == 'settings'">
-					<!-- #include "./inspector/settings.html" -->
+					<!--- #include "./inspector/settings.html" --->
 				</div>
 				<div class="menu" data-if="sl_window == 'import-model' || sl_window == 'import-animation'">
-					<!-- #include "./inspector/importer.html" -->
+					<!--- #include "./inspector/importer.html" --->
 				</div>
 				<div class="menu" data-if="sl_window == 'materials'">
-					<!-- #include "./inspector/materials.html" -->
+					<!--- #include "./inspector/materials.html" --->
 				</div>
 				<div class="menu" data-if="sl_window == 'none'">
 					<p class="message">Nothing to inspect</p>

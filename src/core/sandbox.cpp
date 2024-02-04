@@ -124,12 +124,14 @@ void Sandbox::Initialize()
 	State.MeshImportOpts = (uint32_t)Processors::MeshPreset::Default;
 	Selection.Directory = nullptr;
 
-	if (!State.GUI->LoadManifest("editor/manifest.xml"))
+	auto Document = State.GUI->LoadDocument("editor/ui/layout.html", true);
+	if (!Document)
 	{
 		VI_ERR("could not load GUI");
 		return Stop();
 	}
 
+	Document->Show();
 	Resource.NextPath = "./scenes/demo.xml";
 	ErrorHandling::SetFlag(LogOption::Async, false);
 	Demo::SetSource("");
@@ -149,14 +151,14 @@ void Sandbox::Initialize()
 void Sandbox::Dispatch(Timer* Time)
 {
 #ifdef _DEBUG
-	if (Activity->IsKeyDownHit(KeyCode::F5))
+	if (Activity->IsKeyDownHit(KeyCode::F5) && State.GUI != nullptr)
 	{
-		if (State.GUI != nullptr)
-		{
-			State.GUI->ClearDocuments();
-			State.GUI->ClearStyles();
-			State.GUI->LoadManifest("editor/manifest.xml");
-		}
+		State.GUI->ClearDocuments();
+		State.GUI->ClearStyles();
+
+		auto Document = State.GUI->LoadDocument("editor/ui/layout.html", true);
+		if (Document)
+			Document->Show();
 	}
 #endif
 	if (Activity->IsKeyDownHit(KeyCode::F6))
