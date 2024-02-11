@@ -6,7 +6,7 @@ void RendererLighting(GUI::Context* UI, Renderers::Lighting* Base)
 	ResolveTexture2D(UI, "cmp_camera_lighting_sm", Base->GetSkyMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetSkyMap(New);
-		VI_RELEASE(New);
+		Memory::Release(New);
 	}, false);
 	ResolveColor3(UI, "cmp_camera_lighting_hc", &Base->AmbientLight.HighEmission);
 	ResolveColor3(UI, "cmp_camera_lighting_lc", &Base->AmbientLight.LowEmission);

@@ -22,14 +22,14 @@ endif()
 
 #Query all sources
 file(GLOB_RECURSE SOURCE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/*.inl*
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h*
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c*
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc*
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp*
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp*
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hxx*
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cxx*)
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.inl*
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h*
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c*
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc*
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp*
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp*
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hxx*
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cxx*)
 
 #Resolving source groups
 foreach(ITEM IN ITEMS ${SOURCE})
@@ -42,12 +42,12 @@ endforeach()
 #Project's compile options
 add_executable(sandbox ${SOURCE})
 set_target_properties(sandbox PROPERTIES
-		OUTPUT_NAME "sandbox"
-		CXX_STANDARD ${VI_CXX}
-        CXX_STANDARD_REQUIRED ON
-		CXX_EXTENSIONS OFF
-		VERSION ${PROJECT_VERSION}
-		SOVERSION ${PROJECT_VERSION})
+    OUTPUT_NAME "sandbox"
+    CXX_STANDARD ${VI_CXX}
+    CXX_STANDARD_REQUIRED ON
+    CXX_EXTENSIONS OFF
+    VERSION ${PROJECT_VERSION}
+    SOVERSION ${PROJECT_VERSION})
 if (MSVC)
     set(CMAKE_EXE_LINKER_FLAGS "/ENTRY:mainCRTStartup /SUBSYSTEM:CONSOLE")
 endif()

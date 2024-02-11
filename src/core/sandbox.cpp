@@ -16,22 +16,21 @@ Sandbox::Sandbox(Application::Desc* Conf, const String& Path) : Application(Conf
 Sandbox::~Sandbox()
 {
 	SetLogging(false);
-	VI_RELEASE(State.GUI);
-	VI_RELEASE(State.Directory);
-	VI_RELEASE(Icons.Empty);
-	VI_RELEASE(Icons.Animation);
-	VI_RELEASE(Icons.Body);
-	VI_RELEASE(Icons.Camera);
-	VI_RELEASE(Icons.Decal);
-	VI_RELEASE(Icons.Mesh);
-	VI_RELEASE(Icons.Motion);
-	VI_RELEASE(Icons.Light);
-	VI_RELEASE(Icons.Probe);
-	VI_RELEASE(Icons.Listener);
-	VI_RELEASE(Icons.Source);
-	VI_RELEASE(Icons.Emitter);
-	VI_RELEASE(Icons.Sandbox);
-	VI_RELEASE(Favicons.Sandbox);
+	Memory::Release(State.Directory);
+	Memory::Release(Icons.Empty);
+	Memory::Release(Icons.Animation);
+	Memory::Release(Icons.Body);
+	Memory::Release(Icons.Camera);
+	Memory::Release(Icons.Decal);
+	Memory::Release(Icons.Mesh);
+	Memory::Release(Icons.Motion);
+	Memory::Release(Icons.Light);
+	Memory::Release(Icons.Probe);
+	Memory::Release(Icons.Listener);
+	Memory::Release(Icons.Source);
+	Memory::Release(Icons.Emitter);
+	Memory::Release(Icons.Sandbox);
+	Memory::Release(Favicons.Sandbox);
 	delete (CGizmoTransformMove*)Resource.Gizmo[0];
 	delete (CGizmoTransformRotate*)Resource.Gizmo[1];
 	delete (CGizmoTransformScale*)Resource.Gizmo[2];
@@ -108,7 +107,7 @@ void Sandbox::Initialize()
 	State.IsDragHovered = false;
 	State.IsCaptured = false;
 	State.Directory = nullptr;
-	State.GUI = new GUI::Context(Renderer);
+	State.GUI = FetchUI();
 	State.GUI->SetMountCallback([this](GUI::Context*)
 	{
 		if (!State.IsMounted)
@@ -406,7 +405,7 @@ void Sandbox::UpdateProject()
 		Selection.Directory = nullptr;
 	}
 
-	VI_RELEASE(State.Directory);
+	Memory::Release(State.Directory);
 	State.Directory = new FileTree(Resource.CurrentPath);
 	if (!State.Directories)
 		return;
@@ -422,8 +421,7 @@ void Sandbox::UpdateScene()
 
 	State.Entities->Clear();
 	State.Materials->Clear();
-	if (Scene != nullptr)
-		VI_CLEAR(Scene);
+	Memory::Release(Scene);
 
 	VM->ClearCache();
 	if (!Resource.NextPath.empty())
@@ -668,7 +666,7 @@ void Sandbox::UpdateGrid(Timer* Time)
 		}
 	}
 }
-void Sandbox::UpdateMutation(const String& Name, VariantArgs& Args)
+void Sandbox::UpdateMutation(const std::string_view& Name, VariantArgs& Args)
 {
 	if (Args.find("entity") != Args.end())
 	{
@@ -1072,37 +1070,37 @@ void Sandbox::InspectMaterial()
 	ResolveTexture2D(State.GUI, "mat_diffuse_source", Base->GetDiffuseMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetDiffuseMap(New);
-		VI_RELEASE(New);
+		Memory::Release(New);
 	}, false);
 	ResolveTexture2D(State.GUI, "mat_normal_source", Base->GetNormalMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetNormalMap(New);
-		VI_RELEASE(New);
+		Memory::Release(New);
 	}, false);
 	ResolveTexture2D(State.GUI, "mat_metallic_source", Base->GetMetallicMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetMetallicMap(New);
-		VI_RELEASE(New);
+		Memory::Release(New);
 	}, false);
 	ResolveTexture2D(State.GUI, "mat_roughness_source", Base->GetRoughnessMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetRoughnessMap(New);
-		VI_RELEASE(New);
+		Memory::Release(New);
 	}, false);
 	ResolveTexture2D(State.GUI, "mat_height_source", Base->GetHeightMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetHeightMap(New);
-		VI_RELEASE(New);
+		Memory::Release(New);
 	}, false);
 	ResolveTexture2D(State.GUI, "mat_occlusion_source", Base->GetOcclusionMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetOcclusionMap(New);
-		VI_RELEASE(New);
+		Memory::Release(New);
 	}, false);
 	ResolveTexture2D(State.GUI, "mat_emission_source", Base->GetEmissionMap() != nullptr, [Base](Texture2D* New)
 	{
 		Base->SetEmissionMap(New);
-		VI_RELEASE(New);
+		Memory::Release(New);
 	}, false);
 
 	ResolveColor3(State.GUI, "mat_diffuse", &Base->Surface.Diffuse);
@@ -1379,7 +1377,7 @@ void Sandbox::SetViewModel()
 		{
 			Stream* File = *OS::File::Open(From, FileMode::Binary_Read_Only);
 			auto Target = Processor->Import(File, State.MeshImportOpts);
-			VI_RELEASE(File);
+			Memory::Release(File);
 
 			if (Target)
 			{
@@ -1396,7 +1394,7 @@ void Sandbox::SetViewModel()
 					Args["type"] = Var::String("XML");
 
 				Content->Save<Schema>(To, *Target, Args);
-				VI_RELEASE(Target);
+				Memory::Release(*Target);
 				this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Mesh was imported");
 			}
 			else
@@ -1422,7 +1420,7 @@ void Sandbox::SetViewModel()
 		{
 			Stream* File = *OS::File::Open(From, FileMode::Binary_Read_Only);
 			auto Target = Processor->Import(File, State.MeshImportOpts);
-			VI_RELEASE(File);
+			Memory::Release(File);
 
 			if (Target)
 			{
@@ -1439,7 +1437,7 @@ void Sandbox::SetViewModel()
 					Args["type"] = Var::String("XML");
 
 				Content->Save<Schema>(To, *Target, Args);
-				VI_RELEASE(Target);
+				Memory::Release(*Target);
 				this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Animation was imported");
 			}
 			else
@@ -1532,7 +1530,7 @@ void Sandbox::SetViewModel()
 		else
 			this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Key animation was saved");
 
-		VI_RELEASE(Result);
+		Memory::Release(Result);
 		this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
 		this->Activity->Message.Result(nullptr);
 	});
@@ -1591,7 +1589,7 @@ void Sandbox::SetViewModel()
 		Devices.push_back(Renderer->GetBackend() == OGL.Backend ? Renderer : GraphicsDevice::Create(OGL));
 		this->Renderer->AddRef();
 
-		GraphicsDevice::CompileBuiltinShaders(Devices, [](GraphicsDevice* Device, const String& Name, const ExpectsGraphics<Shader*>& Result) -> bool
+		GraphicsDevice::CompileBuiltinShaders(Devices, [](GraphicsDevice* Device, const std::string_view& Name, const ExpectsGraphics<Shader*>& Result) -> bool
 		{
 			auto GetDeviceName = [&Device]() -> const char*
 			{
@@ -1608,15 +1606,15 @@ void Sandbox::SetViewModel()
 
 			if (Result)
 			{
-				VI_INFO("[sandbox] OK compile %s shader %s", GetDeviceName(), Name.c_str());
-				VI_RELEASE(*Result);
+				VI_INFO("[sandbox] OK compile %s shader %.*s", GetDeviceName(), (int)Name.size(), Name.data());
+				Memory::Release(*Result);
 			}
 			else
-				VI_ERR("[sandbox] cannot compile %s shader %s: %s", GetDeviceName(), Name.c_str(), Result.Error().what());
+				VI_ERR("[sandbox] cannot compile %s shader %.*s: %s", GetDeviceName(), (int)Name.size(), Name.data(), Result.Error().what());
 			return !!Result;
 		});
 		for (auto* Device : Devices)
-			VI_RELEASE(Device);
+			Memory::Release(Device);
 	});
 	State.System->SetCallback("open_scene", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
@@ -2322,7 +2320,7 @@ void Sandbox::SetStatus(const String& Status)
 {
 	State.Status = Status;
 }
-void Sandbox::SetMutation(Entity* Parent, const char* Type)
+void Sandbox::SetMutation(Entity* Parent, const std::string_view& Type)
 {
 	if (!Parent)
 		return;
@@ -2507,10 +2505,6 @@ void Sandbox::GetEntity(const String& Name, const std::function<void(Entity*)>& 
 
 	State.OnEntity = Callback;
 	State.Target = Name;
-}
-GUI::Context* Sandbox::GetGUI() const
-{
-	return State.GUI;
 }
 bool Sandbox::GetSceneFocus()
 {

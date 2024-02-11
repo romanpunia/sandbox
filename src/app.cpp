@@ -18,7 +18,7 @@ Entry:
 #endif
 		Application* App = new Sandbox(&Init);
 		App->Start();
-		VI_CLEAR(App);
+		Memory::Release(App);
 
 		if (Demo::GetSource().empty())
 		{
@@ -28,7 +28,7 @@ Entry:
 
 		App = new Demo(&Init);
 		App->Start();
-		VI_CLEAR(App);
+		Memory::Release(App);
 
 		goto Entry;
 	}

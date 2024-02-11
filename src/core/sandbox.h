@@ -116,7 +116,7 @@ public:
     void UpdateProject();
     void UpdateScene();
 	void UpdateGrid(Timer* Time);
-	void UpdateMutation(const String& Name, VariantArgs& Args);
+	void UpdateMutation(const std::string_view& Name, VariantArgs& Args);
 	void UpdateSystem();
 	void InspectEntity();
 	void InspectSettings();
@@ -128,14 +128,13 @@ public:
 	void SetContents(FileTree* Base, int64_t Depth = 0);
 	void SetSelection(Inspector Window, void* Object = nullptr);
 	void SetStatus(const String& Status);
-	void SetMutation(Entity* Parent, const char* Type);
+	void SetMutation(Entity* Parent, const std::string_view& Type);
 	void SetMetadata(Entity* Source);
     void GetPathName(String& Path);
     void GetEntityCell();
     void GetEntitySync();
 	void GetResource(const String& Name, const std::function<void(const String&)>& Callback);
 	void GetEntity(const String& Name, const std::function<void(Entity*)>& Callback);
-	GUI::Context* GetGUI() const override;
 	bool GetSceneFocus();
 	bool GetResourceState(const String& Name);
 	bool GetEntityState(const String& Name);

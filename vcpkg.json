@@ -12,6 +12,7 @@
         "openal-soft",
         "glew",
         "openssl"
-    ]
+    ],
+    "builtin-baseline": "e038ef04796ee67814f36af7c235ae50bbdf4303"
 }
   

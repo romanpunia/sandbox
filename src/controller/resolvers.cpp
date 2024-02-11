@@ -98,16 +98,16 @@ void ResolveKeyCode(GUI::Context* UI, const String& Id, KeyMap* Output, bool Cha
 	}
 	else
 	{
-		const char* KeyCode = Video::GetKeyCodeAsLiteral(Output->Key);
-		const char* KeyMod = Video::GetKeyModAsLiteral(Output->Mod);
+		auto KeyCode = Video::GetKeyCodeAsLiteral(Output->Key);
+		auto KeyMod = Video::GetKeyModAsLiteral(Output->Mod);
 		if (Source.GetInnerHTML().empty())
 		{
-			if (KeyCode != nullptr && KeyMod != nullptr)
-				Source.SetInnerHTML(Stringify::Text("%s + %s", KeyMod, KeyCode));
-			else if (KeyCode != nullptr && !KeyMod)
-				Source.SetInnerHTML(Stringify::Text("%s", KeyCode));
-			else if (!KeyCode && KeyMod != nullptr)
-				Source.SetInnerHTML(Stringify::Text("%s", KeyMod));
+			if (!KeyCode.empty() && !KeyMod.empty())
+				Source.SetInnerHTML(Stringify::Text("%s + %s", KeyMod.data(), KeyCode.data()));
+			else if (!KeyCode.empty() && KeyMod.empty())
+				Source.SetInnerHTML(Stringify::Text("%s", KeyCode.data()));
+			else if (KeyCode.empty() && !KeyMod.empty())
+				Source.SetInnerHTML(Stringify::Text("%s", KeyMod.data()));
 			else
 				Source.SetInnerHTML("None");
 		}
@@ -157,7 +157,8 @@ void ResolveModel(GUI::Context* UI, const String& Id, Components::Model* Output,
 				auto Instance = App->Content->Load<Vitex::Engine::Model>(File);
 				Output->SetDrawable(Instance.Or(nullptr));
 				App->SetMetadata(Output->GetEntity());
-				VI_RELEASE(Instance);
+				if (Instance)
+					Memory::Release(*Instance);
 			}, Changed);
 		}
 		else
@@ -192,7 +193,8 @@ void ResolveSkin(GUI::Context* UI, const String& Id, Components::Skin* Output, b
 				auto Instance = App->Content->Load<Vitex::Engine::SkinModel>(File);
 				Output->SetDrawable(Instance.Or(nullptr));
 				App->SetMetadata(Output->GetEntity());
-				VI_RELEASE(Instance);
+				if (Instance)
+					Memory::Release(*Instance);
 			}, Changed);
 		}
 		else
@@ -318,7 +320,8 @@ void ResolveSkinAnimator(GUI::Context* UI, const String& Id, Components::SkinAni
 			{
 				auto Instance = Sandbox::Get()->Content->Load<SkinAnimation>(File);
 				Output->SetAnimation(Instance.Or(nullptr));
-				VI_RELEASE(Instance);
+				if (Instance)
+					Memory::Release(*Instance);
 			}, Changed);
 		}
 		else
@@ -382,7 +385,8 @@ void ResolveAudioSource(GUI::Context* UI, const String& Id, Components::AudioSou
 			{
 				auto Instance = Sandbox::Get()->Content->Load<AudioClip>(File);
 				Output->GetSource()->SetClip(Instance.Or(nullptr));
-				VI_RELEASE(Instance);
+				if (Instance)
+					Memory::Release(*Instance);
 			}, Changed);
 		}
 		else

@@ -1,10 +1,10 @@
 #ifndef APP_H
 #define APP_H
 #include <vitex/vitex.h>
-#include <vitex/core/compute.h>
-#include <vitex/core/audio.h>
-#include <vitex/core/engine.h>
-#include <vitex/core/graphics.h>
+#include <vitex/compute.h>
+#include <vitex/audio.h>
+#include <vitex/engine.h>
+#include <vitex/graphics.h>
 #include <vitex/audio/effects.h>
 #include <vitex/audio/filters.h>
 #include <vitex/engine/components.h>
