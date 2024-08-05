@@ -1,6 +1,6 @@
 ## Sandbox
 <p align="center">
-  <img width="640" height="320" src="https://github.com/romanpunia/sandbox/blob/master/var/screenshot.png?raw=true">
+  <img width="640" height="320" src="https://github.com/romanpunia/sandbox/blob/master/var/screenshot1.png?raw=true">
 </p>
 
 ## About
