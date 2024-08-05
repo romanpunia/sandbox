@@ -4,14 +4,14 @@
 </p>
 
 ## About
-Sandbox is a simple (or even primitive) scene editor for Vitex.
+Sandbox is a simple (or even primitive) scene editor for Vengeance.
 
 ## Dependencies
 * [LibGizmo (embedded)](https://github.com/CedricGuillemet/LibGizmo)
-* [Vitex (submodule)](https://github.com/romanpunia/vitex)
+* [Vengeance (submodule)](https://github.com/romanpunia/vengeance)
 
 ## Building
-To build this project you have to clone Vitex, also you need to make sure that it can be build on your machine. CMake's **VI_DIRECTORY** is a path to Vitex source folder.
+To build this project you have to clone Vengeance, also you need to make sure that it can be build on your machine. CMake's **VI_DIRECTORY** is a path to Vengeance source folder.
 
 ## License
 Sandbox is licensed under the MIT license
