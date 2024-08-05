@@ -3,10 +3,10 @@
 
 int main()
 {
-	Vitex::Runtime Scope((uint64_t)Vitex::Preset::Game);
+	Vitex::HeavyRuntime Scope;
 Entry:
 	{
-		Application::Desc Init;
+		HeavyApplication::Desc Init;
 		Init.GraphicsDevice.VSyncMode = VSync::On;
 		Init.Activity.Maximized = true;
 		Init.Activity.Title = "Sandbox";
@@ -16,7 +16,7 @@ Entry:
 #else
 		Init.GraphicsDevice.Debug = false;
 #endif
-		Application* App = new Sandbox(&Init);
+		HeavyApplication* App = new Sandbox(&Init);
 		App->Start();
 		Memory::Release(App);
 

@@ -1,6 +1,6 @@
 #include "demo.h"
 
-Demo::Demo(Application::Desc* Conf) : Application(Conf)
+Demo::Demo(HeavyApplication::Desc* Conf) : HeavyApplication(Conf)
 {
 }
 Demo::~Demo()
@@ -34,7 +34,9 @@ void Demo::Initialize()
 	auto NewScene = Content->Load<SceneGraph>(Source);
 	if (!NewScene)
 		return Stop();
+
 	Scene = *NewScene;
+	Scene->GetCamera();
 }
 void Demo::Dispatch(Timer* Time)
 {

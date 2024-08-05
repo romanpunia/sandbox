@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.6)
 
 #Setup toolchain file if needed
-set(VI_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/deps/vitex CACHE STRING "Vitex directory")
+set(VI_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/deps/vengeance CACHE STRING "Vengeance directory")
 set(VI_SQLITE OFF CACHE BOOL "-")
 set(VI_POSTGRESQL OFF CACHE BOOL "-")
 set(VI_MONGOC OFF CACHE BOOL "-")
 set(VI_VECTORCLASS ON CACHE BOOL "+")
-include(${VI_DIRECTORY}/deps/toolchain.cmake)
+include(${VI_DIRECTORY}/deps/vitex/deps/toolchain.cmake)
 
 #Project's metadata
 project(sandbox)

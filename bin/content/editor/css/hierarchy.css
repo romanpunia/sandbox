@@ -29,6 +29,7 @@
 	width: 100%;
 	box-sizing: border-box;
 	decorator: box-shadow(0 -2 5 rgba(0, 0, 0, 50));
+	z-index: 100;
 }
 
 .hierarchy .header button
@@ -84,21 +85,17 @@
 	drag: clone;
 }
 
-.hierarchy-array
-{
-	padding: 12px;
-}
-
 .hierarchy-item
 {
 	display: block;
-	padding: 6px;
+	padding: 2px 8px;
 }
 
 .hierarchy-button
 {
 	display: block;
-	padding: 4px;
+	padding: 4px 6px;
+	border-radius: 3px;
 }
 
 div:drag .hierarchy-button

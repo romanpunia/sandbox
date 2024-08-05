@@ -5,7 +5,7 @@
 #include "../controller/renderers.h"
 #include "../controller/effects.h"
 
-Sandbox::Sandbox(Application::Desc* Conf, const String& Path) : Application(Conf)
+Sandbox::Sandbox(HeavyApplication::Desc* Conf, const String& Path) : HeavyApplication(Conf)
 {
 	OS::Directory::SetWorking(OS::Directory::GetModule()->c_str());
 	Resource.NextPath = Path;
@@ -1366,7 +1366,7 @@ void Sandbox::SetViewModel()
 	State.System->SetCallback("import_model_action", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		String From;
-		if (!OS::Input::Open("Import mesh", Content->GetEnvironment(), "*.dae,*.fbx,*.gltf,*.glb,*.blend,*.3d,*.3ds,*.ase,*.obj,*.ifc,*.xgl,*.zgl,*.ply,*.lwo,*.lws,*.lxo,*.stl,*.x,*.ac,*.ms3d,*.mdl,*.md2,.*md3", "", false, &From))
+		if (!Alerts::Open("Import mesh", Content->GetEnvironment(), "*.dae,*.fbx,*.gltf,*.glb,*.blend,*.3d,*.3ds,*.ase,*.obj,*.ifc,*.xgl,*.zgl,*.ply,*.lwo,*.lws,*.lxo,*.stl,*.x,*.ac,*.ms3d,*.mdl,*.md2,.*md3", "", false, &From))
 			return;
 
 		if (!OS::File::IsExists(From.c_str()))
@@ -1382,7 +1382,7 @@ void Sandbox::SetViewModel()
 			if (Target)
 			{
 				String To;
-				if (!OS::Input::Save("Save mesh", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized mesh (*.xml, *.json, *.jsonb)", &To))
+				if (!Alerts::Save("Save mesh", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized mesh (*.xml, *.json, *.jsonb)", &To))
 					return;
 
 				VariantArgs Args;
@@ -1409,7 +1409,7 @@ void Sandbox::SetViewModel()
 	State.System->SetCallback("import_skin_animation_action", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		String From;
-		if (!OS::Input::Open("Import animation from mesh", Content->GetEnvironment(), "*.dae,*.fbx,*.gltf,*.glb,*.blend,*.3d,*.3ds,*.ase,*.obj,*.ifc,*.xgl,*.zgl,*.ply,*.lwo,*.lws,*.lxo,*.stl,*.x,*.ac,*.ms3d,*.mdl,*.md2,.*md3", "", false, &From))
+		if (!Alerts::Open("Import animation from mesh", Content->GetEnvironment(), "*.dae,*.fbx,*.gltf,*.glb,*.blend,*.3d,*.3ds,*.ase,*.obj,*.ifc,*.xgl,*.zgl,*.ply,*.lwo,*.lws,*.lxo,*.stl,*.x,*.ac,*.ms3d,*.mdl,*.md2,.*md3", "", false, &From))
 			return;
 
 		if (!OS::File::IsExists(From.c_str()))
@@ -1425,7 +1425,7 @@ void Sandbox::SetViewModel()
 			if (Target)
 			{
 				String To;
-				if (!OS::Input::Save("Save animation", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized skin animation (*.xml, *.json, *.jsonb)", &To))
+				if (!Alerts::Save("Save animation", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized skin animation (*.xml, *.json, *.jsonb)", &To))
 					return;
 
 				VariantArgs Args;
@@ -1508,14 +1508,14 @@ void Sandbox::SetViewModel()
 		}
 
 		String Path;
-		if (!OS::Input::Save("Save key animation", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized key animation (*.xml, *.json, *.jsonb)", &Path))
+		if (!Alerts::Save("Save key animation", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized key animation (*.xml, *.json, *.jsonb)", &Path))
 			return;
 
 		Schema* Result = Var::Set::Object();
 		Result->Key = "key-animation";
 
 		auto* Animator = Selection.Entity->GetComponent<Components::KeyAnimator>();
-		Series::Pack(Result, Animator->Clips);
+		HeavySeries::Pack(Result, Animator->Clips);
 
 		VariantArgs Map;
 		if (Stringify::EndsWith(Path, ".jsonb"))
@@ -1626,7 +1626,7 @@ void Sandbox::SetViewModel()
 	State.System->SetCallback("close_scene", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
 		String Path;
-		if (!OS::Input::Save("Save scene", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized scene (*.xml, *.json, *.jsonb)", &Path))
+		if (!Alerts::Save("Save scene", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized scene (*.xml, *.json, *.jsonb)", &Path))
 			return;
 
 		VariantArgs Map;
@@ -2592,72 +2592,72 @@ void* Sandbox::GetEntityIndex(Entity* Value)
 String Sandbox::GetLabel(Entity* Value)
 {
 	if (Value->GetComponent<Components::Camera>())
-		return "[Camera]";
+		return "[camera]";
 
 	if (Value->GetComponent<Components::Model>())
-		return "[Model]";
+		return "[model]";
 
 	if (Value->GetComponent<Components::Skin>())
-		return "[Skin]";
+		return "[skin]";
 
 	if (Value->GetComponent<Components::Emitter>())
-		return "[Emitter]";
+		return "[emitter]";
 
 	if (Value->GetComponent<Components::Decal>())
-		return "[Decal]";
+		return "[decal]";
 
 	if (Value->GetComponent<Components::PointLight>())
-		return "[Point light]";
+		return "[point light]";
 
 	if (Value->GetComponent<Components::SpotLight>())
-		return "[Spot light]";
+		return "[spot light]";
 
 	if (Value->GetComponent<Components::LineLight>())
-		return "[Line light]";
+		return "[line light]";
 
 	if (Value->GetComponent<Components::SurfaceLight>())
-		return "[Surface light]";
+		return "[surface light]";
 
 	if (Value->GetComponent<Components::Illuminator>())
-		return "[Illuminator]";
+		return "[illuminator]";
 
 	if (Value->GetComponent<Components::AudioListener>())
-		return "[Audio listener]";
+		return "[audio listener]";
 
 	if (Value->GetComponent<Components::AudioSource>())
-		return "[Audio source]";
+		return "[audio source]";
 
 	if (Value->GetComponent<Components::RigidBody>())
-		return "[Rigid body]";
+		return "[rigid body]";
 
 	if (Value->GetComponent<Components::SoftBody>())
-		return "[Soft body]";
+		return "[soft body]";
 
 	if (Value->GetComponent<Components::SliderConstraint>())
-		return "[Slider constraint]";
+		return "[slider constraint]";
 
 	if (Value->GetComponent<Components::Acceleration>())
-		return "[Acceleration]";
+		return "[acceleration]";
 
 	if (Value->GetComponent<Components::KeyAnimator>())
-		return "[Key animator]";
+		return "[key animator]";
 
 	if (Value->GetComponent<Components::SkinAnimator>())
-		return "[Skin animator]";
+		return "[skin animator]";
 
 	if (Value->GetComponent<Components::EmitterAnimator>())
-		return "[Emitter animator]";
+		return "[emitter animator]";
 
 	if (Value->GetComponent<Components::Fly>())
-		return "[Fly]";
+		return "[fly]";
 
 	if (Value->GetComponent<Components::FreeLook>())
-		return "[Free look]";
+		return "[free look]";
 
 	if (Value->GetComponent<Components::Scriptable>())
-		return "[Scriptable]";
+		return "[scriptable]";
 
-	return "[Empty]";
+	return "[empty]";
 }
 String Sandbox::GetName(Entity* Value)
 {

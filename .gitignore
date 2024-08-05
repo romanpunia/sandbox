@@ -1,7 +1,5 @@
 .idea/
 .git/
-debug/
-release/
 bin/content/shaders/
 bin/*.so
 bin/*.a

@@ -14,7 +14,7 @@ enum Inspector
 	Inspector_ImportAnimation
 };
 
-class Sandbox : public Application
+class Sandbox : public HeavyApplication
 {
 public:
     struct
@@ -104,7 +104,7 @@ public:
 	} States;
 
 public:
-	explicit Sandbox(Application::Desc* Conf, const String& Path = "");
+	explicit Sandbox(HeavyApplication::Desc* Conf, const String& Path = "");
 	~Sandbox() override;
 	void KeyEvent(KeyCode Key, KeyMod Mod, int Virtual, int Repeat, bool Pressed) override;
 	void WindowEvent(WindowState State, int X, int Y) override;

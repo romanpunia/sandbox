@@ -154,7 +154,7 @@ void ResolveModel(GUI::Context* UI, const String& Id, Components::Model* Output,
 			ResolveResource(Source, "model", [Output](const String& File)
 			{
 				auto* App = ((Sandbox*)Sandbox::Get());
-				auto Instance = App->Content->Load<Vitex::Engine::Model>(File);
+				auto Instance = App->Content->Load<Vitex::Layer::Model>(File);
 				Output->SetDrawable(Instance.Or(nullptr));
 				App->SetMetadata(Output->GetEntity());
 				if (Instance)
@@ -190,7 +190,7 @@ void ResolveSkin(GUI::Context* UI, const String& Id, Components::Skin* Output, b
 			ResolveResource(Source, "model", [Output](const String& File)
 			{
 				auto* App = ((Sandbox*)Sandbox::Get());
-				auto Instance = App->Content->Load<Vitex::Engine::SkinModel>(File);
+				auto Instance = App->Content->Load<Vitex::Layer::SkinModel>(File);
 				Output->SetDrawable(Instance.Or(nullptr));
 				App->SetMetadata(Output->GetEntity());
 				if (Instance)

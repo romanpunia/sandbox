@@ -2,13 +2,13 @@
 #define DEMO_H
 #include "../core/globals.h"
 
-class Demo : public Application
+class Demo : public HeavyApplication
 {
 private:
 	static String Source;
 
 public:
-	explicit Demo(Application::Desc* Conf);
+	explicit Demo(HeavyApplication::Desc* Conf);
 	~Demo() override;
 	void WindowEvent(WindowState State, int X, int Y) override;
 	void Initialize() override;
