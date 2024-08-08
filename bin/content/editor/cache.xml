@@ -272,19 +272,19 @@
 					<id i="-235292805" />
 					<active b="true" />
 					<metadata>
-						<projection m11="1" m12="0" m13="0" m14="0" m21="0" m22="1" m23="0" m24="0" m31="0" m32="0" m33="1.0016694068908691" m34="1" m41="0" m42="0" m43="-0.1001669391989708" m44="0" />
+						<projection m11="1" m12="0" m13="0" m14="0" m21="0" m22="1" m23="0" m24="0" m31="0" m32="0" m33="1.0020040273666382" m34="1" m41="0" m42="0" m43="-0.10020039975643158" m44="0" />
 						<view m11="1" m12="0" m13="0" m14="0" m21="0" m22="1" m23="0" m24="0" m31="0" m32="0" m33="1" m34="0" m41="-2" m42="10" m43="0" m44="1" />
 						<size>
-							<radius n="50" />
-							<c1 n="0.6299999952316284" />
-							<c2 n="0.5199999809265137" />
+							<radius n="30" />
+							<c1 n="0.7329999804496765" />
+							<c2 n="0.7519999742507935" />
 						</size>
 						<diffuse x="1" y="1" z="1" />
 						<emission n="5.199999809265137" />
-						<disperse n="0.019999999552965164" />
-						<shadow-softness n="20" />
-						<shadow-distance n="60" />
-						<shadow-bias n="0" />
+						<disperse n="0.5199999809265137" />
+						<shadow-softness n="40" />
+						<shadow-distance n="50" />
+						<shadow-bias n="-0.0020000000949949026" />
 						<shadow-iterations i="64" />
 						<shadow-enabled b="true" />
 					</metadata>
@@ -295,8 +295,8 @@
 			<name s="camera" />
 			<refer i="9" />
 			<transform>
-				<position x="-26" y="10" z="0" />
-				<rotation x="0.17453299462795258" y="4.712388038635254" z="0" />
+				<position x="-28.937763214111328" y="9.962371826171875" z="8.102730751037598" />
+				<rotation x="0.33500006794929504" y="-2.0149998664855957" z="0" />
 				<scale x="1" y="1" z="1" />
 				<scaling b="false" />
 			</transform>
@@ -330,7 +330,7 @@
 								<metadata>
 									<sky-map s="" />
 									<high-emission x="0" y="0" z="0" />
-									<low-emission x="0.06274499744176865" y="0.06274499744176865" z="0.06274499744176865" />
+									<low-emission x="0" y="0" z="0" />
 									<sky-emission n="0" />
 									<light-emission n="1" />
 									<sky-color x="1" y="1" z="1" />
@@ -352,8 +352,8 @@
 								<metadata>
 									<samples-1 n="4" />
 									<scale n="0.10000000149011612" />
-									<intensity n="2" />
-									<bias n="0.550000011920929" />
+									<intensity n="1" />
+									<bias n="0.3499999940395355" />
 									<radius n="0.10000000149011612" />
 									<distance n="4" />
 									<fade n="2" />
@@ -368,13 +368,24 @@
 								<metadata>
 									<samples-1 n="16" />
 									<samples-2 n="32" />
-									<cutoff-1 n="-0.30000001192092896" />
+									<cutoff-1 n="0.4000000059604645" />
 									<cutoff-2 n="0.949999988079071" />
 									<attenuation n="1" />
-									<swing n="1" />
-									<bias n="3" />
+									<swing n="0.8999999761581421" />
+									<bias n="1.7000000476837158" />
 									<distance n="10" />
-									<blur n="16" />
+									<blur n="8" />
+								</metadata>
+							</renderer>
+							<renderer>
+								<id i="-1394425869" />
+								<active b="false" />
+								<metadata>
+									<intensity n="64" />
+									<threshold n="0.9800000190734863" />
+									<power n="1" />
+									<samples n="16" />
+									<blur n="64" />
 								</metadata>
 							</renderer>
 							<renderer>
@@ -392,28 +403,17 @@
 								</metadata>
 							</renderer>
 							<renderer>
-								<id i="-1394425869" />
-								<active b="true" />
-								<metadata>
-									<intensity n="16" />
-									<threshold n="0.9300000071525574" />
-									<power n="1" />
-									<samples n="14" />
-									<blur n="64" />
-								</metadata>
-							</renderer>
-							<renderer>
 								<id i="-3694976591" />
 								<active b="true" />
 								<metadata>
 									<grayscale n="-0.11999999731779099" />
-									<aces n="0.6000000238418579" />
-									<filmic n="-0.11999999731779099" />
-									<lottes n="0.10899999737739563" />
-									<reinhard n="-0.09000000357627869" />
-									<reinhard2 n="-0.029999999329447746" />
-									<unreal n="-0.12999999523162842" />
-									<uchimura n="1" />
+									<aces n="0.3499999940395355" />
+									<filmic n="-0.30000001192092896" />
+									<lottes n="0.10000000149011612" />
+									<reinhard n="-0.25" />
+									<reinhard2 n="0.30000001192092896" />
+									<unreal n="0" />
+									<uchimura n="0" />
 									<ubrightness n="2" />
 									<usontrast n="1" />
 									<ustart n="0.8199999928474426" />
@@ -421,11 +421,11 @@
 									<ublack n="1.1299999952316284" />
 									<upedestal n="0.05000000074505806" />
 									<exposure n="0" />
-									<eintensity n="0.8999999761581421" />
-									<egamma n="2.200000047683716" />
-									<adaptation n="0" />
-									<agray n="1" />
-									<awhite n="1" />
+									<eintensity n="3" />
+									<egamma n="1" />
+									<adaptation n="1" />
+									<agray n="0.8999999761581421" />
+									<awhite n="0.800000011920929" />
 									<ablack n="0.05000000074505806" />
 									<aspeed n="2" />
 								</metadata>
