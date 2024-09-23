@@ -30,8 +30,9 @@
 		<material i="0" s="./materials/red-wall.xml" />
 		<material i="1" s="./materials/lamp.xml" />
 		<material i="2" s="./materials/wall.xml" />
-		<material i="3" s="./materials/box.xml" />
+		<material i="3" s="./materials/bump.xml" />
 		<material i="4" s="./materials/green-wall.xml" />
+		<material i="5" s="./materials/monkey.xml" />
 	</materials>
 	<entities>
 		<entity>
@@ -203,12 +204,12 @@
 			</components>
 		</entity>
 		<entity>
-			<name s="long-box" />
+			<name s="box" />
 			<refer i="6" />
 			<transform>
-				<position x="1.7818560600280762" y="2" z="-3.0833373069763184" />
-				<rotation x="0" y="-1.0471980571746826" z="-0" />
-				<scale x="3" y="6" z="3" />
+				<position x="3" y="-1.5" z="-3" />
+				<rotation x="1.570796251296997" y="0.5759586691856384" z="-0" />
+				<scale x="2.200000047683716" y="4" z="2.4000000953674316" />
 				<scaling b="false" />
 			</transform>
 			<components>
@@ -231,11 +232,11 @@
 			</components>
 		</entity>
 		<entity>
-			<name s="short-box" />
+			<name s="monkey" />
 			<refer i="7" />
 			<transform>
-				<position x="-3.004456043243408" y="-1" z="4.718419075012207" />
-				<rotation x="0" y="-0.5235990285873413" z="0" />
+				<position x="-4.756983280181885" y="-2.4483723640441895" z="5.152559280395508" />
+				<rotation x="2.7928717136383057" y="-0.9265113472938538" z="2.7902333736419678" />
 				<scale x="3" y="3" z="3" />
 				<scaling b="false" />
 			</transform>
@@ -244,14 +245,14 @@
 					<id i="-2412263228" />
 					<active b="true" />
 					<metadata>
-						<model s="./models/cube.obj" />
+						<model s="./models/monkey.obj" />
 						<texcoord x="1" y="1" />
 						<category i="0" />
 						<static b="true" />
 						<materials>
 							<material>
-								<name s="Cube" />
-								<slot i="3" />
+								<name s="Suzanne" />
+								<slot i="5" />
 							</material>
 						</materials>
 					</metadata>
@@ -262,7 +263,7 @@
 			<name s="light" />
 			<refer i="8" />
 			<transform>
-				<position x="-2" y="10" z="0" />
+				<position x="0" y="13" z="0" />
 				<rotation x="0" y="0" z="0" />
 				<scale x="1" y="1" z="1" />
 				<scaling b="false" />
@@ -272,19 +273,19 @@
 					<id i="-235292805" />
 					<active b="true" />
 					<metadata>
-						<projection m11="1" m12="0" m13="0" m14="0" m21="0" m22="1" m23="0" m24="0" m31="0" m32="0" m33="1.0016694068908691" m34="1" m41="0" m42="0" m43="-0.1001669391989708" m44="0" />
-						<view m11="1" m12="0" m13="0" m14="0" m21="0" m22="1" m23="0" m24="0" m31="0" m32="0" m33="1" m34="0" m41="-2" m42="10" m43="0" m44="1" />
+						<projection m11="1" m12="0" m13="0" m14="0" m21="0" m22="1" m23="0" m24="0" m31="0" m32="0" m33="1.0020040273666382" m34="1" m41="0" m42="0" m43="-0.10020039975643158" m44="0" />
+						<view m11="1" m12="0" m13="0" m14="0" m21="0" m22="1" m23="0" m24="0" m31="0" m32="0" m33="1" m34="0" m41="0" m42="13" m43="0" m44="1" />
 						<size>
-							<radius n="50" />
-							<c1 n="0.6299999952316284" />
-							<c2 n="0.5199999809265137" />
+							<radius n="30" />
+							<c1 n="0.7329999804496765" />
+							<c2 n="0.7519999742507935" />
 						</size>
 						<diffuse x="1" y="1" z="1" />
-						<emission n="5.400000095367432" />
-						<disperse n="0.11999999731779099" />
-						<shadow-softness n="500" />
-						<shadow-distance n="60" />
-						<shadow-bias n="-0.0010000000474974513" />
+						<emission n="5" />
+						<disperse n="0.12600000202655792" />
+						<shadow-softness n="400" />
+						<shadow-distance n="50" />
+						<shadow-bias n="-0.0005000000237487257" />
 						<shadow-iterations i="64" />
 						<shadow-enabled b="true" />
 					</metadata>
@@ -295,8 +296,8 @@
 			<name s="camera" />
 			<refer i="9" />
 			<transform>
-				<position x="-27.37734031677246" y="11.320052146911621" z="7.491067409515381" />
-				<rotation x="0.40000033378601074" y="-1.9499987363815308" z="0" />
+				<position x="-28.937763214111328" y="9.962371826171875" z="8.102730751037598" />
+				<rotation x="0.33500006794929504" y="-2.0149998664855957" z="0" />
 				<scale x="1" y="1" z="1" />
 				<scaling b="false" />
 			</transform>
@@ -325,12 +326,28 @@
 								<metadata />
 							</renderer>
 							<renderer>
+								<id i="-747052133" />
+								<active b="true" />
+								<metadata>
+									<samples-1 n="4" />
+									<scale n="7" />
+									<intensity n="12" />
+									<bias n="0" />
+									<radius n="0.029999999329447746" />
+									<distance n="4" />
+									<fade n="2" />
+									<power n="1" />
+									<samples-2 n="14" />
+									<blur n="12" />
+								</metadata>
+							</renderer>
+							<renderer>
 								<id i="-2501081933" />
 								<active b="true" />
 								<metadata>
 									<sky-map s="" />
 									<high-emission x="0" y="0" z="0" />
-									<low-emission x="0.06274499744176865" y="0.06274499744176865" z="0.06274499744176865" />
+									<low-emission x="0" y="0" z="0" />
 									<sky-emission n="0" />
 									<light-emission n="1" />
 									<sky-color x="1" y="1" z="1" />
@@ -347,39 +364,23 @@
 								</metadata>
 							</renderer>
 							<renderer>
-								<id i="-747052133" />
-								<active b="true" />
-								<metadata>
-									<samples-1 n="4" />
-									<scale n="0.10000000149011612" />
-									<intensity n="2" />
-									<bias n="0.550000011920929" />
-									<radius n="0.10000000149011612" />
-									<distance n="4" />
-									<fade n="2" />
-									<power n="1" />
-									<samples-2 n="14" />
-									<blur n="12" />
-								</metadata>
-							</renderer>
-							<renderer>
 								<id i="-3375146593" />
 								<active b="true" />
 								<metadata>
 									<samples-1 n="16" />
 									<samples-2 n="32" />
-									<cutoff-1 n="-0.30000001192092896" />
-									<cutoff-2 n="0.949999988079071" />
-									<attenuation n="1" />
-									<swing n="0.8999999761581421" />
-									<bias n="2" />
+									<cutoff-1 n="0" />
+									<cutoff-2 n="0.8199999928474426" />
+									<attenuation n="1.600000023841858" />
+									<swing n="0.36000001430511475" />
+									<bias n="0" />
 									<distance n="10" />
-									<blur n="16" />
+									<blur n="8" />
 								</metadata>
 							</renderer>
 							<renderer>
 								<id i="-2077424530" />
-								<active b="true" />
+								<active b="false" />
 								<metadata>
 									<samples-1 n="32" />
 									<samples-2 n="48" />
@@ -395,10 +396,10 @@
 								<id i="-1394425869" />
 								<active b="true" />
 								<metadata>
-									<intensity n="16" />
-									<threshold n="0.9800000190734863" />
+									<intensity n="64" />
+									<threshold n="0.9900000095367432" />
 									<power n="1" />
-									<samples n="14" />
+									<samples n="16" />
 									<blur n="64" />
 								</metadata>
 							</renderer>
@@ -406,27 +407,27 @@
 								<id i="-3694976591" />
 								<active b="true" />
 								<metadata>
-									<grayscale n="-0.11999999731779099" />
-									<aces n="0.6000000238418579" />
-									<filmic n="-0.11999999731779099" />
-									<lottes n="0.10899999737739563" />
-									<reinhard n="-0.1899999976158142" />
-									<reinhard2 n="-0.12999999523162842" />
-									<unreal n="-0.12999999523162842" />
-									<uchimura n="1" />
-									<ubrightness n="2" />
+									<grayscale n="-0.05000000074505806" />
+									<aces n="-0.30000001192092896" />
+									<filmic n="-0.14000000059604645" />
+									<lottes n="0.20999999344348907" />
+									<reinhard n="0.25" />
+									<reinhard2 n="0.33000001311302185" />
+									<unreal n="0" />
+									<uchimura n="0" />
+									<ubrightness n="1" />
 									<usontrast n="1" />
 									<ustart n="0.8199999928474426" />
 									<ulength n="0.4000000059604645" />
 									<ublack n="1.1299999952316284" />
 									<upedestal n="0.05000000074505806" />
 									<exposure n="0" />
-									<eintensity n="0.8999999761581421" />
-									<egamma n="2.200000047683716" />
+									<eintensity n="1" />
+									<egamma n="1" />
 									<adaptation n="1" />
 									<agray n="1" />
 									<awhite n="1" />
-									<ablack n="0.4000000059604645" />
+									<ablack n="0.05000000074505806" />
 									<aspeed n="2" />
 								</metadata>
 							</renderer>

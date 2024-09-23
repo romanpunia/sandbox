@@ -1,0 +1,17 @@
+<material>
+	<emission x="1" y="1" z="1" w="11" />
+	<metallic x="0" y="1" z="1" w="0" />
+	<penetration x="1" y="0" z="0" w="0" />
+	<diffuse x="1" y="1" z="1" />
+	<scattering x="1" y="1" z="1" />
+	<roughness x="1" y="0" />
+	<occlusion x="0" y="0" />
+	<fresnel n="0" />
+	<refraction n="0" />
+	<transparency n="0" />
+	<environment n="0" />
+	<radius n="0.5" />
+	<height n="0" />
+	<bias n="0" />
+	<name s="bump" />
+</material>

@@ -1,6 +1,6 @@
 .idea/
 .git/
-bin/content/shaders/
+bin/content/shaders/*
 bin/*.so
 bin/*.a
 bin/*.dylib

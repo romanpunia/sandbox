@@ -16,7 +16,6 @@ Sandbox::Sandbox(HeavyApplication::Desc* Conf, const String& Path) : HeavyApplic
 Sandbox::~Sandbox()
 {
 	SetLogging(false);
-	Memory::Release(State.Directory);
 	Memory::Release(Icons.Empty);
 	Memory::Release(Icons.Animation);
 	Memory::Release(Icons.Body);
@@ -106,7 +105,6 @@ void Sandbox::Initialize()
 	State.IsDraggable = false;
 	State.IsDragHovered = false;
 	State.IsCaptured = false;
-	State.Directory = nullptr;
 	State.GUI = FetchUI();
 	State.GUI->SetMountCallback([this](GUI::Context*)
 	{
@@ -121,7 +119,6 @@ void Sandbox::Initialize()
 	State.Status = "Ready";
 	State.ElementsLimit = 1024;
 	State.MeshImportOpts = (uint32_t)Processors::MeshPreset::Default;
-	Selection.Directory = nullptr;
 
 	auto Document = State.GUI->LoadDocument("editor/ui/layout.html", true);
 	if (!Document)
@@ -130,13 +127,20 @@ void Sandbox::Initialize()
 		return Stop();
 	}
 
+	auto* SceneProcessor = (Processors::SceneGraphProcessor*)Content->GetProcessor<SceneGraph>();
+	SceneProcessor->SetupCallback = [this](SceneGraph* Scene)
+	{
+		Scene->ClearListener("mutation", nullptr);
+		Scene->SetListener("mutation", std::bind(&Sandbox::UpdateMutation, this, std::placeholders::_1, std::placeholders::_2));
+	};
+
 	Document->Show();
 	Resource.NextPath = "./scenes/demo.xml";
 	ErrorHandling::SetFlag(LogOption::Async, false);
 	Demo::SetSource("");
 	SetLogging(true);
 	UpdateScene();
-	UpdateProject();
+	UpdateFiles(Resource.CurrentPath);
 	SetStatus("Initialization done");
 
 	Activity->SetIcon(Favicons.Sandbox);
@@ -395,25 +399,6 @@ void Sandbox::UnloadCamera()
 		Scene->DeleteEntity(State.Camera);
 	State.Camera = nullptr;
 }
-void Sandbox::UpdateProject()
-{
-	SetStatus("Project's hierarchy was updated");
-	String Directory = "";
-	if (Selection.Directory != nullptr)
-	{
-		Directory = Selection.Directory->Path;
-		Selection.Directory = nullptr;
-	}
-
-	Memory::Release(State.Directory);
-	State.Directory = new FileTree(Resource.CurrentPath);
-	if (!State.Directories)
-		return;
-
-	State.Directories->Clear();
-	SetContents(State.Directory);
-	State.Directories->SortTree();
-}
 void Sandbox::UpdateScene()
 {
 	SetSelection(Inspector_None);
@@ -446,7 +431,6 @@ void Sandbox::UpdateScene()
 	else
 		SetStatus("Scene was loaded");
 
-	Scene->SetListener("mutation", std::bind(&Sandbox::UpdateMutation, this, std::placeholders::_1, std::placeholders::_2));
 	Resource.ScenePath = Resource.NextPath;
 	Resource.NextPath.clear();
 	LoadCamera();
@@ -750,13 +734,13 @@ void Sandbox::UpdateMutation(const std::string_view& Name, VariantArgs& Args)
 	else if (Args.find("material") != Args.end())
 	{
 		Material* Base = (Material*)Args["material"].GetPointer();
-		if (!Base || !State.Materials)
+		if (!Base || !State.Materials || (Scene && Base == Scene->GetInvalidMaterial()))
 			return;
 
 		for (size_t i = 0; i < State.Materials->Size(); i++)
 		{
 			GUI::DataNode& Node = State.Materials->At(i);
-			if (Node.At(0).GetInteger() == Base->Slot)
+			if (GUI::IElement::ToPointer(Node.At(0).GetString()) == (void*)Base)
 			{
 				State.Materials->Remove(i);
 				break;
@@ -767,17 +751,46 @@ void Sandbox::UpdateMutation(const std::string_view& Name, VariantArgs& Args)
 			return;
 
 		VariantList Item;
-		Item.emplace_back(std::move(Var::Integer(Base->Slot)));
-		Item.emplace_back(std::move(Var::String(Base->GetName().empty() ? "Material #" + ToString(Base->Slot) : Base->GetName())));
 		Item.emplace_back(std::move(Var::String(GUI::IElement::FromPointer((void*)Base))));
+		Item.emplace_back(std::move(Var::String(Base->GetName().empty() ? "Unnamed material" : Base->GetName())));
 		State.Materials->Add(Item);
+	}
+}
+void Sandbox::UpdateFiles(const String& Path, int64_t Depth)
+{
+	if (Depth <= 0)
+		State.Directories->Clear();
+
+	Vector<std::pair<String, FileEntry>> Files;
+	if (!OS::Directory::Scan(Path, Files) || Files.empty())
+		return;
+
+	String Subpath = Path;
+	for (auto& File : Files)
+	{
+		if (Depth <= 0 && (File.first == "editor" || File.first == "shaders"))
+			continue;
+		else if (!File.second.IsDirectory)
+			continue;
+
+		auto Top = std::make_pair((void*)(uintptr_t)State.Directories->Size(), (size_t)Depth);
+		String Pathname = Subpath + File.first;
+		String Filename = Pathname;
+		GetPathName(Filename);
+
+		VariantList Item;
+		Item.emplace_back(std::move(Var::String(Filename)));
+		Item.emplace_back(std::move(Var::String(Pathname)));
+		Item.emplace_back(std::move(Var::Integer(Depth)));
+		State.Directories->Add(Item);
+		UpdateFiles(Filename, Depth + 1);
 	}
 }
 void Sandbox::UpdateSystem()
 {
 	State.System->SetBoolean("scene_active", Scene->IsActive());
 	State.System->SetBoolean("sl_resource", !State.Filename.empty());
-	State.System->SetInteger("sl_material", Selection.Material ? Selection.Material->Slot : -1);
+	State.System->SetString("sl_material", GUI::IElement::FromPointer((void*)Selection.Material));
 	State.System->SetString("sl_entity", GUI::IElement::FromPointer((void*)Selection.Entity));
 	State.System->SetString("sl_status", State.Status);
 
@@ -1104,19 +1117,21 @@ void Sandbox::InspectMaterial()
 	}, false);
 
 	ResolveColor3(State.GUI, "mat_diffuse", &Base->Surface.Diffuse);
+	ResolveColor3(State.GUI, "mat_scat", &Base->Surface.Scattering);
 	if (State.GUI->GetElementById("mat_cemn").CastFormColor(&Base->Surface.Emission, false))
 		State.GUI->GetElementById("mat_cemn_color").SetProperty("background-color", Stringify::Text("rgb(%u, %u, %u)", (unsigned int)(Base->Surface.Emission.X * 255.0f), (unsigned int)(Base->Surface.Emission.Y * 255.0f), (unsigned int)(Base->Surface.Emission.Z * 255.0f)));
 
 	if (State.GUI->GetElementById("mat_cmet").CastFormColor(&Base->Surface.Metallic, false))
 		State.GUI->GetElementById("mat_cmet_color").SetProperty("background-color", Stringify::Text("rgb(%u, %u, %u)", (unsigned int)(Base->Surface.Metallic.X * 255.0f), (unsigned int)(Base->Surface.Metallic.Y * 255.0f), (unsigned int)(Base->Surface.Metallic.Z * 255.0f)));
 
+	if (State.GUI->GetElementById("mat_pens").CastFormColor(&Base->Surface.Penetration, false))
+		State.GUI->GetElementById("mat_pens_color").SetProperty("background-color", Stringify::Text("rgb(%u, %u, %u)", (unsigned int)(Base->Surface.Penetration.X * 255.0f), (unsigned int)(Base->Surface.Penetration.Y * 255.0f), (unsigned int)(Base->Surface.Penetration.Z * 255.0f)));
+
 	String Name = Base->GetName();
 	if (State.GUI->GetElementById("mat_name").CastFormString(&Name))
 		Base->SetName(Name);
 
-	State.GUI->GetElementById("mat_scat_x").CastFormFloat(&Base->Surface.Scatter.X);
-	State.GUI->GetElementById("mat_scat_y").CastFormFloat(&Base->Surface.Scatter.Y);
-	State.GUI->GetElementById("mat_scat_z").CastFormFloat(&Base->Surface.Scatter.Z);
+	State.GUI->GetElementById("mat_pensv").CastFormFloat(&Base->Surface.Penetration.W);
 	State.GUI->GetElementById("mat_memn").CastFormFloat(&Base->Surface.Emission.W);
 	State.GUI->GetElementById("mat_mmet").CastFormFloat(&Base->Surface.Metallic.W);
 	State.GUI->GetElementById("mat_rs").CastFormFloat(&Base->Surface.Roughness.X);
@@ -1157,8 +1172,8 @@ void Sandbox::SetViewModel()
 	State.System->SetBoolean("scene_active", false);
 	State.System->SetString("sl_status", "");
 	State.System->SetString("sl_window", "none");
+	State.System->SetString("sl_material", GUI::IElement::FromPointer(nullptr));
 	State.System->SetString("sl_entity", GUI::IElement::FromPointer(nullptr));
-	State.System->SetInteger("sl_material", -1);
 	State.System->SetBoolean("sl_resource", false);
 	State.System->SetBoolean("sl_cmp_model", false);
 	State.System->SetString("sl_cmp_model_mesh", "");
@@ -1321,8 +1336,7 @@ void Sandbox::SetViewModel()
 	});
 	State.System->SetCallback("set_directory", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
-		if (State.Directory != nullptr)
-			SetDirectory((FileTree*)GUI::IElement::ToPointer(Args[0].GetBlob()));
+		SetDirectory(Args[0].GetBlob());
 	});
 	State.System->SetCallback("set_file", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
@@ -1343,7 +1357,8 @@ void Sandbox::SetViewModel()
 		if (Args.size() != 1)
 			return;
 
-		SetSelection(Inspector_Material, Scene->GetMaterial(Args[0].GetInteger()));
+		Material* Base = (Material*)GUI::IElement::ToPointer(Args[0].GetBlob());
+		SetSelection(Inspector_Material, Base);
 	});
 	State.System->SetCallback("save_settings", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
@@ -1448,10 +1463,6 @@ void Sandbox::SetViewModel()
 
 		this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
 		this->Activity->Message.Result(nullptr);
-	});
-	State.System->SetCallback("update_project", [this](GUI::IEvent& Event, const VariantList& Args)
-	{
-		UpdateProject();
 	});
 	State.System->SetCallback("remove_cmp", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
@@ -1647,6 +1658,10 @@ void Sandbox::SetViewModel()
 		this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Scene was saved");
 		this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
 		this->Activity->Message.Result(nullptr);
+	});
+	State.System->SetCallback("update_files", [this](GUI::IEvent& Event, const VariantList& Args)
+	{
+		UpdateFiles(Resource.CurrentPath);
 	});
 	State.System->SetCallback("cancel_file", [this](GUI::IEvent& Event, const VariantList& Args)
 	{
@@ -2237,46 +2252,32 @@ void Sandbox::SetViewModel()
 		}
 	});
 }
-void Sandbox::SetDirectory(FileTree* Base)
+void Sandbox::SetDirectory(const String& Path)
 {
-	Selection.Directory = Base;
-	if (!Selection.Directory)
+	State.Files->Clear();
+	Selection.Pathname = Path;
+
+	Vector<std::pair<String, FileEntry>> Files;
+	if (!OS::Directory::Scan(Selection.Pathname, Files) || Files.empty())
 		return;
 
-	State.Files->Clear();
-	for (auto& Next : Selection.Directory->Files)
+	String Subpath = Path + VI_SPLITTER;
+	for (auto& File : Files)
 	{
-		String Name = Next;
-		GetPathName(Name);
-
-		VariantList Item;
-		Item.emplace_back(std::move(Var::String(Name)));
-		Item.emplace_back(std::move(Var::String(Next)));
-		State.Files->Add(Item);
-	}
-}
-void Sandbox::SetContents(FileTree* Base, int64_t Depth)
-{
-	bool IsRoot = (Base == State.Directory);
-	size_t Index = 1;
-
-	for (auto* Next : Base->Directories)
-	{
-		if (IsRoot && (Stringify::EndsWith(Next->Path, "editor") || Stringify::EndsWith(Next->Path, "shaders")))
+		if (File.second.IsDirectory)
 			continue;
 
-		auto Top = std::make_pair((void*)(uintptr_t)Index++, (size_t)Depth);
-		String Result = Next->Path;
-		GetPathName(Result);
+		String Time = DateTime::SerializeLocal(DateTime(std::chrono::seconds(std::max(File.second.CreationTime, File.second.LastModified))).CurrentOffset(), DateTime::FormatCompactTime());
+		String Pathname = Subpath + File.first;
+		String Filename = Pathname;
+		GetPathName(Filename);
 
 		VariantList Item;
-		Item.emplace_back(std::move(Var::String(Result)));
-		Item.emplace_back(std::move(Var::String(GUI::IElement::FromPointer((void*)Next))));
-		Item.emplace_back(std::move(Var::Integer(Depth)));
-		State.Directories->Add(Item);
-
-		float D = (float)Depth + 1;
-		SetContents(Next, Depth + 1);
+		Item.emplace_back(std::move(Var::String(Pathname)));
+		Item.emplace_back(std::move(Var::String(Filename)));
+		Item.emplace_back(std::move(Var::String(Stringify::Text("%.2f KB", (double)File.second.Size / 1000.0))));
+		Item.emplace_back(std::move(Var::String(Time)));
+		State.Files->Add(Item);
 	}
 }
 void Sandbox::SetSelection(Inspector Window, void* Object)

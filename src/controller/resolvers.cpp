@@ -9,12 +9,11 @@ void ResolveResource(GUI::IElement& Target, const String& Name, const std::funct
 
 	if (!App->GetResourceState(Name) && !Changed)
 	{
-		Target.SetInnerHTML("Awaiting source...");
-		App->GetResource(Name, [Target, Callback](const String& File)
+		Target.SetInnerHTML(Stringify::Text("[ awaiting %s ... ]", Name.c_str()));
+		App->GetResource(Name, [Name, Target, Callback](const String& File)
 		{
 			GUI::IElement Copy = Target;
-			Copy.SetInnerHTML(File.empty() ? "Assign source" : "Unassign source");
-
+			Copy.SetInnerHTML(Stringify::Text("[ %s %s ]", File.empty() ? "setup" : "change", Name.c_str()));
 			Callback(File);
 		});
 	}
@@ -32,12 +31,11 @@ void ResolveEntity(GUI::IElement& Target, const String& Name, const std::functio
 
 	if (!App->GetEntityState(Name) && !Changed)
 	{
-		Target.SetInnerHTML("Awaiting entity...");
+		Target.SetInnerHTML("[ awaiting entity ... ]");
 		App->GetEntity(Name, [Target, Callback](Entity* Source)
 		{
 			GUI::IElement Copy = Target;
-			Copy.SetInnerHTML(!Source ? "Assign entity" : "Unassign entity");
-
+			Copy.SetInnerHTML(Stringify::Text("[ %s entity ]", Source ? "change" : "setup"));
 			Callback(Source);
 		});
 	}
@@ -61,14 +59,14 @@ void ResolveTexture2D(GUI::Context* UI, const String& Id, bool Assigned, const s
 		}
 		else
 		{
-			Source.SetInnerHTML("Assign source");
+			Source.SetInnerHTML("[ setup texture ]");
 			Callback(nullptr);
 		}
 	}
 	else if (Source.GetInnerHTML().empty() || Changed)
 	{
 		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
-		Source.SetInnerHTML(Assigned ? "Unassign source" : "Assign source");
+		Source.SetInnerHTML(Stringify::Text("[ %s texture ]", Assigned ? "change" : "setup"));
 	}
 }
 void ResolveKeyCode(GUI::Context* UI, const String& Id, KeyMap* Output, bool Changed)
@@ -81,7 +79,7 @@ void ResolveKeyCode(GUI::Context* UI, const String& Id, KeyMap* Output, bool Cha
 	if (Output->Normal && !Changed)
 	{
 		if (Source.GetInnerHTML().empty())
-			Source.SetInnerHTML("Waiting for input...");
+			Source.SetInnerHTML("[ awaiting input ... ]");
 
 		App->State.IsCaptured = true;
 		if (Source.IsActive())
@@ -109,7 +107,7 @@ void ResolveKeyCode(GUI::Context* UI, const String& Id, KeyMap* Output, bool Cha
 			else if (KeyCode.empty() && !KeyMod.empty())
 				Source.SetInnerHTML(Stringify::Text("%s", KeyMod.data()));
 			else
-				Source.SetInnerHTML("None");
+				Source.SetInnerHTML("[ none ]");
 		}
 
 		if (Source.IsActive())
@@ -163,14 +161,14 @@ void ResolveModel(GUI::Context* UI, const String& Id, Components::Model* Output,
 		}
 		else
 		{
-			Source.SetInnerHTML("Assign source");
+			Source.SetInnerHTML("[ setup model ]");
 			Output->SetDrawable(nullptr);
 		}
 	}
 	else if (Source.GetInnerHTML().empty() || Changed)
 	{
 		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
-		Source.SetInnerHTML(Output->GetDrawable() ? "Unassign source" : "Assign source");
+		Source.SetInnerHTML(Stringify::Text("[ %s model ]", Output->GetDrawable() ? "change" : "setup"));
 	}
 }
 void ResolveSkin(GUI::Context* UI, const String& Id, Components::Skin* Output, bool Changed)
@@ -187,7 +185,7 @@ void ResolveSkin(GUI::Context* UI, const String& Id, Components::Skin* Output, b
 	{
 		if (!Output->GetDrawable())
 		{
-			ResolveResource(Source, "model", [Output](const String& File)
+			ResolveResource(Source, "skin", [Output](const String& File)
 			{
 				auto* App = ((Sandbox*)Sandbox::Get());
 				auto Instance = App->Content->Load<Vitex::Layer::SkinModel>(File);
@@ -199,14 +197,14 @@ void ResolveSkin(GUI::Context* UI, const String& Id, Components::Skin* Output, b
 		}
 		else
 		{
-			Source.SetInnerHTML("Assign source");
+			Source.SetInnerHTML("[ setup skin ]");
 			Output->SetDrawable(nullptr);
 		}
 	}
 	else if (Source.GetInnerHTML().empty() || Changed)
 	{
 		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
-		Source.SetInnerHTML(Output->GetDrawable() ? "Unassign source" : "Assign source");
+		Source.SetInnerHTML(Stringify::Text("[ %s skin ]", Output->GetDrawable() ? "change" : "setup"));
 	}
 }
 void ResolveSoftBody(GUI::Context* UI, const String& Id, Components::SoftBody* Output, bool Changed)
@@ -230,14 +228,14 @@ void ResolveSoftBody(GUI::Context* UI, const String& Id, Components::SoftBody* O
 		}
 		else
 		{
-			Source.SetInnerHTML("Assign source");
+			Source.SetInnerHTML("[ setup soft body ]");
 			Output->Clear();
 		}
 	}
 	else if (Source.GetInnerHTML().empty() || Changed)
 	{
 		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
-		Source.SetInnerHTML(Output->GetBody() ? "Unassign source" : "Assign source");
+		Source.SetInnerHTML(Stringify::Text("[ %s soft body ]", Output->GetBody() ? "change" : "setup"));
 	}
 }
 void ResolveRigidBody(GUI::Context* UI, const String& Id, Components::RigidBody* Output, bool Changed)
@@ -261,14 +259,14 @@ void ResolveRigidBody(GUI::Context* UI, const String& Id, Components::RigidBody*
 		}
 		else
 		{
-			Source.SetInnerHTML("Assign source");
+			Source.SetInnerHTML("[ setup rigid body ]");
 			Output->Clear();
 		}
 	}
 	else if (Source.GetInnerHTML().empty() || Changed)
 	{
 		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
-		Source.SetInnerHTML(Output->GetBody() ? "Unassign source" : "Assign source");
+		Source.SetInnerHTML(Stringify::Text("[ %s rigid body ]", Output->GetBody() ? "change" : "setup"));
 	}
 }
 void ResolveSliderConstraint(GUI::Context* UI, const String& Id, Components::SliderConstraint* Output, bool Ghost, bool Linear, bool Changed)
@@ -292,14 +290,14 @@ void ResolveSliderConstraint(GUI::Context* UI, const String& Id, Components::Sli
 		}
 		else
 		{
-			Source.SetInnerHTML("Assign entity");
+			Source.SetInnerHTML("[ setup slider constraint ]");
 			Output->Clear();
 		}
 	}
 	else if (Source.GetInnerHTML().empty() || Changed)
 	{
 		((Sandbox*)Sandbox::Get())->GetEntity("", nullptr);
-		Source.SetInnerHTML(Output->GetConstraint() ? "Unassign entity" : "Assign entity");
+		Source.SetInnerHTML(Stringify::Text("[ %s slider constraint ]", Output->GetConstraint() ? "change" : "setup"));
 	}
 }
 void ResolveSkinAnimator(GUI::Context* UI, const String& Id, Components::SkinAnimator* Output, bool Changed)
@@ -326,14 +324,14 @@ void ResolveSkinAnimator(GUI::Context* UI, const String& Id, Components::SkinAni
 		}
 		else
 		{
-			Source.SetInnerHTML("Assign source");
+			Source.SetInnerHTML("[ setup skin animation ]");
 			Output->SetAnimation(nullptr);
 		}
 	}
 	else if (Source.GetInnerHTML().empty() || Changed)
 	{
 		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
-		Source.SetInnerHTML(!Output->GetPath().empty() ? "Unassign source" : "Assign source");
+		Source.SetInnerHTML(Stringify::Text("[ %s skin animation ]", Output->GetPath().empty() ? "change" : "setup"));
 	}
 }
 void ResolveKeyAnimator(GUI::Context* UI, const String& Id, Components::KeyAnimator* Output, bool Changed)
@@ -357,14 +355,14 @@ void ResolveKeyAnimator(GUI::Context* UI, const String& Id, Components::KeyAnima
 		}
 		else
 		{
-			Source.SetInnerHTML("Assign source");
+			Source.SetInnerHTML("[ setup key animation ]");
 			Output->ClearAnimation();
 		}
 	}
 	else if (Source.GetInnerHTML().empty() || Changed)
 	{
 		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
-		Source.SetInnerHTML(!Output->GetPath().empty() ? "Unassign source" : "Assign source");
+		Source.SetInnerHTML(Stringify::Text("[ %s key animation ]", Output->GetPath().empty() ? "change" : "setup"));
 	}
 }
 void ResolveAudioSource(GUI::Context* UI, const String& Id, Components::AudioSource* Output, bool Changed)
@@ -391,14 +389,14 @@ void ResolveAudioSource(GUI::Context* UI, const String& Id, Components::AudioSou
 		}
 		else
 		{
-			Source.SetInnerHTML("Assign source");
+			Source.SetInnerHTML("[ setup audio clip ]");
 			Output->GetSource()->SetClip(nullptr);
 		}
 	}
 	else if (Source.GetInnerHTML().empty() || Changed)
 	{
 		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
-		Source.SetInnerHTML(Output->GetSource()->GetClip() ? "Unassign source" : "Assign source");
+		Source.SetInnerHTML(Stringify::Text("[ %s audio clip ]", Output->GetSource()->GetClip() ? "change" : "setup"));
 	}
 }
 void ResolveScriptable(GUI::Context* UI, const String& Id, Components::Scriptable* Output, bool Changed)
@@ -422,13 +420,13 @@ void ResolveScriptable(GUI::Context* UI, const String& Id, Components::Scriptabl
 		}
 		else
 		{
-			Source.SetInnerHTML("Assign source");
+			Source.SetInnerHTML("[ setup script ]");
 			Output->UnloadSource();
 		}
 	}
 	else if (Source.GetInnerHTML().empty() || Changed)
 	{
 		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
-		Source.SetInnerHTML(!Output->GetSource().empty() ? "Unassign source" : "Assign source");
+		Source.SetInnerHTML(Stringify::Text("[ %s script ]", Output->GetSource().empty() ? "change" : "setup"));
 	}
 }

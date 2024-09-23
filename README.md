@@ -4,10 +4,13 @@
   <br>
   <br>
   <img src="https://github.com/romanpunia/sandbox/blob/master/var/screenshot2.png?raw=true" alt="Screenshot 2" width="640" />
+  <br>
+  <br>
+  <img src="https://github.com/romanpunia/sandbox/blob/master/var/screenshot3.png?raw=true" alt="Screenshot 3" width="640" />
 </p>
 
 ## About
-Sandbox is a simple (or even primitive) scene editor for Vengeance.
+Sandbox is a primitive scene editor tool for Vengeance Engine.
 
 ## Dependencies
 * [LibGizmo (embedded)](https://github.com/CedricGuillemet/LibGizmo)

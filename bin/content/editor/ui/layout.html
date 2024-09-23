@@ -63,7 +63,7 @@
 		</div>
 		<div class="content" data-model="editor">
 			<div class="assets">
-				<p class="header">Resources</p>
+				<p class="header">Directories</p>
 				<span class="offset"></span>
 				<div class="directory-array">
 					<div class="directory-wrapper" data-for="directory : directories.all">
@@ -78,15 +78,17 @@
 					<p>{{ sl_resource ? 'Select file from this directory' : 'Directory' }}</p>
 					<button data-if="sl_resource" data-event-click="cancel_file">Cancel</button>
 				</div>
-				<div class="menu">
-					<div style="height: 100%;">
-						<div class="file-wrapper" data-for="file : files.all">
-							<p class="file" data-event-click="set_file(file.at[1].str)">{{ file.at[0].str }}</p>
+				<div class="menu" data-if="files.size > 0">
+					<div class="file-wrapper" data-for="file : files.all" data-event-click="set_file(file.at[0].str)">
+						<p class="file">{{ file.at[1].str }}</p>
+						<div class="file-info">
+							<p class="file" style="margin-right: 8px; color: #f30;">{{ file.at[2].str }}</p>
+							<p class="file">{{ file.at[3].str }}</p>
 						</div>
 					</div>
 				</div>
 				<div class="menu" data-if="files.size <= 0">
-					<p class="message">Empty directory</p>
+					<p class="message">No files here</p>
 				</div>
 			</div>
 		</div>

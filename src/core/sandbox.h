@@ -20,12 +20,12 @@ public:
     struct
     {
 		uint64_t Move = 0;
-        FileTree* Directory = nullptr;
         Material* Material = nullptr;
 		Entity* Might = nullptr;
         Entity* Entity = nullptr;
         IGizmo* Gizmo = nullptr;
         Inspector Window = Inspector_None;
+		String Pathname;
     } Selection;
 
     struct
@@ -40,7 +40,6 @@ public:
 		GUI::DataNode* Directories = nullptr;
 		GUI::DataNode* Files = nullptr;
 		GUI::Context* GUI = nullptr;
-		FileTree* Directory = nullptr;
 		Entity* Camera = nullptr;
 		Entity* Draggable = nullptr;
 		Transform::Spacing Space;
@@ -113,10 +112,10 @@ public:
 	void Publish(Timer* Time) override;
 	void LoadCamera();
 	void UnloadCamera();
-    void UpdateProject();
     void UpdateScene();
 	void UpdateGrid(Timer* Time);
 	void UpdateMutation(const std::string_view& Name, VariantArgs& Args);
+	void UpdateFiles(const String& Path, int64_t Depth = 0);
 	void UpdateSystem();
 	void InspectEntity();
 	void InspectSettings();
@@ -124,8 +123,7 @@ public:
 	void InspectMaterial();
 	void SetLogging(bool Active);
 	void SetViewModel();
-	void SetDirectory(FileTree* Base);
-	void SetContents(FileTree* Base, int64_t Depth = 0);
+	void SetDirectory(const String& Path);
 	void SetSelection(Inspector Window, void* Object = nullptr);
 	void SetStatus(const String& Status);
 	void SetMutation(Entity* Parent, const std::string_view& Type);

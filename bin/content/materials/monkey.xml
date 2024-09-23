@@ -1,0 +1,17 @@
+<material>
+	<emission x="1" y="1" z="1" w="0" />
+	<metallic x="0.06666667014360428" y="0.06666667014360428" z="0.06666667014360428" w="0" />
+	<penetration x="0" y="1" z="0" w="0.36000001430511475" />
+	<diffuse x="0" y="1" z="0" />
+	<scattering x="1" y="1" z="1" />
+	<roughness x="0.800000011920929" y="0" />
+	<occlusion x="10" y="0" />
+	<fresnel n="0.05000000074505806" />
+	<refraction n="0" />
+	<transparency n="0" />
+	<environment n="0" />
+	<radius n="0.30000001192092896" />
+	<height n="0" />
+	<bias n="0" />
+	<name s="monkey" />
+</material>
