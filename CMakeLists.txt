@@ -54,8 +54,6 @@ endif()
 
 #Add Vitex as dependency
 add_subdirectory(${VI_DIRECTORY} vitex)
-link_directories(${VI_DIRECTORY})
-target_include_directories(sandbox PRIVATE ${VI_DIRECTORY})
 target_link_libraries(sandbox PRIVATE vitex)
 
 #Project's source resolvers
