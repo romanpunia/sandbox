@@ -2,19 +2,19 @@
 #define RESOLVERS_H
 #include "../core/globals.h"
 
-extern void ResolveResource(GUI::IElement& Target, const String& Name, const std::function<void(const String&)>& Callback, bool Changed);
-extern void ResolveEntity(GUI::IElement& Target, const String& Name, const std::function<void(Entity*)>& Callback, bool Changed);
-extern void ResolveTexture2D(GUI::Context* UI, const String& Id, bool Assigned, const std::function<void(Texture2D*)>& Callback, bool Changed);
-extern void ResolveKeyCode(GUI::Context* UI, const String& Id, KeyMap* Output, bool Changed);
-extern bool ResolveColor4(GUI::Context* UI, const String& Id, Vector4* Output);
-extern bool ResolveColor3(GUI::Context* UI, const String& Id, Vector3* Output);
-extern void ResolveModel(GUI::Context* UI, const String& Id, Components::Model* Output, bool Changed);
-extern void ResolveSkin(GUI::Context* UI, const String& Id, Components::Skin* Output, bool Changed);
-extern void ResolveSoftBody(GUI::Context* UI, const String& Id, Components::SoftBody* Output, bool Changed);
-extern void ResolveRigidBody(GUI::Context* UI, const String& Id, Components::RigidBody* Output, bool Changed);
-extern void ResolveSliderConstraint(GUI::Context* UI, const String& Id, Components::SliderConstraint* Output, bool Ghost, bool Linear, bool Changed);
-extern void ResolveSkinAnimator(GUI::Context* UI, const String& Id, Components::SkinAnimator* Output, bool Changed);
-extern void ResolveKeyAnimator(GUI::Context* UI, const String& Id, Components::KeyAnimator* Output, bool Changed);
-extern void ResolveAudioSource(GUI::Context* UI, const String& Id, Components::AudioSource* Output, bool Changed);
-extern void ResolveScriptable(GUI::Context* UI, const String& Id, Components::Scriptable* Output, bool Changed);
+extern void resolve_resource(gui::ielement& target, const string& name, const std::function<void(const string&)>& callback, bool changed);
+extern void resolve_entity(gui::ielement& target, const string& name, const std::function<void(entity*)>& callback, bool changed);
+extern void resolve_texture_2d(gui::context* ui, const string& id, bool assigned, const std::function<void(texture_2d*)>& callback, bool changed);
+extern void resolve_key_code(gui::context* ui, const string& id, key_map* output, bool changed);
+extern bool resolve_color4(gui::context* ui, const string& id, vitex::trigonometry::vector4* output);
+extern bool resolve_color3(gui::context* ui, const string& id, vitex::trigonometry::vector3* output);
+extern void resolve_model(gui::context* ui, const string& id, components::model* output, bool changed);
+extern void resolve_skin(gui::context* ui, const string& id, components::skin* output, bool changed);
+extern void resolve_soft_body(gui::context* ui, const string& id, components::soft_body* output, bool changed);
+extern void resolve_rigid_body(gui::context* ui, const string& id, components::rigid_body* output, bool changed);
+extern void resolve_slider_constraint(gui::context* ui, const string& id, components::slider_constraint* output, bool ghost, bool linear, bool changed);
+extern void resolve_skin_animator(gui::context* ui, const string& id, components::skin_animator* output, bool changed);
+extern void resolve_key_animator(gui::context* ui, const string& id, components::key_animator* output, bool changed);
+extern void resolve_audio_source(gui::context* ui, const string& id, components::audio_source* output, bool changed);
+extern void resolve_scriptable(gui::context* ui, const string& id, components::scriptable* output, bool changed);
 #endif

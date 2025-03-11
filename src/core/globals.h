@@ -9,12 +9,12 @@
 #include <vengeance/audio/effects.h>
 #include <vengeance/audio/filters.h>
 
-using namespace Vitex::Core;
-using namespace Vitex::Audio;
-using namespace Vitex::Compute;
-using namespace Vitex::Layer;
-using namespace Vitex::Graphics;
-using namespace Vitex::Scripting;
-using namespace Vitex::Trigonometry;
-using namespace Vitex::Physics;
+using namespace vitex::core;
+using namespace vitex::audio;
+using namespace vitex::compute;
+using namespace vitex::layer;
+using namespace vitex::graphics;
+using namespace vitex::scripting;
+using namespace vitex::trigonometry;
+using namespace vitex::physics;
 #endif

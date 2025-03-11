@@ -8,8 +8,6 @@
 		<grow-margin i="128" />
 		<grow-rate n="0" />
 		<max-updates i="256" />
-		<voxels-size i="128" />
-		<voxels-max i="4" />
 		<points-size i="256" />
 		<points-max i="4" />
 		<spots-size i="512" />
@@ -38,14 +36,14 @@
 			<name s="floor" />
 			<refer i="0" />
 			<transform>
-				<position x="0" y="-5" z="-0" />
+				<position x="0" y="-5" z="0" />
 				<rotation x="0" y="0" z="0" />
 				<scale x="10" y="1" z="12" />
 				<scaling b="false" />
 			</transform>
 			<components>
 				<component>
-					<id i="-2412263228" />
+					<typename s="model_component" />
 					<active b="true" />
 					<metadata>
 						<model s="./models/cube.obj" />
@@ -66,14 +64,14 @@
 			<name s="ceil" />
 			<refer i="1" />
 			<transform>
-				<position x="0" y="17" z="-0" />
+				<position x="0" y="17" z="0" />
 				<rotation x="0" y="0" z="0" />
 				<scale x="10" y="1" z="12" />
 				<scaling b="false" />
 			</transform>
 			<components>
 				<component>
-					<id i="-2412263228" />
+					<typename s="model_component" />
 					<active b="true" />
 					<metadata>
 						<model s="./models/cube.obj" />
@@ -101,7 +99,7 @@
 			</transform>
 			<components>
 				<component>
-					<id i="-2412263228" />
+					<typename s="model_component" />
 					<active b="true" />
 					<metadata>
 						<model s="./models/cube.obj" />
@@ -123,13 +121,13 @@
 			<refer i="3" />
 			<transform>
 				<position x="0" y="6" z="-11" />
-				<rotation x="-1.570796012878418" y="-0" z="-0" />
+				<rotation x="-1.570796012878418" y="0" z="0" />
 				<scale x="10" y="1" z="10" />
 				<scaling b="false" />
 			</transform>
 			<components>
 				<component>
-					<id i="-2412263228" />
+					<typename s="model_component" />
 					<active b="true" />
 					<metadata>
 						<model s="./models/cube.obj" />
@@ -151,13 +149,13 @@
 			<refer i="4" />
 			<transform>
 				<position x="0" y="6" z="11" />
-				<rotation x="-1.570796012878418" y="-0" z="-0" />
+				<rotation x="-1.570796012878418" y="0" z="0" />
 				<scale x="10" y="1" z="10" />
 				<scaling b="false" />
 			</transform>
 			<components>
 				<component>
-					<id i="-2412263228" />
+					<typename s="model_component" />
 					<active b="true" />
 					<metadata>
 						<model s="./models/cube.obj" />
@@ -178,14 +176,14 @@
 			<name s="lamp" />
 			<refer i="5" />
 			<transform>
-				<position x="0" y="16" z="-0" />
+				<position x="0" y="16" z="0" />
 				<rotation x="0" y="0" z="0" />
 				<scale x="3" y="0.10000000149011612" z="3" />
 				<scaling b="false" />
 			</transform>
 			<components>
 				<component>
-					<id i="-2412263228" />
+					<typename s="model_component" />
 					<active b="true" />
 					<metadata>
 						<model s="./models/cube.obj" />
@@ -207,13 +205,13 @@
 			<refer i="6" />
 			<transform>
 				<position x="1.7818560600280762" y="2" z="-3.0833373069763184" />
-				<rotation x="0" y="-1.0471980571746826" z="-0" />
+				<rotation x="0" y="-1.0471980571746826" z="0" />
 				<scale x="3" y="6" z="3" />
 				<scaling b="false" />
 			</transform>
 			<components>
 				<component>
-					<id i="-2412263228" />
+					<typename s="model_component" />
 					<active b="true" />
 					<metadata>
 						<model s="./models/cube.obj" />
@@ -241,7 +239,7 @@
 			</transform>
 			<components>
 				<component>
-					<id i="-2412263228" />
+					<typename s="model_component" />
 					<active b="true" />
 					<metadata>
 						<model s="./models/cube.obj" />
@@ -269,7 +267,7 @@
 			</transform>
 			<components>
 				<component>
-					<id i="-235292805" />
+					<typename s="point_light_component" />
 					<active b="true" />
 					<metadata>
 						<projection m11="1" m12="0" m13="0" m14="0" m21="0" m22="1" m23="0" m24="0" m31="0" m32="0" m33="1.0016694068908691" m34="1" m41="0" m42="0" m43="-0.1001669391989708" m44="0" />
@@ -302,7 +300,7 @@
 			</transform>
 			<components>
 				<component>
-					<id i="-1848687429" />
+					<typename s="camera_component" />
 					<active b="true" />
 					<metadata>
 						<mode i="0" />
@@ -320,12 +318,12 @@
 						<max-queries i="16384" />
 						<renderers>
 							<renderer>
-								<id i="-3300659073" />
+								<typename s="model_renderer" />
 								<active b="true" />
 								<metadata />
 							</renderer>
 							<renderer>
-								<id i="-2501081933" />
+								<typename s="lighting_renderer" />
 								<active b="true" />
 								<metadata>
 									<sky-map s="" />
@@ -343,11 +341,10 @@
 									<recursive n="0" />
 									<shadow-distance n="0.5" />
 									<sf-size i="128" />
-									<gi b="false" />
 								</metadata>
 							</renderer>
 							<renderer>
-								<id i="-747052133" />
+								<typename s="local_ambient_renderer" />
 								<active b="true" />
 								<metadata>
 									<samples-1 n="4" />
@@ -363,7 +360,7 @@
 								</metadata>
 							</renderer>
 							<renderer>
-								<id i="-3375146593" />
+								<typename s="local_illumination_renderer" />
 								<active b="true" />
 								<metadata>
 									<samples-1 n="16" />
@@ -371,14 +368,14 @@
 									<cutoff-1 n="-0.30000001192092896" />
 									<cutoff-2 n="0.949999988079071" />
 									<attenuation n="1" />
-									<swing n="0.8999999761581421" />
+									<swing n="0.44999998807907104" />
 									<bias n="2" />
 									<distance n="10" />
 									<blur n="16" />
 								</metadata>
 							</renderer>
 							<renderer>
-								<id i="-2077424530" />
+								<typename s="local_reflections_renderer" />
 								<active b="true" />
 								<metadata>
 									<samples-1 n="32" />
@@ -392,7 +389,7 @@
 								</metadata>
 							</renderer>
 							<renderer>
-								<id i="-1394425869" />
+								<typename s="bloom_renderer" />
 								<active b="true" />
 								<metadata>
 									<intensity n="16" />
@@ -403,7 +400,7 @@
 								</metadata>
 							</renderer>
 							<renderer>
-								<id i="-3694976591" />
+								<typename s="tone_renderer" />
 								<active b="true" />
 								<metadata>
 									<grayscale n="-0.11999999731779099" />
@@ -434,12 +431,12 @@
 					</metadata>
 				</component>
 				<component>
-					<id i="-289577278" />
+					<typename s="fly_component" />
 					<active b="true" />
 					<metadata />
 				</component>
 				<component>
-					<id i="-1076432799" />
+					<typename s="free_look_component" />
 					<active b="true" />
 					<metadata />
 				</component>

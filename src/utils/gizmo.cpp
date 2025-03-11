@@ -1,17 +1,17 @@
 #include "gizmo.h"
 #include "../core/sandbox.h"
 
-void CGizmoTransformRender::DrawCircle(const tvector3 &orig, float r, float g, float b, const tvector3 &vtx, const tvector3 &vty)
+void CGizmoTransformRender::DrawCircle(const tvector3& orig, float r, float g, float b, const tvector3& vtx, const tvector3& vty)
 {
-	auto* App = ((Sandbox*)Sandbox::Get());
-	if (!App->Scene)
+	auto* app = ((sandbox*)sandbox::get());
+	if (!app->scene)
 		return;
 
-	Matrix4x4 ViewProjection = ((Components::Camera*)App->Scene->GetCamera())->GetViewProjection();
+	matrix4x4 view_projection = ((components::camera*)app->scene->get_camera())->get_view_projection();
 
-	App->Renderer->ImBegin();
-	App->Renderer->ImTopology(PrimitiveTopology::Line_Strip);
-	App->Renderer->ImTransform(Matrix4x4::Create(App->State.Gizmo.Position(), App->State.Gizmo.RotationEuler()) * ViewProjection);
+	app->renderer->im_begin();
+	app->renderer->im_topology(primitive_topology::line_strip);
+	app->renderer->im_transform(matrix4x4::create(app->state.gizmo.position(), app->state.gizmo.rotation_euler()) * view_projection);
 
 	for (uint32_t i = 0; i <= 50; i++)
 	{
@@ -19,43 +19,43 @@ void CGizmoTransformRender::DrawCircle(const tvector3 &orig, float r, float g, f
 		vt = vtx * cos((2 * ZPI / 50) * (float)i);
 		vt += vty * sin((2 * ZPI / 50) * (float)i);
 
-		App->Renderer->ImEmit();
-		App->Renderer->ImPosition(vt.x, vt.y, vt.z);
-		App->Renderer->ImColor(r, g, b, 1);
+		app->renderer->im_emit();
+		app->renderer->im_position(vt.x, vt.y, vt.z);
+		app->renderer->im_color(r, g, b, 1);
 	}
 
-	App->Renderer->ImEnd();
+	app->renderer->im_end();
 }
-void CGizmoTransformRender::DrawCircleHalf(const tvector3 &orig, float r, float g, float b, const tvector3 &vtx, const tvector3 &vty, tplane &camPlan)
+void CGizmoTransformRender::DrawCircleHalf(const tvector3& orig, float r, float g, float b, const tvector3& vtx, const tvector3& vty, tplane& camPlan)
 {
-	auto* App = ((Sandbox*)Sandbox::Get());
-	if (!App->Scene)
+	auto* app = ((sandbox*)sandbox::get());
+	if (!app->scene)
 		return;
 
-	Matrix4x4 ViewProjection = ((Components::Camera*)App->Scene->GetCamera())->GetViewProjection();
+	matrix4x4 view_projection = ((components::camera*)app->scene->get_camera())->get_view_projection();
 
-	App->Renderer->ImBegin();
-	App->Renderer->ImTopology(PrimitiveTopology::Line_Strip);
-	App->Renderer->ImTransform(Matrix4x4::Create(App->State.Gizmo.Position(), App->State.Gizmo.RotationEuler()) * ViewProjection);
+	app->renderer->im_begin();
+	app->renderer->im_topology(primitive_topology::line_strip);
+	app->renderer->im_transform(matrix4x4::create(app->state.gizmo.position(), app->state.gizmo.rotation_euler()) * view_projection);
 
 	for (uint32_t i = 0; i < 30; i++)
 	{
 		tvector3 vt;
-		vt = vtx * cos((ZPI / 30)*i);
-		vt += vty * sin((ZPI / 30)*i);
+		vt = vtx * cos((ZPI / 30) * i);
+		vt += vty * sin((ZPI / 30) * i);
 
 		if (camPlan.DotNormal(vt) > 0)
 		{
-			App->Renderer->ImEmit();
-			App->Renderer->ImPosition(vt.x, vt.y, vt.z);
-			App->Renderer->ImColor(r, g, b, 1);
+			app->renderer->im_emit();
+			app->renderer->im_position(vt.x, vt.y, vt.z);
+			app->renderer->im_color(r, g, b, 1);
 		}
 	}
 
-	App->Renderer->ImEnd();
-	App->Renderer->ImBegin();
-	App->Renderer->ImTopology(PrimitiveTopology::Line_Strip);
-	App->Renderer->ImTransform(Matrix4x4::Create(App->State.Gizmo.Position(), -1, App->State.Gizmo.RotationEuler()) * ViewProjection);
+	app->renderer->im_end();
+	app->renderer->im_begin();
+	app->renderer->im_topology(primitive_topology::line_strip);
+	app->renderer->im_transform(matrix4x4::create(app->state.gizmo.position(), -1, app->state.gizmo.rotation_euler()) * view_projection);
 
 	for (uint32_t i = 0; i < 30; i++)
 	{
@@ -65,35 +65,35 @@ void CGizmoTransformRender::DrawCircleHalf(const tvector3 &orig, float r, float 
 
 		if (camPlan.DotNormal(vt) > 0)
 		{
-			App->Renderer->ImEmit();
-			App->Renderer->ImPosition(vt.x, vt.y, vt.z);
-			App->Renderer->ImColor(r, g, b, 1);
+			app->renderer->im_emit();
+			app->renderer->im_position(vt.x, vt.y, vt.z);
+			app->renderer->im_color(r, g, b, 1);
 		}
 	}
 
-	App->Renderer->ImEnd();
+	app->renderer->im_end();
 }
-void CGizmoTransformRender::DrawAxis(const tvector3 &orig, const tvector3 &axis, const tvector3 &vtx, const tvector3 &vty, float fct, float fct2, const tvector4 &col)
+void CGizmoTransformRender::DrawAxis(const tvector3& orig, const tvector3& axis, const tvector3& vtx, const tvector3& vty, float fct, float fct2, const tvector4& col)
 {
-	auto* App = ((Sandbox*)Sandbox::Get());
-	if (!App->Scene)
+	auto* app = ((sandbox*)sandbox::get());
+	if (!app->scene)
 		return;
 
-	Matrix4x4 ViewProjection = ((Components::Camera*)App->Scene->GetCamera())->GetViewProjection();
+	matrix4x4 view_projection = ((components::camera*)app->scene->get_camera())->get_view_projection();
 
-	App->Renderer->ImBegin();
-	App->Renderer->ImTopology(PrimitiveTopology::Line_List);
-	App->Renderer->ImTransform(ViewProjection);
-	App->Renderer->ImEmit();
-	App->Renderer->ImPosition(orig.x, orig.y, orig.z);
-	App->Renderer->ImColor(col.x, col.y, col.z, 1);
-	App->Renderer->ImEmit();
-	App->Renderer->ImPosition(orig.x + axis.x, orig.y + axis.y, orig.z + axis.z);
-	App->Renderer->ImColor(col.x, col.y, col.z, 1);
-	App->Renderer->ImEnd();
-	App->Renderer->ImBegin();
-	App->Renderer->ImTopology(PrimitiveTopology::Triangle_Strip);
-	App->Renderer->ImTransform(ViewProjection);
+	app->renderer->im_begin();
+	app->renderer->im_topology(primitive_topology::line_list);
+	app->renderer->im_transform(view_projection);
+	app->renderer->im_emit();
+	app->renderer->im_position(orig.x, orig.y, orig.z);
+	app->renderer->im_color(col.x, col.y, col.z, 1);
+	app->renderer->im_emit();
+	app->renderer->im_position(orig.x + axis.x, orig.y + axis.y, orig.z + axis.z);
+	app->renderer->im_color(col.x, col.y, col.z, 1);
+	app->renderer->im_end();
+	app->renderer->im_begin();
+	app->renderer->im_topology(primitive_topology::triangle_strip);
+	app->renderer->im_transform(view_projection);
 
 	for (uint32_t i = 0; i <= 30; i++)
 	{
@@ -103,106 +103,106 @@ void CGizmoTransformRender::DrawAxis(const tvector3 &orig, const tvector3 &axis,
 		pt += axis * fct2;
 		pt += orig;
 
-		App->Renderer->ImEmit();
-		App->Renderer->ImPosition(pt.x, pt.y, pt.z);
-		App->Renderer->ImColor(col.x, col.y, col.z, 1);
+		app->renderer->im_emit();
+		app->renderer->im_position(pt.x, pt.y, pt.z);
+		app->renderer->im_color(col.x, col.y, col.z, 1);
 
 		pt = vtx * cos(((2 * ZPI) / 30.0f) * (float)(i + 1)) * fct;
 		pt += vty * sin(((2 * ZPI) / 30.0f) * (float)(i + 1)) * fct;
 		pt += axis * fct2;
 		pt += orig;
 
-		App->Renderer->ImEmit();
-		App->Renderer->ImPosition(pt.x, pt.y, pt.z);
-		App->Renderer->ImColor(col.x, col.y, col.z, 1);
-		App->Renderer->ImEmit();
-		App->Renderer->ImPosition(orig.x + axis.x, orig.y + axis.y, orig.z + axis.z);
-		App->Renderer->ImColor(col.x, col.y, col.z, 1);
+		app->renderer->im_emit();
+		app->renderer->im_position(pt.x, pt.y, pt.z);
+		app->renderer->im_color(col.x, col.y, col.z, 1);
+		app->renderer->im_emit();
+		app->renderer->im_position(orig.x + axis.x, orig.y + axis.y, orig.z + axis.z);
+		app->renderer->im_color(col.x, col.y, col.z, 1);
 	}
 
-	App->Renderer->ImEnd();
+	app->renderer->im_end();
 }
-void CGizmoTransformRender::DrawCamem(const tvector3 &orig, const tvector3 &vtx, const tvector3 &vty, float ng)
+void CGizmoTransformRender::DrawCamem(const tvector3& orig, const tvector3& vtx, const tvector3& vty, float ng)
 {
-	auto* App = ((Sandbox*)Sandbox::Get());
-	if (!App->Scene)
+	auto* app = ((sandbox*)sandbox::get());
+	if (!app->scene)
 		return;
 
-	Matrix4x4 ViewProjection = ((Components::Camera*)App->Scene->GetCamera())->GetViewProjection();
+	matrix4x4 view_projection = ((components::camera*)app->scene->get_camera())->get_view_projection();
 
-	App->Renderer->ImBegin();
-	App->Renderer->ImTopology(PrimitiveTopology::Triangle_Strip);
-	App->Renderer->ImTransform(ViewProjection);
-	App->Renderer->ImEmit();
-	App->Renderer->ImColor(1, 1, 0, 0.5f);
-	App->Renderer->ImPosition(orig.x, orig.y, orig.z);
+	app->renderer->im_begin();
+	app->renderer->im_topology(primitive_topology::triangle_strip);
+	app->renderer->im_transform(view_projection);
+	app->renderer->im_emit();
+	app->renderer->im_color(1, 1, 0, 0.5f);
+	app->renderer->im_position(orig.x, orig.y, orig.z);
 
 	for (uint32_t i = 0; i <= 50; i++)
 	{
 		tvector3 vt;
-		vt = vtx * cos(((ng) / 50)*i);
-		vt += vty * sin(((ng) / 50)*i);
+		vt = vtx * cos(((ng) / 50) * i);
+		vt += vty * sin(((ng) / 50) * i);
 		vt += orig;
 
-		App->Renderer->ImEmit();
-		App->Renderer->ImColor(1, 1, 0, 0.5f);
-		App->Renderer->ImPosition(vt.x, vt.y, vt.z);
+		app->renderer->im_emit();
+		app->renderer->im_color(1, 1, 0, 0.5f);
+		app->renderer->im_position(vt.x, vt.y, vt.z);
 	}
 
-	App->Renderer->ImEmit();
-	App->Renderer->ImColor(1, 1, 0, 0.5f);
-	App->Renderer->ImPosition(orig.x, orig.y, orig.z);
-	App->Renderer->ImEnd();
-	App->Renderer->ImBegin();
-	App->Renderer->ImTopology(PrimitiveTopology::Line_Strip);
-	App->Renderer->ImTransform(ViewProjection);
-	App->Renderer->ImEmit();
-	App->Renderer->ImColor(1, 1, 0.2F, 1);
-	App->Renderer->ImPosition(orig.x, orig.y, orig.z);
+	app->renderer->im_emit();
+	app->renderer->im_color(1, 1, 0, 0.5f);
+	app->renderer->im_position(orig.x, orig.y, orig.z);
+	app->renderer->im_end();
+	app->renderer->im_begin();
+	app->renderer->im_topology(primitive_topology::line_strip);
+	app->renderer->im_transform(view_projection);
+	app->renderer->im_emit();
+	app->renderer->im_color(1, 1, 0.2F, 1);
+	app->renderer->im_position(orig.x, orig.y, orig.z);
 
 	for (uint32_t i = 0; i <= 50; i++)
 	{
 		tvector3 vt;
-		vt = vtx * cos(((ng) / 50)*i);
-		vt += vty * sin(((ng) / 50)*i);
+		vt = vtx * cos(((ng) / 50) * i);
+		vt += vty * sin(((ng) / 50) * i);
 		vt += orig;
 
-		App->Renderer->ImEmit();
-		App->Renderer->ImColor(1, 1, 0.2F, 1);
-		App->Renderer->ImPosition(vt.x, vt.y, vt.z);
+		app->renderer->im_emit();
+		app->renderer->im_color(1, 1, 0.2F, 1);
+		app->renderer->im_position(vt.x, vt.y, vt.z);
 	}
 
-	App->Renderer->ImEmit();
-	App->Renderer->ImColor(1, 1, 0.2F, 1);
-	App->Renderer->ImPosition(orig.x, orig.y, orig.z);
-	App->Renderer->ImEnd();
+	app->renderer->im_emit();
+	app->renderer->im_color(1, 1, 0.2F, 1);
+	app->renderer->im_position(orig.x, orig.y, orig.z);
+	app->renderer->im_end();
 }
-void CGizmoTransformRender::DrawQuadAxis(const tvector3 &orig, const tvector3 &axis, const tvector3 &vtx, const tvector3 &vty, float fct, float fct2, const tvector4 &col)
+void CGizmoTransformRender::DrawQuadAxis(const tvector3& orig, const tvector3& axis, const tvector3& vtx, const tvector3& vty, float fct, float fct2, const tvector4& col)
 {
-	auto* App = ((Sandbox*)Sandbox::Get());
-	if (!App->Scene)
+	auto* app = ((sandbox*)sandbox::get());
+	if (!app->scene)
 		return;
 
-	Matrix4x4 ViewProjection = ((Components::Camera*)App->Scene->GetCamera())->GetViewProjection();
+	matrix4x4 view_projection = ((components::camera*)app->scene->get_camera())->get_view_projection();
 
-	App->Renderer->ImBegin();
-	App->Renderer->ImTopology(PrimitiveTopology::Line_List);
-	App->Renderer->ImTransform(ViewProjection);
-	App->Renderer->ImEmit();
-	App->Renderer->ImPosition(orig.x, orig.y, orig.z);
-	App->Renderer->ImColor(col.x, col.y, col.z, 1);
-	App->Renderer->ImEmit();
-	App->Renderer->ImPosition(orig.x + axis.x, orig.y + axis.y, orig.z + axis.z);
-	App->Renderer->ImColor(col.x, col.y, col.z, 1);
-	App->Renderer->ImEnd();
+	app->renderer->im_begin();
+	app->renderer->im_topology(primitive_topology::line_list);
+	app->renderer->im_transform(view_projection);
+	app->renderer->im_emit();
+	app->renderer->im_position(orig.x, orig.y, orig.z);
+	app->renderer->im_color(col.x, col.y, col.z, 1);
+	app->renderer->im_emit();
+	app->renderer->im_position(orig.x + axis.x, orig.y + axis.y, orig.z + axis.z);
+	app->renderer->im_color(col.x, col.y, col.z, 1);
+	app->renderer->im_end();
 }
-void CGizmoTransformRender::DrawQuad(const tvector3& orig, float size, bool bSelected, const tvector3& axisU, const tvector3 &axisV)
+void CGizmoTransformRender::DrawQuad(const tvector3& orig, float size, bool bSelected, const tvector3& axisU, const tvector3& axisV)
 {
-	auto* App = ((Sandbox*)Sandbox::Get());
-	if (!App->Scene)
+	auto* app = ((sandbox*)sandbox::get());
+	if (!app->scene)
 		return;
 
-	Matrix4x4 ViewProjection = ((Components::Camera*)App->Scene->GetCamera())->GetViewProjection();
+	matrix4x4 view_projection = ((components::camera*)app->scene->get_camera())->get_view_projection();
 
 	tvector3 pts[4];
 	pts[0] = orig;
@@ -210,114 +210,114 @@ void CGizmoTransformRender::DrawQuad(const tvector3& orig, float size, bool bSel
 	pts[2] = orig + (axisU + axisV) * size;
 	pts[3] = orig + (axisV * size);
 
-	App->Renderer->ImBegin();
-	App->Renderer->ImTopology(PrimitiveTopology::Triangle_Strip);
-	App->Renderer->ImTransform(ViewProjection);
-	App->Renderer->ImEmit();
-	App->Renderer->ImPosition(pts[0].x, pts[0].y, pts[0].z);
+	app->renderer->im_begin();
+	app->renderer->im_topology(primitive_topology::triangle_strip);
+	app->renderer->im_transform(view_projection);
+	app->renderer->im_emit();
+	app->renderer->im_position(pts[0].x, pts[0].y, pts[0].z);
 
 	if (!bSelected)
-		App->Renderer->ImColor(1, 1, 0, 0.5f);
+		app->renderer->im_color(1, 1, 0, 0.5f);
 	else
-		App->Renderer->ImColor(1, 1, 1, 0.6f);
+		app->renderer->im_color(1, 1, 1, 0.6f);
 
-	App->Renderer->ImEmit();
-	App->Renderer->ImPosition(pts[1].x, pts[1].y, pts[1].z);
+	app->renderer->im_emit();
+	app->renderer->im_position(pts[1].x, pts[1].y, pts[1].z);
 
 	if (!bSelected)
-		App->Renderer->ImColor(1, 1, 0, 0.5f);
+		app->renderer->im_color(1, 1, 0, 0.5f);
 	else
-		App->Renderer->ImColor(1, 1, 1, 0.6f);
+		app->renderer->im_color(1, 1, 1, 0.6f);
 
-	App->Renderer->ImEmit();
-	App->Renderer->ImPosition(pts[2].x, pts[2].y, pts[2].z);
+	app->renderer->im_emit();
+	app->renderer->im_position(pts[2].x, pts[2].y, pts[2].z);
 
 	if (!bSelected)
-		App->Renderer->ImColor(1, 1, 0, 0.5f);
+		app->renderer->im_color(1, 1, 0, 0.5f);
 	else
-		App->Renderer->ImColor(1, 1, 1, 0.6f);
+		app->renderer->im_color(1, 1, 1, 0.6f);
 
-	App->Renderer->ImEmit();
-	App->Renderer->ImPosition(pts[0].x, pts[0].y, pts[0].z);
+	app->renderer->im_emit();
+	app->renderer->im_position(pts[0].x, pts[0].y, pts[0].z);
 
 	if (!bSelected)
-		App->Renderer->ImColor(1, 1, 0, 0.5f);
+		app->renderer->im_color(1, 1, 0, 0.5f);
 	else
-		App->Renderer->ImColor(1, 1, 1, 0.6f);
+		app->renderer->im_color(1, 1, 1, 0.6f);
 
-	App->Renderer->ImEmit();
-	App->Renderer->ImPosition(pts[3].x, pts[3].y, pts[3].z);
+	app->renderer->im_emit();
+	app->renderer->im_position(pts[3].x, pts[3].y, pts[3].z);
 
 	if (!bSelected)
-		App->Renderer->ImColor(1, 1, 0, 0.5f);
+		app->renderer->im_color(1, 1, 0, 0.5f);
 	else
-		App->Renderer->ImColor(1, 1, 1, 0.6f);
+		app->renderer->im_color(1, 1, 1, 0.6f);
 
-	App->Renderer->ImEmit();
-	App->Renderer->ImPosition(pts[0].x, pts[0].y, pts[0].z);
+	app->renderer->im_emit();
+	app->renderer->im_position(pts[0].x, pts[0].y, pts[0].z);
 
 	if (!bSelected)
-		App->Renderer->ImColor(1, 1, 0, 0.5f);
+		app->renderer->im_color(1, 1, 0, 0.5f);
 	else
-		App->Renderer->ImColor(1, 1, 1, 0.6f);
+		app->renderer->im_color(1, 1, 1, 0.6f);
 
-	App->Renderer->ImEmit();
-	App->Renderer->ImPosition(pts[2].x, pts[2].y, pts[2].z);
+	app->renderer->im_emit();
+	app->renderer->im_position(pts[2].x, pts[2].y, pts[2].z);
 
 	if (!bSelected)
-		App->Renderer->ImColor(1, 1, 0, 0.5f);
+		app->renderer->im_color(1, 1, 0, 0.5f);
 	else
-		App->Renderer->ImColor(1, 1, 1, 0.6f);
+		app->renderer->im_color(1, 1, 1, 0.6f);
 
-	App->Renderer->ImEnd();
-	App->Renderer->ImBegin();
-	App->Renderer->ImTopology(PrimitiveTopology::Line_Strip);
-	App->Renderer->ImTransform(ViewProjection);
-	App->Renderer->ImEmit();
-	App->Renderer->ImPosition(pts[0].x, pts[0].y, pts[0].z);
+	app->renderer->im_end();
+	app->renderer->im_begin();
+	app->renderer->im_topology(primitive_topology::line_strip);
+	app->renderer->im_transform(view_projection);
+	app->renderer->im_emit();
+	app->renderer->im_position(pts[0].x, pts[0].y, pts[0].z);
 
 	if (!bSelected)
-		App->Renderer->ImColor(1, 1, 0.2f, 1);
+		app->renderer->im_color(1, 1, 0.2f, 1);
 	else
-		App->Renderer->ImColor(1, 1, 1, 0.6f);
+		app->renderer->im_color(1, 1, 1, 0.6f);
 
-	App->Renderer->ImEmit();
-	App->Renderer->ImPosition(pts[1].x, pts[1].y, pts[1].z);
+	app->renderer->im_emit();
+	app->renderer->im_position(pts[1].x, pts[1].y, pts[1].z);
 
 	if (!bSelected)
-		App->Renderer->ImColor(1, 1, 0.2f, 1);
+		app->renderer->im_color(1, 1, 0.2f, 1);
 	else
-		App->Renderer->ImColor(1, 1, 1, 0.6f);
+		app->renderer->im_color(1, 1, 1, 0.6f);
 
-	App->Renderer->ImEmit();
-	App->Renderer->ImPosition(pts[2].x, pts[2].y, pts[2].z);
+	app->renderer->im_emit();
+	app->renderer->im_position(pts[2].x, pts[2].y, pts[2].z);
 
 	if (!bSelected)
-		App->Renderer->ImColor(1, 1, 0.2f, 1);
+		app->renderer->im_color(1, 1, 0.2f, 1);
 	else
-		App->Renderer->ImColor(1, 1, 1, 0.6f);
+		app->renderer->im_color(1, 1, 1, 0.6f);
 
-	App->Renderer->ImEmit();
-	App->Renderer->ImPosition(pts[3].x, pts[3].y, pts[3].z);
+	app->renderer->im_emit();
+	app->renderer->im_position(pts[3].x, pts[3].y, pts[3].z);
 
 	if (!bSelected)
-		App->Renderer->ImColor(1, 1, 0.2f, 1);
+		app->renderer->im_color(1, 1, 0.2f, 1);
 	else
-		App->Renderer->ImColor(1, 1, 1, 0.6f);
+		app->renderer->im_color(1, 1, 1, 0.6f);
 
-	App->Renderer->ImEnd();
+	app->renderer->im_end();
 }
 void CGizmoTransformRender::DrawTri(const tvector3& orig, float size, bool bSelected, const tvector3& axisU, const tvector3& axisV)
 {
-	auto* App = ((Sandbox*)Sandbox::Get());
-	if (!App->Scene)
+	auto* app = ((sandbox*)sandbox::get());
+	if (!app->scene)
 		return;
 
-	Matrix4x4 ViewProjection = ((Components::Camera*)App->Scene->GetCamera())->GetViewProjection();
+	matrix4x4 view_projection = ((components::camera*)app->scene->get_camera())->get_view_projection();
 
-	App->Renderer->ImBegin();
-	App->Renderer->ImTopology(PrimitiveTopology::Triangle_Strip);
-	App->Renderer->ImTransform(ViewProjection);
+	app->renderer->im_begin();
+	app->renderer->im_topology(primitive_topology::triangle_strip);
+	app->renderer->im_transform(view_projection);
 
 	tvector3 pts[3];
 	pts[0] = orig;
@@ -328,65 +328,65 @@ void CGizmoTransformRender::DrawTri(const tvector3& orig, float size, bool bSele
 	pts[1] += orig;
 	pts[2] += orig;
 
-	App->Renderer->ImEmit();
-	App->Renderer->ImPosition(pts[0].x, pts[0].y, pts[0].z);
+	app->renderer->im_emit();
+	app->renderer->im_position(pts[0].x, pts[0].y, pts[0].z);
 	if (!bSelected)
-		App->Renderer->ImColor(1, 1, 0, 0.5f);
+		app->renderer->im_color(1, 1, 0, 0.5f);
 	else
-		App->Renderer->ImColor(1, 1, 1, 0.6f);
+		app->renderer->im_color(1, 1, 1, 0.6f);
 
-	App->Renderer->ImEmit();
-	App->Renderer->ImPosition(pts[1].x, pts[1].y, pts[1].z);
+	app->renderer->im_emit();
+	app->renderer->im_position(pts[1].x, pts[1].y, pts[1].z);
 	if (!bSelected)
-		App->Renderer->ImColor(1, 1, 0, 0.5f);
+		app->renderer->im_color(1, 1, 0, 0.5f);
 	else
-		App->Renderer->ImColor(1, 1, 1, 0.6f);
+		app->renderer->im_color(1, 1, 1, 0.6f);
 
-	App->Renderer->ImEmit();
-	App->Renderer->ImPosition(pts[2].x, pts[2].y, pts[2].z);
+	app->renderer->im_emit();
+	app->renderer->im_position(pts[2].x, pts[2].y, pts[2].z);
 	if (!bSelected)
-		App->Renderer->ImColor(1, 1, 0, 0.5f);
+		app->renderer->im_color(1, 1, 0, 0.5f);
 	else
-		App->Renderer->ImColor(1, 1, 1, 0.6f);
+		app->renderer->im_color(1, 1, 1, 0.6f);
 
-	App->Renderer->ImEmit();
-	App->Renderer->ImPosition(pts[0].x, pts[0].y, pts[0].z);
+	app->renderer->im_emit();
+	app->renderer->im_position(pts[0].x, pts[0].y, pts[0].z);
 	if (!bSelected)
-		App->Renderer->ImColor(1, 1, 0, 0.5f);
+		app->renderer->im_color(1, 1, 0, 0.5f);
 	else
-		App->Renderer->ImColor(1, 1, 1, 0.6f);
+		app->renderer->im_color(1, 1, 1, 0.6f);
 
-	App->Renderer->ImEnd();
-	App->Renderer->ImBegin();
-	App->Renderer->ImTopology(PrimitiveTopology::Line_Strip);
-	App->Renderer->ImTransform(ViewProjection);
-	App->Renderer->ImEmit();
-	App->Renderer->ImPosition(pts[0].x, pts[0].y, pts[0].z);
+	app->renderer->im_end();
+	app->renderer->im_begin();
+	app->renderer->im_topology(primitive_topology::line_strip);
+	app->renderer->im_transform(view_projection);
+	app->renderer->im_emit();
+	app->renderer->im_position(pts[0].x, pts[0].y, pts[0].z);
 	if (!bSelected)
-		App->Renderer->ImColor(1, 1, 0.2f, 1);
+		app->renderer->im_color(1, 1, 0.2f, 1);
 	else
-		App->Renderer->ImColor(1, 1, 1, 0.6f);
+		app->renderer->im_color(1, 1, 1, 0.6f);
 
-	App->Renderer->ImEmit();
-	App->Renderer->ImPosition(pts[1].x, pts[1].y, pts[1].z);
+	app->renderer->im_emit();
+	app->renderer->im_position(pts[1].x, pts[1].y, pts[1].z);
 	if (!bSelected)
-		App->Renderer->ImColor(1, 1, 0.2f, 1);
+		app->renderer->im_color(1, 1, 0.2f, 1);
 	else
-		App->Renderer->ImColor(1, 1, 1, 0.6f);
+		app->renderer->im_color(1, 1, 1, 0.6f);
 
-	App->Renderer->ImEmit();
-	App->Renderer->ImPosition(pts[2].x, pts[2].y, pts[2].z);
+	app->renderer->im_emit();
+	app->renderer->im_position(pts[2].x, pts[2].y, pts[2].z);
 	if (!bSelected)
-		App->Renderer->ImColor(1, 1, 0.2f, 1);
+		app->renderer->im_color(1, 1, 0.2f, 1);
 	else
-		App->Renderer->ImColor(1, 1, 1, 0.6f);
+		app->renderer->im_color(1, 1, 1, 0.6f);
 
-	App->Renderer->ImEmit();
-	App->Renderer->ImPosition(pts[0].x, pts[0].y, pts[0].z);
+	app->renderer->im_emit();
+	app->renderer->im_position(pts[0].x, pts[0].y, pts[0].z);
 	if (!bSelected)
-		App->Renderer->ImColor(1, 1, 0.2f, 1);
+		app->renderer->im_color(1, 1, 0.2f, 1);
 	else
-		App->Renderer->ImColor(1, 1, 1, 0.6f);
+		app->renderer->im_color(1, 1, 1, 0.6f);
 
-	App->Renderer->ImEnd();
+	app->renderer->im_end();
 }

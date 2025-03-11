@@ -1,432 +1,432 @@
 #include "resolvers.h"
 #include "../core/sandbox.h"
 
-void ResolveResource(GUI::IElement& Target, const String& Name, const std::function<void(const String&)>& Callback, bool Changed)
+void resolve_resource(gui::ielement& target, const string& name, const std::function<void(const string&)>& callback, bool changed)
 {
-	Sandbox* App = ((Sandbox*)Sandbox::Get());
-	if (!App || !Callback)
+	sandbox* app = ((sandbox*)sandbox::get());
+	if (!app || !callback)
 		return;
 
-	if (!App->GetResourceState(Name) && !Changed)
+	if (!app->get_resource_state(name) && !changed)
 	{
-		Target.SetInnerHTML(Stringify::Text("[ awaiting %s ... ]", Name.c_str()));
-		App->GetResource(Name, [Name, Target, Callback](const String& File)
+		target.set_inner_html(stringify::text("[ awaiting %s ... ]", name.c_str()));
+		app->get_resource(name, [name, target, callback](const string& file)
 		{
-			GUI::IElement Copy = Target;
-			Copy.SetInnerHTML(Stringify::Text("[ %s %s ]", File.empty() ? "setup" : "change", Name.c_str()));
-			Callback(File);
+			gui::ielement copy = target;
+			copy.set_inner_html(stringify::text("[ %s %s ]", file.empty() ? "setup" : "change", name.c_str()));
+			callback(file);
 		});
 	}
 	else
 	{
-		Target.SetInnerHTML("");
-		App->GetResource("", nullptr);
+		target.set_inner_html("");
+		app->get_resource("", nullptr);
 	}
 }
-void ResolveEntity(GUI::IElement& Target, const String& Name, const std::function<void(Entity*)>& Callback, bool Changed)
+void resolve_entity(gui::ielement& target, const string& name, const std::function<void(entity*)>& callback, bool changed)
 {
-	Sandbox* App = ((Sandbox*)Sandbox::Get());
-	if (!App || !Callback)
+	sandbox* app = ((sandbox*)sandbox::get());
+	if (!app || !callback)
 		return;
 
-	if (!App->GetEntityState(Name) && !Changed)
+	if (!app->get_entity_state(name) && !changed)
 	{
-		Target.SetInnerHTML("[ awaiting entity ... ]");
-		App->GetEntity(Name, [Target, Callback](Entity* Source)
+		target.set_inner_html("[ awaiting entity ... ]");
+		app->get_entity(name, [target, callback](entity* source)
 		{
-			GUI::IElement Copy = Target;
-			Copy.SetInnerHTML(Stringify::Text("[ %s entity ]", Source ? "change" : "setup"));
-			Callback(Source);
+			gui::ielement copy = target;
+			copy.set_inner_html(stringify::text("[ %s entity ]", source ? "change" : "setup"));
+			callback(source);
 		});
 	}
 	else
 	{
-		Target.SetInnerHTML("");
-		App->GetEntity("", nullptr);
+		target.set_inner_html("");
+		app->get_entity("", nullptr);
 	}
 }
-void ResolveTexture2D(GUI::Context* UI, const String& Id, bool Assigned, const std::function<void(Texture2D*)>& Callback, bool Changed)
+void resolve_texture_2d(gui::context* ui, const string& id, bool assigned, const std::function<void(texture_2d*)>& callback, bool changed)
 {
-	GUI::IElement Source = UI->GetElementById(Id);
-	if (Source.IsActive() && !Changed)
+	gui::ielement source = ui->get_element_by_id(id);
+	if (source.is_active() && !changed)
 	{
-		if (!Assigned)
+		if (!assigned)
 		{
-			ResolveResource(Source, "texture", [Callback](const String& File)
+			resolve_resource(source, "texture", [callback](const string& file)
 			{
-				Callback(Sandbox::Get()->Content->Load<Vitex::Graphics::Texture2D>(File).Or(nullptr));
-			}, Changed);
+				callback(sandbox::get()->content->load<vitex::graphics::texture_2d>(file).or_else(nullptr));
+			}, changed);
 		}
 		else
 		{
-			Source.SetInnerHTML("[ setup texture ]");
-			Callback(nullptr);
+			source.set_inner_html("[ setup texture ]");
+			callback(nullptr);
 		}
 	}
-	else if (Source.GetInnerHTML().empty() || Changed)
+	else if (source.get_inner_html().empty() || changed)
 	{
-		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
-		Source.SetInnerHTML(Stringify::Text("[ %s texture ]", Assigned ? "change" : "setup"));
+		((sandbox*)sandbox::get())->get_resource("", nullptr);
+		source.set_inner_html(stringify::text("[ %s texture ]", assigned ? "change" : "setup"));
 	}
 }
-void ResolveKeyCode(GUI::Context* UI, const String& Id, KeyMap* Output, bool Changed)
+void resolve_key_code(gui::context* ui, const string& id, key_map* output, bool changed)
 {
-	Sandbox* App = ((Sandbox*)Sandbox::Get());
-	if (!App)
+	sandbox* app = ((sandbox*)sandbox::get());
+	if (!app)
 		return;
 
-	GUI::IElement Source = UI->GetElementById(Id);
-	if (Output->Normal && !Changed)
+	gui::ielement source = ui->get_element_by_id(id);
+	if (output->normal && !changed)
 	{
-		if (Source.GetInnerHTML().empty())
-			Source.SetInnerHTML("[ awaiting input ... ]");
+		if (source.get_inner_html().empty())
+			source.set_inner_html("[ awaiting input ... ]");
 
-		App->State.IsCaptured = true;
-		if (Source.IsActive())
+		app->state.is_captured = true;
+		if (source.is_active())
 		{
-			App->Activity->CaptureKeyMap(nullptr);
-			Output->Normal = false;
-			Source.SetInnerHTML("");
+			app->activity->capture_key_map(nullptr);
+			output->normal = false;
+			source.set_inner_html("");
 		}
-		else if (!Source.IsHovered() && App->Activity->CaptureKeyMap(Output))
+		else if (!source.is_hovered() && app->activity->capture_key_map(output))
 		{
-			Output->Normal = false;
-			Source.SetInnerHTML("");
+			output->normal = false;
+			source.set_inner_html("");
 		}
 	}
 	else
 	{
-		auto KeyCode = Video::GetKeyCodeAsLiteral(Output->Key);
-		auto KeyMod = Video::GetKeyModAsLiteral(Output->Mod);
-		if (Source.GetInnerHTML().empty())
+		auto key_code = video::get_key_code_as_literal(output->key);
+		auto key_mod = video::get_key_mod_as_literal(output->mod);
+		if (source.get_inner_html().empty())
 		{
-			if (!KeyCode.empty() && !KeyMod.empty())
-				Source.SetInnerHTML(Stringify::Text("%s + %s", KeyMod.data(), KeyCode.data()));
-			else if (!KeyCode.empty() && KeyMod.empty())
-				Source.SetInnerHTML(Stringify::Text("%s", KeyCode.data()));
-			else if (KeyCode.empty() && !KeyMod.empty())
-				Source.SetInnerHTML(Stringify::Text("%s", KeyMod.data()));
+			if (!key_code.empty() && !key_mod.empty())
+				source.set_inner_html(stringify::text("%s + %s", key_mod.data(), key_code.data()));
+			else if (!key_code.empty() && key_mod.empty())
+				source.set_inner_html(stringify::text("%s", key_code.data()));
+			else if (key_code.empty() && !key_mod.empty())
+				source.set_inner_html(stringify::text("%s", key_mod.data()));
 			else
-				Source.SetInnerHTML("[ none ]");
+				source.set_inner_html("[ none ]");
 		}
 
-		if (Source.IsActive())
+		if (source.is_active())
 		{
-			Source.SetInnerHTML("");
-			Output->Normal = true;
+			source.set_inner_html("");
+			output->normal = true;
 		}
 	}
 }
-bool ResolveColor4(GUI::Context* UI, const String& Id, Vector4* Output)
+bool resolve_color4(gui::context* ui, const string& id, vitex::trigonometry::vector4* output)
 {
-	if (!UI->GetElementById(Id).CastFormColor(Output, true))
+	if (!ui->get_element_by_id(id).cast_form_color(output, true))
 		return false;
 
-	UI->GetElementById(Id + "_color").SetProperty("background-color", Stringify::Text("rgb(%u, %u, %u, %u)", (unsigned int)(Output->X * 255.0f), (unsigned int)(Output->Y * 255.0f), (unsigned int)(Output->Z * 255.0f), (unsigned int)(Output->W * 255.0f)));
+	ui->get_element_by_id(id + "_color").set_property("background-color", stringify::text("rgb(%u, %u, %u, %u)", (unsigned int)(output->x * 255.0f), (unsigned int)(output->y * 255.0f), (unsigned int)(output->z * 255.0f), (unsigned int)(output->w * 255.0f)));
 	return true;
 }
-bool ResolveColor3(GUI::Context* UI, const String& Id, Vector3* Output)
+bool resolve_color3(gui::context* ui, const string& id, vitex::trigonometry::vector3* output)
 {
-	Vector4 Color = *Output;
-	if (!UI->GetElementById(Id).CastFormColor(&Color, false))
+	vitex::trigonometry::vector4 color = *output;
+	if (!ui->get_element_by_id(id).cast_form_color(&color, false))
 		return false;
 
-	*Output = Color;
-	UI->GetElementById(Id + "_color").SetProperty("background-color", Stringify::Text("rgb(%u, %u, %u)", (unsigned int)(Output->X * 255.0f), (unsigned int)(Output->Y * 255.0f), (unsigned int)(Output->Z * 255.0f)));
+	*output = color;
+	ui->get_element_by_id(id + "_color").set_property("background-color", stringify::text("rgb(%u, %u, %u)", (unsigned int)(output->x * 255.0f), (unsigned int)(output->y * 255.0f), (unsigned int)(output->z * 255.0f)));
 	return true;
 }
-void ResolveModel(GUI::Context* UI, const String& Id, Components::Model* Output, bool Changed)
+void resolve_model(gui::context* ui, const string& id, components::model* output, bool changed)
 {
-	static Components::Model* Last = nullptr;
-	if (Last != Output)
+	static components::model* last = nullptr;
+	if (last != output)
 	{
-		Last = Output;
-		Changed = true;
+		last = output;
+		changed = true;
 	}
 
-	GUI::IElement Source = UI->GetElementById(Id);
-	if (Source.IsActive() && !Changed)
+	gui::ielement source = ui->get_element_by_id(id);
+	if (source.is_active() && !changed)
 	{
-		if (!Output->GetDrawable())
+		if (!output->get_drawable())
 		{
-			ResolveResource(Source, "model", [Output](const String& File)
+			resolve_resource(source, "model", [output](const string& file)
 			{
-				auto* App = ((Sandbox*)Sandbox::Get());
-				auto Instance = App->Content->Load<Vitex::Layer::Model>(File);
-				Output->SetDrawable(Instance.Or(nullptr));
-				App->SetMetadata(Output->GetEntity());
-				if (Instance)
-					Memory::Release(*Instance);
-			}, Changed);
+				auto* app = ((sandbox*)sandbox::get());
+				auto instance = app->content->load<vitex::layer::model>(file);
+				output->set_drawable(instance.or_else(nullptr));
+				app->set_metadata(output->get_entity());
+				if (instance)
+					memory::release(*instance);
+			}, changed);
 		}
 		else
 		{
-			Source.SetInnerHTML("[ setup model ]");
-			Output->SetDrawable(nullptr);
+			source.set_inner_html("[ setup model ]");
+			output->set_drawable(nullptr);
 		}
 	}
-	else if (Source.GetInnerHTML().empty() || Changed)
+	else if (source.get_inner_html().empty() || changed)
 	{
-		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
-		Source.SetInnerHTML(Stringify::Text("[ %s model ]", Output->GetDrawable() ? "change" : "setup"));
+		((sandbox*)sandbox::get())->get_resource("", nullptr);
+		source.set_inner_html(stringify::text("[ %s model ]", output->get_drawable() ? "change" : "setup"));
 	}
 }
-void ResolveSkin(GUI::Context* UI, const String& Id, Components::Skin* Output, bool Changed)
+void resolve_skin(gui::context* ui, const string& id, components::skin* output, bool changed)
 {
-	static Components::Skin* Last = nullptr;
-	if (Last != Output)
+	static components::skin* last = nullptr;
+	if (last != output)
 	{
-		Last = Output;
-		Changed = true;
+		last = output;
+		changed = true;
 	}
 
-	GUI::IElement Source = UI->GetElementById(Id);
-	if (Source.IsActive() && !Changed)
+	gui::ielement source = ui->get_element_by_id(id);
+	if (source.is_active() && !changed)
 	{
-		if (!Output->GetDrawable())
+		if (!output->get_drawable())
 		{
-			ResolveResource(Source, "skin", [Output](const String& File)
+			resolve_resource(source, "skin", [output](const string& file)
 			{
-				auto* App = ((Sandbox*)Sandbox::Get());
-				auto Instance = App->Content->Load<Vitex::Layer::SkinModel>(File);
-				Output->SetDrawable(Instance.Or(nullptr));
-				App->SetMetadata(Output->GetEntity());
-				if (Instance)
-					Memory::Release(*Instance);
-			}, Changed);
+				auto* app = ((sandbox*)sandbox::get());
+				auto instance = app->content->load<vitex::layer::skin_model>(file);
+				output->set_drawable(instance.or_else(nullptr));
+				app->set_metadata(output->get_entity());
+				if (instance)
+					memory::release(*instance);
+			}, changed);
 		}
 		else
 		{
-			Source.SetInnerHTML("[ setup skin ]");
-			Output->SetDrawable(nullptr);
+			source.set_inner_html("[ setup skin ]");
+			output->set_drawable(nullptr);
 		}
 	}
-	else if (Source.GetInnerHTML().empty() || Changed)
+	else if (source.get_inner_html().empty() || changed)
 	{
-		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
-		Source.SetInnerHTML(Stringify::Text("[ %s skin ]", Output->GetDrawable() ? "change" : "setup"));
+		((sandbox*)sandbox::get())->get_resource("", nullptr);
+		source.set_inner_html(stringify::text("[ %s skin ]", output->get_drawable() ? "change" : "setup"));
 	}
 }
-void ResolveSoftBody(GUI::Context* UI, const String& Id, Components::SoftBody* Output, bool Changed)
+void resolve_soft_body(gui::context* ui, const string& id, components::soft_body* output, bool changed)
 {
-	static Components::SoftBody* Last = nullptr;
-	if (Last != Output)
+	static components::soft_body* last = nullptr;
+	if (last != output)
 	{
-		Last = Output;
-		Changed = true;
+		last = output;
+		changed = true;
 	}
 
-	GUI::IElement Source = UI->GetElementById(Id);
-	if (Source.IsActive() && !Changed)
+	gui::ielement source = ui->get_element_by_id(id);
+	if (source.is_active() && !changed)
 	{
-		if (!Output->GetBody())
+		if (!output->get_body())
 		{
-			ResolveResource(Source, "soft body", [Output](const String& File)
+			resolve_resource(source, "soft body", [output](const string& file)
 			{
-				Output->Load(File, 0.0f);
-			}, Changed);
+				output->load(file, 0.0f);
+			}, changed);
 		}
 		else
 		{
-			Source.SetInnerHTML("[ setup soft body ]");
-			Output->Clear();
+			source.set_inner_html("[ setup soft body ]");
+			output->clear();
 		}
 	}
-	else if (Source.GetInnerHTML().empty() || Changed)
+	else if (source.get_inner_html().empty() || changed)
 	{
-		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
-		Source.SetInnerHTML(Stringify::Text("[ %s soft body ]", Output->GetBody() ? "change" : "setup"));
+		((sandbox*)sandbox::get())->get_resource("", nullptr);
+		source.set_inner_html(stringify::text("[ %s soft body ]", output->get_body() ? "change" : "setup"));
 	}
 }
-void ResolveRigidBody(GUI::Context* UI, const String& Id, Components::RigidBody* Output, bool Changed)
+void resolve_rigid_body(gui::context* ui, const string& id, components::rigid_body* output, bool changed)
 {
-	static Components::RigidBody* Last = nullptr;
-	if (Last != Output)
+	static components::rigid_body* last = nullptr;
+	if (last != output)
 	{
-		Last = Output;
-		Changed = true;
+		last = output;
+		changed = true;
 	}
 
-	GUI::IElement Source = UI->GetElementById(Id);
-	if (Source.IsActive() && !Changed)
+	gui::ielement source = ui->get_element_by_id(id);
+	if (source.is_active() && !changed)
 	{
-		if (!Output->GetBody())
+		if (!output->get_body())
 		{
-			ResolveResource(Source, "rigid body", [Output](const String& File)
+			resolve_resource(source, "rigid body", [output](const string& file)
 			{
-				Output->Load(File, 0.0f, 0.0f);
-			}, Changed);
+				output->load(file, 0.0f, 0.0f);
+			}, changed);
 		}
 		else
 		{
-			Source.SetInnerHTML("[ setup rigid body ]");
-			Output->Clear();
+			source.set_inner_html("[ setup rigid body ]");
+			output->clear();
 		}
 	}
-	else if (Source.GetInnerHTML().empty() || Changed)
+	else if (source.get_inner_html().empty() || changed)
 	{
-		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
-		Source.SetInnerHTML(Stringify::Text("[ %s rigid body ]", Output->GetBody() ? "change" : "setup"));
+		((sandbox*)sandbox::get())->get_resource("", nullptr);
+		source.set_inner_html(stringify::text("[ %s rigid body ]", output->get_body() ? "change" : "setup"));
 	}
 }
-void ResolveSliderConstraint(GUI::Context* UI, const String& Id, Components::SliderConstraint* Output, bool Ghost, bool Linear, bool Changed)
+void resolve_slider_constraint(gui::context* ui, const string& id, components::slider_constraint* output, bool ghost, bool linear, bool changed)
 {
-	static Components::SliderConstraint* Last = nullptr;
-	if (Last != Output)
+	static components::slider_constraint* last = nullptr;
+	if (last != output)
 	{
-		Last = Output;
-		Changed = true;
+		last = output;
+		changed = true;
 	}
 
-	GUI::IElement Source = UI->GetElementById(Id);
-	if (Source.IsActive() && !Changed)
+	gui::ielement source = ui->get_element_by_id(id);
+	if (source.is_active() && !changed)
 	{
-		if (!Output->GetConstraint())
+		if (!output->get_constraint())
 		{
-			ResolveEntity(Source, "slider constraint", [Output, Ghost, Linear](Entity* Source)
+			resolve_entity(source, "slider constraint", [output, ghost, linear](entity* source)
 			{
-				Output->Load(Source, Ghost, Linear);
-			}, Changed);
+				output->load(source, ghost, linear);
+			}, changed);
 		}
 		else
 		{
-			Source.SetInnerHTML("[ setup slider constraint ]");
-			Output->Clear();
+			source.set_inner_html("[ setup slider constraint ]");
+			output->clear();
 		}
 	}
-	else if (Source.GetInnerHTML().empty() || Changed)
+	else if (source.get_inner_html().empty() || changed)
 	{
-		((Sandbox*)Sandbox::Get())->GetEntity("", nullptr);
-		Source.SetInnerHTML(Stringify::Text("[ %s slider constraint ]", Output->GetConstraint() ? "change" : "setup"));
+		((sandbox*)sandbox::get())->get_entity("", nullptr);
+		source.set_inner_html(stringify::text("[ %s slider constraint ]", output->get_constraint() ? "change" : "setup"));
 	}
 }
-void ResolveSkinAnimator(GUI::Context* UI, const String& Id, Components::SkinAnimator* Output, bool Changed)
+void resolve_skin_animator(gui::context* ui, const string& id, components::skin_animator* output, bool changed)
 {
-	static Components::SkinAnimator* Last = nullptr;
-	if (Last != Output)
+	static components::skin_animator* last = nullptr;
+	if (last != output)
 	{
-		Last = Output;
-		Changed = true;
+		last = output;
+		changed = true;
 	}
 
-	GUI::IElement Source = UI->GetElementById(Id);
-	if (Source.IsActive() && !Changed)
+	gui::ielement source = ui->get_element_by_id(id);
+	if (source.is_active() && !changed)
 	{
-		if (Output->GetPath().empty())
+		if (output->get_path().empty())
 		{
-			ResolveResource(Source, "skin animation", [Output](const String& File)
+			resolve_resource(source, "skin animation", [output](const string& file)
 			{
-				auto Instance = Sandbox::Get()->Content->Load<SkinAnimation>(File);
-				Output->SetAnimation(Instance.Or(nullptr));
-				if (Instance)
-					Memory::Release(*Instance);
-			}, Changed);
+				auto instance = sandbox::get()->content->load<skin_animation>(file);
+				output->set_animation(instance.or_else(nullptr));
+				if (instance)
+					memory::release(*instance);
+			}, changed);
 		}
 		else
 		{
-			Source.SetInnerHTML("[ setup skin animation ]");
-			Output->SetAnimation(nullptr);
+			source.set_inner_html("[ setup skin animation ]");
+			output->set_animation(nullptr);
 		}
 	}
-	else if (Source.GetInnerHTML().empty() || Changed)
+	else if (source.get_inner_html().empty() || changed)
 	{
-		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
-		Source.SetInnerHTML(Stringify::Text("[ %s skin animation ]", Output->GetPath().empty() ? "change" : "setup"));
+		((sandbox*)sandbox::get())->get_resource("", nullptr);
+		source.set_inner_html(stringify::text("[ %s skin animation ]", output->get_path().empty() ? "change" : "setup"));
 	}
 }
-void ResolveKeyAnimator(GUI::Context* UI, const String& Id, Components::KeyAnimator* Output, bool Changed)
+void resolve_key_animator(gui::context* ui, const string& id, components::key_animator* output, bool changed)
 {
-	static Components::KeyAnimator* Last = nullptr;
-	if (Last != Output)
+	static components::key_animator* last = nullptr;
+	if (last != output)
 	{
-		Last = Output;
-		Changed = true;
+		last = output;
+		changed = true;
 	}
 
-	GUI::IElement Source = UI->GetElementById(Id);
-	if (Source.IsActive() && !Changed)
+	gui::ielement source = ui->get_element_by_id(id);
+	if (source.is_active() && !changed)
 	{
-		if (Output->GetPath().empty())
+		if (output->get_path().empty())
 		{
-			ResolveResource(Source, "key animation", [Output](const String& File)
+			resolve_resource(source, "key animation", [output](const string& file)
 			{
-				Output->LoadAnimation(File);
-			}, Changed);
+				output->load_animation(file);
+			}, changed);
 		}
 		else
 		{
-			Source.SetInnerHTML("[ setup key animation ]");
-			Output->ClearAnimation();
+			source.set_inner_html("[ setup key animation ]");
+			output->clear_animation();
 		}
 	}
-	else if (Source.GetInnerHTML().empty() || Changed)
+	else if (source.get_inner_html().empty() || changed)
 	{
-		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
-		Source.SetInnerHTML(Stringify::Text("[ %s key animation ]", Output->GetPath().empty() ? "change" : "setup"));
+		((sandbox*)sandbox::get())->get_resource("", nullptr);
+		source.set_inner_html(stringify::text("[ %s key animation ]", output->get_path().empty() ? "change" : "setup"));
 	}
 }
-void ResolveAudioSource(GUI::Context* UI, const String& Id, Components::AudioSource* Output, bool Changed)
+void resolve_audio_source(gui::context* ui, const string& id, components::audio_source* output, bool changed)
 {
-	static Components::AudioSource* Last = nullptr;
-	if (Last != Output)
+	static components::audio_source* last = nullptr;
+	if (last != output)
 	{
-		Last = Output;
-		Changed = true;
+		last = output;
+		changed = true;
 	}
 
-	GUI::IElement Source = UI->GetElementById(Id);
-	if (Source.IsActive() && !Changed)
+	gui::ielement source = ui->get_element_by_id(id);
+	if (source.is_active() && !changed)
 	{
-		if (!Output->GetSource()->GetClip())
+		if (!output->get_source()->get_clip())
 		{
-			ResolveResource(Source, "audio clip", [Output](const String& File)
+			resolve_resource(source, "audio clip", [output](const string& file)
 			{
-				auto Instance = Sandbox::Get()->Content->Load<AudioClip>(File);
-				Output->GetSource()->SetClip(Instance.Or(nullptr));
-				if (Instance)
-					Memory::Release(*Instance);
-			}, Changed);
+				auto instance = sandbox::get()->content->load<audio_clip>(file);
+				output->get_source()->set_clip(instance.or_else(nullptr));
+				if (instance)
+					memory::release(*instance);
+			}, changed);
 		}
 		else
 		{
-			Source.SetInnerHTML("[ setup audio clip ]");
-			Output->GetSource()->SetClip(nullptr);
+			source.set_inner_html("[ setup audio clip ]");
+			output->get_source()->set_clip(nullptr);
 		}
 	}
-	else if (Source.GetInnerHTML().empty() || Changed)
+	else if (source.get_inner_html().empty() || changed)
 	{
-		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
-		Source.SetInnerHTML(Stringify::Text("[ %s audio clip ]", Output->GetSource()->GetClip() ? "change" : "setup"));
+		((sandbox*)sandbox::get())->get_resource("", nullptr);
+		source.set_inner_html(stringify::text("[ %s audio clip ]", output->get_source()->get_clip() ? "change" : "setup"));
 	}
 }
-void ResolveScriptable(GUI::Context* UI, const String& Id, Components::Scriptable* Output, bool Changed)
+void resolve_scriptable(gui::context* ui, const string& id, components::scriptable* output, bool changed)
 {
-	static Components::Scriptable* Last = nullptr;
-	if (Last != Output)
+	static components::scriptable* last = nullptr;
+	if (last != output)
 	{
-		Last = Output;
-		Changed = true;
+		last = output;
+		changed = true;
 	}
 
-	GUI::IElement Source = UI->GetElementById(Id);
-	if (Source.IsActive() && !Changed)
+	gui::ielement source = ui->get_element_by_id(id);
+	if (source.is_active() && !changed)
 	{
-		if (Output->GetSource().empty())
+		if (output->get_source().empty())
 		{
-			ResolveResource(Source, "script", [Output](const String& File)
+			resolve_resource(source, "script", [output](const string& file)
 			{
-				Output->LoadSource(Components::Scriptable::SourceType::Resource, File);
-			}, Changed);
+				output->load_source(components::scriptable::source_type::resource, file);
+			}, changed);
 		}
 		else
 		{
-			Source.SetInnerHTML("[ setup script ]");
-			Output->UnloadSource();
+			source.set_inner_html("[ setup script ]");
+			output->unload_source();
 		}
 	}
-	else if (Source.GetInnerHTML().empty() || Changed)
+	else if (source.get_inner_html().empty() || changed)
 	{
-		((Sandbox*)Sandbox::Get())->GetResource("", nullptr);
-		Source.SetInnerHTML(Stringify::Text("[ %s script ]", Output->GetSource().empty() ? "change" : "setup"));
+		((sandbox*)sandbox::get())->get_resource("", nullptr);
+		source.set_inner_html(stringify::text("[ %s script ]", output->get_source().empty() ? "change" : "setup"));
 	}
 }

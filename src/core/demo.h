@@ -2,21 +2,21 @@
 #define DEMO_H
 #include "../core/globals.h"
 
-class Demo : public HeavyApplication
+class demo : public heavy_application
 {
 private:
-	static String Source;
+	static string source;
 
 public:
-	explicit Demo(HeavyApplication::Desc* Conf);
-	~Demo() override;
-	void WindowEvent(WindowState State, int X, int Y) override;
-	void Initialize() override;
-	void Dispatch(Timer* Time) override;
-	void Publish(Timer* Time) override;
+	explicit demo(heavy_application::desc* conf);
+	~demo() override;
+	void window_event(window_state state, int x, int y) override;
+	void initialize() override;
+	void dispatch(timer* time) override;
+	void publish(timer* time) override;
 
 public:
-	static void SetSource(const String& Resource);
-	static String& GetSource();
+	static void set_source(const string& resource);
+	static string& get_source();
 };
 #endif

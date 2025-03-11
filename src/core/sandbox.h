@@ -3,145 +3,145 @@
 #include "../core/globals.h"
 #include "../utils/gizmo.h"
 
-enum Inspector
+enum inspector
 {
-	Inspector_None,
-	Inspector_Entity,
-	Inspector_Material,
-	Inspector_Settings,
-	Inspector_Materials,
-	Inspector_ImportModel,
-	Inspector_ImportAnimation
+	inspector_none,
+	inspector_entity,
+	inspector_material,
+	inspector_settings,
+	inspector_materials,
+	inspector_import_model,
+	inspector_import_animation
 };
 
-class Sandbox : public HeavyApplication
+class sandbox : public heavy_application
 {
 public:
-    struct
-    {
-		uint64_t Move = 0;
-        Material* Material = nullptr;
-		Entity* Might = nullptr;
-        Entity* Entity = nullptr;
-        IGizmo* Gizmo = nullptr;
-        Inspector Window = Inspector_None;
-		String Pathname;
-    } Selection;
-
-    struct
-    {
-		std::function<void(const String&)> OnResource;
-		std::function<void(Entity*)> OnEntity;
-		GUI::DataModel* System = nullptr;
-		GUI::DataNode* Entities = nullptr;
-		GUI::DataNode* Materials = nullptr;
-		GUI::DataNode* Models = nullptr;
-		GUI::DataNode* Skins = nullptr;
-		GUI::DataNode* Directories = nullptr;
-		GUI::DataNode* Files = nullptr;
-		GUI::Context* GUI = nullptr;
-		Entity* Camera = nullptr;
-		Entity* Draggable = nullptr;
-		Transform::Spacing Space;
-		String Status;
-		String Filename;
-		String Target;
-        Vector2 Cursor;
-        Matrix4x4 Gizmo;
-        float GizmoScale = 1.0f;
-		float Frames = 0.0f;
-        bool IsPathTracked = false;
-        bool IsSceneFocused = false;
-        bool IsCameraActive = false;
-		bool IsTraceMode = false;
-		bool IsDraggable = false;
-		bool IsDragHovered = false;
-		bool IsInteractive = false;
-		bool IsCaptured = false;
-		bool IsMounted = false;
-		uint32_t MeshImportOpts = 0;
-		int ElementsLimit = 0;
-    } State;
-
-    struct
-    {
-		IGizmo* Gizmo[3] = { nullptr };
-        String CurrentPath;
-        String NextPath;
-		String ScenePath;
-    } Resource;
+	struct
+	{
+		uint64_t move = 0;
+		material* material = nullptr;
+		entity* might = nullptr;
+		entity* entity = nullptr;
+		IGizmo* gizmo = nullptr;
+		inspector window = inspector_none;
+		string pathname;
+	} selection;
 
 	struct
 	{
-		Texture2D* Sandbox = nullptr;
-		Texture2D* Empty = nullptr;
-		Texture2D* Animation = nullptr;
-		Texture2D* Body = nullptr;
-		Texture2D* Camera = nullptr;
-		Texture2D* Decal = nullptr;
-		Texture2D* Mesh = nullptr;
-		Texture2D* Motion = nullptr;
-		Texture2D* Light = nullptr;
-		Texture2D* Probe = nullptr;
-		Texture2D* Listener = nullptr;
-		Texture2D* Source = nullptr;
-		Texture2D* Emitter = nullptr;
-	} Icons;
+		std::function<void(const string&)> on_resource;
+		std::function<void(entity*)> on_entity;
+		gui::data_model* system = nullptr;
+		gui::data_node* entities = nullptr;
+		gui::data_node* materials = nullptr;
+		gui::data_node* models = nullptr;
+		gui::data_node* skins = nullptr;
+		gui::data_node* directories = nullptr;
+		gui::data_node* files = nullptr;
+		gui::context* gui = nullptr;
+		entity* camera = nullptr;
+		entity* draggable = nullptr;
+		transform::spacing space;
+		string status;
+		string filename;
+		string target;
+		vector2 cursor;
+		matrix4x4 gizmo;
+		float gizmo_scale = 1.0f;
+		float frames = 0.0f;
+		bool is_path_tracked = false;
+		bool is_scene_focused = false;
+		bool is_camera_active = false;
+		bool is_trace_mode = false;
+		bool is_draggable = false;
+		bool is_drag_hovered = false;
+		bool is_interactive = false;
+		bool is_captured = false;
+		bool is_mounted = false;
+		uint32_t mesh_import_opts = 0;
+		int elements_limit = 0;
+	} state;
 
 	struct
 	{
-		Surface* Sandbox = nullptr;
-	} Favicons;
+		IGizmo* gizmo[3] = { nullptr };
+		string current_path;
+		string next_path;
+		string scene_path;
+	} resource;
 
 	struct
 	{
-		DepthStencilState* DepthStencil = nullptr;
-		RasterizerState* NoneRasterizer = nullptr;
-		RasterizerState* BackRasterizer = nullptr;
-		BlendState* Blend = nullptr;
-		InputLayout* Layout = nullptr;
-	} States;
+		texture_2d* sandbox = nullptr;
+		texture_2d* empty = nullptr;
+		texture_2d* animation = nullptr;
+		texture_2d* body = nullptr;
+		texture_2d* camera = nullptr;
+		texture_2d* decal = nullptr;
+		texture_2d* mesh = nullptr;
+		texture_2d* motion = nullptr;
+		texture_2d* light = nullptr;
+		texture_2d* probe = nullptr;
+		texture_2d* listener = nullptr;
+		texture_2d* source = nullptr;
+		texture_2d* emitter = nullptr;
+	} icons;
+
+	struct
+	{
+		surface* sandbox = nullptr;
+	} favicons;
+
+	struct
+	{
+		depth_stencil_state* depth_stencil = nullptr;
+		rasterizer_state* none_rasterizer = nullptr;
+		rasterizer_state* back_rasterizer = nullptr;
+		blend_state* blend = nullptr;
+		input_layout* layout = nullptr;
+	} states;
 
 public:
-	explicit Sandbox(HeavyApplication::Desc* Conf, const String& Path = "");
-	~Sandbox() override;
-	void KeyEvent(KeyCode Key, KeyMod Mod, int Virtual, int Repeat, bool Pressed) override;
-	void WindowEvent(WindowState State, int X, int Y) override;
-	void Initialize() override;
-	void Dispatch(Timer* Time) override;
-	void Publish(Timer* Time) override;
-	void LoadCamera();
-	void UnloadCamera();
-    void UpdateScene();
-	void UpdateGrid(Timer* Time);
-	void UpdateMutation(const std::string_view& Name, VariantArgs& Args);
-	void UpdateFiles(const String& Path, int64_t Depth = 0);
-	void UpdateSystem();
-	void InspectEntity();
-	void InspectSettings();
-	void InspectImporter();
-	void InspectMaterial();
-	void SetLogging(bool Active);
-	void SetViewModel();
-	void SetDirectory(const String& Path);
-	void SetSelection(Inspector Window, void* Object = nullptr);
-	void SetStatus(const String& Status);
-	void SetMutation(Entity* Parent, const std::string_view& Type);
-	void SetMetadata(Entity* Source);
-    void GetPathName(String& Path);
-    void GetEntityCell();
-    void GetEntitySync();
-	void GetResource(const String& Name, const std::function<void(const String&)>& Callback);
-	void GetEntity(const String& Name, const std::function<void(Entity*)>& Callback);
-	bool GetSceneFocus();
-	bool GetResourceState(const String& Name);
-	bool GetEntityState(const String& Name);
-	bool GetSelectionState();
-	Texture2D* GetIcon(Entity* Value);
-	void* GetEntityIndex(Entity* Value);
-	uint64_t GetEntityNesting(Entity* Value);
-    String GetLabel(Entity* Value);
-    String GetName(Entity* Value);
-	String GetPascal(const String& Value);
+	explicit sandbox(heavy_application::desc* conf, const string& path = "");
+	~sandbox() override;
+	void key_event(key_code key, key_mod mod, int computed, int repeat, bool pressed) override;
+	void window_event(window_state state, int x, int y) override;
+	void initialize() override;
+	void dispatch(timer* time) override;
+	void publish(timer* time) override;
+	void load_camera();
+	void unload_camera();
+	void update_scene();
+	void update_grid(timer* time);
+	void update_mutation(const std::string_view& name, variant_args& args);
+	void update_files(const string& path, int64_t depth = 0);
+	void update_system();
+	void inspect_entity();
+	void inspect_settings();
+	void inspect_importer();
+	void inspect_material();
+	void set_logging(bool active);
+	void set_view_model();
+	void set_directory(const string& path);
+	void set_selection(inspector window, void* object = nullptr);
+	void set_status(const string& status);
+	void set_mutation(entity* parent, const std::string_view& type);
+	void set_metadata(entity* source);
+	void get_path_name(string& path);
+	void get_entity_cell();
+	void get_entity_sync();
+	void get_resource(const string& name, const std::function<void(const string&)>& callback);
+	void get_entity(const string& name, const std::function<void(entity*)>& callback);
+	bool get_scene_focus();
+	bool get_resource_state(const string& name);
+	bool get_entity_state(const string& name);
+	bool get_selection_state();
+	texture_2d* get_icon(entity* value);
+	void* get_entity_index(entity* value);
+	uint64_t get_entity_nesting(entity* value);
+	string get_label(entity* value);
+	string get_name(entity* value);
+	string get_pascal(const string& value);
 };
 #endif

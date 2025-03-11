@@ -1,63 +1,63 @@
 #include "demo.h"
 
-Demo::Demo(HeavyApplication::Desc* Conf) : HeavyApplication(Conf)
+demo::demo(heavy_application::desc* conf) : heavy_application(conf)
 {
 }
-Demo::~Demo()
+demo::~demo()
 {
 }
-void Demo::WindowEvent(WindowState NewState, int X, int Y)
+void demo::window_event(window_state new_state, int x, int y)
 {
-	switch (NewState)
+	switch (new_state)
 	{
-		case WindowState::Resize:
-			Renderer->ResizeBuffers((unsigned int)X, (unsigned int)Y);
-			if (Scene != nullptr)
-				Scene->ResizeBuffers();
+		case window_state::resize:
+			renderer->resize_buffers((unsigned int)x, (unsigned int)y);
+			if (scene != nullptr)
+				scene->resize_buffers();
 			break;
-		case WindowState::Close:
-			Activity->Message.Setup(AlertType::Warning, "Demo", "Do you want to go back to sandbox?");
-			Activity->Message.Button(AlertConfirm::Escape, "No", 1);
-			Activity->Message.Button(AlertConfirm::Return, "Yes", 2);
-			Activity->Message.Result([this](int Button)
+		case window_state::close:
+			activity->message.setup(alert_type::warning, "Demo", "Do you want to go back to sandbox?");
+			activity->message.button(alert_confirm::escape, "No", 1);
+			activity->message.button(alert_confirm::defer, "Yes", 2);
+			activity->message.result([this](int button)
 			{
-				if (Button == 2)
-					Stop();
+				if (button == 2)
+					stop();
 			});
 			break;
 		default:
 			break;
 	}
 }
-void Demo::Initialize()
+void demo::initialize()
 {
-	auto NewScene = Content->Load<SceneGraph>(Source);
-	if (!NewScene)
-		return Stop();
+	auto new_scene = content->load<scene_graph>(source);
+	if (!new_scene)
+		return stop();
 
-	Scene = *NewScene;
-	Scene->GetCamera();
+	scene = *new_scene;
+	scene->get_camera();
 }
-void Demo::Dispatch(Timer* Time)
+void demo::dispatch(timer* time)
 {
-	Scene->Dispatch(Time);
+	scene->dispatch(time);
 }
-void Demo::Publish(Timer* Time)
+void demo::publish(timer* time)
 {
-	Renderer->Clear(0, 0, 0);
-	Renderer->ClearDepth();
+	renderer->clear(0, 0, 0);
+	renderer->clear_depth();
 
-	Scene->Publish(Time);
-	Scene->Submit();
+	scene->publish(time);
+	scene->submit();
 
-	Renderer->Submit();
+	renderer->submit();
 }
-void Demo::SetSource(const String& Resource)
+void demo::set_source(const string& resource)
 {
-	Source = Resource;
+	source = resource;
 }
-String& Demo::GetSource()
+string& demo::get_source()
 {
-	return Source;
+	return source;
 }
-String Demo::Source;
+string demo::source;

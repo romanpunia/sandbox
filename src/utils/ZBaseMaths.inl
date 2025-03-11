@@ -130,7 +130,7 @@ inline tvector4 tvector4::operator + () const
 
 inline tvector4 tvector4::operator - () const
 {
-	return vector4(-x, -y, -z, -w);
+	return ::vector4(-x, -y, -z, -w);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -544,7 +544,7 @@ inline tvector3 tvector3::operator * (float f) const
 
 inline tvector4 tvector4::operator * (float f) const
 {
-	return vector4(x * f, y * f, z * f, w * f);
+	return ::vector4(x * f, y * f, z * f, w * f);
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 

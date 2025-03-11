@@ -3,35 +3,35 @@
 
 int main()
 {
-	Vitex::HeavyRuntime Scope;
-Entry:
+	vitex::heavy_runtime scope;
+entry:
 	{
-		HeavyApplication::Desc Init;
-		Init.GraphicsDevice.VSyncMode = VSync::On;
-		Init.Activity.Maximized = true;
-		Init.Activity.Title = "Sandbox";
-		Init.Directory = "content";
+		heavy_application::desc init;
+		init.graphics_device.vsync_mode = vsync::on;
+		init.activity.maximized = true;
+		init.activity.title = "Sandbox";
+		init.directory = "content";
 #ifdef _DEBUG
-		Init.GraphicsDevice.Debug = true;
+		init.graphics_device.debug = true;
 #else
-		Init.GraphicsDevice.Debug = false;
+		init.graphics_device.debug = false;
 #endif
-		HeavyApplication* App = new Sandbox(&Init);
-		App->Start();
-		Memory::Release(App);
+		heavy_application* app = new sandbox(&init);
+		app->start();
+		memory::release(app);
 
-		if (Demo::GetSource().empty())
+		if (demo::get_source().empty())
 		{
-			Demo::GetSource().~basic_string();
-			goto Exit;
+			demo::get_source().~basic_string();
+			goto exit;
 		}
 
-		App = new Demo(&Init);
-		App->Start();
-		Memory::Release(App);
+		app = new demo(&init);
+		app->start();
+		memory::release(app);
 
-		goto Entry;
+		goto entry;
 	}
-Exit:
+exit:
 	return 0;
 }

@@ -193,7 +193,7 @@ public:
 	{
 		tmatrix viewproj = m_Model * m_Proj;
 
-		tvector4 trf = vector4(m_pMatrix->V4.position.x, m_pMatrix->V4.position.y, m_pMatrix->V4.position.z, 1.f);
+		tvector4 trf = ::vector4(m_pMatrix->V4.position.x, m_pMatrix->V4.position.y, m_pMatrix->V4.position.z, 1.f);
 		trf.Transform(viewproj);
 		m_ScreenFactor = mDisplayScale * 0.15f * trf.w;
 	}
@@ -208,7 +208,7 @@ public:
 
 		tvector3 df, inters;
 
-		m_plan = vector4(m_pMatrix->GetTranslation(), norm);
+		m_plan = ::vector4(m_pMatrix->GetTranslation(), norm);
 		m_plan.RayInter(inters, rayOrigin, rayDir);
 		df.TransformPoint(inters, mt);
 

@@ -5,338 +5,338 @@
 #include "../controller/renderers.h"
 #include "../controller/effects.h"
 
-Sandbox::Sandbox(HeavyApplication::Desc* Conf, const String& Path) : HeavyApplication(Conf)
+sandbox::sandbox(heavy_application::desc* conf, const string& path) : heavy_application(conf)
 {
-	OS::Directory::SetWorking(OS::Directory::GetModule()->c_str());
-	Resource.NextPath = Path;
+	os::directory::set_working(os::directory::get_module()->c_str());
+	resource.next_path = path;
 #ifdef _DEBUG
-	Console::Get()->Show();
+	console::get()->show();
 #endif
 }
-Sandbox::~Sandbox()
+sandbox::~sandbox()
 {
-	SetLogging(false);
-	Memory::Release(Icons.Empty);
-	Memory::Release(Icons.Animation);
-	Memory::Release(Icons.Body);
-	Memory::Release(Icons.Camera);
-	Memory::Release(Icons.Decal);
-	Memory::Release(Icons.Mesh);
-	Memory::Release(Icons.Motion);
-	Memory::Release(Icons.Light);
-	Memory::Release(Icons.Probe);
-	Memory::Release(Icons.Listener);
-	Memory::Release(Icons.Source);
-	Memory::Release(Icons.Emitter);
-	Memory::Release(Icons.Sandbox);
-	Memory::Release(Favicons.Sandbox);
-	delete (CGizmoTransformMove*)Resource.Gizmo[0];
-	delete (CGizmoTransformRotate*)Resource.Gizmo[1];
-	delete (CGizmoTransformScale*)Resource.Gizmo[2];
+	set_logging(false);
+	memory::release(icons.empty);
+	memory::release(icons.animation);
+	memory::release(icons.body);
+	memory::release(icons.camera);
+	memory::release(icons.decal);
+	memory::release(icons.mesh);
+	memory::release(icons.motion);
+	memory::release(icons.light);
+	memory::release(icons.probe);
+	memory::release(icons.listener);
+	memory::release(icons.source);
+	memory::release(icons.emitter);
+	memory::release(icons.sandbox);
+	memory::release(favicons.sandbox);
+	delete (CGizmoTransformMove*)resource.gizmo[0];
+	delete (CGizmoTransformRotate*)resource.gizmo[1];
+	delete (CGizmoTransformScale*)resource.gizmo[2];
 }
-void Sandbox::KeyEvent(KeyCode Key, KeyMod, int, int, bool Pressed)
+void sandbox::key_event(key_code key, key_mod, int, int, bool pressed)
 {
-	if (Key == KeyCode::CursorLeft && Selection.Gizmo)
+	if (key == key_code::cursor_left && selection.gizmo)
 	{
-		if (!Pressed)
+		if (!pressed)
 		{
-			Activity->SetGrabbing(false);
-			Selection.Gizmo->OnMouseUp((unsigned int)State.Cursor.X, (unsigned int)State.Cursor.Y);
+			activity->set_grabbing(false);
+			selection.gizmo->OnMouseUp((unsigned int)state.cursor.x, (unsigned int)state.cursor.y);
 		}
-		else if (Selection.Gizmo->OnMouseDown((unsigned int)State.Cursor.X, (unsigned int)State.Cursor.Y))
-			Activity->SetGrabbing(true);
+		else if (selection.gizmo->OnMouseDown((unsigned int)state.cursor.x, (unsigned int)state.cursor.y))
+			activity->set_grabbing(true);
 	}
 }
-void Sandbox::WindowEvent(WindowState NewState, int X, int Y)
+void sandbox::window_event(window_state new_state, int x, int y)
 {
-	switch (NewState)
+	switch (new_state)
 	{
-		case WindowState::Resize:
-			Renderer->ResizeBuffers((unsigned int)X, (unsigned int)Y);
-			if (Scene != nullptr)
-				Scene->ResizeBuffers();
+		case window_state::resize:
+			renderer->resize_buffers((unsigned int)x, (unsigned int)y);
+			if (scene != nullptr)
+				scene->resize_buffers();
 
-			SetStatus("Buffer resize was submitted");
+			set_status("Buffer resize was submitted");
 			break;
-		case WindowState::Close:
-			Activity->Message.Setup(AlertType::Warning, "Sandbox", "Do you really want to exit?");
-			Activity->Message.Button(AlertConfirm::Escape, "No", 1);
-			Activity->Message.Button(AlertConfirm::Return, "Yes", 2);
-			Activity->Message.Result([this](int Button)
+		case window_state::close:
+			activity->message.setup(alert_type::warning, "Sandbox", "Do you really want to exit?");
+			activity->message.button(alert_confirm::escape, "No", 1);
+			activity->message.button(alert_confirm::defer, "Yes", 2);
+			activity->message.result([this](int button)
 			{
-				if (Button == 2)
-					Stop();
+				if (button == 2)
+					stop();
 			});
 			break;
 		default:
 			break;
 	}
 }
-void Sandbox::Initialize()
+void sandbox::initialize()
 {
-	States.DepthStencil = Renderer->GetDepthStencilState("doo_soo_lt");
-	States.NoneRasterizer = Renderer->GetRasterizerState("so_co");
-	States.BackRasterizer = Renderer->GetRasterizerState("so_cback");
-	States.Blend = Renderer->GetBlendState("bw_wrgba_one");
-	States.Layout = Renderer->GetInputLayout("vx_shape");
-	Icons.Sandbox = *Content->Load<Texture2D>("editor/img/sandbox.png");
-	Icons.Empty = *Content->Load<Texture2D>("editor/img/empty.png");
-	Icons.Animation = *Content->Load<Texture2D>("editor/img/animation.png");
-	Icons.Body = *Content->Load<Texture2D>("editor/img/body.png");
-	Icons.Camera = *Content->Load<Texture2D>("editor/img/camera.png");
-	Icons.Decal = *Content->Load<Texture2D>("editor/img/decal.png");
-	Icons.Mesh = *Content->Load<Texture2D>("editor/img/mesh.png");
-	Icons.Motion = *Content->Load<Texture2D>("editor/img/motion.png");
-	Icons.Light = *Content->Load<Texture2D>("editor/img/light.png");
-	Icons.Probe = *Content->Load<Texture2D>("editor/img/probe.png");
-	Icons.Listener = *Content->Load<Texture2D>("editor/img/listener.png");
-	Icons.Source = *Content->Load<Texture2D>("editor/img/source.png");
-	Icons.Emitter = *Content->Load<Texture2D>("editor/img/emitter.png");
-	Favicons.Sandbox = *Renderer->CreateSurface(Icons.Sandbox);
-	Resource.CurrentPath = Content->GetEnvironment();
-	Resource.Gizmo[0] = CreateMoveGizmo();
-	Resource.Gizmo[1] = CreateRotateGizmo();
-	Resource.Gizmo[2] = CreateScaleGizmo();
-	Resource.Gizmo[1]->SetAxisMask(IGizmo::AXIS_X | IGizmo::AXIS_Y | IGizmo::AXIS_Z);
-	State.IsInteractive = true;
-	State.IsPathTracked = false;
-	State.IsCameraActive = true;
-	State.IsTraceMode = false;
-	State.IsDraggable = false;
-	State.IsDragHovered = false;
-	State.IsCaptured = false;
-	State.GUI = FetchUI();
-	State.GUI->SetMountCallback([this](GUI::Context*)
+	states.depth_stencil = renderer->get_depth_stencil_state("doo_soo_lt");
+	states.none_rasterizer = renderer->get_rasterizer_state("so_co");
+	states.back_rasterizer = renderer->get_rasterizer_state("so_cback");
+	states.blend = renderer->get_blend_state("bw_wrgba_one");
+	states.layout = renderer->get_input_layout("vx_shape");
+	icons.sandbox = *content->load<texture_2d>("editor/img/sandbox.png");
+	icons.empty = *content->load<texture_2d>("editor/img/empty.png");
+	icons.animation = *content->load<texture_2d>("editor/img/animation.png");
+	icons.body = *content->load<texture_2d>("editor/img/body.png");
+	icons.camera = *content->load<texture_2d>("editor/img/camera.png");
+	icons.decal = *content->load<texture_2d>("editor/img/decal.png");
+	icons.mesh = *content->load<texture_2d>("editor/img/mesh.png");
+	icons.motion = *content->load<texture_2d>("editor/img/motion.png");
+	icons.light = *content->load<texture_2d>("editor/img/light.png");
+	icons.probe = *content->load<texture_2d>("editor/img/probe.png");
+	icons.listener = *content->load<texture_2d>("editor/img/listener.png");
+	icons.source = *content->load<texture_2d>("editor/img/source.png");
+	icons.emitter = *content->load<texture_2d>("editor/img/emitter.png");
+	favicons.sandbox = *renderer->create_surface(icons.sandbox);
+	resource.current_path = content->get_environment();
+	resource.gizmo[0] = CreateMoveGizmo();
+	resource.gizmo[1] = CreateRotateGizmo();
+	resource.gizmo[2] = CreateScaleGizmo();
+	resource.gizmo[1]->SetAxisMask(IGizmo::AXIS_X | IGizmo::AXIS_Y | IGizmo::AXIS_Z);
+	state.is_interactive = true;
+	state.is_path_tracked = false;
+	state.is_camera_active = true;
+	state.is_trace_mode = false;
+	state.is_draggable = false;
+	state.is_drag_hovered = false;
+	state.is_captured = false;
+	state.gui = fetch_ui();
+	state.gui->set_mount_callback([this](gui::context*)
 	{
-		if (!State.IsMounted)
+		if (!state.is_mounted)
 		{
-			SetViewModel();
-			State.IsMounted = true;
+			set_view_model();
+			state.is_mounted = true;
 		}
 	});
-	State.Draggable = nullptr;
-	State.GizmoScale = 1.25f;
-	State.Status = "Ready";
-	State.ElementsLimit = 1024;
-	State.MeshImportOpts = (uint32_t)Processors::MeshPreset::Default;
+	state.draggable = nullptr;
+	state.gizmo_scale = 1.25f;
+	state.status = "Ready";
+	state.elements_limit = 1024;
+	state.mesh_import_opts = (uint32_t)processors::mesh_preset::defaults;
 
-	auto Document = State.GUI->LoadDocument("editor/ui/layout.html", true);
-	if (!Document)
+	auto document = state.gui->load_document("editor/ui/layout.html", true);
+	if (!document)
 	{
-		VI_ERR("could not load GUI");
-		return Stop();
+		VI_ERR("could not load gui: %s", document.error().what());
+		return stop();
 	}
 
-	auto* SceneProcessor = (Processors::SceneGraphProcessor*)Content->GetProcessor<SceneGraph>();
-	SceneProcessor->SetupCallback = [this](SceneGraph* Scene)
+	auto* scene_processor = (processors::scene_graph_processor*)content->get_processor<scene_graph>();
+	scene_processor->setup_callback = [this](scene_graph* scene)
 	{
-		Scene->ClearListener("mutation", nullptr);
-		Scene->SetListener("mutation", std::bind(&Sandbox::UpdateMutation, this, std::placeholders::_1, std::placeholders::_2));
+		scene->clear_listener("mutation", nullptr);
+		scene->set_listener("mutation", std::bind(&sandbox::update_mutation, this, std::placeholders::_1, std::placeholders::_2));
 	};
 
-	Document->Show();
-	Resource.NextPath = "./scenes/demo.xml";
-	ErrorHandling::SetFlag(LogOption::Async, false);
-	Demo::SetSource("");
-	SetLogging(true);
-	UpdateScene();
-	UpdateFiles(Resource.CurrentPath);
-	SetStatus("Initialization done");
+	document->show();
+	resource.next_path = "./scenes/demo.xml";
+	error_handling::set_flag(log_option::async, false);
+	demo::set_source("");
+	set_logging(true);
+	update_scene();
+	update_files(resource.current_path);
+	set_status("Initialization done");
 
-	Activity->SetIcon(Favicons.Sandbox);
-	Activity->Callbacks.CursorMove = [this](int X, int Y, int RX, int RY)
+	activity->set_icon(favicons.sandbox);
+	activity->callbacks.cursor_move = [this](int x, int y, int RX, int RY)
 	{
-		State.Cursor = Activity->GetCursorPosition();
-		if (Selection.Gizmo)
-			Selection.Gizmo->OnMouseMove(X, Y);
+		state.cursor = activity->get_cursor_position();
+		if (selection.gizmo)
+			selection.gizmo->OnMouseMove(x, y);
 	};
 }
-void Sandbox::Dispatch(Timer* Time)
+void sandbox::dispatch(timer* time)
 {
 #ifdef _DEBUG
-	if (Activity->IsKeyDownHit(KeyCode::F5) && State.GUI != nullptr)
+	if (activity->is_key_down_hit(key_code::f5) && state.gui != nullptr)
 	{
-		State.GUI->ClearDocuments();
-		State.GUI->ClearStyles();
+		state.gui->clear_documents();
+		state.gui->clear_styles();
 
-		auto Document = State.GUI->LoadDocument("editor/ui/layout.html", true);
-		if (Document)
-			Document->Show();
+		auto document = state.gui->load_document("editor/ui/layout.html", true);
+		if (document)
+			document->show();
 	}
 #endif
-	if (Activity->IsKeyDownHit(KeyCode::F6))
-		State.IsInteractive = !State.IsInteractive;
+	if (activity->is_key_down_hit(key_code::f6))
+		state.is_interactive = !state.is_interactive;
 
-	if (!State.IsCameraActive && Scene->GetCamera()->GetEntity() == State.Camera)
-		State.IsCameraActive = true;
+	if (!state.is_camera_active && scene->get_camera()->get_entity() == state.camera)
+		state.is_camera_active = true;
 
-	if (State.Camera != nullptr)
+	if (state.camera != nullptr)
 	{
-		bool Active = (!Scene->IsActive() && GetSceneFocus());
-		State.Camera->GetComponent<Components::Fly>()->SetActive(Active);
-		State.Camera->GetComponent<Components::FreeLook>()->SetActive(Active);
-		if (Active)
+		bool active = (!scene->is_active() && !state.gui->is_input_focused());
+		state.camera->get_component<components::fly>()->set_active(active);
+		state.camera->get_component<components::free_look>()->set_active(active);
+		if (active)
 		{
-			for (auto& Item : *State.Camera)
-				Item.second->Update(Time);
+			for (auto& item : *state.camera)
+				item.second->update(time);
 		}
 	}
 
-	if (State.IsInteractive)
+	if (state.is_interactive)
 	{
-		State.Frames = (float)Time->GetFrames();
-		if (!Resource.NextPath.empty())
-			return UpdateScene();
+		state.frames = (float)time->get_frames();
+		if (!resource.next_path.empty())
+			return update_scene();
 
-		UpdateSystem();
-		if (State.GUI != nullptr)
-			State.GUI->UpdateEvents(Activity);
+		update_system();
+		if (state.gui != nullptr)
+			state.gui->update_events(activity);
 	}
 
-	if (!State.IsCaptured)
+	if (!state.is_captured)
 	{
-		if (State.IsInteractive)
+		if (state.is_interactive)
 		{
-			if (Activity->IsKeyDownHit(KeyCode::F1))
+			if (activity->is_key_down_hit(key_code::f1))
 			{
-				State.IsTraceMode = !State.IsTraceMode;
-				if (!State.IsTraceMode)
-					SetStatus("Tracing mode: off");
+				state.is_trace_mode = !state.is_trace_mode;
+				if (!state.is_trace_mode)
+					set_status("Tracing mode: off");
 				else
-					SetStatus("Tracing mode: on");
+					set_status("Tracing mode: on");
 			}
 
-			if (State.Camera != nullptr && Scene->GetCamera()->GetEntity() == State.Camera && State.IsCameraActive)
+			if (state.camera != nullptr && scene->get_camera()->get_entity() == state.camera && state.is_camera_active)
 			{
-				if (Selection.Entity != nullptr)
+				if (selection.entity != nullptr)
 				{
-					if (Activity->IsKeyDownHit(KeyCode::Delete))
+					if (activity->is_key_down_hit(key_code::deinit))
 					{
-						SetStatus("Entity was removed");
-						Scene->DeleteEntity(Selection.Entity);
-						SetSelection(Inspector_None);
+						set_status("Entity was removed");
+						scene->delete_entity(selection.entity);
+						set_selection(inspector_none);
 					}
 
-					if (GetSceneFocus())
+					if (get_scene_focus())
 					{
-						if (Activity->IsKeyDownHit(KeyCode::D1))
+						if (activity->is_key_down_hit(key_code::d1))
 						{
-							Selection.Gizmo = Resource.Gizmo[Selection.Move = 0];
-							Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
-							Selection.Gizmo->SetDisplayScale(State.GizmoScale);
-							Selection.Gizmo->SetLocation(IGizmo::LOCATE_WORLD);
-							SetStatus("Movement gizmo selected");
+							selection.gizmo = resource.gizmo[selection.move = 0];
+							selection.gizmo->SetEditMatrix(state.gizmo.row);
+							selection.gizmo->SetDisplayScale(state.gizmo_scale);
+							selection.gizmo->SetLocation(IGizmo::LOCATE_WORLD);
+							set_status("Movement gizmo selected");
 						}
-						else if (Activity->IsKeyDownHit(KeyCode::D2))
+						else if (activity->is_key_down_hit(key_code::d2))
 						{
-							Selection.Gizmo = Resource.Gizmo[Selection.Move = 1];
-							Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
-							Selection.Gizmo->SetDisplayScale(State.GizmoScale);
-							Selection.Gizmo->SetLocation(IGizmo::LOCATE_WORLD);
-							SetStatus("Rotation gizmo selected");
+							selection.gizmo = resource.gizmo[selection.move = 1];
+							selection.gizmo->SetEditMatrix(state.gizmo.row);
+							selection.gizmo->SetDisplayScale(state.gizmo_scale);
+							selection.gizmo->SetLocation(IGizmo::LOCATE_WORLD);
+							set_status("Rotation gizmo selected");
 						}
-						else if (Activity->IsKeyDownHit(KeyCode::D3))
+						else if (activity->is_key_down_hit(key_code::d3))
 						{
-							Selection.Gizmo = Resource.Gizmo[Selection.Move = 2];
-							Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
-							Selection.Gizmo->SetDisplayScale(State.GizmoScale);
-							Selection.Gizmo->SetLocation(IGizmo::LOCATE_WORLD);
-							SetStatus("Scale gizmo selected");
+							selection.gizmo = resource.gizmo[selection.move = 2];
+							selection.gizmo->SetEditMatrix(state.gizmo.row);
+							selection.gizmo->SetDisplayScale(state.gizmo_scale);
+							selection.gizmo->SetLocation(IGizmo::LOCATE_WORLD);
+							set_status("Scale gizmo selected");
 						}
 					}
 				}
 
-				if (Selection.Entity != nullptr)
+				if (selection.entity != nullptr)
 				{
-					if (Selection.Gizmo != nullptr)
+					if (selection.gizmo != nullptr)
 					{
-						Transform::Spacing Space;
-						Space.Position = State.Gizmo.Position();
-						Space.Rotation = State.Gizmo.RotationEuler();
-						Selection.Entity->GetTransform()->Localize(Space);
+						transform::spacing space;
+						space.position = state.gizmo.position();
+						space.rotation = state.gizmo.rotation_euler();
+						selection.entity->get_transform()->localize(space);
 
-						if (Selection.Gizmo->IsActive())
+						if (selection.gizmo->IsActive())
 						{
-							switch (Selection.Move)
+							switch (selection.move)
 							{
 								case 1:
-									Selection.Entity->GetTransform()->SetRotation(Space.Rotation);
+									selection.entity->get_transform()->set_rotation(space.rotation);
 									break;
 								case 2:
-									Selection.Entity->GetTransform()->SetScale(State.Gizmo.Scale());
+									selection.entity->get_transform()->set_scale(state.gizmo.scale());
 									break;
 								default:
-									Selection.Entity->GetTransform()->SetPosition(Space.Position);
+									selection.entity->get_transform()->set_position(space.position);
 									break;
 							}
-							GetEntitySync();
+							get_entity_sync();
 						}
 						else
 						{
-							State.Gizmo = Selection.Entity->GetTransform()->GetBias();
-							Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
+							state.gizmo = selection.entity->get_transform()->get_bias();
+							selection.gizmo->SetEditMatrix(state.gizmo.row);
 						}
 					}
 					else
 					{
-						State.Gizmo = Selection.Entity->GetTransform()->GetBias();
-						Selection.Gizmo = Resource.Gizmo[Selection.Move];
-						Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
-						Selection.Gizmo->SetDisplayScale(State.GizmoScale);
-						Selection.Gizmo->SetLocation(IGizmo::LOCATE_WORLD);
+						state.gizmo = selection.entity->get_transform()->get_bias();
+						selection.gizmo = resource.gizmo[selection.move];
+						selection.gizmo->SetEditMatrix(state.gizmo.row);
+						selection.gizmo->SetDisplayScale(state.gizmo_scale);
+						selection.gizmo->SetLocation(IGizmo::LOCATE_WORLD);
 					}
 				}
 
-				GetEntityCell();
-				if (Selection.Entity != nullptr && Selection.Entity != State.Camera)
+				get_entity_cell();
+				if (selection.entity != nullptr && selection.entity != state.camera)
 				{
-					if (Activity->IsKeyDownHit(KeyCode::Delete))
+					if (activity->is_key_down_hit(key_code::deinit))
 					{
-						SetStatus("Entity was removed");
-						Scene->DeleteEntity(Selection.Entity);
-						SetSelection(Inspector_None);
+						set_status("Entity was removed");
+						scene->delete_entity(selection.entity);
+						set_selection(inspector_none);
 					}
 
-					if (Activity->IsKeyDown(KeyMod::LeftControl) && GetSceneFocus())
+					if (activity->is_key_down(key_mod::left_control) && get_scene_focus())
 					{
-						if (Activity->IsKeyDownHit(KeyCode::V) || Activity->IsKeyDown(KeyCode::B))
+						if (activity->is_key_down_hit(key_code::v) || activity->is_key_down(key_code::b))
 						{
-							SetStatus("Entity was cloned");
-							Entity* Result = Scene->CloneEntity(Selection.Entity);
-							SetSelection(Result ? Inspector_Entity : Inspector_None, Result);
+							set_status("Entity was cloned");
+							entity* result = scene->clone_entity(selection.entity);
+							set_selection(result ? inspector_entity : inspector_none, result);
 						}
 
-						if (Activity->IsKeyDownHit(KeyCode::X))
+						if (activity->is_key_down_hit(key_code::x))
 						{
-							SetStatus("Entity was removed");
-							Scene->DeleteEntity(Selection.Entity);
-							SetSelection(Inspector_None);
+							set_status("Entity was removed");
+							scene->delete_entity(selection.entity);
+							set_selection(inspector_none);
 						}
 					}
 				}
 
-				if (Activity->IsKeyDown(KeyMod::LeftControl))
+				if (activity->is_key_down(key_mod::left_control))
 				{
-					if (Activity->IsKeyDown(KeyCode::N))
+					if (activity->is_key_down(key_code::n))
 					{
-						Entity* Last = Scene->GetLastEntity();
-						if (Last != nullptr && Last != State.Camera)
+						entity* last = scene->get_last_entity();
+						if (last != nullptr && last != state.camera)
 						{
-							if (Selection.Entity == Last)
-								SetSelection(Inspector_None);
+							if (selection.entity == last)
+								set_selection(inspector_none);
 
-							SetStatus("Last entity was removed");
-							Scene->DeleteEntity(Last);
+							set_status("Last entity was removed");
+							scene->delete_entity(last);
 						}
 					}
 
-					if (Activity->IsKeyDown(KeyCode::X))
+					if (activity->is_key_down(key_code::x))
 					{
-						if (Selection.Entity != nullptr)
+						if (selection.entity != nullptr)
 						{
-							SetStatus("Entity was removed");
-							Scene->DeleteEntity(Selection.Entity);
-							SetSelection(Inspector_None);
+							set_status("Entity was removed");
+							scene->delete_entity(selection.entity);
+							set_selection(inspector_none);
 						}
 					}
 				}
@@ -344,2356 +344,2359 @@ void Sandbox::Dispatch(Timer* Time)
 		}
 	}
 	else
-		State.IsCaptured = false;
+		state.is_captured = false;
 
-	Scene->Dispatch(Time);
+	scene->dispatch(time);
 }
-void Sandbox::Publish(Timer* Time)
+void sandbox::publish(timer* time)
 {
-	Renderer->Clear(0, 0, 0);
-	Renderer->ClearDepth();
+	renderer->clear(0, 0, 0);
+	renderer->clear_depth();
 
-	Scene->Publish(Time);
-	if (State.IsInteractive && State.Camera == Scene->GetCamera()->GetEntity())
+	scene->publish(time);
+	if (state.is_interactive && state.camera == scene->get_camera()->get_entity())
 	{
-		Scene->SetMRT(TargetType::Main, false);
-		UpdateGrid(Time);
+		scene->set_mrt(target_type::main, false);
+		update_grid(time);
 	}
 
-	Scene->Submit();
-	if (State.IsInteractive && State.GUI != nullptr)
-		State.GUI->RenderLists(Renderer->GetRenderTarget()->GetTarget());
+	scene->submit();
+	if (state.is_interactive && state.gui != nullptr)
+		state.gui->render_lists(renderer->get_render_target()->get_target());
 
-	Renderer->Submit();
+	renderer->submit();
 }
-void Sandbox::LoadCamera()
+void sandbox::load_camera()
 {
-	State.IsCameraActive = true;
-	State.Camera = Scene->AddEntity();
-	State.Camera->AddComponent<Components::Camera>();
-	State.Camera->AddComponent<Components::FreeLook>();
-	State.Camera->GetTransform()->SetSpacing(Positioning::Global, State.Space);
+	state.is_camera_active = true;
+	state.camera = scene->add_entity();
+	state.camera->add_component<components::camera>();
+	state.camera->add_component<components::free_look>();
+	state.camera->get_transform()->set_spacing(positioning::global, state.space);
 
-	auto* Fly = State.Camera->AddComponent<Components::Fly>();
-	Fly->Moving.Slower *= 0.25f;
-	Fly->Moving.Normal *= 0.35f;
-	Scene->SetCamera(State.Camera);
+	auto* fly = state.camera->add_component<components::fly>();
+	fly->moving.slower *= 0.25f;
+	fly->moving.normal *= 0.35f;
+	scene->set_camera(state.camera);
 
-	auto* fRenderer = Scene->GetRenderer();
-	fRenderer->AddRenderer<Renderers::Model>();
-	fRenderer->AddRenderer<Renderers::Skin>();
-	fRenderer->AddRenderer<Renderers::SoftBody>();
-	fRenderer->AddRenderer<Renderers::Emitter>();
-	fRenderer->AddRenderer<Renderers::Decal>();
-	fRenderer->AddRenderer<Renderers::Lighting>();
-	fRenderer->AddRenderer<Renderers::Transparency>();
+	auto* fRenderer = scene->get_renderer();
+	fRenderer->add_renderer<renderers::model>();
+	fRenderer->add_renderer<renderers::skin>();
+	fRenderer->add_renderer<renderers::soft_body>();
+	fRenderer->add_renderer<renderers::emitter>();
+	fRenderer->add_renderer<renderers::decal>();
+	fRenderer->add_renderer<renderers::lighting>();
+	fRenderer->add_renderer<renderers::transparency>();
 }
-void Sandbox::UnloadCamera()
+void sandbox::unload_camera()
 {
-	State.IsCameraActive = false;
-	if (!State.Camera)
+	state.is_camera_active = false;
+	if (!state.camera)
 		return;
 
-	State.Space = State.Camera->GetTransform()->GetSpacing(Positioning::Global);
-	if (Scene != nullptr)
-		Scene->DeleteEntity(State.Camera);
-	State.Camera = nullptr;
+	state.space = state.camera->get_transform()->get_spacing(positioning::global);
+	if (scene != nullptr)
+		scene->delete_entity(state.camera);
+	state.camera = nullptr;
 }
-void Sandbox::UpdateScene()
+void sandbox::update_scene()
 {
-	SetSelection(Inspector_None);
-	UnloadCamera();
+	set_selection(inspector_none);
+	unload_camera();
 
-	State.Entities->Clear();
-	State.Materials->Clear();
-	Memory::Release(Scene);
+	state.entities->clear();
+	state.materials->clear();
+	memory::release(scene);
 
-	VM->ClearCache();
-	if (!Resource.NextPath.empty())
+	vm->clear_cache();
+	if (!resource.next_path.empty())
 	{
-		VariantArgs Args;
-		Args["active"] = Var::Boolean(false);
-		Args["mutations"] = Var::Boolean(true);
-		Scene = Content->Load<SceneGraph>(Resource.NextPath, Args).Or(nullptr);
+		variant_args args;
+		args["active"] = var::boolean(false);
+		args["mutations"] = var::boolean(true);
+		scene = content->load<scene_graph>(resource.next_path, args).or_else(nullptr);
 	}
 
-	if (Scene == nullptr)
+	if (scene == nullptr)
 	{
-		SceneGraph::Desc I = SceneGraph::Desc::Get(this);
-		I.Simulator.EnableSoftBody = true;
-		I.Mutations = true;
+		scene_graph::desc i = scene_graph::desc::get(this);
+		i.simulator.enable_soft_body = true;
+		i.mutations = true;
 
-		Scene = new SceneGraph(I);
-		Scene->SetActive(false);
+		scene = new scene_graph(i);
+		scene->set_active(false);
 
-		SetStatus("Created new scene from scratch");
+		set_status("Created new scene from scratch");
 	}
 	else
-		SetStatus("Scene was loaded");
+		set_status("Scene was loaded");
 
-	Resource.ScenePath = Resource.NextPath;
-	Resource.NextPath.clear();
-	LoadCamera();
+	resource.scene_path = resource.next_path;
+	resource.next_path.clear();
+	load_camera();
 }
-void Sandbox::UpdateGrid(Timer* Time)
+void sandbox::update_grid(timer* time)
 {
-	Matrix4x4 Origin[4] =
+	matrix4x4 origin[4] =
 	{
-		Matrix4x4::Identity(),
-		Matrix4x4::CreateTranslation({ 0, 0, -2 }),
-		Matrix4x4::Create({ 0, 0, 0 }, 1,{ 0, Math<float>::Deg2Rad() * (90), 0 }),
-		Matrix4x4::Create({ -2, 0, 0 }, 1,{ 0, Math<float>::Deg2Rad() * (90), 0 })
+		matrix4x4::identity(),
+		matrix4x4::create_translation({ 0, 0, -2 }),
+		matrix4x4::create({ 0, 0, 0 }, 1, { 0, math<float>::deg2rad() * (90), 0 }),
+		matrix4x4::create({ -2, 0, 0 }, 1, { 0, math<float>::deg2rad() * (90), 0 })
 	};
 
-	Renderer->SetDepthStencilState(States.DepthStencil);
-	Renderer->SetBlendState(States.Blend);
-	Renderer->SetRasterizerState(States.BackRasterizer);
-	Renderer->SetInputLayout(States.Layout);
-	Renderer->SetShader(Constants->GetBasicEffect(), VI_VS | VI_PS);
-	Renderer->SetVertexBuffer(Cache.Primitives->GetQuad());
+	renderer->set_depth_stencil_state(states.depth_stencil);
+	renderer->set_blend_state(states.blend);
+	renderer->set_rasterizer_state(states.back_rasterizer);
+	renderer->set_input_layout(states.layout);
+	renderer->set_shader(constants->get_basic_effect(), VI_VS | VI_PS);
+	renderer->set_vertex_buffer(cache.primitives->get_quad());
 
-	for (uint32_t i = 0; i < Scene->GetEntitiesCount(); i++)
+	for (uint32_t i = 0; i < scene->get_entities_count(); i++)
 	{
-		Entity* Value = Scene->GetEntity(i);
-		if (State.Camera == Value)
+		entity* value = scene->get_entity(i);
+		if (state.camera == value)
 			continue;
 
-		auto& From = Value->GetTransform()->GetPosition();
-		auto& To = State.Camera->GetTransform()->GetPosition();
-		float Direction = Vector2(From.X, From.Z).LookAt(Vector2(To.X, To.Z));
-		Constants->Render.TexCoord = (Value == Selection.Entity ? 0.5f : 0.05f);
-		Constants->Render.Transform = Matrix4x4::Create(Value->GetTransform()->GetPosition(), 0.5f, Vector3(0, Direction)) * State.Camera->GetComponent<Components::Camera>()->GetViewProjection();
-		Constants->UpdateConstantBuffer(RenderBufferType::Render);
-		Renderer->SetTexture2D(GetIcon(Value), 1, VI_PS);
-		Renderer->Draw(6, 0);
+		auto& from = value->get_transform()->get_position();
+		auto& to = state.camera->get_transform()->get_position();
+		float direction = vector2(from.x, from.z).look_at(vector2(to.x, to.z));
+		constants->render.texcoord = (value == selection.entity ? 0.5f : 0.05f);
+		constants->render.transform = matrix4x4::create(value->get_transform()->get_position(), 0.5f, vector3(0, direction)) * state.camera->get_component<components::camera>()->get_view_projection();
+		constants->update_constant_buffer(render_buffer_type::render);
+		renderer->set_texture_2d(get_icon(value), 1, VI_PS);
+		renderer->draw(6, 0);
 	}
 
-	if (Selection.Gizmo != nullptr)
+	if (selection.gizmo != nullptr)
 	{
-		Renderer->SetRasterizerState(States.NoneRasterizer);
-		Vector2 Size = Activity->GetSize();
-		Selection.Gizmo->SetScreenDimension((int)Size.X, (int)Size.Y);
-		Selection.Gizmo->SetCameraMatrix(((Components::Camera*)Scene->GetCamera())->GetView().Row, ((Components::Camera*)Scene->GetCamera())->GetProjection().Row);
-		Selection.Gizmo->Draw();
-		Renderer->SetRasterizerState(States.BackRasterizer);
+		renderer->set_rasterizer_state(states.none_rasterizer);
+		vector2 size = activity->get_size();
+		selection.gizmo->SetScreenDimension((int)size.x, (int)size.y);
+		selection.gizmo->SetCameraMatrix(((components::camera*)scene->get_camera())->get_view().row, ((components::camera*)scene->get_camera())->get_projection().row);
+		selection.gizmo->Draw();
+		renderer->set_rasterizer_state(states.back_rasterizer);
 	}
 
-	for (uint32_t i = 0; i < Scene->GetEntitiesCount(); i++)
+	for (uint32_t i = 0; i < scene->get_entities_count(); i++)
 	{
-		Entity* Value = Scene->GetEntity(i);
-		if (State.Camera == Value)
+		entity* value = scene->get_entity(i);
+		if (state.camera == value)
 			continue;
 
-		if (!State.IsTraceMode)
+		if (!state.is_trace_mode)
 		{
-			if (Value != Selection.Entity && Value != Selection.Might)
+			if (value != selection.entity && value != selection.might)
 				continue;
 		}
 
-		if (State.IsPathTracked)
+		if (state.is_path_tracked)
 		{
-			auto* KeyAnimator = Value->GetComponent<Components::KeyAnimator>();
-			if (KeyAnimator != nullptr && KeyAnimator->IsExists(KeyAnimator->State.Clip))
+			auto* key_animator = value->get_component<components::key_animator>();
+			if (key_animator != nullptr && key_animator->is_exists(key_animator->state.clip))
 			{
-				Vector<AnimatorKey>* Keys = KeyAnimator->GetClip(KeyAnimator->State.Clip);
-				if (Keys != nullptr)
+				vector<animator_key>* keys = key_animator->get_clip(key_animator->state.clip);
+				if (keys != nullptr)
 				{
-					Matrix4x4 Offset = (Value->GetTransform()->GetRoot() ? Value->GetTransform()->GetRoot()->GetBias() : Matrix4x4::Identity());
-					for (size_t j = 0; j < Keys->size(); j++)
+					matrix4x4 offset = (value->get_transform()->get_root() ? value->get_transform()->get_root()->get_bias() : matrix4x4::identity());
+					for (size_t j = 0; j < keys->size(); j++)
 					{
-						auto& Pos = Keys->at(j).Position;
-						Renderer->ImBegin();
-						Renderer->ImTopology(PrimitiveTopology::Line_Strip);
-						Renderer->ImTransform(Offset * ((Components::Camera*)Scene->GetCamera())->GetViewProjection());
-						Renderer->ImEmit();
-						Renderer->ImPosition(Pos.X, Pos.Y, -Pos.Z);
-						Renderer->ImEmit();
+						auto& pos = keys->at(j).position;
+						renderer->im_begin();
+						renderer->im_topology(primitive_topology::line_strip);
+						renderer->im_transform(offset * ((components::camera*)scene->get_camera())->get_view_projection());
+						renderer->im_emit();
+						renderer->im_position(pos.x, pos.y, -pos.z);
+						renderer->im_emit();
 
-						if (KeyAnimator->State.Frame == j)
-							Renderer->ImColor(1, 0, 1, 1);
+						if (key_animator->state.frame == j)
+							renderer->im_color(1, 0, 1, 1);
 
-						if (j + 1 >= Keys->size())
+						if (j + 1 >= keys->size())
 						{
-							auto& xPos = Keys->at(0).Position;
-							Renderer->ImPosition(xPos.X, xPos.Y, -xPos.Z);
+							auto& xPos = keys->at(0).position;
+							renderer->im_position(xPos.x, xPos.y, -xPos.z);
 						}
 						else
 						{
-							auto& xPos = Keys->at(j + 1).Position;
-							Renderer->ImPosition(xPos.X, xPos.Y, -xPos.Z);
+							auto& xPos = keys->at(j + 1).position;
+							renderer->im_position(xPos.x, xPos.y, -xPos.z);
 						}
 
-						Renderer->ImEnd();
+						renderer->im_end();
 					}
 				}
 			}
 		}
 
-		Matrix4x4 Transform = Value->GetBox();
+		matrix4x4 transform = value->get_box();
+		if (value->get_component<components::camera>() != nullptr)
+		{
+			auto& global = value->get_transform()->get_spacing();
+			transform = matrix4x4::create(global.position, global.scale, global.rotation.inv_y());
+		}
 		for (int j = 0; j < 4; j++)
 		{
-			Renderer->ImBegin();
-			Renderer->ImTopology(PrimitiveTopology::Line_Strip);
-			Renderer->ImTransform(Origin[j] * Transform * ((Components::Camera*)Scene->GetCamera())->GetViewProjection());
-			Renderer->ImEmit();
-			if (Value == Selection.Might)
-				Renderer->ImColor(1, 1, 0.75f, 0.15f);
-			else if (Value != Selection.Entity)
-				Renderer->ImColor(1, 1, 1, 0.1f);
+			renderer->im_begin();
+			renderer->im_topology(primitive_topology::line_strip);
+			renderer->im_transform(origin[j] * transform * ((components::camera*)scene->get_camera())->get_view_projection());
+			renderer->im_emit();
+			if (value == selection.might)
+				renderer->im_color(1, 1, 0.75f, 0.15f);
+			else if (value != selection.entity)
+				renderer->im_color(1, 1, 1, 0.1f);
 			else
-				Renderer->ImColor(1, 1, 1, 0.5f);
-			Renderer->ImPosition(1, 1, 1);
+				renderer->im_color(1, 1, 1, 0.5f);
+			renderer->im_position(1, 1, 1);
 
-			Renderer->ImEmit();
-			if (Value == Selection.Might)
-				Renderer->ImColor(1, 1, 0.75f, 0.15f);
-			else if (Value != Selection.Entity)
-				Renderer->ImColor(1, 1, 1, 0.1f);
+			renderer->im_emit();
+			if (value == selection.might)
+				renderer->im_color(1, 1, 0.75f, 0.15f);
+			else if (value != selection.entity)
+				renderer->im_color(1, 1, 1, 0.1f);
 			else
-				Renderer->ImColor(1, 1, 1, 0.5f);
-			Renderer->ImPosition(-1, 1, 1);
+				renderer->im_color(1, 1, 1, 0.5f);
+			renderer->im_position(-1, 1, 1);
 
-			Renderer->ImEmit();
-			if (Value == Selection.Might)
-				Renderer->ImColor(1, 1, 0.75f, 0.15f);
-			else if (Value != Selection.Entity)
-				Renderer->ImColor(1, 1, 1, 0.1f);
+			renderer->im_emit();
+			if (value == selection.might)
+				renderer->im_color(1, 1, 0.75f, 0.15f);
+			else if (value != selection.entity)
+				renderer->im_color(1, 1, 1, 0.1f);
 			else
-				Renderer->ImColor(1, 1, 1, 0.5f);
-			Renderer->ImPosition(-1, -1, 1);
+				renderer->im_color(1, 1, 1, 0.5f);
+			renderer->im_position(-1, -1, 1);
 
-			Renderer->ImEmit();
-			if (Value == Selection.Might)
-				Renderer->ImColor(1, 1, 0.75f, 0.15f);
-			else if (Value != Selection.Entity)
-				Renderer->ImColor(1, 1, 1, 0.1f);
+			renderer->im_emit();
+			if (value == selection.might)
+				renderer->im_color(1, 1, 0.75f, 0.15f);
+			else if (value != selection.entity)
+				renderer->im_color(1, 1, 1, 0.1f);
 			else
-				Renderer->ImColor(1, 1, 1, 0.5f);
-			Renderer->ImPosition(1, -1, 1);
+				renderer->im_color(1, 1, 1, 0.5f);
+			renderer->im_position(1, -1, 1);
 
-			Renderer->ImEmit();
-			if (Value == Selection.Might)
-				Renderer->ImColor(1, 1, 0.75f, 0.15f);
-			else if (Value != Selection.Entity)
-				Renderer->ImColor(1, 1, 1, 0.1f);
+			renderer->im_emit();
+			if (value == selection.might)
+				renderer->im_color(1, 1, 0.75f, 0.15f);
+			else if (value != selection.entity)
+				renderer->im_color(1, 1, 1, 0.1f);
 			else
-				Renderer->ImColor(1, 1, 1, 0.5f);
-			Renderer->ImPosition(1, 1, 1);
-			Renderer->ImEnd();
+				renderer->im_color(1, 1, 1, 0.5f);
+			renderer->im_position(1, 1, 1);
+			renderer->im_end();
 		}
 	}
 
-	if (Selection.Material != nullptr && Selection.Window == Inspector_Material)
+	if (selection.material != nullptr && selection.window == inspector_material)
 	{
-		Matrix4x4 ViewProjection = ((Components::Camera*)Scene->GetCamera())->GetViewProjection();
-		for (uint32_t i = 0; i < Scene->GetEntitiesCount(); i++)
+		matrix4x4 view_projection = ((components::camera*)scene->get_camera())->get_view_projection();
+		for (uint32_t i = 0; i < scene->get_entities_count(); i++)
 		{
-			Entity* Entity = Scene->GetEntity(i);
-			Material* Source = nullptr;
+			entity* entity = scene->get_entity(i);
+			material* source = nullptr;
 
-			if (Entity->GetComponent<Components::Model>())
+			if (entity->get_component<components::model>())
 			{
-				auto* It = Entity->GetComponent<Components::Model>();
-				for (auto& Face : It->GetMaterials())
+				auto* it = entity->get_component<components::model>();
+				for (auto& face : it->get_materials())
 				{
-					if (Face.second == Selection.Material)
+					if (face.second == selection.material)
 					{
-						Source = Face.second;
+						source = face.second;
 						break;
 					}
 				}
 			}
-			else if (Entity->GetComponent<Components::Skin>())
+			else if (entity->get_component<components::skin>())
 			{
-				auto* It = Entity->GetComponent<Components::Skin>();
-				for (auto& Face : It->GetMaterials())
+				auto* it = entity->get_component<components::skin>();
+				for (auto& face : it->get_materials())
 				{
-					if (Face.second == Selection.Material)
+					if (face.second == selection.material)
 					{
-						Source = Face.second;
+						source = face.second;
 						break;
 					}
 				}
 			}
-			else if (Entity->GetComponent<Components::Emitter>())
-				Source = Entity->GetComponent<Components::Emitter>()->GetMaterial();
-			else if (Entity->GetComponent<Components::SoftBody>())
-				Source = Entity->GetComponent<Components::SoftBody>()->GetMaterial();
-			else if (Entity->GetComponent<Components::Decal>())
-				Source = Entity->GetComponent<Components::Decal>()->GetMaterial();
+			else if (entity->get_component<components::emitter>())
+				source = entity->get_component<components::emitter>()->get_material();
+			else if (entity->get_component<components::soft_body>())
+				source = entity->get_component<components::soft_body>()->get_material();
+			else if (entity->get_component<components::decal>())
+				source = entity->get_component<components::decal>()->get_material();
 
-			if (Source != Selection.Material)
+			if (source != selection.material)
 				continue;
 
-			for (const auto& j : Origin)
+			for (const auto& j : origin)
 			{
-				Renderer->ImBegin();
-				Renderer->ImTopology(PrimitiveTopology::Line_Strip);
-				Renderer->ImTransform(j * Scene->GetEntity(i)->GetTransform()->GetBias() * ViewProjection);
-				Renderer->ImEmit();
-				Renderer->ImColor(0.5f, 0.5f, 1.0f, 0.75f);
-				Renderer->ImPosition(1.0f, 1.0f, 1.0f);
-				Renderer->ImEmit();
-				Renderer->ImColor(0.5f, 0.5f, 1.0f, 0.75f);
-				Renderer->ImPosition(-1.0f, 1.0f, 1.0f);
-				Renderer->ImEmit();
-				Renderer->ImColor(0.5f, 0.5f, 1.0f, 0.75f);
-				Renderer->ImPosition(-1.0f, -1.0f, 1.0f);
-				Renderer->ImEmit();
-				Renderer->ImColor(0.5f, 0.5f, 1.0f, 0.75f);
-				Renderer->ImPosition(1.0f, -1.0f, 1.0f);
-				Renderer->ImEmit();
-				Renderer->ImColor(0.5f, 0.5f, 1.0f, 0.75f);
-				Renderer->ImPosition(1.0f, 1.0f, 1.0f);
-				Renderer->ImEnd();
+				renderer->im_begin();
+				renderer->im_topology(primitive_topology::line_strip);
+				renderer->im_transform(j * scene->get_entity(i)->get_transform()->get_bias() * view_projection);
+				renderer->im_emit();
+				renderer->im_color(0.5f, 0.5f, 1.0f, 0.75f);
+				renderer->im_position(1.0f, 1.0f, 1.0f);
+				renderer->im_emit();
+				renderer->im_color(0.5f, 0.5f, 1.0f, 0.75f);
+				renderer->im_position(-1.0f, 1.0f, 1.0f);
+				renderer->im_emit();
+				renderer->im_color(0.5f, 0.5f, 1.0f, 0.75f);
+				renderer->im_position(-1.0f, -1.0f, 1.0f);
+				renderer->im_emit();
+				renderer->im_color(0.5f, 0.5f, 1.0f, 0.75f);
+				renderer->im_position(1.0f, -1.0f, 1.0f);
+				renderer->im_emit();
+				renderer->im_color(0.5f, 0.5f, 1.0f, 0.75f);
+				renderer->im_position(1.0f, 1.0f, 1.0f);
+				renderer->im_end();
 			}
 		}
 	}
 }
-void Sandbox::UpdateMutation(const std::string_view& Name, VariantArgs& Args)
+void sandbox::update_mutation(const std::string_view& name, variant_args& args)
 {
-	if (Args.find("entity") != Args.end())
+	if (args.find("entity") != args.end())
 	{
-		Entity* Base = (Entity*)Args["entity"].GetPointer();
-		if (!Base || Base == State.Camera || !State.Entities)
+		entity* base = (entity*)args["entity"].get_pointer();
+		if (!base || base == state.camera || !state.entities)
 			return;
 
-		for (size_t i = 0; i < State.Entities->Size(); i++)
+		for (size_t i = 0; i < state.entities->size(); i++)
 		{
-			GUI::DataNode& Node = State.Entities->At(i);
-			if (GUI::IElement::ToPointer(Node.At(1).GetString()) == (void*)Base)
+			gui::data_node& node = state.entities->at(i);
+			if (gui::ielement::to_pointer(node.at(1).get_string()) == (void*)base)
 			{
-				State.Entities->Remove(i);
+				state.entities->remove(i);
 				break;
 			}
 		}
 
-		if (Args["type"].IsString("pop") || (!Args["type"].IsString("set") && !Args["type"].IsString("push")))
+		if (args["type"].is_string("pop") || (!args["type"].is_string("set") && !args["type"].is_string("push")))
 			return;
 
-		auto Top = std::make_pair(GetEntityIndex(Base), (size_t)GetEntityNesting(Base));
+		auto top = std::make_pair(get_entity_index(base), (size_t)get_entity_nesting(base));
 
-		VariantList Item;
-		Item.emplace_back(std::move(Var::Integer(Top.second)));
-		Item.emplace_back(std::move(Var::String(GUI::IElement::FromPointer((void*)Base))));
-		Item.emplace_back(std::move(Var::String(GetName(Base))));
-		State.Entities->Add(Item, &Top);
+		variant_list item;
+		item.emplace_back(std::move(var::integer(top.second)));
+		item.emplace_back(std::move(var::string(gui::ielement::from_pointer((void*)base))));
+		item.emplace_back(std::move(var::string(get_name(base))));
+		state.entities->add(item, &top);
 	}
-	else if (Args.find("parent") != Args.end())
+	else if (args.find("parent") != args.end())
 	{
-		Entity* Base = (Entity*)Args["child"].GetPointer();
-		if (!Base || Base == State.Camera || !State.Entities)
+		entity* base = (entity*)args["child"].get_pointer();
+		if (!base || base == state.camera || !state.entities)
 			return;
 
-		auto Top = std::make_pair(GetEntityIndex(Base), (size_t)GetEntityNesting(Base));
+		auto top = std::make_pair(get_entity_index(base), (size_t)get_entity_nesting(base));
 
-		VariantList Item;
-		Item.emplace_back(std::move(Var::Integer(GetEntityNesting(Base))));
-		Item.emplace_back(std::move(Var::String(GUI::IElement::FromPointer((void*)Base))));
-		Item.emplace_back(std::move(Var::String(GetName(Base))));
+		variant_list item;
+		item.emplace_back(std::move(var::integer(get_entity_nesting(base))));
+		item.emplace_back(std::move(var::string(gui::ielement::from_pointer((void*)base))));
+		item.emplace_back(std::move(var::string(get_name(base))));
 
-		for (size_t i = 0; i < State.Entities->Size(); i++)
+		for (size_t i = 0; i < state.entities->size(); i++)
 		{
-			GUI::DataNode& Node = State.Entities->At(i);
-			if (GUI::IElement::ToPointer(Node.At(1).GetString()) == (void*)Base)
+			gui::data_node& node = state.entities->at(i);
+			if (gui::ielement::to_pointer(node.at(1).get_string()) == (void*)base)
 			{
-				Node.Replace(Item, &Top);
-				State.Entities->SortTree();
-				SetMutation(Base, Args["type"].GetString());
+				node.replace(item, &top);
+				state.entities->sort_tree();
+				set_mutation(base, args["type"].get_string());
 				return;
 			}
 		}
 
-		State.Entities->Add(Item, &Top);
+		state.entities->add(item, &top);
 	}
-	else if (Args.find("component") != Args.end())
+	else if (args.find("component") != args.end())
 	{
-		Component* Child = (Component*)Args["component"].GetPointer();
-		if (!Child || Child->GetEntity() == State.Camera || !State.Entities)
+		component* child = (component*)args["component"].get_pointer();
+		if (!child || child->get_entity() == state.camera || !state.entities)
 			return;
 
-		Entity* Base = Child->GetEntity();
-		for (size_t i = 0; i < State.Entities->Size(); i++)
+		entity* base = child->get_entity();
+		for (size_t i = 0; i < state.entities->size(); i++)
 		{
-			GUI::DataNode& Node = State.Entities->At(i);
-			if (GUI::IElement::ToPointer(Node.At(1).GetString()) == (void*)Base)
+			gui::data_node& node = state.entities->at(i);
+			if (gui::ielement::to_pointer(node.at(1).get_string()) == (void*)base)
 			{
-				State.Entities->Remove(i);
+				state.entities->remove(i);
 				break;
 			}
 		}
 
-		auto Top = std::make_pair(GetEntityIndex(Base), (size_t)GetEntityNesting(Base));
+		auto top = std::make_pair(get_entity_index(base), (size_t)get_entity_nesting(base));
 
-		VariantList Item;
-		Item.emplace_back(std::move(Var::Integer(Top.second)));
-		Item.emplace_back(std::move(Var::String(GUI::IElement::FromPointer((void*)Base))));
-		Item.emplace_back(std::move(Var::String(GetName(Base))));
-		State.Entities->Add(Item, &Top);
+		variant_list item;
+		item.emplace_back(std::move(var::integer(top.second)));
+		item.emplace_back(std::move(var::string(gui::ielement::from_pointer((void*)base))));
+		item.emplace_back(std::move(var::string(get_name(base))));
+		state.entities->add(item, &top);
 	}
-	else if (Args.find("material") != Args.end())
+	else if (args.find("material") != args.end())
 	{
-		Material* Base = (Material*)Args["material"].GetPointer();
-		if (!Base || !State.Materials || (Scene && Base == Scene->GetInvalidMaterial()))
+		material* base = (material*)args["material"].get_pointer();
+		if (!base || !state.materials || (scene && base == scene->get_invalid_material()))
 			return;
 
-		for (size_t i = 0; i < State.Materials->Size(); i++)
+		for (size_t i = 0; i < state.materials->size(); i++)
 		{
-			GUI::DataNode& Node = State.Materials->At(i);
-			if (GUI::IElement::ToPointer(Node.At(0).GetString()) == (void*)Base)
+			gui::data_node& node = state.materials->at(i);
+			if (gui::ielement::to_pointer(node.at(0).get_string()) == (void*)base)
 			{
-				State.Materials->Remove(i);
+				state.materials->remove(i);
 				break;
 			}
 		}
 
-		if (!Args["type"].IsString("push") && !Args["type"].IsString("set"))
+		if (!args["type"].is_string("push") && !args["type"].is_string("set"))
 			return;
 
-		VariantList Item;
-		Item.emplace_back(std::move(Var::String(GUI::IElement::FromPointer((void*)Base))));
-		Item.emplace_back(std::move(Var::String(Base->GetName().empty() ? "Unnamed material" : Base->GetName())));
-		State.Materials->Add(Item);
+		variant_list item;
+		item.emplace_back(std::move(var::string(gui::ielement::from_pointer((void*)base))));
+		item.emplace_back(std::move(var::string(base->get_name().empty() ? "Unnamed material" : base->get_name())));
+		state.materials->add(item);
 	}
 }
-void Sandbox::UpdateFiles(const String& Path, int64_t Depth)
+void sandbox::update_files(const string& path, int64_t depth)
 {
-	if (Depth <= 0)
-		State.Directories->Clear();
+	if (depth <= 0)
+		state.directories->clear();
 
-	Vector<std::pair<String, FileEntry>> Files;
-	if (!OS::Directory::Scan(Path, Files) || Files.empty())
+	vector<std::pair<string, file_entry>> files;
+	if (!os::directory::scan(path, files) || files.empty())
 		return;
 
-	String Subpath = Path;
-	for (auto& File : Files)
+	string subpath = path;
+	for (auto& file : files)
 	{
-		if (Depth <= 0 && (File.first == "editor" || File.first == "shaders"))
+		if (depth <= 0 && (file.first == "editor" || file.first == "shaders"))
 			continue;
-		else if (!File.second.IsDirectory)
+		else if (!file.second.is_directory)
 			continue;
 
-		auto Top = std::make_pair((void*)(uintptr_t)State.Directories->Size(), (size_t)Depth);
-		String Pathname = Subpath + File.first;
-		String Filename = Pathname;
-		GetPathName(Filename);
+		auto top = std::make_pair((void*)(uintptr_t)state.directories->size(), (size_t)depth);
+		string pathname = subpath + file.first;
+		string filename = pathname;
+		get_path_name(filename);
 
-		VariantList Item;
-		Item.emplace_back(std::move(Var::String(Filename)));
-		Item.emplace_back(std::move(Var::String(Pathname)));
-		Item.emplace_back(std::move(Var::Integer(Depth)));
-		State.Directories->Add(Item);
-		UpdateFiles(Filename, Depth + 1);
+		variant_list item;
+		item.emplace_back(std::move(var::string(filename)));
+		item.emplace_back(std::move(var::string(pathname)));
+		item.emplace_back(std::move(var::integer(depth)));
+		state.directories->add(item);
+		update_files(filename, depth + 1);
 	}
 }
-void Sandbox::UpdateSystem()
+void sandbox::update_system()
 {
-	State.System->SetBoolean("scene_active", Scene->IsActive());
-	State.System->SetBoolean("sl_resource", !State.Filename.empty());
-	State.System->SetString("sl_material", GUI::IElement::FromPointer((void*)Selection.Material));
-	State.System->SetString("sl_entity", GUI::IElement::FromPointer((void*)Selection.Entity));
-	State.System->SetString("sl_status", State.Status);
+	state.system->set_boolean("scene_active", scene->is_active());
+	state.system->set_boolean("sl_resource", !state.filename.empty());
+	state.system->set_string("sl_material", gui::ielement::from_pointer((void*)selection.material));
+	state.system->set_string("sl_entity", gui::ielement::from_pointer((void*)selection.entity));
+	state.system->set_string("sl_status", state.status);
 
-	switch (Selection.Window)
+	switch (selection.window)
 	{
-		case Inspector_Entity:
-			State.System->SetString("sl_window", "entity");
-			InspectEntity();
+		case inspector_entity:
+			state.system->set_string("sl_window", "entity");
+			inspect_entity();
 			break;
-		case Inspector_Material:
-			State.System->SetString("sl_window", "material");
-			InspectMaterial();
+		case inspector_material:
+			state.system->set_string("sl_window", "material");
+			inspect_material();
 			break;
-		case Inspector_Settings:
-			State.System->SetString("sl_window", "settings");
-			InspectSettings();
+		case inspector_settings:
+			state.system->set_string("sl_window", "settings");
+			inspect_settings();
 			break;
-		case Inspector_Materials:
-			State.System->SetString("sl_window", "materials");
+		case inspector_materials:
+			state.system->set_string("sl_window", "materials");
 			break;
-		case Inspector_ImportModel:
-			State.System->SetString("sl_window", "import-model");
-			InspectImporter();
+		case inspector_import_model:
+			state.system->set_string("sl_window", "import-model");
+			inspect_importer();
 			break;
-		case Inspector_ImportAnimation:
-			State.System->SetString("sl_window", "import-animation");
-			InspectImporter();
+		case inspector_import_animation:
+			state.system->set_string("sl_window", "import-animation");
+			inspect_importer();
 			break;
-		case Inspector_None:
+		case inspector_none:
 		default:
-			State.System->SetString("sl_window", "none");
+			state.system->set_string("sl_window", "none");
 			break;
 	}
 }
-void Sandbox::InspectEntity()
+void sandbox::inspect_entity()
 {
-	static Entity* LastBase = nullptr;
-	if (!Selection.Entity)
+	static entity* last_base = nullptr;
+	if (!selection.entity)
 		return;
 
-	Entity* Base = Selection.Entity;
-	bool Changed = (LastBase != Base);
-	if (Changed)
-		LastBase = Base;
+	entity* base = selection.entity;
+	bool changed = (last_base != base);
+	if (changed)
+		last_base = base;
 
-	String Name = Base->GetName();
-	if (State.GUI->GetElementById("ent_name").CastFormString(&Name))
-		Base->SetName(Name);
+	string name = base->get_name();
+	if (state.gui->get_element_by_id("ent_name").cast_form_string(&name))
+		base->set_name(name);
 
-	auto& Space = Base->GetTransform()->GetSpacing();
-	if (State.GUI->GetElementById("ent_pos_x").CastFormFloat(&Space.Position.X) ||
-		State.GUI->GetElementById("ent_pos_y").CastFormFloat(&Space.Position.Y) ||
-		State.GUI->GetElementById("ent_pos_z").CastFormFloat(&Space.Position.Z) ||
-		State.GUI->GetElementById("ent_rot_x").CastFormFloat(&Space.Rotation.X, Mathf::Rad2Deg()) ||
-		State.GUI->GetElementById("ent_rot_y").CastFormFloat(&Space.Rotation.Y, Mathf::Rad2Deg()) ||
-		State.GUI->GetElementById("ent_rot_z").CastFormFloat(&Space.Rotation.Z, Mathf::Rad2Deg()) ||
-		State.GUI->GetElementById("ent_scale_x").CastFormFloat(&Space.Scale.X) ||
-		State.GUI->GetElementById("ent_scale_y").CastFormFloat(&Space.Scale.Y) ||
-		State.GUI->GetElementById("ent_scale_z").CastFormFloat(&Space.Scale.Z))
+	auto& space = base->get_transform()->get_spacing();
+	if (state.gui->get_element_by_id("ent_pos_x").cast_form_float(&space.position.x) ||
+		state.gui->get_element_by_id("ent_pos_y").cast_form_float(&space.position.y) ||
+		state.gui->get_element_by_id("ent_pos_z").cast_form_float(&space.position.z) ||
+		state.gui->get_element_by_id("ent_rot_x").cast_form_float(&space.rotation.x, mathf::rad2deg()) ||
+		state.gui->get_element_by_id("ent_rot_y").cast_form_float(&space.rotation.y, mathf::rad2deg()) ||
+		state.gui->get_element_by_id("ent_rot_z").cast_form_float(&space.rotation.z, mathf::rad2deg()) ||
+		state.gui->get_element_by_id("ent_scale_x").cast_form_float(&space.scale.x) ||
+		state.gui->get_element_by_id("ent_scale_y").cast_form_float(&space.scale.y) ||
+		state.gui->get_element_by_id("ent_scale_z").cast_form_float(&space.scale.z))
 	{
-		Base->GetTransform()->MakeDirty();
-		GetEntitySync();
+		base->get_transform()->make_dirty();
+		get_entity_sync();
 	}
 
-	bool Scaling = Base->GetTransform()->HasScaling();
-	if (State.GUI->GetElementById("ent_const_scale").CastFormBoolean(&Scaling))
-		Base->GetTransform()->SetScaling(Scaling);
+	bool scaling = base->get_transform()->has_scaling();
+	if (state.gui->get_element_by_id("ent_const_scale").cast_form_boolean(&scaling))
+		base->get_transform()->set_scaling(scaling);
 
-	if (State.System->SetBoolean("sl_cmp_model", Base->GetComponent<Components::Model>() != nullptr)->GetBoolean())
-		ComponentModel(State.GUI, Base->GetComponent<Components::Model>(), Changed);
+	if (state.system->set_boolean("sl_cmp_model", base->get_component<components::model>() != nullptr)->get_boolean())
+		component_model(state.gui, base->get_component<components::model>(), changed);
 
-	if (State.System->SetBoolean("sl_cmp_skin", Base->GetComponent<Components::Skin>() != nullptr)->GetBoolean())
-		ComponentSkin(State.GUI, Base->GetComponent<Components::Skin>(), Changed);
+	if (state.system->set_boolean("sl_cmp_skin", base->get_component<components::skin>() != nullptr)->get_boolean())
+		component_skin(state.gui, base->get_component<components::skin>(), changed);
 
-	if (State.System->SetBoolean("sl_cmp_emitter", Base->GetComponent<Components::Emitter>() != nullptr)->GetBoolean())
-		ComponentEmitter(State.GUI, Base->GetComponent<Components::Emitter>(), Changed);
+	if (state.system->set_boolean("sl_cmp_emitter", base->get_component<components::emitter>() != nullptr)->get_boolean())
+		component_emitter(state.gui, base->get_component<components::emitter>(), changed);
 
-	if (State.System->SetBoolean("sl_cmp_soft_body", Base->GetComponent<Components::SoftBody>() != nullptr)->GetBoolean())
-		ComponentSoftBody(State.GUI, Base->GetComponent<Components::SoftBody>(), Changed);
+	if (state.system->set_boolean("sl_cmp_soft_body", base->get_component<components::soft_body>() != nullptr)->get_boolean())
+		component_soft_body(state.gui, base->get_component<components::soft_body>(), changed);
 
-	if (State.System->SetBoolean("sl_cmp_decal", Base->GetComponent<Components::Decal>() != nullptr)->GetBoolean())
-		ComponentDecal(State.GUI, Base->GetComponent<Components::Decal>(), Changed);
+	if (state.system->set_boolean("sl_cmp_decal", base->get_component<components::decal>() != nullptr)->get_boolean())
+		component_decal(state.gui, base->get_component<components::decal>(), changed);
 
-	if (State.System->SetBoolean("sl_cmp_skin_animator", Base->GetComponent<Components::SkinAnimator>() != nullptr)->GetBoolean())
-		ComponentSkinAnimator(State.GUI, Base->GetComponent<Components::SkinAnimator>(), Changed);
+	if (state.system->set_boolean("sl_cmp_skin_animator", base->get_component<components::skin_animator>() != nullptr)->get_boolean())
+		component_skin_animator(state.gui, base->get_component<components::skin_animator>(), changed);
 
-	if (State.System->SetBoolean("sl_cmp_key_animator", Base->GetComponent<Components::KeyAnimator>() != nullptr)->GetBoolean())
-		ComponentKeyAnimator(State.GUI, Base->GetComponent<Components::KeyAnimator>(), Changed);
+	if (state.system->set_boolean("sl_cmp_key_animator", base->get_component<components::key_animator>() != nullptr)->get_boolean())
+		component_key_animator(state.gui, base->get_component<components::key_animator>(), changed);
 
-	if (State.System->SetBoolean("sl_cmp_emitter_animator", Base->GetComponent<Components::EmitterAnimator>() != nullptr)->GetBoolean())
-		ComponentEmitterAnimator(State.GUI, Base->GetComponent<Components::EmitterAnimator>(), Changed);
+	if (state.system->set_boolean("sl_cmp_emitter_animator", base->get_component<components::emitter_animator>() != nullptr)->get_boolean())
+		component_emitter_animator(state.gui, base->get_component<components::emitter_animator>(), changed);
 
-	if (State.System->SetBoolean("sl_cmp_rigid_body", Base->GetComponent<Components::RigidBody>() != nullptr)->GetBoolean())
-		ComponentRigidBody(State.GUI, Base->GetComponent<Components::RigidBody>(), Changed);
+	if (state.system->set_boolean("sl_cmp_rigid_body", base->get_component<components::rigid_body>() != nullptr)->get_boolean())
+		component_rigid_body(state.gui, base->get_component<components::rigid_body>(), changed);
 
-	if (State.System->SetBoolean("sl_cmp_acceleration", Base->GetComponent<Components::Acceleration>() != nullptr)->GetBoolean())
-		ComponentAcceleration(State.GUI, Base->GetComponent<Components::Acceleration>(), Changed);
+	if (state.system->set_boolean("sl_cmp_acceleration", base->get_component<components::acceleration>() != nullptr)->get_boolean())
+		component_acceleration(state.gui, base->get_component<components::acceleration>(), changed);
 
-	if (State.System->SetBoolean("sl_cmp_slider_constraint", Base->GetComponent<Components::SliderConstraint>() != nullptr)->GetBoolean())
-		ComponentSliderConstraint(State.GUI, Base->GetComponent<Components::SliderConstraint>(), Changed);
+	if (state.system->set_boolean("sl_cmp_slider_constraint", base->get_component<components::slider_constraint>() != nullptr)->get_boolean())
+		component_slider_constraint(state.gui, base->get_component<components::slider_constraint>(), changed);
 
-	if (State.System->SetBoolean("sl_cmp_free_look", Base->GetComponent<Components::FreeLook>() != nullptr)->GetBoolean())
-		ComponentFreeLook(State.GUI, Base->GetComponent<Components::FreeLook>(), Changed);
+	if (state.system->set_boolean("sl_cmp_free_look", base->get_component<components::free_look>() != nullptr)->get_boolean())
+		component_free_look(state.gui, base->get_component<components::free_look>(), changed);
 
-	if (State.System->SetBoolean("sl_cmp_fly", Base->GetComponent<Components::Fly>() != nullptr)->GetBoolean())
-		ComponentFly(State.GUI, Base->GetComponent<Components::Fly>(), Changed);
+	if (state.system->set_boolean("sl_cmp_fly", base->get_component<components::fly>() != nullptr)->get_boolean())
+		component_fly(state.gui, base->get_component<components::fly>(), changed);
 
-	if (State.System->SetBoolean("sl_cmp_audio_source", Base->GetComponent<Components::AudioSource>() != nullptr)->GetBoolean())
+	if (state.system->set_boolean("sl_cmp_audio_source", base->get_component<components::audio_source>() != nullptr)->get_boolean())
 	{
-		auto* Source = Base->GetComponent<Components::AudioSource>();
-		State.System->SetBoolean("sl_cmp_audio_source_compressor", Source->GetSource()->GetEffect<Effects::Compressor>() != nullptr);
+		auto* source = base->get_component<components::audio_source>();
+		state.system->set_boolean("sl_cmp_audio_source_compressor", source->get_source()->get_effect<effects::compressor>() != nullptr);
 
-		if (State.System->SetBoolean("sl_cmp_audio_source_reverb", Source->GetSource()->GetEffect<Effects::Reverb>() != nullptr)->GetBoolean())
-			EffectReverb(State.GUI, Source->GetSource()->GetEffect<Effects::Reverb>());
+		if (state.system->set_boolean("sl_cmp_audio_source_reverb", source->get_source()->get_effect<effects::reverb>() != nullptr)->get_boolean())
+			effect_reverb(state.gui, source->get_source()->get_effect<effects::reverb>());
 
-		if (State.System->SetBoolean("sl_cmp_audio_source_chorus", Source->GetSource()->GetEffect<Effects::Chorus>() != nullptr)->GetBoolean())
-			EffectChorus(State.GUI, Source->GetSource()->GetEffect<Effects::Chorus>());
+		if (state.system->set_boolean("sl_cmp_audio_source_chorus", source->get_source()->get_effect<effects::chorus>() != nullptr)->get_boolean())
+			effect_chorus(state.gui, source->get_source()->get_effect<effects::chorus>());
 
-		if (State.System->SetBoolean("sl_cmp_audio_source_distortion", Source->GetSource()->GetEffect<Effects::Distortion>() != nullptr)->GetBoolean())
-			EffectDistortion(State.GUI, Source->GetSource()->GetEffect<Effects::Distortion>());
+		if (state.system->set_boolean("sl_cmp_audio_source_distortion", source->get_source()->get_effect<effects::distortion>() != nullptr)->get_boolean())
+			effect_distortion(state.gui, source->get_source()->get_effect<effects::distortion>());
 
-		if (State.System->SetBoolean("sl_cmp_audio_source_echo", Source->GetSource()->GetEffect<Effects::Echo>() != nullptr)->GetBoolean())
-			EffectEcho(State.GUI, Source->GetSource()->GetEffect<Effects::Echo>());
+		if (state.system->set_boolean("sl_cmp_audio_source_echo", source->get_source()->get_effect<effects::echo>() != nullptr)->get_boolean())
+			effect_echo(state.gui, source->get_source()->get_effect<effects::echo>());
 
-		if (State.System->SetBoolean("sl_cmp_audio_source_flanger", Source->GetSource()->GetEffect<Effects::Flanger>() != nullptr)->GetBoolean())
-			EffectFlanger(State.GUI, Source->GetSource()->GetEffect<Effects::Flanger>());
+		if (state.system->set_boolean("sl_cmp_audio_source_flanger", source->get_source()->get_effect<effects::flanger>() != nullptr)->get_boolean())
+			effect_flanger(state.gui, source->get_source()->get_effect<effects::flanger>());
 
-		if (State.System->SetBoolean("sl_cmp_audio_source_frequency_shifter", Source->GetSource()->GetEffect<Effects::FrequencyShifter>() != nullptr)->GetBoolean())
-			EffectFrequencyShifter(State.GUI, Source->GetSource()->GetEffect<Effects::FrequencyShifter>());
+		if (state.system->set_boolean("sl_cmp_audio_source_frequency_shifter", source->get_source()->get_effect<effects::frequency_shifter>() != nullptr)->get_boolean())
+			effect_frequency_shifter(state.gui, source->get_source()->get_effect<effects::frequency_shifter>());
 
-		if (State.System->SetBoolean("sl_cmp_audio_source_vocal_morpher", Source->GetSource()->GetEffect<Effects::VocalMorpher>() != nullptr)->GetBoolean())
-			EffectVocalMorpher(State.GUI, Source->GetSource()->GetEffect<Effects::VocalMorpher>());
+		if (state.system->set_boolean("sl_cmp_audio_source_vocal_morpher", source->get_source()->get_effect<effects::vocal_morpher>() != nullptr)->get_boolean())
+			effect_vocal_morpher(state.gui, source->get_source()->get_effect<effects::vocal_morpher>());
 
-		if (State.System->SetBoolean("sl_cmp_audio_source_pitch_shifter", Source->GetSource()->GetEffect<Effects::PitchShifter>() != nullptr)->GetBoolean())
-			EffectPitchShifter(State.GUI, Source->GetSource()->GetEffect<Effects::PitchShifter>());
+		if (state.system->set_boolean("sl_cmp_audio_source_pitch_shifter", source->get_source()->get_effect<effects::pitch_shifter>() != nullptr)->get_boolean())
+			effect_pitch_shifter(state.gui, source->get_source()->get_effect<effects::pitch_shifter>());
 
-		if (State.System->SetBoolean("sl_cmp_audio_source_ring_modulator", Source->GetSource()->GetEffect<Effects::RingModulator>() != nullptr)->GetBoolean())
-			EffectRingModulator(State.GUI, Source->GetSource()->GetEffect<Effects::RingModulator>());
+		if (state.system->set_boolean("sl_cmp_audio_source_ring_modulator", source->get_source()->get_effect<effects::ring_modulator>() != nullptr)->get_boolean())
+			effect_ring_modulator(state.gui, source->get_source()->get_effect<effects::ring_modulator>());
 
-		if (State.System->SetBoolean("sl_cmp_audio_source_autowah", Source->GetSource()->GetEffect<Effects::Autowah>() != nullptr)->GetBoolean())
-			EffectAutowah(State.GUI, Source->GetSource()->GetEffect<Effects::Autowah>());
+		if (state.system->set_boolean("sl_cmp_audio_source_autowah", source->get_source()->get_effect<effects::autowah>() != nullptr)->get_boolean())
+			effect_autowah(state.gui, source->get_source()->get_effect<effects::autowah>());
 
-		if (State.System->SetBoolean("sl_cmp_audio_source_equalizer", Source->GetSource()->GetEffect<Effects::Equalizer>() != nullptr)->GetBoolean())
-			EffectEqualizer(State.GUI, Source->GetSource()->GetEffect<Effects::Equalizer>());
+		if (state.system->set_boolean("sl_cmp_audio_source_equalizer", source->get_source()->get_effect<effects::equalizer>() != nullptr)->get_boolean())
+			effect_equalizer(state.gui, source->get_source()->get_effect<effects::equalizer>());
 
-		ComponentAudioSource(State.GUI, Source, Changed);
+		component_audio_source(state.gui, source, changed);
 	}
 
-	if (State.System->SetBoolean("sl_cmp_audio_listener", Base->GetComponent<Components::AudioListener>() != nullptr)->GetBoolean())
-		ComponentAudioListener(State.GUI, Base->GetComponent<Components::AudioListener>(), Changed);
+	if (state.system->set_boolean("sl_cmp_audio_listener", base->get_component<components::audio_listener>() != nullptr)->get_boolean())
+		component_audio_listener(state.gui, base->get_component<components::audio_listener>(), changed);
 
-	if (State.System->SetBoolean("sl_cmp_point_light", Base->GetComponent<Components::PointLight>() != nullptr)->GetBoolean())
-		ComponentPointLight(State.GUI, Base->GetComponent<Components::PointLight>(), Changed);
+	if (state.system->set_boolean("sl_cmp_point_light", base->get_component<components::point_light>() != nullptr)->get_boolean())
+		component_point_light(state.gui, base->get_component<components::point_light>(), changed);
 
-	if (State.System->SetBoolean("sl_cmp_spot_light", Base->GetComponent<Components::SpotLight>() != nullptr)->GetBoolean())
-		ComponentSpotLight(State.GUI, Base->GetComponent<Components::SpotLight>(), Changed);
+	if (state.system->set_boolean("sl_cmp_spot_light", base->get_component<components::spot_light>() != nullptr)->get_boolean())
+		component_spot_light(state.gui, base->get_component<components::spot_light>(), changed);
 
-	if (State.System->SetBoolean("sl_cmp_line_light", Base->GetComponent<Components::LineLight>() != nullptr)->GetBoolean())
-		ComponentLineLight(State.GUI, Base->GetComponent<Components::LineLight>(), Changed);
+	if (state.system->set_boolean("sl_cmp_line_light", base->get_component<components::line_light>() != nullptr)->get_boolean())
+		component_line_light(state.gui, base->get_component<components::line_light>(), changed);
 
-	if (State.System->SetBoolean("sl_cmp_surface_light", Base->GetComponent<Components::SurfaceLight>() != nullptr)->GetBoolean())
-		ComponentSurfaceLight(State.GUI, Base->GetComponent<Components::SurfaceLight>(), Changed);
+	if (state.system->set_boolean("sl_cmp_surface_light", base->get_component<components::surface_light>() != nullptr)->get_boolean())
+		component_surface_light(state.gui, base->get_component<components::surface_light>(), changed);
 
-	if (State.System->SetBoolean("sl_cmp_illuminator", Base->GetComponent<Components::Illuminator>() != nullptr)->GetBoolean())
-		ComponentIlluminator(State.GUI, Base->GetComponent<Components::Illuminator>(), Changed);
+	if (state.system->set_boolean("sl_cmp_illuminator", base->get_component<components::illuminator>() != nullptr)->get_boolean())
+		component_illuminator(state.gui, base->get_component<components::illuminator>(), changed);
 
-	if (State.System->SetBoolean("sl_cmp_camera", Base->GetComponent<Components::Camera>() != nullptr)->GetBoolean())
+	if (state.system->set_boolean("sl_cmp_camera", base->get_component<components::camera>() != nullptr)->get_boolean())
 	{
-		auto* Camera = Base->GetComponent<Components::Camera>();
-		auto* fRenderer = Camera->GetRenderer();
-		State.System->SetInteger("sl_cmp_camera_model", fRenderer->GetOffset<Renderers::Model>());
-		State.System->SetInteger("sl_cmp_camera_skin", fRenderer->GetOffset<Renderers::Skin>());
-		State.System->SetInteger("sl_cmp_camera_soft_body", fRenderer->GetOffset<Renderers::SoftBody>());
-		State.System->SetInteger("sl_cmp_camera_decal", fRenderer->GetOffset<Renderers::Decal>());
-		State.System->SetInteger("sl_cmp_camera_emitter", fRenderer->GetOffset<Renderers::Emitter>());
-		State.System->SetInteger("sl_cmp_camera_gui", fRenderer->GetOffset<Renderers::UserInterface>());
-		State.System->SetInteger("sl_cmp_camera_transparency", fRenderer->GetOffset<Renderers::Transparency>());
+		auto* camera = base->get_component<components::camera>();
+		auto* fRenderer = camera->get_renderer();
+		state.system->set_integer("sl_cmp_camera_model", fRenderer->get_offset<renderers::model>());
+		state.system->set_integer("sl_cmp_camera_skin", fRenderer->get_offset<renderers::skin>());
+		state.system->set_integer("sl_cmp_camera_soft_body", fRenderer->get_offset<renderers::soft_body>());
+		state.system->set_integer("sl_cmp_camera_decal", fRenderer->get_offset<renderers::decal>());
+		state.system->set_integer("sl_cmp_camera_emitter", fRenderer->get_offset<renderers::emitter>());
+		state.system->set_integer("sl_cmp_camera_gui", fRenderer->get_offset<renderers::user_interface>());
+		state.system->set_integer("sl_cmp_camera_transparency", fRenderer->get_offset<renderers::transparency>());
 
-		if (State.System->SetInteger("sl_cmp_camera_lighting", fRenderer->GetOffset<Renderers::Lighting>())->GetInteger() >= 0)
-			RendererLighting(State.GUI, fRenderer->GetRenderer<Renderers::Lighting>());
+		if (state.system->set_integer("sl_cmp_camera_lighting", fRenderer->get_offset<renderers::lighting>())->get_integer() >= 0)
+			renderer_lighting(state.gui, fRenderer->get_renderer<renderers::lighting>());
 
-		if (State.System->SetInteger("sl_cmp_camera_ssr", fRenderer->GetOffset<Renderers::SSR>())->GetInteger() >= 0)
-			RendererSSR(State.GUI, fRenderer->GetRenderer<Renderers::SSR>());
+		if (state.system->set_integer("sl_cmp_camera_sslr", fRenderer->get_offset<renderers::local_reflections>())->get_integer() >= 0)
+			renderer_sslr(state.gui, fRenderer->get_renderer<renderers::local_reflections>());
 
-		if (State.System->SetInteger("sl_cmp_camera_ssgi", fRenderer->GetOffset<Renderers::SSGI>())->GetInteger() >= 0)
-			RendererSSGI(State.GUI, fRenderer->GetRenderer<Renderers::SSGI>());
+		if (state.system->set_integer("sl_cmp_camera_ssli", fRenderer->get_offset<renderers::local_illumination>())->get_integer() >= 0)
+			renderer_ssli(state.gui, fRenderer->get_renderer<renderers::local_illumination>());
 
-		if (State.System->SetInteger("sl_cmp_camera_ssao", fRenderer->GetOffset<Renderers::SSAO>())->GetInteger() >= 0)
-			RendererSSAO(State.GUI, fRenderer->GetRenderer<Renderers::SSAO>());
+		if (state.system->set_integer("sl_cmp_camera_ssla", fRenderer->get_offset<renderers::local_ambient>())->get_integer() >= 0)
+			renderer_ssla(state.gui, fRenderer->get_renderer<renderers::local_ambient>());
 
-		if (State.System->SetInteger("sl_cmp_camera_motionblur", fRenderer->GetOffset<Renderers::MotionBlur>())->GetInteger() >= 0)
-			RendererMotionBlur(State.GUI, fRenderer->GetRenderer<Renderers::MotionBlur>());
+		if (state.system->set_integer("sl_cmp_camera_motionblur", fRenderer->get_offset<renderers::motion_blur>())->get_integer() >= 0)
+			renderer_motion_blur(state.gui, fRenderer->get_renderer<renderers::motion_blur>());
 
-		if (State.System->SetInteger("sl_cmp_camera_bloom", fRenderer->GetOffset<Renderers::Bloom>())->GetInteger() >= 0)
-			RendererBloom(State.GUI, fRenderer->GetRenderer<Renderers::Bloom>());
+		if (state.system->set_integer("sl_cmp_camera_bloom", fRenderer->get_offset<renderers::bloom>())->get_integer() >= 0)
+			renderer_bloom(state.gui, fRenderer->get_renderer<renderers::bloom>());
 
-		if (State.System->SetInteger("sl_cmp_camera_dof", fRenderer->GetOffset<Renderers::DoF>())->GetInteger() >= 0)
-			RendererDoF(State.GUI, fRenderer->GetRenderer<Renderers::DoF>());
+		if (state.system->set_integer("sl_cmp_camera_dof", fRenderer->get_offset<renderers::depth_of_field>())->get_integer() >= 0)
+			renderer_dof(state.gui, fRenderer->get_renderer<renderers::depth_of_field>());
 
-		if (State.System->SetInteger("sl_cmp_camera_tone", fRenderer->GetOffset<Renderers::Tone>())->GetInteger() >= 0)
-			RendererTone(State.GUI, fRenderer->GetRenderer<Renderers::Tone>());
+		if (state.system->set_integer("sl_cmp_camera_tone", fRenderer->get_offset<renderers::tone>())->get_integer() >= 0)
+			renderer_tone(state.gui, fRenderer->get_renderer<renderers::tone>());
 
-		if (State.System->SetInteger("sl_cmp_camera_glitch", fRenderer->GetOffset<Renderers::Glitch>())->GetInteger() >= 0)
-			RendererGlitch(State.GUI, fRenderer->GetRenderer<Renderers::Glitch>());
+		if (state.system->set_integer("sl_cmp_camera_glitch", fRenderer->get_offset<renderers::glitch>())->get_integer() >= 0)
+			renderer_glitch(state.gui, fRenderer->get_renderer<renderers::glitch>());
 
-		ComponentCamera(State.GUI, Camera, Changed);
+		component_camera(state.gui, camera, changed);
 	}
 
-	if (State.System->SetBoolean("sl_cmp_scriptable", Base->GetComponent<Components::Scriptable>() != nullptr)->GetBoolean())
-		ComponentScriptable(State.GUI, Base->GetComponent<Components::Scriptable>(), Changed);
+	if (state.system->set_boolean("sl_cmp_scriptable", base->get_component<components::scriptable>() != nullptr)->get_boolean())
+		component_scriptable(state.gui, base->get_component<components::scriptable>(), changed);
 }
-void Sandbox::InspectSettings()
+void sandbox::inspect_settings()
 {
-	SceneGraph::Desc& Conf = Scene->GetConf();
-	State.GUI->GetElementById("sc_start_grav_x").CastFormFloat(&Conf.Simulator.Gravity.X);
-	State.GUI->GetElementById("sc_start_grav_y").CastFormFloat(&Conf.Simulator.Gravity.Y);
-	State.GUI->GetElementById("sc_start_grav_z").CastFormFloat(&Conf.Simulator.Gravity.Z);
-	State.GUI->GetElementById("sc_wet_norm_x").CastFormFloat(&Conf.Simulator.WaterNormal.X);
-	State.GUI->GetElementById("sc_wet_norm_y").CastFormFloat(&Conf.Simulator.WaterNormal.Y);
-	State.GUI->GetElementById("sc_wet_norm_z").CastFormFloat(&Conf.Simulator.WaterNormal.Z);
-	State.GUI->GetElementById("sc_air_dens").CastFormFloat(&Conf.Simulator.AirDensity);
-	State.GUI->GetElementById("sc_wet_dens").CastFormFloat(&Conf.Simulator.WaterDensity);
-	State.GUI->GetElementById("sc_wet_off").CastFormFloat(&Conf.Simulator.WaterOffset);
-	State.GUI->GetElementById("sc_max_disp").CastFormFloat(&Conf.Simulator.MaxDisplacement);
-	State.GUI->GetElementById("sc_softs").CastFormBoolean(&Conf.Simulator.EnableSoftBody);
-	State.GUI->GetElementById("sc_gp_qual").CastFormFloat(&Conf.RenderQuality, 100.0f);
-	State.GUI->GetElementById("sc_gp_hdr").CastFormBoolean(&Conf.EnableHDR);
-	State.GUI->GetElementById("sc_start_mats").CastFormSize(&Conf.StartEntities);
-	State.GUI->GetElementById("sc_start_ents").CastFormSize(&Conf.StartComponents);
-	State.GUI->GetElementById("sc_start_comps").CastFormSize(&Conf.StartMaterials);
-	State.GUI->GetElementById("sc_grow_marg").CastFormSize(&Conf.GrowMargin);
-	State.GUI->GetElementById("sc_grow_rate").CastFormDouble(&Conf.GrowRate);
-	State.GUI->GetElementById("sc_vp_br").CastFormSize(&Conf.VoxelsSize);
-	State.GUI->GetElementById("sc_vp_bl").CastFormSize(&Conf.VoxelsMax);
-	State.GUI->GetElementById("sc_sp_plr").CastFormSize(&Conf.PointsSize);
-	State.GUI->GetElementById("sc_sp_pll").CastFormSize(&Conf.PointsMax);
-	State.GUI->GetElementById("sc_sp_slr").CastFormSize(&Conf.SpotsSize);
-	State.GUI->GetElementById("sc_sp_sll").CastFormSize(&Conf.SpotsMax);
-	State.GUI->GetElementById("sc_sp_llr").CastFormSize(&Conf.LinesSize);
-	State.GUI->GetElementById("sc_sp_lll").CastFormSize(&Conf.LinesMax);
+	scene_graph::desc& conf = scene->get_conf();
+	state.gui->get_element_by_id("sc_start_grav_x").cast_form_float(&conf.simulator.gravity.x);
+	state.gui->get_element_by_id("sc_start_grav_y").cast_form_float(&conf.simulator.gravity.y);
+	state.gui->get_element_by_id("sc_start_grav_z").cast_form_float(&conf.simulator.gravity.z);
+	state.gui->get_element_by_id("sc_wet_norm_x").cast_form_float(&conf.simulator.water_normal.x);
+	state.gui->get_element_by_id("sc_wet_norm_y").cast_form_float(&conf.simulator.water_normal.y);
+	state.gui->get_element_by_id("sc_wet_norm_z").cast_form_float(&conf.simulator.water_normal.z);
+	state.gui->get_element_by_id("sc_air_dens").cast_form_float(&conf.simulator.air_density);
+	state.gui->get_element_by_id("sc_wet_dens").cast_form_float(&conf.simulator.water_density);
+	state.gui->get_element_by_id("sc_wet_off").cast_form_float(&conf.simulator.water_offset);
+	state.gui->get_element_by_id("sc_max_disp").cast_form_float(&conf.simulator.max_displacement);
+	state.gui->get_element_by_id("sc_softs").cast_form_boolean(&conf.simulator.enable_soft_body);
+	state.gui->get_element_by_id("sc_gp_qual").cast_form_float(&conf.render_quality, 100.0f);
+	state.gui->get_element_by_id("sc_gp_hdr").cast_form_boolean(&conf.enable_hdr);
+	state.gui->get_element_by_id("sc_start_mats").cast_form_size(&conf.start_entities);
+	state.gui->get_element_by_id("sc_start_ents").cast_form_size(&conf.start_components);
+	state.gui->get_element_by_id("sc_start_comps").cast_form_size(&conf.start_materials);
+	state.gui->get_element_by_id("sc_grow_marg").cast_form_size(&conf.grow_margin);
+	state.gui->get_element_by_id("sc_grow_rate").cast_form_double(&conf.grow_rate);
+	state.gui->get_element_by_id("sc_sp_plr").cast_form_size(&conf.points_size);
+	state.gui->get_element_by_id("sc_sp_pll").cast_form_size(&conf.points_max);
+	state.gui->get_element_by_id("sc_sp_slr").cast_form_size(&conf.spots_size);
+	state.gui->get_element_by_id("sc_sp_sll").cast_form_size(&conf.spots_max);
+	state.gui->get_element_by_id("sc_sp_llr").cast_form_size(&conf.lines_size);
+	state.gui->get_element_by_id("sc_sp_lll").cast_form_size(&conf.lines_max);
 
-	Vector3 Gravity = Scene->GetSimulator()->GetGravity();
-	if (State.GUI->GetElementById("sc_sim_grav_x").CastFormFloat(&Gravity.X) ||
-		State.GUI->GetElementById("sc_sim_grav_y").CastFormFloat(&Gravity.Y) ||
-		State.GUI->GetElementById("sc_sim_grav_z").CastFormFloat(&Gravity.Z))
-		Scene->GetSimulator()->SetGravity(Gravity);
+	vector3 gravity = scene->get_simulator()->get_gravity();
+	if (state.gui->get_element_by_id("sc_sim_grav_x").cast_form_float(&gravity.x) ||
+		state.gui->get_element_by_id("sc_sim_grav_y").cast_form_float(&gravity.y) ||
+		state.gui->get_element_by_id("sc_sim_grav_z").cast_form_float(&gravity.z))
+		scene->get_simulator()->set_gravity(gravity);
 
-	State.GUI->GetElementById("sc_sim_time").CastFormFloat(&Scene->GetSimulator()->Speedup);
-	State.GUI->GetElementById("sc_sim").CastFormBoolean(&Scene->GetSimulator()->Active);
+	state.gui->get_element_by_id("sc_sim_time").cast_form_float(&scene->get_simulator()->speedup);
+	state.gui->get_element_by_id("sc_sim").cast_form_boolean(&scene->get_simulator()->active);
 }
-void Sandbox::InspectImporter()
+void sandbox::inspect_importer()
 {
-	State.GUI->GetElementById("im_jiv").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::JoinIdenticalVertices);
-	State.GUI->GetElementById("im_tri").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::Triangulate);
-	State.GUI->GetElementById("im_cts").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::CalcTangentSpace);
-	State.GUI->GetElementById("im_rc").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::RemoveComponent);
-	State.GUI->GetElementById("im_mn").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::GenNormals);
-	State.GUI->GetElementById("im_msn").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::GenSmoothNormals);
-	State.GUI->GetElementById("im_slm").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::SplitLargeMeshes);
-	State.GUI->GetElementById("im_ptv").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::PreTransformVertices);
-	State.GUI->GetElementById("im_vds").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::ValidateDataStructure);
-	State.GUI->GetElementById("im_mlh").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::MakeLeftHanded);
-	State.GUI->GetElementById("im_icl").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::ImproveCacheLocality);
-	State.GUI->GetElementById("im_rrm").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::RemoveRedundantMaterials);
-	State.GUI->GetElementById("im_fin").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::FixInfacingNormals);
-	State.GUI->GetElementById("im_sbt").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::SortByPType);
-	State.GUI->GetElementById("im_rd").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::RemoveDegenerates);
-	State.GUI->GetElementById("im_ri").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::RemoveInstances);
-	State.GUI->GetElementById("im_rid").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::RemoveInvalidData);
-	State.GUI->GetElementById("im_muv").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::GenUVCoords);
-	State.GUI->GetElementById("im_tuv").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::TransformUVCoords);
-	State.GUI->GetElementById("im_om").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::OptimizeMeshes);
-	State.GUI->GetElementById("im_og").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::OptimizeGraph);
-	State.GUI->GetElementById("im_fuv").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::FlipUVs);
-	State.GUI->GetElementById("im_fwo").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::FlipWindingOrder);
-	State.GUI->GetElementById("im_sbb").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::SplitByBoneCount);
-	State.GUI->GetElementById("im_dbn").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::Debone);
-	State.GUI->GetElementById("im_gs").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::GlobalScale);
-	State.GUI->GetElementById("im_fmn").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::ForceGenNormals);
-	State.GUI->GetElementById("im_et").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::EmbedTextures);
-	State.GUI->GetElementById("im_dn").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::DropNormals);
-	State.GUI->GetElementById("im_cbb").CastFormFlag32(&State.MeshImportOpts, (uint32_t)Processors::MeshOpt::GenBoundingBoxes);
+	state.gui->get_element_by_id("im_jiv").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::join_identical_vertices);
+	state.gui->get_element_by_id("im_tri").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::triangulate);
+	state.gui->get_element_by_id("im_cts").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::calc_tangent_space);
+	state.gui->get_element_by_id("im_rc").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::remove_component);
+	state.gui->get_element_by_id("im_mn").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::gen_normals);
+	state.gui->get_element_by_id("im_msn").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::gen_smooth_normals);
+	state.gui->get_element_by_id("im_slm").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::split_large_meshes);
+	state.gui->get_element_by_id("im_ptv").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::pre_transform_vertices);
+	state.gui->get_element_by_id("im_vds").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::validate_data_structure);
+	state.gui->get_element_by_id("im_mlh").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::make_left_handed);
+	state.gui->get_element_by_id("im_icl").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::improve_cache_locality);
+	state.gui->get_element_by_id("im_rrm").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::remove_redundant_materials);
+	state.gui->get_element_by_id("im_fin").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::fix_infacing_normals);
+	state.gui->get_element_by_id("im_sbt").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::sort_by_ptype);
+	state.gui->get_element_by_id("im_rd").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::remove_degenerates);
+	state.gui->get_element_by_id("im_ri").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::remove_instances);
+	state.gui->get_element_by_id("im_rid").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::remove_invalid_data);
+	state.gui->get_element_by_id("im_muv").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::gen_uv_coords);
+	state.gui->get_element_by_id("im_tuv").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::transform_uv_coords);
+	state.gui->get_element_by_id("im_om").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::optimize_meshes);
+	state.gui->get_element_by_id("im_og").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::optimize_graph);
+	state.gui->get_element_by_id("im_fuv").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::flip_uvs);
+	state.gui->get_element_by_id("im_fwo").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::flip_winding_order);
+	state.gui->get_element_by_id("im_sbb").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::split_by_bone_count);
+	state.gui->get_element_by_id("im_dbn").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::debone);
+	state.gui->get_element_by_id("im_gs").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::global_scale);
+	state.gui->get_element_by_id("im_fmn").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::force_gen_normals);
+	state.gui->get_element_by_id("im_et").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::embed_textures);
+	state.gui->get_element_by_id("im_dn").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::drop_normals);
+	state.gui->get_element_by_id("im_cbb").cast_form_flag32(&state.mesh_import_opts, (uint32_t)processors::mesh_opt::gen_bounding_boxes);
 }
-void Sandbox::InspectMaterial()
+void sandbox::inspect_material()
 {
-	Material* Base = Selection.Material;
-	if (!Base)
+	material* base = selection.material;
+	if (!base)
 		return;
 
-	ResolveTexture2D(State.GUI, "mat_diffuse_source", Base->GetDiffuseMap() != nullptr, [Base](Texture2D* New)
+	resolve_texture_2d(state.gui, "mat_diffuse_source", base->get_diffuse_map() != nullptr, [base](texture_2d* init)
 	{
-		Base->SetDiffuseMap(New);
-		Memory::Release(New);
+		base->set_diffuse_map(init);
+		memory::release(init);
 	}, false);
-	ResolveTexture2D(State.GUI, "mat_normal_source", Base->GetNormalMap() != nullptr, [Base](Texture2D* New)
+	resolve_texture_2d(state.gui, "mat_normal_source", base->get_normal_map() != nullptr, [base](texture_2d* init)
 	{
-		Base->SetNormalMap(New);
-		Memory::Release(New);
+		base->set_normal_map(init);
+		memory::release(init);
 	}, false);
-	ResolveTexture2D(State.GUI, "mat_metallic_source", Base->GetMetallicMap() != nullptr, [Base](Texture2D* New)
+	resolve_texture_2d(state.gui, "mat_metallic_source", base->get_metallic_map() != nullptr, [base](texture_2d* init)
 	{
-		Base->SetMetallicMap(New);
-		Memory::Release(New);
+		base->set_metallic_map(init);
+		memory::release(init);
 	}, false);
-	ResolveTexture2D(State.GUI, "mat_roughness_source", Base->GetRoughnessMap() != nullptr, [Base](Texture2D* New)
+	resolve_texture_2d(state.gui, "mat_roughness_source", base->get_roughness_map() != nullptr, [base](texture_2d* init)
 	{
-		Base->SetRoughnessMap(New);
-		Memory::Release(New);
+		base->set_roughness_map(init);
+		memory::release(init);
 	}, false);
-	ResolveTexture2D(State.GUI, "mat_height_source", Base->GetHeightMap() != nullptr, [Base](Texture2D* New)
+	resolve_texture_2d(state.gui, "mat_height_source", base->get_height_map() != nullptr, [base](texture_2d* init)
 	{
-		Base->SetHeightMap(New);
-		Memory::Release(New);
+		base->set_height_map(init);
+		memory::release(init);
 	}, false);
-	ResolveTexture2D(State.GUI, "mat_occlusion_source", Base->GetOcclusionMap() != nullptr, [Base](Texture2D* New)
+	resolve_texture_2d(state.gui, "mat_occlusion_source", base->get_occlusion_map() != nullptr, [base](texture_2d* init)
 	{
-		Base->SetOcclusionMap(New);
-		Memory::Release(New);
+		base->set_occlusion_map(init);
+		memory::release(init);
 	}, false);
-	ResolveTexture2D(State.GUI, "mat_emission_source", Base->GetEmissionMap() != nullptr, [Base](Texture2D* New)
+	resolve_texture_2d(state.gui, "mat_emission_source", base->get_emission_map() != nullptr, [base](texture_2d* init)
 	{
-		Base->SetEmissionMap(New);
-		Memory::Release(New);
+		base->set_emission_map(init);
+		memory::release(init);
 	}, false);
 
-	ResolveColor3(State.GUI, "mat_diffuse", &Base->Surface.Diffuse);
-	ResolveColor3(State.GUI, "mat_scat", &Base->Surface.Scattering);
-	if (State.GUI->GetElementById("mat_cemn").CastFormColor(&Base->Surface.Emission, false))
-		State.GUI->GetElementById("mat_cemn_color").SetProperty("background-color", Stringify::Text("rgb(%u, %u, %u)", (unsigned int)(Base->Surface.Emission.X * 255.0f), (unsigned int)(Base->Surface.Emission.Y * 255.0f), (unsigned int)(Base->Surface.Emission.Z * 255.0f)));
+	resolve_color3(state.gui, "mat_diffuse", &base->surface.diffuse);
+	resolve_color3(state.gui, "mat_scat", &base->surface.scattering);
+	if (state.gui->get_element_by_id("mat_cemn").cast_form_color(&base->surface.emission, false))
+		state.gui->get_element_by_id("mat_cemn_color").set_property("background-color", stringify::text("rgb(%u, %u, %u)", (unsigned int)(base->surface.emission.x * 255.0f), (unsigned int)(base->surface.emission.y * 255.0f), (unsigned int)(base->surface.emission.z * 255.0f)));
 
-	if (State.GUI->GetElementById("mat_cmet").CastFormColor(&Base->Surface.Metallic, false))
-		State.GUI->GetElementById("mat_cmet_color").SetProperty("background-color", Stringify::Text("rgb(%u, %u, %u)", (unsigned int)(Base->Surface.Metallic.X * 255.0f), (unsigned int)(Base->Surface.Metallic.Y * 255.0f), (unsigned int)(Base->Surface.Metallic.Z * 255.0f)));
+	if (state.gui->get_element_by_id("mat_cmet").cast_form_color(&base->surface.metallic, false))
+		state.gui->get_element_by_id("mat_cmet_color").set_property("background-color", stringify::text("rgb(%u, %u, %u)", (unsigned int)(base->surface.metallic.x * 255.0f), (unsigned int)(base->surface.metallic.y * 255.0f), (unsigned int)(base->surface.metallic.z * 255.0f)));
 
-	if (State.GUI->GetElementById("mat_pens").CastFormColor(&Base->Surface.Penetration, false))
-		State.GUI->GetElementById("mat_pens_color").SetProperty("background-color", Stringify::Text("rgb(%u, %u, %u)", (unsigned int)(Base->Surface.Penetration.X * 255.0f), (unsigned int)(Base->Surface.Penetration.Y * 255.0f), (unsigned int)(Base->Surface.Penetration.Z * 255.0f)));
+	if (state.gui->get_element_by_id("mat_pens").cast_form_color(&base->surface.penetration, false))
+		state.gui->get_element_by_id("mat_pens_color").set_property("background-color", stringify::text("rgb(%u, %u, %u)", (unsigned int)(base->surface.penetration.x * 255.0f), (unsigned int)(base->surface.penetration.y * 255.0f), (unsigned int)(base->surface.penetration.z * 255.0f)));
 
-	String Name = Base->GetName();
-	if (State.GUI->GetElementById("mat_name").CastFormString(&Name))
-		Base->SetName(Name);
+	string name = base->get_name();
+	if (state.gui->get_element_by_id("mat_name").cast_form_string(&name))
+		base->set_name(name);
 
-	State.GUI->GetElementById("mat_pensv").CastFormFloat(&Base->Surface.Penetration.W);
-	State.GUI->GetElementById("mat_memn").CastFormFloat(&Base->Surface.Emission.W);
-	State.GUI->GetElementById("mat_mmet").CastFormFloat(&Base->Surface.Metallic.W);
-	State.GUI->GetElementById("mat_rs").CastFormFloat(&Base->Surface.Roughness.X);
-	State.GUI->GetElementById("mat_mrs").CastFormFloat(&Base->Surface.Roughness.Y);
-	State.GUI->GetElementById("mat_occ").CastFormFloat(&Base->Surface.Occlusion.X);
-	State.GUI->GetElementById("mat_mocc").CastFormFloat(&Base->Surface.Occlusion.Y);
-	State.GUI->GetElementById("mat_fres").CastFormFloat(&Base->Surface.Fresnel);
-	State.GUI->GetElementById("mat_refr").CastFormFloat(&Base->Surface.Refraction);
-	State.GUI->GetElementById("mat_alpha").CastFormFloat(&Base->Surface.Transparency);
-	State.GUI->GetElementById("mat_env").CastFormFloat(&Base->Surface.Environment);
-	State.GUI->GetElementById("mat_rad").CastFormFloat(&Base->Surface.Radius);
-	State.GUI->GetElementById("mat_ht_amnt").CastFormFloat(&Base->Surface.Height);
-	State.GUI->GetElementById("mat_ht_bias").CastFormFloat(&Base->Surface.Bias);
+	state.gui->get_element_by_id("mat_pensv").cast_form_float(&base->surface.penetration.w);
+	state.gui->get_element_by_id("mat_memn").cast_form_float(&base->surface.emission.w);
+	state.gui->get_element_by_id("mat_mmet").cast_form_float(&base->surface.metallic.w);
+	state.gui->get_element_by_id("mat_rs").cast_form_float(&base->surface.roughness.x);
+	state.gui->get_element_by_id("mat_mrs").cast_form_float(&base->surface.roughness.y);
+	state.gui->get_element_by_id("mat_occ").cast_form_float(&base->surface.occlusion.x);
+	state.gui->get_element_by_id("mat_mocc").cast_form_float(&base->surface.occlusion.y);
+	state.gui->get_element_by_id("mat_fres").cast_form_float(&base->surface.fresnel);
+	state.gui->get_element_by_id("mat_refr").cast_form_float(&base->surface.refraction);
+	state.gui->get_element_by_id("mat_alpha").cast_form_float(&base->surface.transparency);
+	state.gui->get_element_by_id("mat_env").cast_form_float(&base->surface.environment);
+	state.gui->get_element_by_id("mat_rad").cast_form_float(&base->surface.radius);
+	state.gui->get_element_by_id("mat_ht_amnt").cast_form_float(&base->surface.height);
+	state.gui->get_element_by_id("mat_ht_bias").cast_form_float(&base->surface.bias);
 }
-void Sandbox::SetLogging(bool Active)
+void sandbox::set_logging(bool active)
 {
-	if (!Active)
-		return ErrorHandling::SetCallback(nullptr);
+	if (!active)
+		return error_handling::set_callback(nullptr);
 
-	ErrorHandling::SetCallback([this](ErrorHandling::Details& Data)
+	error_handling::set_callback([this](error_handling::details& data)
 	{
-		SetStatus(ErrorHandling::GetMessageText(Data));
+		set_status(error_handling::get_message_text(data));
 	});
 }
-void Sandbox::SetViewModel()
+void sandbox::set_view_model()
 {
-	SetStatus("GUI view-model setup done");
-	if (!State.GUI)
+	set_status("gui view-model setup done");
+	if (!state.gui)
 		return;
 
-	State.System = State.GUI->SetDataModel("editor");
-	State.Entities = State.System->SetArray("entities");
-	State.Materials = State.System->SetArray("materials");
-	State.Models = State.System->SetArray("models");
-	State.Skins = State.System->SetArray("skins");
-	State.Directories = State.System->SetArray("directories");
-	State.Files = State.System->SetArray("files");
-	State.System->SetBoolean("scene_active", false);
-	State.System->SetString("sl_status", "");
-	State.System->SetString("sl_window", "none");
-	State.System->SetString("sl_material", GUI::IElement::FromPointer(nullptr));
-	State.System->SetString("sl_entity", GUI::IElement::FromPointer(nullptr));
-	State.System->SetBoolean("sl_resource", false);
-	State.System->SetBoolean("sl_cmp_model", false);
-	State.System->SetString("sl_cmp_model_mesh", "");
-	State.System->SetBoolean("sl_cmp_model_source", false);
-	State.System->SetBoolean("sl_cmp_model_assigned", false);
-	State.System->SetBoolean("sl_cmp_skin", false);
-	State.System->SetString("sl_cmp_skin_mesh", "");
-	State.System->SetBoolean("sl_cmp_skin_source", false);
-	State.System->SetBoolean("sl_cmp_skin_assigned", false);
-	State.System->SetInteger("sl_cmp_skin_joint", -1);
-	State.System->SetInteger("sl_cmp_skin_joints", -1);
-	State.System->SetBoolean("sl_cmp_emitter", false);
-	State.System->SetBoolean("sl_cmp_soft_body", false);
-	State.System->SetBoolean("sl_cmp_soft_body_source", false);
-	State.System->SetBoolean("sl_cmp_decal", false);
-	State.System->SetBoolean("sl_cmp_skin_animator", false);
-	State.System->SetInteger("sl_cmp_skin_animator_joint", -1);
-	State.System->SetInteger("sl_cmp_skin_animator_joints", -1);
-	State.System->SetInteger("sl_cmp_skin_animator_frame", -1);
-	State.System->SetInteger("sl_cmp_skin_animator_frames", -1);
-	State.System->SetInteger("sl_cmp_skin_animator_clip", -1);
-	State.System->SetInteger("sl_cmp_skin_animator_clips", -1);
-	State.System->SetBoolean("sl_cmp_key_animator", false);
-	State.System->SetInteger("sl_cmp_key_animator_frame", -1);
-	State.System->SetInteger("sl_cmp_key_animator_frames", -1);
-	State.System->SetInteger("sl_cmp_key_animator_clip", -1);
-	State.System->SetInteger("sl_cmp_key_animator_clips", -1);
-	State.System->SetBoolean("sl_cmp_emitter_animator", false);
-	State.System->SetBoolean("sl_cmp_rigid_body", false);
-	State.System->SetBoolean("sl_cmp_rigid_body_source", false);
-	State.System->SetBoolean("sl_cmp_rigid_body_from_source", false);
-	State.System->SetBoolean("sl_cmp_acceleration", false);
-	State.System->SetBoolean("sl_cmp_slider_constraint", false);
-	State.System->SetBoolean("sl_cmp_slider_constraint_entity", false);
-	State.System->SetBoolean("sl_cmp_free_look", false);
-	State.System->SetBoolean("sl_cmp_fly", false);
-	State.System->SetBoolean("sl_cmp_audio_source", false);
-	State.System->SetBoolean("sl_cmp_audio_source_clip", false);
-	State.System->SetFloat("sl_cmp_audio_source_length", 0.0f);
-	State.System->SetBoolean("sl_cmp_audio_source_reverb", false);
-	State.System->SetBoolean("sl_cmp_audio_source_chorus", false);
-	State.System->SetBoolean("sl_cmp_audio_source_distortion", false);
-	State.System->SetBoolean("sl_cmp_audio_source_echo", false);
-	State.System->SetBoolean("sl_cmp_audio_source_flanger", false);
-	State.System->SetBoolean("sl_cmp_audio_source_frequency_shifter", false);
-	State.System->SetBoolean("sl_cmp_audio_source_vocal_morpher", false);
-	State.System->SetBoolean("sl_cmp_audio_source_pitch_shifter", false);
-	State.System->SetBoolean("sl_cmp_audio_source_ring_modulator", false);
-	State.System->SetBoolean("sl_cmp_audio_source_autowah", false);
-	State.System->SetBoolean("sl_cmp_audio_source_compressor", false);
-	State.System->SetBoolean("sl_cmp_audio_source_equalizer", false);
-	State.System->SetBoolean("sl_cmp_audio_listener", false);
-	State.System->SetBoolean("sl_cmp_point_light", false);
-	State.System->SetBoolean("sl_cmp_spot_light", false);
-	State.System->SetBoolean("sl_cmp_line_light", false);
-	State.System->SetInteger("sl_cmp_line_light_cascades", -1);
-	State.System->SetBoolean("sl_cmp_surface_light", false);
-	State.System->SetBoolean("sl_cmp_illuminator", false);
-	State.System->SetBoolean("sl_cmp_camera", false);
-	State.System->SetInteger("sl_cmp_camera_model", -1);
-	State.System->SetInteger("sl_cmp_camera_skin", -1);
-	State.System->SetInteger("sl_cmp_camera_soft_body", -1);
-	State.System->SetInteger("sl_cmp_camera_decal", -1);
-	State.System->SetInteger("sl_cmp_camera_emitter", -1);
-	State.System->SetInteger("sl_cmp_camera_depth", -1);
-	State.System->SetInteger("sl_cmp_camera_lighting", -1);
-	State.System->SetInteger("sl_cmp_camera_environment", -1);
-	State.System->SetInteger("sl_cmp_camera_transparency", -1);
-	State.System->SetInteger("sl_cmp_camera_ssr", -1);
-	State.System->SetInteger("sl_cmp_camera_ssgi", -1);
-	State.System->SetInteger("sl_cmp_camera_ssao", -1);
-	State.System->SetInteger("sl_cmp_camera_motionblur", -1);
-	State.System->SetInteger("sl_cmp_camera_bloom", -1);
-	State.System->SetInteger("sl_cmp_camera_dof", -1);
-	State.System->SetInteger("sl_cmp_camera_tone", -1);
-	State.System->SetInteger("sl_cmp_camera_glitch", -1);
-	State.System->SetInteger("sl_cmp_camera_gui", -1);
-	State.System->SetBoolean("sl_cmp_scriptable", false);
-	State.System->SetBoolean("sl_cmp_scriptable_source", false);
-	State.System->SetCallback("set_parent", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system = state.gui->set_data_model("editor");
+	state.entities = state.system->set_array("entities");
+	state.materials = state.system->set_array("materials");
+	state.models = state.system->set_array("models");
+	state.skins = state.system->set_array("skins");
+	state.directories = state.system->set_array("directories");
+	state.files = state.system->set_array("files");
+	state.system->set_boolean("scene_active", false);
+	state.system->set_string("sl_status", "");
+	state.system->set_string("sl_window", "none");
+	state.system->set_string("sl_material", gui::ielement::from_pointer(nullptr));
+	state.system->set_string("sl_entity", gui::ielement::from_pointer(nullptr));
+	state.system->set_boolean("sl_resource", false);
+	state.system->set_boolean("sl_cmp_model", false);
+	state.system->set_string("sl_cmp_model_mesh", "");
+	state.system->set_boolean("sl_cmp_model_source", false);
+	state.system->set_boolean("sl_cmp_model_assigned", false);
+	state.system->set_boolean("sl_cmp_skin", false);
+	state.system->set_string("sl_cmp_skin_mesh", "");
+	state.system->set_boolean("sl_cmp_skin_source", false);
+	state.system->set_boolean("sl_cmp_skin_assigned", false);
+	state.system->set_integer("sl_cmp_skin_joint", -1);
+	state.system->set_integer("sl_cmp_skin_joints", -1);
+	state.system->set_boolean("sl_cmp_emitter", false);
+	state.system->set_boolean("sl_cmp_soft_body", false);
+	state.system->set_boolean("sl_cmp_soft_body_source", false);
+	state.system->set_boolean("sl_cmp_decal", false);
+	state.system->set_boolean("sl_cmp_skin_animator", false);
+	state.system->set_integer("sl_cmp_skin_animator_joint", -1);
+	state.system->set_integer("sl_cmp_skin_animator_joints", -1);
+	state.system->set_integer("sl_cmp_skin_animator_frame", -1);
+	state.system->set_integer("sl_cmp_skin_animator_frames", -1);
+	state.system->set_integer("sl_cmp_skin_animator_clip", -1);
+	state.system->set_integer("sl_cmp_skin_animator_clips", -1);
+	state.system->set_boolean("sl_cmp_key_animator", false);
+	state.system->set_integer("sl_cmp_key_animator_frame", -1);
+	state.system->set_integer("sl_cmp_key_animator_frames", -1);
+	state.system->set_integer("sl_cmp_key_animator_clip", -1);
+	state.system->set_integer("sl_cmp_key_animator_clips", -1);
+	state.system->set_boolean("sl_cmp_emitter_animator", false);
+	state.system->set_boolean("sl_cmp_rigid_body", false);
+	state.system->set_boolean("sl_cmp_rigid_body_source", false);
+	state.system->set_boolean("sl_cmp_rigid_body_from_source", false);
+	state.system->set_boolean("sl_cmp_acceleration", false);
+	state.system->set_boolean("sl_cmp_slider_constraint", false);
+	state.system->set_boolean("sl_cmp_slider_constraint_entity", false);
+	state.system->set_boolean("sl_cmp_free_look", false);
+	state.system->set_boolean("sl_cmp_fly", false);
+	state.system->set_boolean("sl_cmp_audio_source", false);
+	state.system->set_boolean("sl_cmp_audio_source_clip", false);
+	state.system->set_float("sl_cmp_audio_source_length", 0.0f);
+	state.system->set_boolean("sl_cmp_audio_source_reverb", false);
+	state.system->set_boolean("sl_cmp_audio_source_chorus", false);
+	state.system->set_boolean("sl_cmp_audio_source_distortion", false);
+	state.system->set_boolean("sl_cmp_audio_source_echo", false);
+	state.system->set_boolean("sl_cmp_audio_source_flanger", false);
+	state.system->set_boolean("sl_cmp_audio_source_frequency_shifter", false);
+	state.system->set_boolean("sl_cmp_audio_source_vocal_morpher", false);
+	state.system->set_boolean("sl_cmp_audio_source_pitch_shifter", false);
+	state.system->set_boolean("sl_cmp_audio_source_ring_modulator", false);
+	state.system->set_boolean("sl_cmp_audio_source_autowah", false);
+	state.system->set_boolean("sl_cmp_audio_source_compressor", false);
+	state.system->set_boolean("sl_cmp_audio_source_equalizer", false);
+	state.system->set_boolean("sl_cmp_audio_listener", false);
+	state.system->set_boolean("sl_cmp_point_light", false);
+	state.system->set_boolean("sl_cmp_spot_light", false);
+	state.system->set_boolean("sl_cmp_line_light", false);
+	state.system->set_integer("sl_cmp_line_light_cascades", -1);
+	state.system->set_boolean("sl_cmp_surface_light", false);
+	state.system->set_boolean("sl_cmp_illuminator", false);
+	state.system->set_boolean("sl_cmp_camera", false);
+	state.system->set_integer("sl_cmp_camera_model", -1);
+	state.system->set_integer("sl_cmp_camera_skin", -1);
+	state.system->set_integer("sl_cmp_camera_soft_body", -1);
+	state.system->set_integer("sl_cmp_camera_decal", -1);
+	state.system->set_integer("sl_cmp_camera_emitter", -1);
+	state.system->set_integer("sl_cmp_camera_depth", -1);
+	state.system->set_integer("sl_cmp_camera_lighting", -1);
+	state.system->set_integer("sl_cmp_camera_environment", -1);
+	state.system->set_integer("sl_cmp_camera_transparency", -1);
+	state.system->set_integer("sl_cmp_camera_sslr", -1);
+	state.system->set_integer("sl_cmp_camera_ssli", -1);
+	state.system->set_integer("sl_cmp_camera_ssla", -1);
+	state.system->set_integer("sl_cmp_camera_motionblur", -1);
+	state.system->set_integer("sl_cmp_camera_bloom", -1);
+	state.system->set_integer("sl_cmp_camera_dof", -1);
+	state.system->set_integer("sl_cmp_camera_tone", -1);
+	state.system->set_integer("sl_cmp_camera_glitch", -1);
+	state.system->set_integer("sl_cmp_camera_gui", -1);
+	state.system->set_boolean("sl_cmp_scriptable", false);
+	state.system->set_boolean("sl_cmp_scriptable_source", false);
+	state.system->set_callback("set_parent", [this](gui::ievent& event, const variant_list& args)
 	{
-		GUI::IElement Target = (Rml::Element*)Event.GetPointer("drag_element");
-		if (!Target.IsValid())
+		gui::ielement target = (Rml::Element*)event.get_pointer("drag_element");
+		if (!target.is_valid())
 			return;
 
-		Entity* Child = (Entity*)GUI::IElement::ToPointer(Target.GetAttribute("entity"));
-		if (!Child)
+		entity* child = (entity*)gui::ielement::to_pointer(target.get_attribute("entity"));
+		if (!child)
 			return;
 
-		if (Args.size() == 1)
+		if (args.size() == 1)
 		{
-			Entity* Base = (Entity*)GUI::IElement::ToPointer(Args[0].GetBlob());
-			if (Base != nullptr)
-				Child->SetRoot(Base);
+			entity* base = (entity*)gui::ielement::to_pointer(args[0].get_blob());
+			if (base != nullptr)
+				child->set_root(base);
 			else
-				Child->SetRoot(nullptr);
-			Event.StopImmediatePropagation();
+				child->set_root(nullptr);
+			event.stop_immediate_propagation();
 		}
-		else if (Args.empty())
-			Child->SetRoot(nullptr);
+		else if (args.empty())
+			child->set_root(nullptr);
 	});
-	State.System->SetCallback("set_entity", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("set_entity", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Args.size() != 1)
+		if (args.size() != 1)
 			return;
 
-		Entity* Base = (Entity*)GUI::IElement::ToPointer(Args[0].GetBlob());
-		if (State.OnEntity)
+		entity* base = (entity*)gui::ielement::to_pointer(args[0].get_blob());
+		if (state.on_entity)
 		{
-			auto Callback = State.OnEntity;
-			GetEntity("__got__", nullptr);
+			auto callback = state.on_entity;
+			get_entity("__got__", nullptr);
 
-			Callback(Base);
+			callback(base);
 		}
-		else if (Selection.Entity != Base)
-			SetSelection(Inspector_Entity, Base);
+		else if (selection.entity != base)
+			set_selection(inspector_entity, base);
 		else
-			SetSelection(Inspector_None);
+			set_selection(inspector_none);
 	});
-	State.System->SetCallback("set_controls", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("set_controls", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Args.size() == 1)
-			State.IsSceneFocused = Args[0].GetBoolean();
+		if (args.size() == 1)
+			state.is_scene_focused = args[0].get_boolean();
 	});
-	State.System->SetCallback("set_menu", [](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("set_menu", [](gui::ievent& event, const variant_list& args)
 	{
-		if (Args.size() != 1)
+		if (args.size() != 1)
 			return;
 
-		GUI::IElement Target = Event.GetCurrentElement();
-		GUI::IElement Current = Event.GetTargetElement();
-		bool Toggle = false;
+		gui::ielement target = event.get_current_element();
+		gui::ielement current = event.get_target_element();
+		bool toggle = false;
 
-		if (Target.GetElement() != Current.GetElement())
+		if (target.get_element() != current.get_element())
 		{
-			if (Event.GetType() != "click")
+			if (event.get_type() != "click")
 				return;
 
-			if (Current.GetTagName() != "button")
+			if (current.get_tag_name() != "button")
 			{
-				if (Current.GetTagName() != "p")
+				if (current.get_tag_name() != "p")
 					return;
 
-				Toggle = true;
+				toggle = true;
 			}
 		}
 
-		Vector<GUI::IElement> Tabs = Target.QuerySelectorAll(".tab");
-		bool Enabled = Args[0].GetBoolean();
+		vector<gui::ielement> tabs = target.query_selector_all(".tab");
+		bool enabled = args[0].get_boolean();
 
-		for (auto& Tab : Tabs)
+		for (auto& tab : tabs)
 		{
-			if (Toggle)
-				Tab.SetClass("transfer", !Tab.IsClassSet("transfer"));
-			else if (Enabled)
-				Tab.SetClass("transfer", true);
+			if (toggle)
+				tab.set_class("transfer", !tab.is_class_set("transfer"));
+			else if (enabled)
+				tab.set_class("transfer", true);
 			else
-				Tab.SetClass("transfer", false);
+				tab.set_class("transfer", false);
 		}
 	});
-	State.System->SetCallback("set_directory", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("set_directory", [this](gui::ievent& event, const variant_list& args)
 	{
-		SetDirectory(Args[0].GetBlob());
+		set_directory(args[0].get_blob());
 	});
-	State.System->SetCallback("set_file", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("set_file", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Args.size() != 1)
+		if (args.size() != 1)
 			return;
 
-		String fResource = Args[0].Serialize();
-		if (fResource.empty() || !State.OnResource)
+		string fResource = args[0].serialize();
+		if (fResource.empty() || !state.on_resource)
 			return;
 
-		auto Callback = State.OnResource;
-		GetResource("__got__", nullptr);
+		auto callback = state.on_resource;
+		get_resource("__got__", nullptr);
 
-		Callback(fResource);
+		callback(fResource);
 	});
-	State.System->SetCallback("set_material", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("set_material", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Args.size() != 1)
+		if (args.size() != 1)
 			return;
 
-		Material* Base = (Material*)GUI::IElement::ToPointer(Args[0].GetBlob());
-		SetSelection(Inspector_Material, Base);
+		material* base = (material*)gui::ielement::to_pointer(args[0].get_blob());
+		set_selection(inspector_material, base);
 	});
-	State.System->SetCallback("save_settings", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("save_settings", [this](gui::ievent& event, const variant_list& args)
 	{
-		Scene->Configure(Scene->GetConf());
+		scene->configure(scene->get_conf());
 	});
-	State.System->SetCallback("switch_scene", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("switch_scene", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (!Scene->IsActive())
+		if (!scene->is_active())
 		{
-			VariantArgs Args;
-			Args["type"] = Var::String("XML");
+			variant_args args;
+			args["type"] = var::string("XML");
 
-			UnloadCamera();
-			Content->Save<SceneGraph>("./editor/cache.xml", Scene, Args);
-			Scene->SetActive(true);
+			unload_camera();
+			content->save<scene_graph>("./editor/cache.xml", scene, args);
+			scene->set_active(true);
 		}
 		else
-			this->Resource.NextPath = "./editor/cache.xml";
+			this->resource.next_path = "./editor/cache.xml";
 	});
-	State.System->SetCallback("import_model_action", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("import_model_action", [this](gui::ievent& event, const variant_list& args)
 	{
-		String From;
-		if (!Alerts::Open("Import mesh", Content->GetEnvironment(), "*.dae,*.fbx,*.gltf,*.glb,*.blend,*.3d,*.3ds,*.ase,*.obj,*.ifc,*.xgl,*.zgl,*.ply,*.lwo,*.lws,*.lxo,*.stl,*.x,*.ac,*.ms3d,*.mdl,*.md2,.*md3", "", false, &From))
+		string from;
+		if (!alerts::open("Import mesh", content->get_environment(), "*.dae,*.fbx,*.gltf,*.glb,*.blend,*.3d,*.3ds,*.ase,*.obj,*.ifc,*.xgl,*.zgl,*.ply,*.lwo,*.lws,*.lxo,*.stl,*.x,*.ac,*.ms3d,*.mdl,*.md2,.*md3", "", false, &from))
 			return;
 
-		if (!OS::File::IsExists(From.c_str()))
+		if (!os::file::is_exists(from.c_str()))
 			return;
 
-		Processors::ModelProcessor* Processor = (Processors::ModelProcessor*)Content->GetProcessor<Model>();
-		if (Processor != nullptr)
+		processors::model_processor* processor = (processors::model_processor*)content->get_processor<model>();
+		if (processor != nullptr)
 		{
-			Stream* File = *OS::File::Open(From, FileMode::Binary_Read_Only);
-			auto Target = Processor->Import(File, State.MeshImportOpts);
-			Memory::Release(File);
+			stream* file = *os::file::open(from, file_mode::binary_read_only);
+			auto target = processor->import(file, state.mesh_import_opts);
+			memory::release(file);
 
-			if (Target)
+			if (target)
 			{
-				String To;
-				if (!Alerts::Save("Save mesh", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized mesh (*.xml, *.json, *.jsonb)", &To))
+				string to;
+				if (!alerts::save("Save mesh", content->get_environment(), "*.xml,*.json,*.jsonb", "Serialized mesh (*.xml, *.json, *.jsonb)", &to))
 					return;
 
-				VariantArgs Args;
-				if (Stringify::EndsWith(To, ".jsonb"))
-					Args["type"] = Var::String("JSONB");
-				else if (Stringify::EndsWith(To, ".json"))
-					Args["type"] = Var::String("JSON");
+				variant_args args;
+				if (stringify::ends_with(to, ".jsonb"))
+					args["type"] = var::string("JSONB");
+				else if (stringify::ends_with(to, ".json"))
+					args["type"] = var::string("JSON");
 				else
-					Args["type"] = Var::String("XML");
+					args["type"] = var::string("XML");
 
-				Content->Save<Schema>(To, *Target, Args);
-				Memory::Release(*Target);
-				this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Mesh was imported");
+				content->save<schema>(to, *target, args);
+				memory::release(*target);
+				this->activity->message.setup(alert_type::info, "Sandbox", "Mesh was imported");
 			}
 			else
-				this->Activity->Message.Setup(AlertType::Error, "Sandbox", "Mesh is unsupported");
+				this->activity->message.setup(alert_type::error, "Sandbox", "Mesh is unsupported");
 		}
 		else
-			this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Mesh cannot be imported");
+			this->activity->message.setup(alert_type::info, "Sandbox", "Mesh cannot be imported");
 
-		this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
-		this->Activity->Message.Result(nullptr);
+		this->activity->message.button(alert_confirm::defer, "OK", 1);
+		this->activity->message.result(nullptr);
 	});
-	State.System->SetCallback("import_skin_animation_action", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("import_skin_animation_action", [this](gui::ievent& event, const variant_list& args)
 	{
-		String From;
-		if (!Alerts::Open("Import animation from mesh", Content->GetEnvironment(), "*.dae,*.fbx,*.gltf,*.glb,*.blend,*.3d,*.3ds,*.ase,*.obj,*.ifc,*.xgl,*.zgl,*.ply,*.lwo,*.lws,*.lxo,*.stl,*.x,*.ac,*.ms3d,*.mdl,*.md2,.*md3", "", false, &From))
+		string from;
+		if (!alerts::open("Import animation from mesh", content->get_environment(), "*.dae,*.fbx,*.gltf,*.glb,*.blend,*.3d,*.3ds,*.ase,*.obj,*.ifc,*.xgl,*.zgl,*.ply,*.lwo,*.lws,*.lxo,*.stl,*.x,*.ac,*.ms3d,*.mdl,*.md2,.*md3", "", false, &from))
 			return;
 
-		if (!OS::File::IsExists(From.c_str()))
+		if (!os::file::is_exists(from.c_str()))
 			return;
 
-		Processors::SkinAnimationProcessor* Processor = (Processors::SkinAnimationProcessor*)Content->GetProcessor<SkinAnimation>();
-		if (Processor != nullptr)
+		processors::skin_animation_processor* processor = (processors::skin_animation_processor*)content->get_processor<skin_animation>();
+		if (processor != nullptr)
 		{
-			Stream* File = *OS::File::Open(From, FileMode::Binary_Read_Only);
-			auto Target = Processor->Import(File, State.MeshImportOpts);
-			Memory::Release(File);
+			stream* file = *os::file::open(from, file_mode::binary_read_only);
+			auto target = processor->import(file, state.mesh_import_opts);
+			memory::release(file);
 
-			if (Target)
+			if (target)
 			{
-				String To;
-				if (!Alerts::Save("Save animation", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized skin animation (*.xml, *.json, *.jsonb)", &To))
+				string to;
+				if (!alerts::save("Save animation", content->get_environment(), "*.xml,*.json,*.jsonb", "Serialized skin animation (*.xml, *.json, *.jsonb)", &to))
 					return;
 
-				VariantArgs Args;
-				if (Stringify::EndsWith(To, ".jsonb"))
-					Args["type"] = Var::String("JSONB");
-				else if (Stringify::EndsWith(To, ".json"))
-					Args["type"] = Var::String("JSON");
+				variant_args args;
+				if (stringify::ends_with(to, ".jsonb"))
+					args["type"] = var::string("JSONB");
+				else if (stringify::ends_with(to, ".json"))
+					args["type"] = var::string("JSON");
 				else
-					Args["type"] = Var::String("XML");
+					args["type"] = var::string("XML");
 
-				Content->Save<Schema>(To, *Target, Args);
-				Memory::Release(*Target);
-				this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Animation was imported");
+				content->save<schema>(to, *target, args);
+				memory::release(*target);
+				this->activity->message.setup(alert_type::info, "Sandbox", "Animation was imported");
 			}
 			else
-				this->Activity->Message.Setup(AlertType::Error, "Sandbox", "Animation is unsupported");
+				this->activity->message.setup(alert_type::error, "Sandbox", "Animation is unsupported");
 		}
 		else
-			this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Animation cannot be imported");
+			this->activity->message.setup(alert_type::info, "Sandbox", "Animation cannot be imported");
 
-		this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
-		this->Activity->Message.Result(nullptr);
+		this->activity->message.button(alert_confirm::defer, "OK", 1);
+		this->activity->message.result(nullptr);
 	});
-	State.System->SetCallback("remove_cmp", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("remove_cmp", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Args.size() != 1)
+		if (args.size() != 1)
 			return;
 
-		if (Selection.Entity != nullptr)
-			Selection.Entity->RemoveComponent(VI_HASH(Args[0].Serialize()));
+		if (selection.entity != nullptr)
+			selection.entity->remove_component(VI_HASH(args[0].serialize()));
 	});
-	State.System->SetCallback("open_materials", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("open_materials", [this](gui::ievent& event, const variant_list& args)
 	{
-		SetSelection(Inspector_Materials);
+		set_selection(inspector_materials);
 	});
-	State.System->SetCallback("remove_material", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("remove_material", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Material != nullptr)
-			Scene->DeleteMaterial(Selection.Material);
-		SetSelection(Inspector_Materials);
+		if (selection.material != nullptr)
+			scene->delete_material(selection.material);
+		set_selection(inspector_materials);
 	});
-	State.System->SetCallback("copy_material", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("copy_material", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Material != nullptr)
+		if (selection.material != nullptr)
 		{
-			Selection.Material = Scene->CloneMaterial(Selection.Material);
-			Selection.Material->SetName(Selection.Material->GetName() + "*");
+			selection.material = scene->clone_material(selection.material);
+			selection.material->set_name(selection.material->get_name() + "*");
 		}
 	});
-	State.System->SetCallback("open_settings", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("open_settings", [this](gui::ievent& event, const variant_list& args)
 	{
-		SetSelection(Inspector_Settings);
+		set_selection(inspector_settings);
 	});
-	State.System->SetCallback("add_material", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_material", [this](gui::ievent& event, const variant_list& args)
 	{
-		Material* New = Scene->AddMaterial();
-	    New->SetName("Material " + ToString(Scene->GetMaterialsCount() + 1));
-		SetSelection(Inspector_Material, New);
+		material* init = scene->add_material();
+		init->set_name("Material " + to_string(scene->get_materials_count() + 1));
+		set_selection(inspector_material, init);
 	});
-	State.System->SetCallback("import_model", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("import_model", [this](gui::ievent& event, const variant_list& args)
 	{
-		SetSelection(Inspector_ImportModel);
+		set_selection(inspector_import_model);
 	});
-	State.System->SetCallback("import_skin_animation", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("import_skin_animation", [this](gui::ievent& event, const variant_list& args)
 	{
-		SetSelection(Inspector_ImportAnimation);
+		set_selection(inspector_import_animation);
 	});
-	State.System->SetCallback("export_key_animation", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("export_key_animation", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (!Selection.Entity || !Selection.Entity->GetComponent<Components::KeyAnimator>())
+		if (!selection.entity || !selection.entity->get_component<components::key_animator>())
 		{
-			this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Select entity with key animator to export");
-			this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
-			this->Activity->Message.Result(nullptr);
+			this->activity->message.setup(alert_type::info, "Sandbox", "Select entity with key animator to export");
+			this->activity->message.button(alert_confirm::defer, "OK", 1);
+			this->activity->message.result(nullptr);
 			return;
 		}
 
-		String Path;
-		if (!Alerts::Save("Save key animation", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized key animation (*.xml, *.json, *.jsonb)", &Path))
+		string path;
+		if (!alerts::save("Save key animation", content->get_environment(), "*.xml,*.json,*.jsonb", "Serialized key animation (*.xml, *.json, *.jsonb)", &path))
 			return;
 
-		Schema* Result = Var::Set::Object();
-		Result->Key = "key-animation";
+		schema* result = var::set::object();
+		result->key = "key-animation";
 
-		auto* Animator = Selection.Entity->GetComponent<Components::KeyAnimator>();
-		HeavySeries::Pack(Result, Animator->Clips);
+		auto* animator = selection.entity->get_component<components::key_animator>();
+		heavy_series::pack(result, animator->clips);
 
-		VariantArgs Map;
-		if (Stringify::EndsWith(Path, ".jsonb"))
-			Map["type"] = Var::String("JSONB");
-		else if (Stringify::EndsWith(Path, ".json"))
-			Map["type"] = Var::String("JSON");
+		variant_args map;
+		if (stringify::ends_with(path, ".jsonb"))
+			map["type"] = var::string("JSONB");
+		else if (stringify::ends_with(path, ".json"))
+			map["type"] = var::string("JSON");
 		else
-			Map["type"] = Var::String("XML");
+			map["type"] = var::string("XML");
 
-		if (!Content->Save<Schema>(Path, Result, Map))
-			this->Activity->Message.Setup(AlertType::Error, "Sandbox", "Key animation cannot be saved");
+		if (!content->save<schema>(path, result, map))
+			this->activity->message.setup(alert_type::error, "Sandbox", "Key animation cannot be saved");
 		else
-			this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Key animation was saved");
+			this->activity->message.setup(alert_type::info, "Sandbox", "Key animation was saved");
 
-		Memory::Release(Result);
-		this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
-		this->Activity->Message.Result(nullptr);
+		memory::release(result);
+		this->activity->message.button(alert_confirm::defer, "OK", 1);
+		this->activity->message.result(nullptr);
 	});
-	State.System->SetCallback("import_material", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("import_material", [this](gui::ievent& event, const variant_list& args)
 	{
-		GetResource("material", [this](const String& File)
+		get_resource("material", [this](const string& file)
 		{
-			auto Result = Content->Load<Material>(File);
-			if (!Result || !Scene->AddMaterial(*Result))
+			auto result = content->load<material>(file);
+			if (!result || !scene->add_material(*result))
 				return;
 
-			SetSelection(Inspector_Material, *Result);
+			set_selection(inspector_material, *result);
 		});
 	});
-	State.System->SetCallback("deploy_scene", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("deploy_scene", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (!Resource.ScenePath.empty())
+		if (!resource.scene_path.empty())
 		{
-			this->Activity->Message.Setup(AlertType::Warning, "Sandbox", "Editor's state will be flushed before start");
-			this->Activity->Message.Button(AlertConfirm::Escape, "No", 1);
-			this->Activity->Message.Button(AlertConfirm::Return, "Yes", 2);
-			this->Activity->Message.Result([this](int Button)
+			this->activity->message.setup(alert_type::warning, "Sandbox", "Editor's state will be flushed before start");
+			this->activity->message.button(alert_confirm::escape, "No", 1);
+			this->activity->message.button(alert_confirm::defer, "Yes", 2);
+			this->activity->message.result([this](int button)
 			{
-				if (Button == 2)
+				if (button == 2)
 				{
-					Demo::SetSource(Resource.ScenePath);
-					Stop();
+					demo::set_source(resource.scene_path);
+					stop();
 				}
 			});
 		}
 		else
 		{
-			this->Activity->Message.Setup(AlertType::Error, "Sandbox", "Save the scene to deploy it later");
-			this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
-			this->Activity->Message.Result(nullptr);
+			this->activity->message.setup(alert_type::error, "Sandbox", "Save the scene to deploy it later");
+			this->activity->message.button(alert_confirm::defer, "OK", 1);
+			this->activity->message.result(nullptr);
 		}
 	});
-	State.System->SetCallback("compile_shaders", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("compile_shaders", [this](gui::ievent& event, const variant_list& args)
 	{
-		String Path = Content->GetEnvironment() + "./shaders";
-		auto Subpath = OS::Path::Resolve(Path.c_str());
-		if (Subpath)
-			Path = *Subpath;
-		OS::Directory::Patch(Path);
+		string path = content->get_environment() + "./shaders";
+		auto subpath = os::path::resolve(path.c_str());
+		if (subpath)
+			path = *subpath;
+		os::directory::patch(path);
 
-		GraphicsDevice::Desc D3D11;
-		D3D11.Backend = RenderBackend::D3D11;
-		D3D11.CacheDirectory = Path;
+		graphics_device::desc D3D11;
+		D3D11.backend = render_backend::d3d11;
+		D3D11.cache_directory = path;
 
-		GraphicsDevice::Desc OGL;
-		OGL.Backend = RenderBackend::OGL;
-		OGL.CacheDirectory = Path;
+		graphics_device::desc OGL;
+		OGL.backend = render_backend::ogl;
+		OGL.cache_directory = path;
 
-		Vector<GraphicsDevice*> Devices;
-		Devices.push_back(Renderer->GetBackend() == D3D11.Backend ? Renderer : GraphicsDevice::Create(D3D11));
-		Devices.push_back(Renderer->GetBackend() == OGL.Backend ? Renderer : GraphicsDevice::Create(OGL));
-		this->Renderer->AddRef();
+		vector<graphics_device*> devices;
+		devices.push_back(renderer->get_backend() == D3D11.backend ? renderer : graphics_device::create(D3D11));
+		devices.push_back(renderer->get_backend() == OGL.backend ? renderer : graphics_device::create(OGL));
+		this->renderer->add_ref();
 
-		GraphicsDevice::CompileBuiltinShaders(Devices, [](GraphicsDevice* Device, const std::string_view& Name, const ExpectsGraphics<Shader*>& Result) -> bool
+		graphics_device::compile_builtin_shaders(devices, [](graphics_device* device, const std::string_view& name, const expects_graphics<shader*>& result) -> bool
 		{
-			auto GetDeviceName = [&Device]() -> const char*
+			auto get_device_name = [&device]() -> const char*
 			{
-				switch (Device->GetBackend())
+				switch (device->get_backend())
 				{
-					case RenderBackend::D3D11:
+					case render_backend::d3d11:
 						return "d3d11";
-					case RenderBackend::OGL:
+					case render_backend::ogl:
 						return "opengl";
 					default:
 						return "unknown";
 				}
 			};
 
-			if (Result)
+			if (result)
 			{
-				VI_INFO("[sandbox] OK compile %s shader %.*s", GetDeviceName(), (int)Name.size(), Name.data());
-				Memory::Release(*Result);
+				VI_INFO("[sandbox] OK compile %s shader %.*s", get_device_name(), (int)name.size(), name.data());
+				memory::release(*result);
 			}
 			else
-				VI_ERR("[sandbox] cannot compile %s shader %.*s: %s", GetDeviceName(), (int)Name.size(), Name.data(), Result.Error().what());
-			return !!Result;
+				VI_ERR("[sandbox] cannot compile %s shader %.*s: %s", get_device_name(), (int)name.size(), name.data(), result.error().what());
+			return !!result;
 		});
-		for (auto* Device : Devices)
-			Memory::Release(Device);
+		for (auto* device : devices)
+			memory::release(device);
 	});
-	State.System->SetCallback("open_scene", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("open_scene", [this](gui::ievent& event, const variant_list& args)
 	{
-		GetResource("scene", [this](const String& File)
+		get_resource("scene", [this](const string& file)
 		{
-			this->Resource.NextPath = File;
+			this->resource.next_path = file;
 		});
 	});
-	State.System->SetCallback("close_scene", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("close_scene", [this](gui::ievent& event, const variant_list& args)
 	{
-		String Path;
-		if (!Alerts::Save("Save scene", Content->GetEnvironment(), "*.xml,*.json,*.jsonb", "Serialized scene (*.xml, *.json, *.jsonb)", &Path))
+		string path;
+		if (!alerts::save("Save scene", content->get_environment(), "*.xml,*.json,*.jsonb", "Serialized scene (*.xml, *.json, *.jsonb)", &path))
 			return;
 
-		VariantArgs Map;
-		if (Stringify::EndsWith(Path, ".jsonb"))
-			Map["type"] = Var::String("JSONB");
-		else if (Stringify::EndsWith(Path, ".json"))
-			Map["type"] = Var::String("JSON");
+		variant_args map;
+		if (stringify::ends_with(path, ".jsonb"))
+			map["type"] = var::string("JSONB");
+		else if (stringify::ends_with(path, ".json"))
+			map["type"] = var::string("JSON");
 		else
-			Map["type"] = Var::String("XML");
+			map["type"] = var::string("XML");
 
-		UnloadCamera();
-		Content->Save<SceneGraph>(Path, Scene, Map);
-		LoadCamera();
+		unload_camera();
+		content->save<scene_graph>(path, scene, map);
+		load_camera();
 
-		if (!Scene->IsActive())
-			Scene->SetCamera(State.Camera);
+		if (!scene->is_active())
+			scene->set_camera(state.camera);
 
-		this->Activity->Message.Setup(AlertType::Info, "Sandbox", "Scene was saved");
-		this->Activity->Message.Button(AlertConfirm::Return, "OK", 1);
-		this->Activity->Message.Result(nullptr);
+		this->activity->message.setup(alert_type::info, "Sandbox", "Scene was saved");
+		this->activity->message.button(alert_confirm::defer, "OK", 1);
+		this->activity->message.result(nullptr);
 	});
-	State.System->SetCallback("update_files", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("update_files", [this](gui::ievent& event, const variant_list& args)
 	{
-		UpdateFiles(Resource.CurrentPath);
+		update_files(resource.current_path);
 	});
-	State.System->SetCallback("cancel_file", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("cancel_file", [this](gui::ievent& event, const variant_list& args)
 	{
-		GetResource("", nullptr);
+		get_resource("", nullptr);
 	});
-	State.System->SetCallback("add_entity", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_entity", [this](gui::ievent& event, const variant_list& args)
 	{
-	    SetSelection(Inspector_Entity, Scene->AddEntity());
+		set_selection(inspector_entity, scene->add_entity());
 	});
-	State.System->SetCallback("remove_entity", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("remove_entity", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			Scene->DeleteEntity(Selection.Entity);
-			SetSelection(Inspector_None);
+			scene->delete_entity(selection.entity);
+			set_selection(inspector_none);
 		}
 	});
-	State.System->SetCallback("move_entity", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("move_entity", [this](gui::ievent& event, const variant_list& args)
 	{
-		Selection.Gizmo = Resource.Gizmo[Selection.Move = 0];
-		Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
-		Selection.Gizmo->SetDisplayScale(State.GizmoScale);
-		Selection.Gizmo->SetLocation(IGizmo::LOCATE_WORLD);
+		selection.gizmo = resource.gizmo[selection.move = 0];
+		selection.gizmo->SetEditMatrix(state.gizmo.row);
+		selection.gizmo->SetDisplayScale(state.gizmo_scale);
+		selection.gizmo->SetLocation(IGizmo::LOCATE_WORLD);
 	});
-	State.System->SetCallback("rotate_entity", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("rotate_entity", [this](gui::ievent& event, const variant_list& args)
 	{
-		Selection.Gizmo = Resource.Gizmo[Selection.Move = 1];
-		Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
-		Selection.Gizmo->SetDisplayScale(State.GizmoScale);
-		Selection.Gizmo->SetLocation(IGizmo::LOCATE_WORLD);
+		selection.gizmo = resource.gizmo[selection.move = 1];
+		selection.gizmo->SetEditMatrix(state.gizmo.row);
+		selection.gizmo->SetDisplayScale(state.gizmo_scale);
+		selection.gizmo->SetLocation(IGizmo::LOCATE_WORLD);
 	});
-	State.System->SetCallback("scale_entity", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("scale_entity", [this](gui::ievent& event, const variant_list& args)
 	{
-		Selection.Gizmo = Resource.Gizmo[Selection.Move = 2];
-		Selection.Gizmo->SetEditMatrix(State.Gizmo.Row);
-		Selection.Gizmo->SetDisplayScale(State.GizmoScale);
-		Selection.Gizmo->SetLocation(IGizmo::LOCATE_WORLD);
+		selection.gizmo = resource.gizmo[selection.move = 2];
+		selection.gizmo->SetEditMatrix(state.gizmo.row);
+		selection.gizmo->SetDisplayScale(state.gizmo_scale);
+		selection.gizmo->SetLocation(IGizmo::LOCATE_WORLD);
 	});
-	State.System->SetCallback("place_position", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("place_position", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			Selection.Entity->GetTransform()->SetPosition(Scene->GetCamera()->GetEntity()->GetTransform()->GetPosition());
-			State.Gizmo = Selection.Entity->GetTransform()->GetBias();
-			GetEntitySync();
+			selection.entity->get_transform()->set_position(scene->get_camera()->get_entity()->get_transform()->get_position());
+			state.gizmo = selection.entity->get_transform()->get_bias();
+			get_entity_sync();
 		}
 	});
-	State.System->SetCallback("place_rotation", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("place_rotation", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			Selection.Entity->GetTransform()->SetRotation(Scene->GetCamera()->GetEntity()->GetTransform()->GetRotation());
-			State.Gizmo = Selection.Entity->GetTransform()->GetBias();
+			selection.entity->get_transform()->set_rotation(scene->get_camera()->get_entity()->get_transform()->get_rotation());
+			state.gizmo = selection.entity->get_transform()->get_bias();
 
-			auto* Source = Selection.Entity->GetComponent<Components::AudioSource>();
-			if (Source != nullptr)
-				Source->GetSync().Direction = -Scene->GetCamera()->GetEntity()->GetTransform()->GetRotation().dDirection();
+			auto* source = selection.entity->get_component<components::audio_source>();
+			if (source != nullptr)
+				source->get_sync().direction = -scene->get_camera()->get_entity()->get_transform()->get_rotation().ddirection();
 
-			GetEntitySync();
+			get_entity_sync();
 		}
 	});
-	State.System->SetCallback("place_combine", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("place_combine", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			Selection.Entity->GetTransform()->SetPosition(Scene->GetCamera()->GetEntity()->GetTransform()->GetPosition());
-			Selection.Entity->GetTransform()->SetRotation(Scene->GetCamera()->GetEntity()->GetTransform()->GetRotation());
-			State.Gizmo = Selection.Entity->GetTransform()->GetBias();
+			selection.entity->get_transform()->set_position(scene->get_camera()->get_entity()->get_transform()->get_position());
+			selection.entity->get_transform()->set_rotation(scene->get_camera()->get_entity()->get_transform()->get_rotation());
+			state.gizmo = selection.entity->get_transform()->get_bias();
 
-			auto* Source = Selection.Entity->GetComponent<Components::AudioSource>();
-			if (Source != nullptr)
-				Source->GetSync().Direction = -Scene->GetCamera()->GetEntity()->GetTransform()->GetRotation().dDirection();
+			auto* source = selection.entity->get_component<components::audio_source>();
+			if (source != nullptr)
+				source->get_sync().direction = -scene->get_camera()->get_entity()->get_transform()->get_rotation().ddirection();
 
-			GetEntitySync();
+			get_entity_sync();
 		}
 	});
-	State.System->SetCallback("reset_position", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("reset_position", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			Selection.Entity->GetTransform()->SetPosition(0);
-			GetEntitySync();
+			selection.entity->get_transform()->set_position(0);
+			get_entity_sync();
 		}
 	});
-	State.System->SetCallback("reset_rotation", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("reset_rotation", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			Selection.Entity->GetTransform()->SetRotation(0);
-			GetEntitySync();
+			selection.entity->get_transform()->set_rotation(0);
+			get_entity_sync();
 		}
 	});
-	State.System->SetCallback("reset_scale", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("reset_scale", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			Selection.Entity->GetTransform()->SetScale(1);
-			GetEntitySync();
+			selection.entity->get_transform()->set_scale(1);
+			get_entity_sync();
 		}
 	});
-	State.System->SetCallback("add_cmp_skin_animator", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_skin_animator", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
-			Selection.Entity->AddComponent<Components::SkinAnimator>();
+		if (selection.entity != nullptr)
+			selection.entity->add_component<components::skin_animator>();
 	});
-	State.System->SetCallback("add_cmp_key_animator", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_key_animator", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
-			Selection.Entity->AddComponent<Components::KeyAnimator>();
+		if (selection.entity != nullptr)
+			selection.entity->add_component<components::key_animator>();
 	});
-	State.System->SetCallback("add_cmp_emitter_animator", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_emitter_animator", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
-			Selection.Entity->AddComponent<Components::EmitterAnimator>();
+		if (selection.entity != nullptr)
+			selection.entity->add_component<components::emitter_animator>();
 	});
-	State.System->SetCallback("add_cmp_listener", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_listener", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
-			Selection.Entity->AddComponent<Components::AudioListener>();
+		if (selection.entity != nullptr)
+			selection.entity->add_component<components::audio_listener>();
 	});
-	State.System->SetCallback("add_cmp_source", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_source", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
-			Selection.Entity->AddComponent<Components::AudioSource>();
+		if (selection.entity != nullptr)
+			selection.entity->add_component<components::audio_source>();
 	});
-	State.System->SetCallback("add_cmp_reverb", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_reverb", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::AudioSource>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::AudioSource>();
+			auto* source = selection.entity->get_component<components::audio_source>();
+			if (!source)
+				source = selection.entity->add_component<components::audio_source>();
 
-			Source->GetSource()->AddEffect(new Effects::Reverb());
+			source->get_source()->add_effect(new effects::reverb());
 		}
 	});
-	State.System->SetCallback("add_cmp_chorus", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_chorus", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::AudioSource>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::AudioSource>();
+			auto* source = selection.entity->get_component<components::audio_source>();
+			if (!source)
+				source = selection.entity->add_component<components::audio_source>();
 
-			Source->GetSource()->AddEffect(new Effects::Chorus());
+			source->get_source()->add_effect(new effects::chorus());
 		}
 	});
-	State.System->SetCallback("add_cmp_distortion", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_distortion", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::AudioSource>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::AudioSource>();
+			auto* source = selection.entity->get_component<components::audio_source>();
+			if (!source)
+				source = selection.entity->add_component<components::audio_source>();
 
-			Source->GetSource()->AddEffect(new Effects::Distortion());
+			source->get_source()->add_effect(new effects::distortion());
 		}
 	});
-	State.System->SetCallback("add_cmp_echo", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_echo", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::AudioSource>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::AudioSource>();
+			auto* source = selection.entity->get_component<components::audio_source>();
+			if (!source)
+				source = selection.entity->add_component<components::audio_source>();
 
-			Source->GetSource()->AddEffect(new Effects::Echo());
+			source->get_source()->add_effect(new effects::echo());
 		}
 	});
-	State.System->SetCallback("add_cmp_flanger", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_flanger", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::AudioSource>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::AudioSource>();
+			auto* source = selection.entity->get_component<components::audio_source>();
+			if (!source)
+				source = selection.entity->add_component<components::audio_source>();
 
-			Source->GetSource()->AddEffect(new Effects::Flanger());
+			source->get_source()->add_effect(new effects::flanger());
 		}
 	});
-	State.System->SetCallback("add_cmp_frequency_shifter", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_frequency_shifter", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::AudioSource>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::AudioSource>();
+			auto* source = selection.entity->get_component<components::audio_source>();
+			if (!source)
+				source = selection.entity->add_component<components::audio_source>();
 
-			Source->GetSource()->AddEffect(new Effects::FrequencyShifter());
+			source->get_source()->add_effect(new effects::frequency_shifter());
 		}
 	});
-	State.System->SetCallback("add_cmp_vocal_morpher", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_vocal_morpher", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::AudioSource>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::AudioSource>();
+			auto* source = selection.entity->get_component<components::audio_source>();
+			if (!source)
+				source = selection.entity->add_component<components::audio_source>();
 
-			Source->GetSource()->AddEffect(new Effects::VocalMorpher());
+			source->get_source()->add_effect(new effects::vocal_morpher());
 		}
 	});
-	State.System->SetCallback("add_cmp_pitch_shifter", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_pitch_shifter", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::AudioSource>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::AudioSource>();
+			auto* source = selection.entity->get_component<components::audio_source>();
+			if (!source)
+				source = selection.entity->add_component<components::audio_source>();
 
-			Source->GetSource()->AddEffect(new Effects::PitchShifter());
+			source->get_source()->add_effect(new effects::pitch_shifter());
 		}
 	});
-	State.System->SetCallback("add_cmp_ring_modulator", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_ring_modulator", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::AudioSource>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::AudioSource>();
+			auto* source = selection.entity->get_component<components::audio_source>();
+			if (!source)
+				source = selection.entity->add_component<components::audio_source>();
 
-			Source->GetSource()->AddEffect(new Effects::RingModulator());
+			source->get_source()->add_effect(new effects::ring_modulator());
 		}
 	});
-	State.System->SetCallback("add_cmp_autowah", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_autowah", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::AudioSource>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::AudioSource>();
+			auto* source = selection.entity->get_component<components::audio_source>();
+			if (!source)
+				source = selection.entity->add_component<components::audio_source>();
 
-			Source->GetSource()->AddEffect(new Effects::Autowah());
+			source->get_source()->add_effect(new effects::autowah());
 		}
 	});
-	State.System->SetCallback("add_cmp_compressor", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_compressor", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::AudioSource>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::AudioSource>();
+			auto* source = selection.entity->get_component<components::audio_source>();
+			if (!source)
+				source = selection.entity->add_component<components::audio_source>();
 
-			Source->GetSource()->AddEffect(new Effects::Compressor());
+			source->get_source()->add_effect(new effects::compressor());
 		}
 	});
-	State.System->SetCallback("add_cmp_equalizer", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_equalizer", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::AudioSource>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::AudioSource>();
+			auto* source = selection.entity->get_component<components::audio_source>();
+			if (!source)
+				source = selection.entity->add_component<components::audio_source>();
 
-			Source->GetSource()->AddEffect(new Effects::Equalizer());
+			source->get_source()->add_effect(new effects::equalizer());
 		}
 	});
-	State.System->SetCallback("add_cmp_model", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_model", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
-			Selection.Entity->AddComponent<Components::Model>();
+		if (selection.entity != nullptr)
+			selection.entity->add_component<components::model>();
 	});
-	State.System->SetCallback("add_cmp_skin", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_skin", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
-			Selection.Entity->AddComponent<Components::Skin>();
+		if (selection.entity != nullptr)
+			selection.entity->add_component<components::skin>();
 	});
-	State.System->SetCallback("add_cmp_emitter", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_emitter", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
-			Selection.Entity->AddComponent<Components::Emitter>();
+		if (selection.entity != nullptr)
+			selection.entity->add_component<components::emitter>();
 	});
-	State.System->SetCallback("add_cmp_decal", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_decal", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
-			Selection.Entity->AddComponent<Components::Decal>();
+		if (selection.entity != nullptr)
+			selection.entity->add_component<components::decal>();
 	});
-	State.System->SetCallback("add_cmp_point_light", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_point_light", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
-			Selection.Entity->AddComponent<Components::PointLight>();
+		if (selection.entity != nullptr)
+			selection.entity->add_component<components::point_light>();
 	});
-	State.System->SetCallback("add_cmp_spot_light", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_spot_light", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
-			Selection.Entity->AddComponent<Components::SpotLight>();
+		if (selection.entity != nullptr)
+			selection.entity->add_component<components::spot_light>();
 	});
-	State.System->SetCallback("add_cmp_line_light", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_line_light", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
-			Selection.Entity->AddComponent<Components::LineLight>();
+		if (selection.entity != nullptr)
+			selection.entity->add_component<components::line_light>();
 	});
-	State.System->SetCallback("add_cmp_surface_light", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_surface_light", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
-			Selection.Entity->AddComponent<Components::SurfaceLight>();
+		if (selection.entity != nullptr)
+			selection.entity->add_component<components::surface_light>();
 	});
-	State.System->SetCallback("add_cmp_illuminator", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_illuminator", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
-			Selection.Entity->AddComponent<Components::Illuminator>();
+		if (selection.entity != nullptr)
+			selection.entity->add_component<components::illuminator>();
 	});
-	State.System->SetCallback("add_cmp_rigid_body", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_rigid_body", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
-			Selection.Entity->AddComponent<Components::RigidBody>();
+		if (selection.entity != nullptr)
+			selection.entity->add_component<components::rigid_body>();
 	});
-	State.System->SetCallback("add_cmp_soft_body", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_soft_body", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
-			Selection.Entity->AddComponent<Components::SoftBody>();
+		if (selection.entity != nullptr)
+			selection.entity->add_component<components::soft_body>();
 	});
-	State.System->SetCallback("add_cmp_slider_constraint", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_slider_constraint", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
-			Selection.Entity->AddComponent<Components::SliderConstraint>();
+		if (selection.entity != nullptr)
+			selection.entity->add_component<components::slider_constraint>();
 	});
-	State.System->SetCallback("add_cmp_acceleration", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_acceleration", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
-			Selection.Entity->AddComponent<Components::Acceleration>();
+		if (selection.entity != nullptr)
+			selection.entity->add_component<components::acceleration>();
 	});
-	State.System->SetCallback("add_cmp_fly", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_fly", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
-			Selection.Entity->AddComponent<Components::Fly>();
+		if (selection.entity != nullptr)
+			selection.entity->add_component<components::fly>();
 	});
-	State.System->SetCallback("add_cmp_free_look", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_free_look", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
-			Selection.Entity->AddComponent<Components::FreeLook>();
+		if (selection.entity != nullptr)
+			selection.entity->add_component<components::free_look>();
 	});
-	State.System->SetCallback("add_cmp_camera", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_camera", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
-			Selection.Entity->AddComponent<Components::Camera>();
+		if (selection.entity != nullptr)
+			selection.entity->add_component<components::camera>();
 	});
-	State.System->SetCallback("add_cmp_3d_camera", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_3d_camera", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (!Selection.Entity)
+		if (!selection.entity)
 			return;
 
-		Components::Camera* Camera = Selection.Entity->AddComponent<Components::Camera>();
-		auto* fRenderer = Camera->GetRenderer();
-		fRenderer->AddRenderer<Renderers::Model>();
-		fRenderer->AddRenderer<Renderers::Skin>();
-		fRenderer->AddRenderer<Renderers::SoftBody>();
-		fRenderer->AddRenderer<Renderers::Emitter>();
-		fRenderer->AddRenderer<Renderers::Decal>();
-		fRenderer->AddRenderer<Renderers::Lighting>();
-		fRenderer->AddRenderer<Renderers::Transparency>();
+		components::camera* camera = selection.entity->add_component<components::camera>();
+		auto* fRenderer = camera->get_renderer();
+		fRenderer->add_renderer<renderers::model>();
+		fRenderer->add_renderer<renderers::skin>();
+		fRenderer->add_renderer<renderers::soft_body>();
+		fRenderer->add_renderer<renderers::emitter>();
+		fRenderer->add_renderer<renderers::decal>();
+		fRenderer->add_renderer<renderers::lighting>();
+		fRenderer->add_renderer<renderers::transparency>();
 	});
-	State.System->SetCallback("add_cmp_scriptable", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_cmp_scriptable", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
-			Selection.Entity->AddComponent<Components::Scriptable>();
+		if (selection.entity != nullptr)
+			selection.entity->add_component<components::scriptable>();
 	});
-	State.System->SetCallback("add_rndr_model", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_rndr_model", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::Camera>();
+			auto* source = selection.entity->get_component<components::camera>();
+			if (!source)
+				source = selection.entity->add_component<components::camera>();
 
-			Source->GetRenderer()->AddRenderer<Renderers::Model>();
+			source->get_renderer()->add_renderer<renderers::model>();
 		}
 	});
-	State.System->SetCallback("add_rndr_skin", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_rndr_skin", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::Camera>();
+			auto* source = selection.entity->get_component<components::camera>();
+			if (!source)
+				source = selection.entity->add_component<components::camera>();
 
-			Source->GetRenderer()->AddRenderer<Renderers::Skin>();
+			source->get_renderer()->add_renderer<renderers::skin>();
 		}
 	});
-	State.System->SetCallback("add_rndr_soft_body", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_rndr_soft_body", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::Camera>();
+			auto* source = selection.entity->get_component<components::camera>();
+			if (!source)
+				source = selection.entity->add_component<components::camera>();
 
-			Source->GetRenderer()->AddRenderer<Renderers::SoftBody>();
+			source->get_renderer()->add_renderer<renderers::soft_body>();
 		}
 	});
-	State.System->SetCallback("add_rndr_decal", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_rndr_decal", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::Camera>();
+			auto* source = selection.entity->get_component<components::camera>();
+			if (!source)
+				source = selection.entity->add_component<components::camera>();
 
-			Source->GetRenderer()->AddRenderer<Renderers::Decal>();
+			source->get_renderer()->add_renderer<renderers::decal>();
 		}
 	});
-	State.System->SetCallback("add_rndr_emitter", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_rndr_emitter", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::Camera>();
+			auto* source = selection.entity->get_component<components::camera>();
+			if (!source)
+				source = selection.entity->add_component<components::camera>();
 
-			Source->GetRenderer()->AddRenderer<Renderers::Emitter>();
+			source->get_renderer()->add_renderer<renderers::emitter>();
 		}
 	});
-	State.System->SetCallback("add_rndr_lighting", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_rndr_lighting", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::Camera>();
+			auto* source = selection.entity->get_component<components::camera>();
+			if (!source)
+				source = selection.entity->add_component<components::camera>();
 
-			Source->GetRenderer()->AddRenderer<Renderers::Lighting>();
+			source->get_renderer()->add_renderer<renderers::lighting>();
 		}
 	});
-	State.System->SetCallback("add_rndr_transparency", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_rndr_transparency", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::Camera>();
+			auto* source = selection.entity->get_component<components::camera>();
+			if (!source)
+				source = selection.entity->add_component<components::camera>();
 
-			Source->GetRenderer()->AddRenderer<Renderers::Transparency>();
+			source->get_renderer()->add_renderer<renderers::transparency>();
 		}
 	});
-	State.System->SetCallback("add_rndr_ssgi", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_rndr_ssli", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::Camera>();
+			auto* source = selection.entity->get_component<components::camera>();
+			if (!source)
+				source = selection.entity->add_component<components::camera>();
 
-			Source->GetRenderer()->AddRenderer<Renderers::SSGI>();
+			source->get_renderer()->add_renderer<renderers::local_illumination>();
 		}
 	});
-	State.System->SetCallback("add_rndr_ssr", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_rndr_sslr", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::Camera>();
+			auto* source = selection.entity->get_component<components::camera>();
+			if (!source)
+				source = selection.entity->add_component<components::camera>();
 
-			Source->GetRenderer()->AddRenderer<Renderers::SSR>();
+			source->get_renderer()->add_renderer<renderers::local_reflections>();
 		}
 	});
-	State.System->SetCallback("add_rndr_ssao", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_rndr_ssla", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::Camera>();
+			auto* source = selection.entity->get_component<components::camera>();
+			if (!source)
+				source = selection.entity->add_component<components::camera>();
 
-			Source->GetRenderer()->AddRenderer<Renderers::SSAO>();
+			source->get_renderer()->add_renderer<renderers::local_ambient>();
 		}
 	});
-	State.System->SetCallback("add_rndr_motionblur", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_rndr_motionblur", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::Camera>();
+			auto* source = selection.entity->get_component<components::camera>();
+			if (!source)
+				source = selection.entity->add_component<components::camera>();
 
-			Source->GetRenderer()->AddRenderer<Renderers::MotionBlur>();
+			source->get_renderer()->add_renderer<renderers::motion_blur>();
 		}
 	});
-	State.System->SetCallback("add_rndr_bloom", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_rndr_bloom", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::Camera>();
+			auto* source = selection.entity->get_component<components::camera>();
+			if (!source)
+				source = selection.entity->add_component<components::camera>();
 
-			Source->GetRenderer()->AddRenderer<Renderers::Bloom>();
+			source->get_renderer()->add_renderer<renderers::bloom>();
 		}
 	});
-	State.System->SetCallback("add_rndr_dof", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_rndr_dof", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::Camera>();
+			auto* source = selection.entity->get_component<components::camera>();
+			if (!source)
+				source = selection.entity->add_component<components::camera>();
 
-			Source->GetRenderer()->AddRenderer<Renderers::DoF>();
+			source->get_renderer()->add_renderer<renderers::depth_of_field>();
 		}
 	});
-	State.System->SetCallback("add_rndr_tone", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_rndr_tone", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::Camera>();
+			auto* source = selection.entity->get_component<components::camera>();
+			if (!source)
+				source = selection.entity->add_component<components::camera>();
 
-			Source->GetRenderer()->AddRenderer<Renderers::Tone>();
+			source->get_renderer()->add_renderer<renderers::tone>();
 		}
 	});
-	State.System->SetCallback("add_rndr_glitch", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_rndr_glitch", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::Camera>();
+			auto* source = selection.entity->get_component<components::camera>();
+			if (!source)
+				source = selection.entity->add_component<components::camera>();
 
-			Source->GetRenderer()->AddRenderer<Renderers::Glitch>();
+			source->get_renderer()->add_renderer<renderers::glitch>();
 		}
 	});
-	State.System->SetCallback("add_rndr_gui", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("add_rndr_gui", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr)
+		if (selection.entity != nullptr)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
-			if (!Source)
-				Source = Selection.Entity->AddComponent<Components::Camera>();
+			auto* source = selection.entity->get_component<components::camera>();
+			if (!source)
+				source = selection.entity->add_component<components::camera>();
 
-			Source->GetRenderer()->AddRenderer<Renderers::UserInterface>();
+			source->get_renderer()->add_renderer<renderers::user_interface>();
 		}
 	});
-	State.System->SetCallback("up_rndr", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("up_rndr", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr && Args.size() == 1)
+		if (selection.entity != nullptr && args.size() == 1)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
-			if (Source != nullptr)
-				Source->GetRenderer()->MoveRenderer(VI_HASH(Args[0].Serialize()), -1);
+			auto* source = selection.entity->get_component<components::camera>();
+			if (source != nullptr)
+				source->get_renderer()->move_renderer(VI_HASH(args[0].serialize()), -1);
 		}
 	});
-	State.System->SetCallback("down_rndr", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("down_rndr", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr && Args.size() == 1)
+		if (selection.entity != nullptr && args.size() == 1)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
-			if (Source != nullptr)
-				Source->GetRenderer()->MoveRenderer(VI_HASH(Args[0].Serialize()), 1);
+			auto* source = selection.entity->get_component<components::camera>();
+			if (source != nullptr)
+				source->get_renderer()->move_renderer(VI_HASH(args[0].serialize()), 1);
 		}
 	});
-	State.System->SetCallback("remove_rndr", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("remove_rndr", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr && Args.size() == 1)
+		if (selection.entity != nullptr && args.size() == 1)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
-			if (Source != nullptr)
-				Source->GetRenderer()->RemoveRenderer(VI_HASH(Args[0].Serialize()));
+			auto* source = selection.entity->get_component<components::camera>();
+			if (source != nullptr)
+				source->get_renderer()->remove_renderer(VI_HASH(args[0].serialize()));
 		}
 	});
-	State.System->SetCallback("toggle_rndr", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("toggle_rndr", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr && Args.size() == 1)
+		if (selection.entity != nullptr && args.size() == 1)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::Camera>();
-			if (Source != nullptr)
+			auto* source = selection.entity->get_component<components::camera>();
+			if (source != nullptr)
 			{
-				auto* fRenderer = Source->GetRenderer()->GetRenderer(VI_HASH(Args[0].Serialize()));
+				auto* fRenderer = source->get_renderer()->get_renderer(VI_HASH(args[0].serialize()));
 				if (fRenderer != nullptr)
 				{
-					fRenderer->Active = !fRenderer->Active;
-					if (fRenderer->Active)
+					fRenderer->active = !fRenderer->active;
+					if (fRenderer->active)
 					{
-						fRenderer->Deactivate();
-						fRenderer->Activate();
+						fRenderer->deactivate();
+						fRenderer->activate();
 					}
 				}
 			}
 		}
 	});
-	State.System->SetCallback("remove_aefx", [this](GUI::IEvent& Event, const VariantList& Args)
+	state.system->set_callback("remove_aefx", [this](gui::ievent& event, const variant_list& args)
 	{
-		if (Selection.Entity != nullptr && Args.size() == 1)
+		if (selection.entity != nullptr && args.size() == 1)
 		{
-			auto* Source = Selection.Entity->GetComponent<Components::AudioSource>();
-			if (Source != nullptr)
-				Source->GetSource()->RemoveEffectById(VI_HASH(Args[0].Serialize()));
+			auto* source = selection.entity->get_component<components::audio_source>();
+			if (source != nullptr)
+				source->get_source()->remove_effect_by_id(VI_HASH(args[0].serialize()));
 		}
 	});
 }
-void Sandbox::SetDirectory(const String& Path)
+void sandbox::set_directory(const string& path)
 {
-	State.Files->Clear();
-	Selection.Pathname = Path;
+	state.files->clear();
+	selection.pathname = path;
 
-	Vector<std::pair<String, FileEntry>> Files;
-	if (!OS::Directory::Scan(Selection.Pathname, Files) || Files.empty())
+	vector<std::pair<string, file_entry>> files;
+	if (!os::directory::scan(selection.pathname, files) || files.empty())
 		return;
 
-	String Subpath = Path + VI_SPLITTER;
-	for (auto& File : Files)
+	string subpath = path + VI_SPLITTER;
+	for (auto& file : files)
 	{
-		if (File.second.IsDirectory)
+		if (file.second.is_directory)
 			continue;
 
-		String Time = DateTime::SerializeLocal(DateTime(std::chrono::seconds(std::max(File.second.CreationTime, File.second.LastModified))).CurrentOffset(), DateTime::FormatCompactTime());
-		String Pathname = Subpath + File.first;
-		String Filename = Pathname;
-		GetPathName(Filename);
+		string time = date_time::serialize_local(date_time(std::chrono::seconds(std::max(file.second.creation_time, file.second.last_modified))).current_offset(), date_time::format_compact_time());
+		string pathname = subpath + file.first;
+		string filename = pathname;
+		get_path_name(filename);
 
-		VariantList Item;
-		Item.emplace_back(std::move(Var::String(Pathname)));
-		Item.emplace_back(std::move(Var::String(Filename)));
-		Item.emplace_back(std::move(Var::String(Stringify::Text("%.2f KB", (double)File.second.Size / 1000.0))));
-		Item.emplace_back(std::move(Var::String(Time)));
-		State.Files->Add(Item);
+		variant_list item;
+		item.emplace_back(std::move(var::string(pathname)));
+		item.emplace_back(std::move(var::string(filename)));
+		item.emplace_back(std::move(var::string(stringify::text("%.2f KB", (double)file.second.size / 1000.0))));
+		item.emplace_back(std::move(var::string(time)));
+		state.files->add(item);
 	}
 }
-void Sandbox::SetSelection(Inspector Window, void* Object)
+void sandbox::set_selection(inspector window, void* object)
 {
-	Selection.Might = nullptr;
-	Selection.Entity = nullptr;
-	Selection.Material = nullptr;
-	Selection.Gizmo = nullptr;
-	Selection.Move = 0;
-	Selection.Window = Window;
+	selection.might = nullptr;
+	selection.entity = nullptr;
+	selection.material = nullptr;
+	selection.gizmo = nullptr;
+	selection.move = 0;
+	selection.window = window;
 
-	switch (Window)
+	switch (window)
 	{
-		case Inspector_None:
-			SetStatus("Selection lost");
+		case inspector_none:
+			set_status("Selection lost");
 			break;
-		case Inspector_Entity:
-			SetStatus("Entity was selected");
-			Selection.Entity = (Entity*)Object;
-			SetMetadata(Selection.Entity);
+		case inspector_entity:
+			set_status("Entity was selected");
+			selection.entity = (entity*)object;
+			set_metadata(selection.entity);
 			break;
-		case Inspector_Material:
-			SetStatus("Material was selected");
-			Selection.Material = (Material*)Object;
+		case inspector_material:
+			set_status("Material was selected");
+			selection.material = (material*)object;
 			break;
-		case Inspector_Settings:
-			SetStatus("Settings were selected");
+		case inspector_settings:
+			set_status("Settings were selected");
 			break;
-		case Inspector_Materials:
-			SetStatus("Materials were selected");
+		case inspector_materials:
+			set_status("Materials were selected");
 			break;
-		case Inspector_ImportModel:
-			SetStatus("Model import was selected");
+		case inspector_import_model:
+			set_status("Model import was selected");
 			break;
-		case Inspector_ImportAnimation:
-			SetStatus("Animation import was selected");
+		case inspector_import_animation:
+			set_status("Animation import was selected");
 			break;
 	}
 }
-void Sandbox::SetStatus(const String& Status)
+void sandbox::set_status(const string& status)
 {
-	State.Status = Status;
+	state.status = status;
 }
-void Sandbox::SetMutation(Entity* Parent, const std::string_view& Type)
+void sandbox::set_mutation(entity* parent, const std::string_view& type)
 {
-	if (!Parent)
+	if (!parent)
 		return;
 
-	for (size_t i = 0; i < Parent->GetChildsCount(); i++)
+	for (size_t i = 0; i < parent->get_childs_count(); i++)
 	{
-		Entity* Child = Parent->GetChild(i);
-		Scene->Mutate(Parent, Child, Type);
-		SetMutation(Child, Type);
+		entity* child = parent->get_child(i);
+		scene->mutate(parent, child, type);
+		set_mutation(child, type);
 	}
 }
-void Sandbox::SetMetadata(Entity* Source)
+void sandbox::set_metadata(entity* source)
 {
-	if (!Source)
+	if (!source)
 		return;
 
-	auto* Model = Source->GetComponent<Components::Model>();
-	if (State.Models != nullptr && Model != nullptr)
+	auto* model = source->get_component<components::model>();
+	if (state.models != nullptr && model != nullptr)
 	{
-		State.Models->Clear();
-		if (Model->GetDrawable())
+		state.models->clear();
+		if (model->get_drawable())
 		{
-			for (auto* Buffer : Model->GetDrawable()->Meshes)
+			for (auto* buffer : model->get_drawable()->meshes)
 			{
-				VariantList Item;
-				Item.emplace_back(Var::String(GUI::IElement::FromPointer(Buffer)));
-				Item.emplace_back(Var::String(Buffer->Name.empty() ? "Unknown" : Buffer->Name));
-				State.Models->Add(Item);
+				variant_list item;
+				item.emplace_back(var::string(gui::ielement::from_pointer(buffer)));
+				item.emplace_back(var::string(buffer->name.empty() ? "Unknown" : buffer->name));
+				state.models->add(item);
 			}
 		}
 	}
 
-	auto* Skin = Source->GetComponent<Components::Skin>();
-	if (State.Skins != nullptr && Skin != nullptr)
+	auto* skin = source->get_component<components::skin>();
+	if (state.skins != nullptr && skin != nullptr)
 	{
-		State.Skins->Clear();
-		if (Skin->GetDrawable())
+		state.skins->clear();
+		if (skin->get_drawable())
 		{
-			for (auto* Buffer : Skin->GetDrawable()->Meshes)
+			for (auto* buffer : skin->get_drawable()->meshes)
 			{
-				VariantList Item;
-				Item.emplace_back(Var::String(GUI::IElement::FromPointer(Buffer)));
-				Item.emplace_back(Var::String(Buffer->Name.empty() ? "Unknown" : Buffer->Name));
-				State.Skins->Add(Item);
+				variant_list item;
+				item.emplace_back(var::string(gui::ielement::from_pointer(buffer)));
+				item.emplace_back(var::string(buffer->name.empty() ? "Unknown" : buffer->name));
+				state.skins->add(item);
 			}
 		}
 	}
 }
-void Sandbox::GetPathName(String& Path)
+void sandbox::get_path_name(string& path)
 {
-	int64_t Distance = 0;
-	if (Path.back() == '/' || Path.back() == '\\')
-		Path.erase(Path.size() - 1);
+	int64_t distance = 0;
+	if (path.back() == '/' || path.back() == '\\')
+		path.erase(path.size() - 1);
 
-	for (size_t i = Path.size(); i > 0; i--)
+	for (size_t i = path.size(); i > 0; i--)
 	{
-		if (Path[i] == '\\' || Path[i] == '/')
+		if (path[i] == '\\' || path[i] == '/')
 		{
-			Distance = (int64_t)i + 1;
+			distance = (int64_t)i + 1;
 			break;
 		}
 	}
 
-	if (Distance > 0)
-		Path.erase(0, (size_t)Distance);
+	if (distance > 0)
+		path.erase(0, (size_t)distance);
 }
-void Sandbox::GetEntityCell()
+void sandbox::get_entity_cell()
 {
-	if (!State.Camera || !GetSceneFocus() || (Selection.Gizmo && Selection.Gizmo->IsActive()))
+	if (!state.camera || !get_scene_focus() || (selection.gizmo && selection.gizmo->IsActive()))
 		return;
 
-	auto* Camera = State.Camera->GetComponent<Components::Camera>();
-	bool WantChange = Activity->IsKeyDownHit(KeyCode::CursorLeft);
-	Ray Cursor = Camera->GetCursorRay();
-	float Distance = -1.0f;
-	Entity* Current = nullptr;
+	auto* camera = state.camera->get_component<components::camera>();
+	bool want_change = activity->is_key_down_hit(key_code::cursor_left);
+	ray cursor = camera->get_cursor_ray();
+	float distance = -1.0f;
+	entity* current = nullptr;
 
-	for (uint32_t i = 0; i < Scene->GetEntitiesCount(); i++)
+	for (uint32_t i = 0; i < scene->get_entities_count(); i++)
 	{
-		Entity* Value = Scene->GetEntity(i);
-		if (Selection.Entity == Value || Value == State.Camera)
+		entity* value = scene->get_entity(i);
+		if (selection.entity == value || value == state.camera)
 			continue;
 
-		float Far = Camera->GetDistance(Value);
-		if (Distance > 0.0f && Distance < Far)
+		float far_distance = camera->get_distance(value);
+		if (distance > 0.0f && distance < far_distance)
 			continue;
 
-		Matrix4x4 Transform = Value->GetBox();
-		if (Camera->RayTest(Cursor, Transform))
+		matrix4x4 transform = value->get_box();
+		if (camera->ray_test(cursor, transform))
 		{
-			Current = Value;
-			Distance = Far;
+			current = value;
+			distance = far_distance;
 		}
 	}
 
-	if (Current != nullptr)
+	if (current != nullptr)
 	{
-		if (!WantChange)
+		if (!want_change)
 		{
-			if (Selection.Entity != Current)
-				Selection.Might = Current;
+			if (selection.entity != current)
+				selection.might = current;
 		}
 		else
-			SetSelection(Inspector_Entity, Current);
+			set_selection(inspector_entity, current);
 	}
 	else
 	{
-		Selection.Might = nullptr;
-		if (WantChange)
-			SetSelection(Inspector_None);
+		selection.might = nullptr;
+		if (want_change)
+			set_selection(inspector_none);
 	}
 }
-void Sandbox::GetEntitySync()
+void sandbox::get_entity_sync()
 {
-	Components::RigidBody* RigidBody = Selection.Entity->GetComponent<Components::RigidBody>();
-	if (RigidBody != nullptr)
+	components::rigid_body* rigid_body = selection.entity->get_component<components::rigid_body>();
+	if (rigid_body != nullptr)
 	{
-		RigidBody->SetTransform(true);
-		if (RigidBody->GetBody())
+		rigid_body->set_transform(true);
+		if (rigid_body->get_body())
 		{
-			RigidBody->GetBody()->SetAngularVelocity(0);
-			RigidBody->GetBody()->SetLinearVelocity(0);
+			rigid_body->get_body()->set_angular_velocity(0);
+			rigid_body->get_body()->set_linear_velocity(0);
 		}
 	}
 
-	Components::SoftBody* SoftBody = Selection.Entity->GetComponent<Components::SoftBody>();
-	if (SoftBody != nullptr)
+	components::soft_body* soft_body = selection.entity->get_component<components::soft_body>();
+	if (soft_body != nullptr)
 	{
-		SoftBody->SetTransform(true);
-		if (SoftBody->GetBody())
-			SoftBody->GetBody()->SetVelocity(0);
+		soft_body->set_transform(true);
+		if (soft_body->get_body())
+			soft_body->get_body()->set_velocity(0);
 	}
 }
-void Sandbox::GetResource(const String& Name, const std::function<void(const String&)>& Callback)
+void sandbox::get_resource(const string& name, const std::function<void(const string&)>& callback)
 {
-	if (Name == "__got__")
+	if (name == "__got__")
 	{
-		SetStatus("Resource selected");
+		set_status("Resource selected");
 
-		State.OnResource = nullptr;
-		State.Filename.clear();
+		state.on_resource = nullptr;
+		state.filename.clear();
 		return;
 	}
 
-	if (Name.empty() || !Callback)
+	if (name.empty() || !callback)
 	{
-		SetStatus("Resource selection cancelled");
+		set_status("Resource selection cancelled");
 
-		State.OnResource = nullptr;
-		State.Filename.clear();
+		state.on_resource = nullptr;
+		state.filename.clear();
 		return;
 	}
 
-	SetStatus("Awaiting " + Name + " resource selection");
+	set_status("Awaiting " + name + " resource selection");
 
-	State.OnResource = Callback;
-	State.Filename = Name;
+	state.on_resource = callback;
+	state.filename = name;
 }
-void Sandbox::GetEntity(const String& Name, const std::function<void(Entity*)>& Callback)
+void sandbox::get_entity(const string& name, const std::function<void(entity*)>& callback)
 {
-	if (Name == "__got__")
+	if (name == "__got__")
 	{
-		SetStatus("Entity selected");
+		set_status("Entity selected");
 
-		State.Draggable = nullptr;
-		State.OnEntity = nullptr;
-		State.Target.clear();
+		state.draggable = nullptr;
+		state.on_entity = nullptr;
+		state.target.clear();
 		return;
 	}
 
-	State.Draggable = nullptr;
-	if (Name.empty() || !Callback)
+	state.draggable = nullptr;
+	if (name.empty() || !callback)
 	{
-		SetStatus("Entity selection cancelled");
+		set_status("Entity selection cancelled");
 
-		State.OnEntity = nullptr;
-		State.Target.clear();
+		state.on_entity = nullptr;
+		state.target.clear();
 		return;
 	}
 
-	SetStatus("Awaiting " + Name + " entity selection");
+	set_status("Awaiting " + name + " entity selection");
 
-	State.OnEntity = Callback;
-	State.Target = Name;
+	state.on_entity = callback;
+	state.target = name;
 }
-bool Sandbox::GetSceneFocus()
+bool sandbox::get_scene_focus()
 {
-	return State.IsSceneFocused && !State.GUI->IsInputFocused();
+	return state.is_scene_focused && !state.gui->is_input_focused();
 }
-bool Sandbox::GetResourceState(const String& Name)
+bool sandbox::get_resource_state(const string& name)
 {
-	return State.Filename == Name;
+	return state.filename == name;
 }
-bool Sandbox::GetEntityState(const String& Name)
+bool sandbox::get_entity_state(const string& name)
 {
-	return State.Target == Name;
+	return state.target == name;
 }
-bool Sandbox::GetSelectionState()
+bool sandbox::get_selection_state()
 {
-	return Selection.Entity || Selection.Material;
+	return selection.entity || selection.material;
 }
-Texture2D* Sandbox::GetIcon(Entity* Value)
+texture_2d* sandbox::get_icon(entity* value)
 {
-	if (Value->GetComponent<Components::Camera>())
-		return Icons.Camera;
+	if (value->get_component<components::camera>())
+		return icons.camera;
 
-	if (Value->GetComponent<Components::Model>() ||
-		Value->GetComponent<Components::Skin>())
-		return Icons.Mesh;
+	if (value->get_component<components::model>() ||
+		value->get_component<components::skin>())
+		return icons.mesh;
 
-	if (Value->GetComponent<Components::Emitter>())
-		return Icons.Emitter;
+	if (value->get_component<components::emitter>())
+		return icons.emitter;
 
-	if (Value->GetComponent<Components::Decal>())
-		return Icons.Decal;
+	if (value->get_component<components::decal>())
+		return icons.decal;
 
-	if (Value->GetComponent<Components::PointLight>() ||
-		Value->GetComponent<Components::SpotLight>() ||
-		Value->GetComponent<Components::LineLight>())
-		return Icons.Light;
+	if (value->get_component<components::point_light>() ||
+		value->get_component<components::spot_light>() ||
+		value->get_component<components::line_light>())
+		return icons.light;
 
-	if (Value->GetComponent<Components::SurfaceLight>() ||
-		Value->GetComponent<Components::Illuminator>())
-		return Icons.Probe;
+	if (value->get_component<components::surface_light>() ||
+		value->get_component<components::illuminator>())
+		return icons.probe;
 
-	if (Value->GetComponent<Components::AudioListener>())
-		return Icons.Listener;
+	if (value->get_component<components::audio_listener>())
+		return icons.listener;
 
-	if (Value->GetComponent<Components::AudioSource>())
-		return Icons.Source;
+	if (value->get_component<components::audio_source>())
+		return icons.source;
 
-	if (Value->GetComponent<Components::RigidBody>() ||
-		Value->GetComponent<Components::SoftBody>())
-		return Icons.Body;
+	if (value->get_component<components::rigid_body>() ||
+		value->get_component<components::soft_body>())
+		return icons.body;
 
-	if (Value->GetComponent<Components::SliderConstraint>() ||
-		Value->GetComponent<Components::Acceleration>())
-		return Icons.Motion;
+	if (value->get_component<components::slider_constraint>() ||
+		value->get_component<components::acceleration>())
+		return icons.motion;
 
-	if (Value->GetComponent<Components::KeyAnimator>() ||
-		Value->GetComponent<Components::SkinAnimator>() ||
-		Value->GetComponent<Components::EmitterAnimator>())
-		return Icons.Animation;
+	if (value->get_component<components::key_animator>() ||
+		value->get_component<components::skin_animator>() ||
+		value->get_component<components::emitter_animator>())
+		return icons.animation;
 
-	return Icons.Empty;
+	return icons.empty;
 }
-uint64_t Sandbox::GetEntityNesting(Entity* Value)
+uint64_t sandbox::get_entity_nesting(entity* value)
 {
-	uint64_t Top = 0;
-	if (!Value)
-		return Top;
+	uint64_t top = 0;
+	if (!value)
+		return top;
 
-	Entity* Base = Value;
-	while ((Base = Base->GetParent()) != nullptr)
-		Top++;
+	entity* base = value;
+	while ((base = base->get_parent()) != nullptr)
+		top++;
 
-	return Top;
+	return top;
 }
-void* Sandbox::GetEntityIndex(Entity* Value)
+void* sandbox::get_entity_index(entity* value)
 {
-	if (!Value)
+	if (!value)
 		return nullptr;
 
-	if (Value->GetParent() != nullptr)
-		return (void*)Value->GetParent();
+	if (value->get_parent() != nullptr)
+		return (void*)value->get_parent();
 
-	return (void*)Value;
+	return (void*)value;
 }
-String Sandbox::GetLabel(Entity* Value)
+string sandbox::get_label(entity* value)
 {
-	if (Value->GetComponent<Components::Camera>())
+	if (value->get_component<components::camera>())
 		return "[camera]";
 
-	if (Value->GetComponent<Components::Model>())
+	if (value->get_component<components::model>())
 		return "[model]";
 
-	if (Value->GetComponent<Components::Skin>())
+	if (value->get_component<components::skin>())
 		return "[skin]";
 
-	if (Value->GetComponent<Components::Emitter>())
+	if (value->get_component<components::emitter>())
 		return "[emitter]";
 
-	if (Value->GetComponent<Components::Decal>())
+	if (value->get_component<components::decal>())
 		return "[decal]";
 
-	if (Value->GetComponent<Components::PointLight>())
+	if (value->get_component<components::point_light>())
 		return "[point light]";
 
-	if (Value->GetComponent<Components::SpotLight>())
+	if (value->get_component<components::spot_light>())
 		return "[spot light]";
 
-	if (Value->GetComponent<Components::LineLight>())
+	if (value->get_component<components::line_light>())
 		return "[line light]";
 
-	if (Value->GetComponent<Components::SurfaceLight>())
+	if (value->get_component<components::surface_light>())
 		return "[surface light]";
 
-	if (Value->GetComponent<Components::Illuminator>())
+	if (value->get_component<components::illuminator>())
 		return "[illuminator]";
 
-	if (Value->GetComponent<Components::AudioListener>())
+	if (value->get_component<components::audio_listener>())
 		return "[audio listener]";
 
-	if (Value->GetComponent<Components::AudioSource>())
+	if (value->get_component<components::audio_source>())
 		return "[audio source]";
 
-	if (Value->GetComponent<Components::RigidBody>())
+	if (value->get_component<components::rigid_body>())
 		return "[rigid body]";
 
-	if (Value->GetComponent<Components::SoftBody>())
+	if (value->get_component<components::soft_body>())
 		return "[soft body]";
 
-	if (Value->GetComponent<Components::SliderConstraint>())
+	if (value->get_component<components::slider_constraint>())
 		return "[slider constraint]";
 
-	if (Value->GetComponent<Components::Acceleration>())
+	if (value->get_component<components::acceleration>())
 		return "[acceleration]";
 
-	if (Value->GetComponent<Components::KeyAnimator>())
+	if (value->get_component<components::key_animator>())
 		return "[key animator]";
 
-	if (Value->GetComponent<Components::SkinAnimator>())
+	if (value->get_component<components::skin_animator>())
 		return "[skin animator]";
 
-	if (Value->GetComponent<Components::EmitterAnimator>())
+	if (value->get_component<components::emitter_animator>())
 		return "[emitter animator]";
 
-	if (Value->GetComponent<Components::Fly>())
+	if (value->get_component<components::fly>())
 		return "[fly]";
 
-	if (Value->GetComponent<Components::FreeLook>())
+	if (value->get_component<components::free_look>())
 		return "[free look]";
 
-	if (Value->GetComponent<Components::Scriptable>())
+	if (value->get_component<components::scriptable>())
 		return "[scriptable]";
 
 	return "[empty]";
 }
-String Sandbox::GetName(Entity* Value)
+string sandbox::get_name(entity* value)
 {
-	String Result;
-	if (Value == nullptr)
-		return "[Empty] unknown";
+	string result;
+	if (value == nullptr)
+		return "[empty] unknown";
 
-	if (Value->GetName().empty())
-		Result = GetLabel(Value);
+	if (value->get_name().empty())
+		result = get_label(value);
 	else
-		Result = GetLabel(Value) + " " + Value->GetName();
+		result = get_label(value) + " " + value->get_name();
 
-	auto* Scriptable = Value->GetComponent<Components::Scriptable>();
-	if (Scriptable != nullptr && !Scriptable->GetSource().empty())
+	auto* scriptable = value->get_component<components::scriptable>();
+	if (scriptable != nullptr && !scriptable->get_source().empty())
 	{
-		const String& Module = Scriptable->GetName();
-		Result += " " + (Module.empty() ? "anonymous" : Module);
+		const string& library = scriptable->get_name();
+		result += " " + (library.empty() ? "anonymous" : library);
 	}
-	else if (Value->GetName().empty())
-		Result += " unnamed";
+	else if (value->get_name().empty())
+		result += " unnamed";
 
-	return Result;
+	return result;
 }
-String Sandbox::GetPascal(const String& Value)
+string sandbox::get_pascal(const string& value)
 {
-	String Result;
-	Result.reserve(Value.size() * 2);
+	string result;
+	result.reserve(value.size() * 2);
 
-	for (auto& Char : Value)
+	for (auto& symbol : value)
 	{
-		if (!Result.empty() && isupper(Char))
-			Result.append(1, ' ').append(1, tolower(Char));
+		if (!result.empty() && isupper(symbol))
+			result.append(1, ' ').append(1, tolower(symbol));
 		else
-			Result.append(1, Char);
+			result.append(1, symbol);
 	}
 
-	return Result;
+	return result;
 }

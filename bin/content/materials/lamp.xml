@@ -2,7 +2,7 @@
 	<emission x="1" y="1" z="1" w="5" />
 	<metallic x="0" y="0" z="0" w="0" />
 	<penetration x="0.75" y="0.75" z="0.75" w="0" />
-	<diffuse x="0" y="0" z="0" />
+	<diffuse x="1" y="1" z="1" />
 	<scattering x="1" y="0.25" z="0.03999999910593033" />
 	<roughness x="1" y="0" />
 	<occlusion x="1" y="0" />
